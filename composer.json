@@ -1,0 +1,6 @@
+{
+    "name": "afeefa/vue2-bootstrap",
+    "require": {
+        "afeefa/package-manager": "^0"
+    }
+}
