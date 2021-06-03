@@ -28,10 +28,9 @@ export default class ListViewMixin extends Vue {
       this.requestFilters.off('change', this.filtersChanged)
     }
 
-    const historyKey = [this.$route.meta.routeDefinition.fullId, this.filterHistoryKey].filter(i => i).join('.')
+    const historyKey = [this.$route.path, this.filterHistoryKey].filter(i => i).join('.')
     const querySource = this.filterSource === QuerySourceType.OBJECT ? undefined : new RouteFilterSource(this.$router)
     this.requestFilters = this.action.createRequestFilters(historyKey, querySource)
-
 
     this.requestFilters.on('change', this.filtersChanged)
 
@@ -77,6 +76,7 @@ export default class ListViewMixin extends Vue {
     this.requestFilters.initFromUsed(this.meta.used_filters, this.meta.count_search)
 
     this.isLoading = false
+
     this.$emit('update:count', this.meta.count_search)
   }
 }
