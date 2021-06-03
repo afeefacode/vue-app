@@ -1,11 +1,10 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 
-import { LoadingEvent } from '../loading-indicator/LoadingEvent'
 import { QuerySourceType } from './QuerySourceType'
 import { RouteFilterSource } from './RouteFilterSource'
 
 @Component({
-  props: ['listId', 'filterSource', 'action', 'fields']
+  props: ['filterHistoryKey', 'filterSource', 'action', 'fields']
 })
 export default class ListViewMixin extends Vue {
   models = []
@@ -29,32 +28,34 @@ export default class ListViewMixin extends Vue {
       this.requestFilters.off('change', this.filtersChanged)
     }
 
+    const historyKey = [this.$route.meta.routeDefinition.fullId, this.filterHistoryKey].filter(i => i).join('.')
     const querySource = this.filterSource === QuerySourceType.OBJECT ? undefined : new RouteFilterSource(this.$router)
+    this.requestFilters = this.action.createRequestFilters(historyKey, querySource)
 
-    this.requestFilters = this.action.createRequestFilters(this.internalListId, querySource)
-
-    this.$emit('update:filters', this.requestFilters.getFilters())
 
     this.requestFilters.on('change', this.filtersChanged)
+
+    this.$emit('update:filters', this.filters)
 
     this.load()
   }
 
   @Watch('$route.query')
   routeQueryChanged () {
-    this.requestFilters.querySourceChanged()
+    if (this.filterSource !== QuerySourceType.ROUTE) {
+      this.requestFilters.querySourceChanged()
+    }
   }
 
   filtersChanged () {
     this.load()
   }
 
+  /**
+   * Used by ListFilter
+   */
   get filters () {
     return this.requestFilters.getFilters()
-  }
-
-  get internalListId () {
-    return [this.$route.meta.routeDefinition.fullId, this.listId].filter(i => i).join('.')
   }
 
   resetFilters () {
@@ -63,9 +64,6 @@ export default class ListViewMixin extends Vue {
 
   async load () {
     this.isLoading = true
-    this.$events.dispatch(new LoadingEvent(LoadingEvent.START_LOADING))
-
-    this.$emit('update:isLoading', this.isLoading)
 
     const result = await this.action
       .request()
@@ -79,9 +77,6 @@ export default class ListViewMixin extends Vue {
     this.requestFilters.initFromUsed(this.meta.used_filters, this.meta.count_search)
 
     this.isLoading = false
-    this.$events.dispatch(new LoadingEvent(LoadingEvent.STOP_LOADING))
-    this.$emit('update:isLoading', this.isLoading)
-
     this.$emit('update:count', this.meta.count_search)
   }
 }
