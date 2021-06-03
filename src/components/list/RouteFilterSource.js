@@ -1,6 +1,6 @@
-import { BaseQuerySource } from '@afeefa/api-resources-client'
+import { BaseFilterSource } from '@afeefa/api-resources-client'
 
-export class RouteQuerySource extends BaseQuerySource {
+export class RouteFilterSource extends BaseFilterSource {
   router = null
 
   constructor (router) {

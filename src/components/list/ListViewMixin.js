@@ -1,8 +1,8 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 
-import { RouteQuerySource } from '../../api-resources/RouteQuerySource'
 import { LoadingEvent } from '../loading-indicator/LoadingEvent'
 import { QuerySourceType } from './QuerySourceType'
+import { RouteFilterSource } from './RouteFilterSource'
 
 @Component({
   props: ['listId', 'filterSource', 'action', 'fields']
@@ -29,7 +29,7 @@ export default class ListViewMixin extends Vue {
       this.requestFilters.off('change', this.filtersChanged)
     }
 
-    const querySource = this.filterSource === QuerySourceType.OBJECT ? undefined : new RouteQuerySource(this.$router)
+    const querySource = this.filterSource === QuerySourceType.OBJECT ? undefined : new RouteFilterSource(this.$router)
 
     this.requestFilters = this.action.createRequestFilters(this.internalListId, querySource)
 
