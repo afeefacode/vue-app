@@ -1,4 +1,5 @@
 import './config/event-bus'
+import './config/components'
 
 import { timeout } from '@a-vue/utils/timeout'
 import { apiResources } from '@afeefa/api-resources-client'
