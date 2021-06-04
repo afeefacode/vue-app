@@ -73,7 +73,9 @@ export default class ListViewMixin extends Vue {
     this.models = result.data
     this.meta = result.meta
 
-    this.requestFilters.initFromUsed(this.meta.used_filters, this.meta.count_search)
+    if (this.meta.used_filters) {
+      this.requestFilters.initFromUsed(this.meta.used_filters, this.meta.count_search)
+    }
 
     this.isLoading = false
 
