@@ -6,11 +6,6 @@ import ModelRoute from '@a-admin/components/routes/ModelRoute'
 import { routeConfigPlugin } from '@a-vue/plugins/route-config/RouteConfigPlugin'
 
 export default routeConfigPlugin
-  .router({
-    mode: 'history',
-    base: process.env.BASE_URL
-  })
-
   .defaultComponents({
     list: ListRoute,
     model: ModelRoute,

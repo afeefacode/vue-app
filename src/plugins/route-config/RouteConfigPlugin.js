@@ -35,16 +35,18 @@ class RouteConfigPlugin {
   _routeDefinitions = []
   _config = {}
 
+  _routerOptions = {}
   _router = null
   _routes = []
 
   _promise = Promise.resolve(true)
 
-  router (options) {
-    Vue.use(Router)
-    Vue.use(this)
+  baseUrl (url) {
+    return this
+  }
 
-    this._router = new Router(options)
+  router (options = {}) {
+    this._routerOptions = options
     return this
   }
 
@@ -128,6 +130,17 @@ class RouteConfigPlugin {
         this._routeDefinitions = Array.isArray(routeOrRoutes) ? routeOrRoutes : [routeOrRoutes]
         this._routeDefinitions.forEach(r => r.init(null, '', this._definitionMap))
         this._routes = this._routeDefinitions.map(r => r.toVue())
+
+        // create router here
+        Vue.use(Router)
+        Vue.use(this)
+
+        const options = {
+          mode: 'history',
+          ...this._routerOptions
+        }
+
+        this._router = new Router(options)
 
         for (const route of this._routes) {
           this._router.addRoute(route)
