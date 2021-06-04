@@ -4,7 +4,7 @@ import { timeout } from '@a-vue/utils/timeout'
 import { apiResources } from '@afeefa/api-resources-client'
 import Vue from 'vue'
 
-import { routeConfigPlugin } from './config/routing'
+import routeConfigPlugin from './config/routing'
 import vuetify from './config/vuetify'
 
 Vue.config.productionTip = false
@@ -20,8 +20,8 @@ export async function bootstrap ({ apis, models, routing }) {
     template: '<splash />'
   })
 
-  routing = routing(routeConfigPlugin)
-  const router = await routing.getRouter()
+  routing(routeConfigPlugin)
+  const router = await routeConfigPlugin.getRouter()
   await apiResources.schemasLoaded()
 
   timeout(() => {
