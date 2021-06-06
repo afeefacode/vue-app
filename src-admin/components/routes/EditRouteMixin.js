@@ -73,9 +73,9 @@ export default class EditRouteMixin extends Vue {
         message: 'Die Daten wurden gespeichert.'
       }))
 
-      this.$emitOnParent('update:model')
-
       const model = result.data
+
+      this.$emitOnParent('modelSaved')
       this.saved(model)
     } else {
       this.$events.dispatch(new AlertEvent(AlertEvent.ERROR, {

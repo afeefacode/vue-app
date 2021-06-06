@@ -1,7 +1,10 @@
 <template>
-  <div>
+  <component
+    :is="Wrapper"
+    @modelSaved="modelSaved"
+  >
     <slot />
-  </div>
+  </component>
 </template>
 
 
@@ -12,12 +15,22 @@ import { LoadingEvent } from '@a-vue/events'
 
 @Component
 export default class ModelView extends Mixins(ModelViewMixin) {
+  modelSaved () {
+    this.load()
+  }
+
   @Watch('isLoading')
   isLoadingChanged () {
     if (this.isLoading) {
       this.$events.dispatch(new LoadingEvent(LoadingEvent.START_LOADING))
     } else {
       this.$events.dispatch(new LoadingEvent(LoadingEvent.STOP_LOADING))
+    }
+  }
+
+  get Wrapper () {
+    return {
+      template: '<div><slot /></div>'
     }
   }
 }

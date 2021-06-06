@@ -28,9 +28,12 @@ export default class EditForm extends Vue {
   }
 
   get changed () {
-    // console.log(this.json)
-    // console.log(json)
     return this.json !== this.lastJson
+  }
+
+  @Watch('model')
+  modelChanged () {
+    this.lastJson = this.json
   }
 
   @Watch('valid')
@@ -39,7 +42,7 @@ export default class EditForm extends Vue {
   }
 
   @Watch('changed')
-  modelChanged () {
+  changedChanged () {
     this.$emitOnParent('update:changed', this.changed)
   }
 
