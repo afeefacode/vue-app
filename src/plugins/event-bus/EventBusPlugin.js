@@ -8,20 +8,16 @@ class EventBusPlugin {
       }
     })
 
-    Object.defineProperty(Vue.prototype, '$emitOnParent', {
-      get () {
-        return (event, value) => {
-          let parent = this
-          while (parent) {
-            if (parent.$listeners[event]) {
-              parent.$emit(event, value)
-              break
-            }
-            parent = parent.$parent
-          }
+    Vue.prototype.$emitOnParent = function (event) {
+      let parent = this
+      while (parent) {
+        if (parent.$listeners[event]) {
+          parent.$emit(...arguments)
+          break
         }
+        parent = parent.$parent
       }
-    })
+    }
   }
 }
 

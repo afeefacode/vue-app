@@ -5,7 +5,7 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 })
 export default class ModelViewMixin extends Vue {
   model = null
-  isLoading = true
+  isLoading = false
 
   created () {
     this.load()
