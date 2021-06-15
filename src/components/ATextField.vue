@@ -27,7 +27,7 @@ export default class ATextField extends Vue {
     if (this.debounce) {
       this.$listeners.input = debounce(value => {
         this.$emit('input', value)
-      }, this.debounce)
+      }, this.debounce, value => value)
     }
   }
 
