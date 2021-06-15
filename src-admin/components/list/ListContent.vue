@@ -1,12 +1,13 @@
 <template>
-  <div class="listCard">
+  <div class="listContent">
     <slot />
   </div>
 </template>
 
 
 <style lang="scss" scoped>
-.listCard {
-  margin-bottom: 1rem;
+.listContent {
+  background: #F4F4F4;
+  padding: .5rem;
 }
 </style>
