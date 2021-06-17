@@ -16,7 +16,7 @@ export class BreadcrumbDefinition {
 
     this.title = title
     this.getTitle = getTitle
-    this.children = children
+    this.children = children.flat()
   }
 
   init (parent, parentName, map) {
