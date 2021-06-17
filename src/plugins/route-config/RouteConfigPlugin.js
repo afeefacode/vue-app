@@ -46,7 +46,7 @@ class RouteConfigPlugin {
   }
 
   router (options = {}) {
-    this._routerOptions = options
+    this._routerOptions = {...this._routerOptions, ...options}
     return this
   }
 
@@ -160,9 +160,9 @@ class RouteConfigPlugin {
     await this._promise
     for (const path in this._definitionMap) {
       const r = this._definitionMap[path]
-      const whites = ' '.repeat(60 - path.length)
-      const whites2 = ' '.repeat(40 - r.fullName.length)
-      console.log('path:', path, whites, 'name:', r.fullName, whites2, 'parent:', r.parentPathDefinition && r.parentPathDefinition.fullName)
+      const whites = ' '.repeat(Math.max(0, 60 - path.length))
+      const whites2 = ' '.repeat(Math.max(0, 40 - r.fullName.length))
+      console.log('path:', path, whites, 'name:', r.fullName, whites2, 'parent:', r.parentBreadcrumbDefinition && r.parentBreadcrumbDefinition.fullName)
     }
   }
 
