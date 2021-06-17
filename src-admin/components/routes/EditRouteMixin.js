@@ -9,10 +9,6 @@ export default class EditRouteMixin extends Vue {
   modelToEdit = null
   ignoreChanged = false
 
-  created () {
-    this.modelToEdit = this.createModelToEdit()
-  }
-
   createModelToEdit () {
     return null
   }

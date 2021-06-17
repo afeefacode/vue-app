@@ -1,12 +1,17 @@
 <template>
   <div>
-    <router-link
-      v-if="config.add !== false"
-      class="button"
-      :to="newLink"
+    <v-row
+      class="buttons mr-0"
+      justify="end"
     >
-      <v-btn>Neu</v-btn>
-    </router-link>
+      <router-link
+        v-if="config.add !== false"
+        class="button"
+        :to="newLink"
+      >
+        <v-btn>Neu</v-btn>
+      </router-link>
+    </v-row>
 
     <component
       :is="Component"

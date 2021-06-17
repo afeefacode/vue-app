@@ -1,32 +1,49 @@
 <template>
-  <div>
-    <v-row
-      v-if="hasEdit || hasRemove"
-      class="buttons"
-    >
-      <router-link
-        v-if="hasEdit"
-        class="button"
-        :to="model.getLink('edit')"
+  <model-view
+    :id="id"
+    :action="action"
+    :fields="fields"
+    :model.sync="model"
+  >
+    <template v-if="model">
+      <v-row
+        v-if="hasEdit || hasRemove || hasList"
+        class="buttons mr-0"
+        justify="end"
       >
-        <v-btn>Bearbeiten</v-btn>
-      </router-link>
+        <v-btn
+          v-if="hasRemove"
+          color="red"
+          text
+          class="white--text"
+          @click="remove"
+        >
+          Löschen
+        </v-btn>
 
-      <v-btn
-        v-if="hasRemove"
-        color="red"
-        class="white--text"
-        @click="remove"
-      >
-        Löschen
-      </v-btn>
-    </v-row>
+        <router-link
+          v-if="hasList"
+          class="button"
+          :to="listLink"
+        >
+          <v-btn>Liste</v-btn>
+        </router-link>
 
-    <component
-      :is="Component"
-      :model="model"
-    />
-  </div>
+        <router-link
+          v-if="hasEdit"
+          class="button"
+          :to="model.getLink('edit')"
+        >
+          <v-btn>Bearbeiten</v-btn>
+        </router-link>
+      </v-row>
+
+      <component
+        :is="Component"
+        :model="model"
+      />
+    </template>
+  </model-view>
 </template>
 
 <script>
@@ -34,12 +51,32 @@ import { Component, Vue } from 'vue-property-decorator'
 import { AlertEvent, DialogEvent, SaveEvent } from '@a-vue/events'
 import { sleep } from '@a-vue/utils/timeout'
 
-@Component({
-  props: ['model']
-})
+@Component
 export default class DetailRoute extends Vue {
+  model = null
+
+  get config () {
+    return this.$routeDefinition.config.routing.detail
+  }
+
+  get idKey () {
+    return this.$routeDefinition.idKey
+  }
+
+  get id () {
+    return this.$route.params[this.idKey]
+  }
+
+  get fields () {
+    return this.config.fields
+  }
+
+  get action () {
+    return this.config.action
+  }
+
   get Component () {
-    return this.$routeDefinition.config.routing.detail.Component
+    return this.config.Component
   }
 
   get deleteAction () {
@@ -48,13 +85,22 @@ export default class DetailRoute extends Vue {
   }
 
   get hasEdit () {
-    const config = this.$routeDefinition.config.routing.detail
-    return config.edit !== false
+    return this.config.edit !== false
   }
 
   get hasRemove () {
-    const config = this.$routeDefinition.config.routing.detail
-    return config.remove !== false
+    return this.config.remove !== false
+  }
+
+  get hasList () {
+    return this.config.list !== false
+  }
+
+  get listLink () {
+    if (this.config.listLink) {
+      return this.config.listLink(this.$route.params)
+    }
+    return this.model.getLink('list')
   }
 
   async remove () {
@@ -98,7 +144,7 @@ export default class DetailRoute extends Vue {
   gap: 1rem;
 }
 
-.button {
+button, .button {
   display: block;
   margin-bottom: 2rem;
 }

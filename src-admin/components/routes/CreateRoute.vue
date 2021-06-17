@@ -1,8 +1,13 @@
 <template>
   <div>
-    <router-link :to="listLink">
-      <v-btn>Liste</v-btn>
-    </router-link>
+    <v-row
+      class="buttons mr-0"
+      justify="end"
+    >
+      <router-link :to="listLink">
+        <v-btn>Liste</v-btn>
+      </router-link>
+    </v-row>
 
     <component
       :is="Component"
@@ -11,7 +16,7 @@
       :changed.sync="changed"
     />
 
-    <v-row>
+    <v-row class="submit">
       <v-btn
         :disabled="!changed || !valid"
         @click="save"
@@ -36,6 +41,10 @@ import EditRouteMixin from './EditRouteMixin'
 
 @Component
 export default class CreateRoute extends Mixins(EditRouteMixin) {
+  created () {
+    this.reset()
+  }
+
   createModelToEdit () {
     return this.config.Model.createForNew(this.fields)
   }
@@ -63,6 +72,10 @@ export default class CreateRoute extends Mixins(EditRouteMixin) {
 <style lang="scss" scoped>
 button {
   display: block;
-  margin: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.submit {
+  margin-top: 2rem;
 }
 </style>
