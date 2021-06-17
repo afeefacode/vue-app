@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import { BreadcrumbDefinition } from './BreadcrumbDefinition'
+import { BreadcrumbSetDefinition } from './BreadcrumbSetDefinition'
 import { RouteDefinition } from './RouteDefinition'
 import { RouteSetDefinition } from './RouteSetDefinition'
 
@@ -10,6 +12,7 @@ const defaultRouteComponent = {
 
 class RouteConfigPlugin {
   _definitionMap = {}
+  _definitionNameMap = {}
 
   _defaultComponents = {
     container: defaultRouteComponent,
@@ -34,6 +37,9 @@ class RouteConfigPlugin {
 
   _routeDefinitions = []
   _config = {}
+
+  _breadcrumbDefinitions = []
+  _breadcrumbDefinitionMap = {}
 
   _routerOptions = {}
   _router = null
@@ -131,6 +137,10 @@ class RouteConfigPlugin {
         this._routeDefinitions.forEach(r => r.init(null, '', this._definitionMap))
         this._routes = this._routeDefinitions.map(r => r.toVue())
 
+        Object.values(this._definitionMap).forEach(d => {
+          this._definitionNameMap[d.fullName] = d
+        })
+
         // create router here
         Vue.use(Router)
         Vue.use(this)
@@ -151,9 +161,48 @@ class RouteConfigPlugin {
     return this
   }
 
+  breadcrumbs (callback) {
+    this._promise = this._promise.then(() => {
+      callback = callback({
+        BREADCRUMBSET: this.breadcrumbSet,
+        BREADCRUMB: this.breadcrumb
+      })
+
+      if (!(callback instanceof Promise)) {
+        callback = Promise.resolve(callback)
+      }
+
+      return callback.then(breadcrumbOrBreadcrumbs => {
+        this._breadcrumbDefinitions = Array.isArray(breadcrumbOrBreadcrumbs) ? breadcrumbOrBreadcrumbs : [breadcrumbOrBreadcrumbs]
+        this._breadcrumbDefinitions.forEach(b => b.init(null, '', this._breadcrumbDefinitionMap))
+
+        for (const breadcrumbDefinition of Object.values(this._breadcrumbDefinitionMap)) {
+          const name = breadcrumbDefinition.name
+          breadcrumbDefinition.routeDefinition = this._definitionNameMap[name]
+        }
+      })
+    })
+
+    return this
+  }
+
   async getRoutes () {
     await this._promise
     return this._routes
+  }
+
+  async getBreadcrumbs (routeName) {
+    await this._promise
+
+    const definitions = []
+    let parent = this._breadcrumbDefinitionMap[routeName]
+    while (parent) {
+      if (parent) {
+        definitions.unshift(parent)
+      }
+      parent = parent.parentDefinition
+    }
+    return definitions
   }
 
   async dumpRoutes () {
@@ -166,7 +215,14 @@ class RouteConfigPlugin {
     }
   }
 
-  route = (options) => {
+  async dumbBreadcrumbs () {
+    await this._promise
+    for (const path in this._breadcrumbDefinitionMap) {
+      console.log(path, this._breadcrumbDefinitionMap[path])
+    }
+  }
+
+  route = options => {
     options.config = {
       ...this._config,
       ...options.config
@@ -174,7 +230,7 @@ class RouteConfigPlugin {
     return new RouteDefinition(options)
   }
 
-  routeSet = (options) => {
+  routeSet = options => {
     options.components = {
       ...this._defaultComponents,
       ...options.components
@@ -192,6 +248,27 @@ class RouteConfigPlugin {
       ...options.config
     }
     return new RouteSetDefinition(options).getDefinitions()
+  }
+
+  breadcrumb = options => {
+    options.config = {
+      ...this._config,
+      ...options.config
+    }
+    return new BreadcrumbDefinition(options)
+  }
+
+  breadcrumbSet = options => {
+    options.breadcrumbTitles = {
+      ...this._defaultBreadcrumbTitles,
+      ...options.breadcrumbTitles
+    }
+
+    options.config = {
+      ...this._config,
+      ...options.config
+    }
+    return new BreadcrumbSetDefinition(options).getDefinitions()
   }
 }
 

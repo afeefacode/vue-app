@@ -7,9 +7,7 @@ export class RouteDefinition {
   fullName = ''
 
   parentDefinition = null
-  parentBreadcrumbDefinition = null
   definitionMap = null
-  customBreadcrumbTitle = null
 
   constructor ({
     path,
@@ -18,8 +16,6 @@ export class RouteDefinition {
     name = '',
     idKey = 'id',
     childrenNamePrefix = '',
-    breadcrumbParent = null,
-    breadcrumbTitle = '',
     config = {},
     children = [],
     ...options
@@ -30,8 +26,6 @@ export class RouteDefinition {
     this.name = name
     this.idKey = idKey
     this.childrenNamePrefix = childrenNamePrefix
-    this.breadcrumbParent = breadcrumbParent
-    this.breadcrumbTitle = breadcrumbTitle
     this.config = config
     this.children = children
     this.options = options
@@ -61,7 +55,6 @@ export class RouteDefinition {
       }
 
       this.parentDefinition = parent
-      this.parentBreadcrumbDefinition = this.findBreadcrumbParent()
     }
   }
 
@@ -89,33 +82,8 @@ export class RouteDefinition {
     })
   }
 
-  setCustomBreadcrumbTitle (title) {
-    this.customBreadcrumbTitle = title
-    eventBus.dispatch(new RouteEvent(RouteEvent.CHANGE))
-  }
-
   getChild (name) {
     return this.children.find(c => c.name === name)
-  }
-
-  toBreadcrumb () {
-    return {
-      title: this.customBreadcrumbTitle || this.breadcrumbTitle,
-      to: { name: this.fullName },
-      definition: this
-    }
-  }
-
-  getBreadcrumbs () {
-    const definitions = []
-    let parent = this
-    while (parent) {
-      if (parent) {
-        definitions.unshift(parent)
-      }
-      parent = parent.parentBreadcrumbDefinition
-    }
-    return definitions
   }
 
   toVue () {
@@ -142,31 +110,6 @@ export class RouteDefinition {
       component: this.component,
       ...this.options,
       children: this.children.map(c => c.toVue())
-    }
-  }
-
-  findBreadcrumbParent () {
-    if (this.breadcrumbParent) {
-      const idParts = this.fullId.split('.')
-      const breadcrumbParts = this.breadcrumbParent.split('/')
-      for (const part of breadcrumbParts) {
-        if (part === '..') {
-          idParts.pop()
-        } else {
-          idParts.push(part)
-        }
-      }
-      const parentId = idParts.join('.')
-      return this.definitionMap[parentId]
-    } else {
-      let parent = this.parentDefinition
-      while (parent) {
-        if (parent.name) {
-          return parent
-        }
-        parent = parent.parentDefinition
-      }
-      return null
     }
   }
 

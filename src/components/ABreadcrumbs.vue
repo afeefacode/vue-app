@@ -29,27 +29,74 @@
 
 <script>
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { RouteEvent } from '../plugins/route-config/RouteEvent'
+import { SaveEvent } from './save-indicator/SaveEvent'
+import { routeConfigPlugin } from '@a-vue/plugins/route-config/RouteConfigPlugin'
 
 @Component
 export default class ABreadcrumbs extends Vue {
   breadcrumbs = []
+  titleCache = {}
+  lastRoute = null
 
   created () {
-    this.$events.on(RouteEvent.CHANGE, this.init)
+    this.$events.on(SaveEvent.STOP_SAVING, this.afterSave)
+
     this.init()
   }
 
   @Watch('$route.name')
   routeNameChanged () {
+    this.afterRouteChange()
+  }
+
+  @Watch('$route.params')
+  routeParamsChanged () {
+    this.afterRouteChange()
+  }
+
+  afterRouteChange () {
+    const routeJson = JSON.stringify({
+      name: this.$route.name,
+      params: this.$route.params
+    })
+
+    if (this.lastRoute === routeJson) {
+      return
+    }
+
+    this.lastRoute = routeJson
+
     this.init()
   }
 
-  init () {
-    const definition = this.$route.meta.routeDefinition
-    this.breadcrumbs = definition.getBreadcrumbs().map(d => {
-      return d.name !== 'root' && d.toBreadcrumb()
-    }).filter(b => b)
+  afterSave () {
+    this.titleCache = {}
+    this.init()
+  }
+
+  async init () {
+    const breadcrumbs = []
+
+    const breadcrumbDefinitions = await routeConfigPlugin.getBreadcrumbs(this.$route.name)
+
+    for (const d of breadcrumbDefinitions) {
+      const item = d.toBreadcrumb(this.$route.params)
+      if (d.getTitle) {
+        const idKey = d.routeDefinition.idKey
+        if (this.$route.params[idKey]) {
+          const cacheKey = `${d.name}.${this.$route.params[idKey]}`
+          if (!this.titleCache[cacheKey]) {
+            this.titleCache[cacheKey] = item.title // set title to default for multiple parallel requests
+            const title = await d.getTitle(this.$route.params)
+            this.titleCache[cacheKey] = title
+          }
+          item.title = this.titleCache[cacheKey]
+        }
+      }
+      breadcrumbs.push(item)
+    }
+
+    this.breadcrumbs = breadcrumbs
   }
 }
 </script>

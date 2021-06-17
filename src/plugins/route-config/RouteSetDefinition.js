@@ -6,7 +6,6 @@ export class RouteSetDefinition {
     name,
     idKey = 'id',
     components,
-    breadcrumbTitles,
     routePaths,
     config = {},
     children = []
@@ -15,30 +14,28 @@ export class RouteSetDefinition {
     this.name = name
     this.idKey = idKey
     this.components = components
-    this.breadcrumbTitles = breadcrumbTitles
     this.routePaths = routePaths
     this.config = config
     this.children = children
   }
 
   getDefinitions () {
-    return this.route('container', this.path, false, null, false, [
-      this.route('list', '', true, null, false),
-      this.route('new', this.routePaths.new, true, '../list', false),
-      this.route('model', `:${this.idKey}`, false, null, true, [
-        this.route('detail', '', true, '../../list', true),
-        this.route('edit', this.routePaths.edit, true, '../detail', true),
+    return this.route('container', this.path, false, false, [
+      this.route('list', '', true, false),
+      this.route('new', this.routePaths.new, true, false),
+      this.route('model', `:${this.idKey}`, false, true, [
+        this.route('detail', '', true, true),
+        this.route('edit', this.routePaths.edit, true, true),
         ...this.children
       ])
     ])
   }
 
-  route (action, path, hasRouteName, breadcrumbParent, hasId, children = []) {
+  route (action, path, hasRouteName, hasId, children = []) {
     const options = {
       path,
       component: this.components[action],
       name: hasRouteName ? action : '',
-      breadcrumbTitle: this.breadcrumbTitles[action],
       config: this.config,
       children
     }
@@ -48,10 +45,6 @@ export class RouteSetDefinition {
       options.childrenNamePrefix = this.name
     } else {
       options.id = action
-    }
-
-    if (breadcrumbParent) {
-      options.breadcrumbParent = breadcrumbParent
     }
 
     if (hasId) {
