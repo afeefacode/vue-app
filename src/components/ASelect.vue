@@ -16,7 +16,7 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 @Component({
   props: ['validator', 'defaultValue', 'items']
 })
-export default class KSelect extends Vue {
+export default class ASelect extends Vue {
   internalItems = []
 
   mounted () {

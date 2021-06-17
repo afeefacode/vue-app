@@ -13,7 +13,7 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 @Component({
   props: ['isLoading']
 })
-export default class KLoadingIndicator extends Vue {
+export default class ALoadingIndicator extends Vue {
   internalLoading = false
   timeout = null
 
