@@ -6,6 +6,10 @@ import ModelRoute from '@a-admin/components/routes/ModelRoute'
 import { routeConfigPlugin } from '@a-vue/plugins/route-config/RouteConfigPlugin'
 
 export default routeConfigPlugin
+  .router({
+    linkActiveClass: 'active'
+  })
+
   .defaultComponents({
     list: ListRoute,
     model: ModelRoute,

@@ -25,6 +25,8 @@ export async function bootstrap ({ apis, models, routing }) {
   const router = await routeConfigPlugin.getRouter()
   await apiResources.schemasLoaded()
 
+  // routeConfigPlugin.dumpRoutes()
+
   timeout(() => {
     splash.$destroy()
 

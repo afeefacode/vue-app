@@ -1,6 +1,7 @@
 <template>
   <div>
     <router-link
+      v-if="config.add !== false"
       class="button"
       :to="newLink"
     >

@@ -8,6 +8,7 @@ import ListContent from './list/ListContent'
 import ListMeta from './list/ListMeta'
 import ListTitle from './list/ListTitle'
 import ListView from './list/ListView'
+import ModelCount from './model/ModelCount'
 import ModelView from './model/ModelView'
 import Splash from './Splash'
 
@@ -17,6 +18,7 @@ Vue.component('ListMeta', ListMeta)
 Vue.component('ListTitle', ListTitle)
 Vue.component('ListView', ListView)
 
+Vue.component('ModelCount', ModelCount)
 Vue.component('ModelView', ModelView)
 
 Vue.component('DetailContent', DetailContent)

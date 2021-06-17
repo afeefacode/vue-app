@@ -1,7 +1,11 @@
 <template>
   <div>
-    <v-row class="buttons">
+    <v-row
+      v-if="hasEdit || hasRemove"
+      class="buttons"
+    >
       <router-link
+        v-if="hasEdit"
         class="button"
         :to="model.getLink('edit')"
       >
@@ -9,6 +13,7 @@
       </router-link>
 
       <v-btn
+        v-if="hasRemove"
         color="red"
         class="white--text"
         @click="remove"
@@ -40,6 +45,16 @@ export default class DetailRoute extends Vue {
   get deleteAction () {
     const config = this.$routeDefinition.config.routing.delete
     return config.action
+  }
+
+  get hasEdit () {
+    const config = this.$routeDefinition.config.routing.detail
+    return config.edit !== false
+  }
+
+  get hasRemove () {
+    const config = this.$routeDefinition.config.routing.detail
+    return config.remove !== false
   }
 
   async remove () {
