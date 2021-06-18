@@ -14,13 +14,13 @@
       </template>
 
       <template #item="{ item }">
-        <v-breadcrumbs-item
+        <breadcrumbs-item
           :to="item.to"
-          :exact="true"
+          :exact-path="true"
           :disabled="item.disabled"
         >
           {{ item.title.toUpperCase() }}
-        </v-breadcrumbs-item>
+        </breadcrumbs-item>
       </template>
     </v-breadcrumbs>
   </div>
@@ -31,8 +31,13 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { SaveEvent } from './save-indicator/SaveEvent'
 import { routeConfigPlugin } from '@a-vue/plugins/route-config/RouteConfigPlugin'
+import BreadcrumbsItem from './breadcrumbs/BreadcrumbsItem'
 
-@Component
+@Component({
+  components: {
+    BreadcrumbsItem
+  }
+})
 export default class ABreadcrumbs extends Vue {
   breadcrumbs = []
   titleCache = {}
