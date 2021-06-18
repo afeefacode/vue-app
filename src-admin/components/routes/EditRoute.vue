@@ -6,6 +6,19 @@
   >
     <template v-if="model">
       <v-row
+        class="header ma-0"
+        align="center"
+      >
+        <v-icon
+          :color="icon.color"
+          size="3rem"
+          v-text="icon.icon"
+        />
+
+        <h2>{{ model.getTitle() }}</h2>
+      </v-row>
+
+      <v-row
         class="buttons mr-0"
         justify="end"
       >
@@ -60,7 +73,7 @@ import { Component, Mixins, Watch } from 'vue-property-decorator'
 import EditRouteMixin from './EditRouteMixin'
 
 @Component({
-  props: ['detail', 'getAction', 'list', 'listLink']
+  props: ['icon', 'detail', 'getAction', 'list', 'listLink']
 })
 export default class EditRoute extends Mixins(EditRouteMixin) {
   model = null
@@ -99,6 +112,12 @@ export default class EditRoute extends Mixins(EditRouteMixin) {
 
 
 <style lang="scss" scoped>
+.header {
+  h2 {
+    margin-left: 1rem;
+  }
+}
+
 button {
   display: block;
   margin-bottom: 2rem;

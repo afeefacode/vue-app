@@ -1,6 +1,19 @@
 <template>
   <div>
     <v-row
+      class="header ma-0"
+      align="center"
+    >
+      <v-icon
+        :color="icon.color"
+        size="3rem"
+        v-text="icon.icon"
+      />
+
+      <h2>{{ modelToEdit.getTitle() || title }}</h2>
+    </v-row>
+
+    <v-row
       class="buttons mr-0"
       justify="end"
     >
@@ -43,7 +56,7 @@ import { Component, Mixins } from 'vue-property-decorator'
 import EditRouteMixin from './EditRouteMixin'
 
 @Component({
-  props: ['createModel', 'list', 'listLink']
+  props: ['icon', 'title', 'createModel', 'list', 'listLink']
 })
 export default class CreateRoute extends Mixins(EditRouteMixin) {
   created () {
@@ -74,6 +87,12 @@ export default class CreateRoute extends Mixins(EditRouteMixin) {
 
 
 <style lang="scss" scoped>
+.header {
+  h2 {
+    margin-left: 1rem;
+  }
+}
+
 button {
   display: block;
   margin-bottom: 2rem;

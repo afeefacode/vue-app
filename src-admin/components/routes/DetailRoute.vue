@@ -6,6 +6,19 @@
   >
     <template v-if="model">
       <v-row
+        class="header ma-0"
+        align="center"
+      >
+        <v-icon
+          :color="icon.color"
+          size="3rem"
+          v-text="icon.icon"
+        />
+
+        <h2>{{ model.getTitle() }}</h2>
+      </v-row>
+
+      <v-row
         v-if="hasEdit || hasRemove || hasList"
         class="buttons mr-0"
         justify="end"
@@ -48,7 +61,7 @@ import { AlertEvent, DialogEvent, SaveEvent } from '@a-vue/events'
 import { sleep } from '@a-vue/utils/timeout'
 
 @Component({
-  props: ['edit', 'remove', 'deleteAction', 'list', 'listLink']
+  props: ['icon', 'edit', 'remove', 'deleteAction', 'list', 'listLink']
 })
 export default class DetailRoute extends Vue {
   model = null
@@ -109,6 +122,12 @@ export default class DetailRoute extends Vue {
 
 
 <style lang="scss" scoped>
+.header {
+  h2 {
+    margin-left: 1rem;
+  }
+}
+
 .buttons {
   gap: 1rem;
 }

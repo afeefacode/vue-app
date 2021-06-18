@@ -9,6 +9,7 @@ import ListMeta from './list/ListMeta'
 import ListTitle from './list/ListTitle'
 import ListView from './list/ListView'
 import ModelCount from './model/ModelCount'
+import ModelIcon from './model/ModelIcon'
 import ModelView from './model/ModelView'
 import CreateRoute from './routes/CreateRoute'
 import DetailRoute from './routes/DetailRoute'
@@ -27,6 +28,7 @@ Vue.component('CreateRoute', CreateRoute)
 Vue.component('EditRoute', EditRoute)
 
 Vue.component('ModelCount', ModelCount)
+Vue.component('ModelIcon', ModelIcon)
 Vue.component('ModelView', ModelView)
 
 Vue.component('DetailRoute', DetailRoute)
