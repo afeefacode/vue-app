@@ -9,6 +9,29 @@ export default class EditRouteMixin extends Vue {
   modelToEdit = null
   ignoreChanged = false
 
+  unregisterRouterHook = null
+
+  created () {
+    this.unregisterRouterHook = this.$router.beforeEach(async (to, from, next) => {
+      if (!this.ignoreChanged && this.changed) {
+        const result = await this.$events.dispatch(new DialogEvent(DialogEvent.SHOW, {
+          title: 'Änderungen verwerfen?',
+          message: 'Im Formular sind nicht gespeicherte Änderungen. Sollen diese verworfen werden?',
+          yesButton: 'Verwerfen'
+        }))
+        if (result === DialogEvent.RESULT_YES) {
+          next()
+        }
+        return
+      }
+      next()
+    })
+  }
+
+  destroyed () {
+    this.unregisterRouterHook()
+  }
+
   createModelToEdit () {
     return null
   }
@@ -19,21 +42,6 @@ export default class EditRouteMixin extends Vue {
 
   get fields () {
     return this.$attrs.fields
-  }
-
-  async beforeRouteLeave (_to, _from, next) {
-    if (!this.ignoreChanged && this.changed) {
-      const result = await this.$events.dispatch(new DialogEvent(DialogEvent.SHOW, {
-        title: 'Änderungen verwerfen?',
-        message: 'Im Formular sind nicht gespeicherte Änderungen. Sollen diese verworfen werden?',
-        yesButton: 'Verwerfen'
-      }))
-      if (result === DialogEvent.RESULT_YES) {
-        next()
-      }
-      return
-    }
-    next()
   }
 
   get saveParams () {

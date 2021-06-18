@@ -41,11 +41,11 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { LoadingEvent } from '@a-vue/events'
 
-Component.registerHooks([
-  'beforeRouteEnter',
-  'beforeRouteLeave',
-  'beforeRouteUpdate'
-])
+// Component.registerHooks([
+//   'beforeRouteEnter',
+//   'beforeRouteLeave',
+//   'beforeRouteUpdate'
+// ])
 
 @Component({
   props: ['Menu']
