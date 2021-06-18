@@ -12,6 +12,9 @@ export class BreadcrumbSetDefinition {
     this.name = name
     this.actions = {
       list: true,
+      new: true,
+      detail: true,
+      edit: true,
       ...actions
     }
     this.titles = titles
@@ -26,13 +29,27 @@ export class BreadcrumbSetDefinition {
       c.namePrefix = this.name
     })
 
-    const listChildren = [
-      this.breadcrumb('new', this.breadcrumbTitles.new),
-      this.breadcrumb('detail', this.titles.detail, [
-        this.breadcrumb('edit', this.breadcrumbTitles.edit),
+    const listChildren = []
+    if (this.actions.new) {
+      listChildren.push(this.breadcrumb('new', this.breadcrumbTitles.new))
+    }
+
+    const detailChildren = []
+    if (this.actions.edit) {
+      detailChildren.push(this.breadcrumb('edit', this.breadcrumbTitles.edit))
+    }
+
+    if (this.actions.detail) {
+      listChildren.push(this.breadcrumb('detail', this.titles.detail, [
+        detailChildren,
         ...this.children
-      ])
-    ]
+      ]))
+    } else {
+      listChildren.push(
+        ...detailChildren,
+        ...this.children
+      )
+    }
 
     if (this.actions.list) {
       return this.breadcrumb('list', this.titles.list, listChildren)
@@ -48,7 +65,7 @@ export class BreadcrumbSetDefinition {
       children
     }
 
-    if (action === 'detail') {
+    if (action === 'detail' || (!this.actions.detail && action === 'edit')) {
       options.getTitle = this.getTitle
     }
 

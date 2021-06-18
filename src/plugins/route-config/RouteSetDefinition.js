@@ -20,12 +20,31 @@ export class RouteSetDefinition {
   }
 
   getDefinitions () {
+    const children = []
+
+    if (this.components.list) {
+      children.push(this.route('list', '', true, false))
+    }
+
+    if (this.components.new) {
+      children.push(this.route('new', this.routePaths.new, true, false))
+    }
+
+    const modelChildren = []
+
+    if (this.components.detail) {
+      modelChildren.push(this.route('detail', '', true, true))
+    }
+
+    if (this.components.edit) {
+      const path = this.components.detail ? this.routePaths.edit : ''
+      modelChildren.push(this.route('edit', path, true, true))
+    }
+
     return this.route('container', this.path, false, false, [
-      this.route('list', '', true, false),
-      this.route('new', this.routePaths.new, true, false),
+      ...children,
       this.route('model', `:${this.idKey}`, false, true, [
-        this.route('detail', '', true, true),
-        this.route('edit', this.routePaths.edit, true, true),
+        ...modelChildren,
         ...this.children
       ])
     ])

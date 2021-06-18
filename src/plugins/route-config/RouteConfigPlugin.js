@@ -202,23 +202,60 @@ class RouteConfigPlugin {
       }
       parent = parent.parentDefinition
     }
+
+    this.validateBreadcrumbs()
+
     return definitions
+  }
+
+  validateBreadcrumbs () {
+    for (const id in this._definitionMap) {
+      const r = this._definitionMap[id]
+      if (r.fullName) {
+        const breadcrumbDefinition = this._breadcrumbDefinitionMap[r.fullName]
+        if (!breadcrumbDefinition) {
+          console.warn(`Route "${r.fullName}" does not have a breadcrumb definition`)
+        }
+      }
+    }
+
+    for (const name in this._breadcrumbDefinitionMap) {
+      const b = this._breadcrumbDefinitionMap[name]
+
+      if (!b.routeDefinition) {
+        console.warn(`Breadcrumb "${b.name}" does not have a route definition`)
+      }
+    }
   }
 
   async dumpRoutes () {
     await this._promise
-    for (const path in this._definitionMap) {
-      const r = this._definitionMap[path]
-      const whites = ' '.repeat(Math.max(0, 60 - path.length))
+
+    for (const id in this._definitionMap) {
+      const r = this._definitionMap[id]
+      const whites = ' '.repeat(Math.max(0, 80 - id.length))
       const whites2 = ' '.repeat(Math.max(0, 40 - r.fullName.length))
-      console.log('path:', path, whites, 'name:', r.fullName, whites2, 'parent:', r.parentBreadcrumbDefinition && r.parentBreadcrumbDefinition.fullName)
+
+      const breadcrumbDefinition = this._breadcrumbDefinitionMap[r.fullName]
+      let parentName = null
+      if (breadcrumbDefinition) {
+        parentName = breadcrumbDefinition.parentDefinition && breadcrumbDefinition.parentDefinition.name
+      }
+
+      console.log('id:', id, whites, 'name:', r.fullName, whites2, 'parent', parentName)
     }
   }
 
   async dumbBreadcrumbs () {
     await this._promise
-    for (const path in this._breadcrumbDefinitionMap) {
-      console.log(path, this._breadcrumbDefinitionMap[path])
+
+    for (const name in this._breadcrumbDefinitionMap) {
+      const b = this._breadcrumbDefinitionMap[name]
+
+      const parentName = (b.parentDefinition && b.parentDefinition.name) || null
+      const whites = ' '.repeat(Math.max(0, 80 - name.length))
+
+      console.log('name:', name, whites, 'parent', parentName)
     }
   }
 
