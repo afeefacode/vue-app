@@ -13,20 +13,12 @@ export default class EditRouteMixin extends Vue {
     return null
   }
 
-  get config () {
-    return this.$routeDefinition.config.routing.edit
-  }
-
-  get Component () {
-    return this.config.Component
+  get action () {
+    return this.$attrs.action
   }
 
   get fields () {
-    return this.config.fields
-  }
-
-  get action () {
-    return this.config.action
+    return this.$attrs.fields
   }
 
   async beforeRouteLeave (_to, _from, next) {

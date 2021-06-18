@@ -4,17 +4,20 @@
       class="buttons mr-0"
       justify="end"
     >
-      <router-link :to="listLink">
+      <router-link :to="getListLink()">
         <v-btn>Liste</v-btn>
       </router-link>
     </v-row>
 
-    <component
-      :is="Component"
+    <edit-form
       :model="modelToEdit"
       :valid.sync="valid"
       :changed.sync="changed"
-    />
+    >
+      <template #fields>
+        <slot name="fields" />
+      </template>
+    </edit-form>
 
     <v-row class="submit">
       <v-btn
@@ -39,26 +42,27 @@
 import { Component, Mixins } from 'vue-property-decorator'
 import EditRouteMixin from './EditRouteMixin'
 
-@Component
+@Component({
+  props: ['createModel', 'list', 'listLink']
+})
 export default class CreateRoute extends Mixins(EditRouteMixin) {
   created () {
     this.reset()
   }
 
   createModelToEdit () {
-    return this.config.Model.createForNew(this.fields)
+    return this.createModel(this.fields)
   }
 
-  get config () {
-    return this.$routeDefinition.config.routing.new
+  get hasList () {
+    return !!this.listLink
   }
 
-  get fields () {
-    return this.config.fields
-  }
-
-  get listLink () {
-    return this.config.Model.getLink('list')
+  getListLink () {
+    if (this.listLink) {
+      return this.listLink(this.$route.params)
+    }
+    return this.modelToEdit.getLink('list')
   }
 
   saved (model) {

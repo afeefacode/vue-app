@@ -1,8 +1,7 @@
 <template>
   <model-view
-    :id="id"
+    v-bind="$attrs"
     :action="getAction"
-    :fields="fields"
     :model.sync="model"
   >
     <template v-if="model">
@@ -13,7 +12,7 @@
         <router-link
           v-if="hasList"
           class="button"
-          :to="listLink"
+          :to="getListLink()"
         >
           <v-btn>Liste</v-btn>
         </router-link>
@@ -26,12 +25,15 @@
         </router-link>
       </v-row>
 
-      <component
-        :is="Component"
+      <edit-form
         :model="modelToEdit"
         :valid.sync="valid"
         :changed.sync="changed"
-      />
+      >
+        <template #fields>
+          <slot name="fields" />
+        </template>
+      </edit-form>
 
       <v-row class="submit">
         <v-btn
@@ -57,43 +59,25 @@
 import { Component, Mixins, Watch } from 'vue-property-decorator'
 import EditRouteMixin from './EditRouteMixin'
 
-@Component
+@Component({
+  props: ['detail', 'getAction', 'list', 'listLink']
+})
 export default class EditRoute extends Mixins(EditRouteMixin) {
   model = null
 
-  get config () {
-    return this.$routeDefinition.config.routing.edit
-  }
-
-  get idKey () {
-    return this.$routeDefinition.idKey
-  }
-
-  get id () {
-    return this.$route.params[this.idKey]
-  }
-
-  get fields () {
-    return this.config.fields
-  }
-
   get hasDetail () {
-    return this.config.detail !== false
+    return this.detail !== false
   }
 
   get hasList () {
-    return !!this.config.listLink
+    return !!this.listLink
   }
 
-  get listLink () {
-    if (this.config.listLink) {
-      return this.config.listLink(this.$route.params)
+  getListLink () {
+    if (this.listLink) {
+      return this.listLink(this.$route.params)
     }
     return this.model.getLink('list')
-  }
-
-  get getAction () {
-    return this.config.getAction
   }
 
   @Watch('model')
