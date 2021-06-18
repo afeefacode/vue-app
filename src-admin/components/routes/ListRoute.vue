@@ -5,7 +5,7 @@
       justify="end"
     >
       <router-link
-        v-if="config.add !== false"
+        v-if="add !== false"
         class="button"
         :to="newLink"
       >
@@ -13,38 +13,31 @@
       </router-link>
     </v-row>
 
-    <component
-      :is="Component"
-      :action="action"
-      :fields="fields"
-    />
+    <list-view
+      v-bind="$attrs"
+      v-on="$listeners"
+    >
+      <template #filters>
+        <slot name="filters" />
+      </template>
+
+      <template #model="{ model }">
+        <slot
+          name="model"
+          :model="model"
+        />
+      </template>
+    </list-view>
   </div>
 </template>
 
 <script>
 import { Component, Vue } from 'vue-property-decorator'
 
-@Component
+@Component({
+  props: ['add', 'newLink']
+})
 export default class ListRoute extends Vue {
-  get config () {
-    return this.$routeDefinition.config.routing.list
-  }
-
-  get action () {
-    return this.config.action
-  }
-
-  get fields () {
-    return this.config.fields
-  }
-
-  get newLink () {
-    return this.config.Model.getLink('new')
-  }
-
-  get Component () {
-    return this.config.Component
-  }
 }
 </script>
 
@@ -53,5 +46,9 @@ export default class ListRoute extends Vue {
 .button {
   display: block;
   margin-bottom: 2rem;
+}
+
+::v-deep .v-pagination {
+  justify-content: left;
 }
 </style>

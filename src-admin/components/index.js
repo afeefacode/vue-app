@@ -10,6 +10,7 @@ import ListTitle from './list/ListTitle'
 import ListView from './list/ListView'
 import ModelCount from './model/ModelCount'
 import ModelView from './model/ModelView'
+import ListRoute from './routes/ListRoute'
 import Splash from './Splash'
 
 Vue.component('ListCard', ListCard)
@@ -17,6 +18,7 @@ Vue.component('ListContent', ListContent)
 Vue.component('ListMeta', ListMeta)
 Vue.component('ListTitle', ListTitle)
 Vue.component('ListView', ListView)
+Vue.component('ListRoute', ListRoute)
 
 Vue.component('ModelCount', ModelCount)
 Vue.component('ModelView', ModelView)
