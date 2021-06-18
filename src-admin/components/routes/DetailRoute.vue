@@ -1,9 +1,8 @@
 <template>
   <model-view
-    :id="id"
-    :action="action"
-    :fields="fields"
+    v-bind="$attrs"
     :model.sync="model"
+    v-on="$listeners"
   >
     <template v-if="model">
       <v-row
@@ -16,7 +15,7 @@
           color="red"
           text
           class="white--text"
-          @click="remove"
+          @click="removeModel"
         >
           Löschen
         </v-btn>
@@ -24,7 +23,7 @@
         <router-link
           v-if="hasList"
           class="button"
-          :to="listLink"
+          :to="getListLink()"
         >
           <v-btn>Liste</v-btn>
         </router-link>
@@ -38,10 +37,7 @@
         </router-link>
       </v-row>
 
-      <component
-        :is="Component"
-        :model="model"
-      />
+      <slot />
     </template>
   </model-view>
 </template>
@@ -51,59 +47,32 @@ import { Component, Vue } from 'vue-property-decorator'
 import { AlertEvent, DialogEvent, SaveEvent } from '@a-vue/events'
 import { sleep } from '@a-vue/utils/timeout'
 
-@Component
+@Component({
+  props: ['edit', 'remove', 'deleteAction', 'list', 'listLink']
+})
 export default class DetailRoute extends Vue {
   model = null
 
-  get config () {
-    return this.$routeDefinition.config.routing.detail
-  }
-
-  get idKey () {
-    return this.$routeDefinition.idKey
-  }
-
-  get id () {
-    return this.$route.params[this.idKey]
-  }
-
-  get fields () {
-    return this.config.fields
-  }
-
-  get action () {
-    return this.config.action
-  }
-
-  get Component () {
-    return this.config.Component
-  }
-
-  get deleteAction () {
-    const config = this.$routeDefinition.config.routing.delete
-    return config.action
-  }
-
   get hasEdit () {
-    return this.config.edit !== false
+    return this.edit !== false
   }
 
   get hasRemove () {
-    return this.config.remove !== false
+    return this.remove !== false
   }
 
   get hasList () {
-    return this.config.list !== false
+    return this.list !== false
   }
 
-  get listLink () {
-    if (this.config.listLink) {
-      return this.config.listLink(this.$route.params)
+  getListLink () {
+    if (this.listLink) {
+      return this.listLink(this.$route.params)
     }
     return this.model.getLink('list')
   }
 
-  async remove () {
+  async removeModel () {
     const result = await this.$events.dispatch(new DialogEvent(DialogEvent.SHOW, {
       title: this.model.getTitle() + ' löschen?',
       message: 'Soll ' + this.model.getTitle() + 'gelöscht werden?',

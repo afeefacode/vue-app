@@ -10,6 +10,7 @@ import ListTitle from './list/ListTitle'
 import ListView from './list/ListView'
 import ModelCount from './model/ModelCount'
 import ModelView from './model/ModelView'
+import DetailRoute from './routes/DetailRoute'
 import ListRoute from './routes/ListRoute'
 import Splash from './Splash'
 
@@ -22,6 +23,7 @@ Vue.component('ListRoute', ListRoute)
 
 Vue.component('ModelCount', ModelCount)
 Vue.component('ModelView', ModelView)
+Vue.component('DetailRoute', DetailRoute)
 
 Vue.component('DetailContent', DetailContent)
 Vue.component('DetailMeta', DetailMeta)

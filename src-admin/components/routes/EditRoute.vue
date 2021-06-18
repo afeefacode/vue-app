@@ -10,7 +10,18 @@
         class="buttons mr-0"
         justify="end"
       >
-        <router-link :to="model.getLink()">
+        <router-link
+          v-if="hasList"
+          class="button"
+          :to="listLink"
+        >
+          <v-btn>Liste</v-btn>
+        </router-link>
+
+        <router-link
+          v-if="hasDetail"
+          :to="model.getLink()"
+        >
           <v-btn>Ansehen</v-btn>
         </router-link>
       </v-row>
@@ -66,8 +77,23 @@ export default class EditRoute extends Mixins(EditRouteMixin) {
     return this.config.fields
   }
 
+  get hasDetail () {
+    return this.config.detail !== false
+  }
+
+  get hasList () {
+    return !!this.config.listLink
+  }
+
+  get listLink () {
+    if (this.config.listLink) {
+      return this.config.listLink(this.$route.params)
+    }
+    return this.model.getLink('list')
+  }
+
   get getAction () {
-    return this.$routeDefinition.config.routing.detail.action
+    return this.config.getAction
   }
 
   @Watch('model')
