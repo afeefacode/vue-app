@@ -93,7 +93,9 @@ export default class ABreadcrumbs extends Vue {
           if (!this.titleCache[cacheKey]) {
             this.titleCache[cacheKey] = item.title // set title to default for multiple parallel requests
             const title = await d.getTitle(this.$route.params)
-            this.titleCache[cacheKey] = title
+            if (title) { // item might be removed
+              this.titleCache[cacheKey] = title
+            }
           }
           item.title = this.titleCache[cacheKey]
         }
