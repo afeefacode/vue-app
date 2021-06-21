@@ -18,12 +18,15 @@ import { Component, Vue } from 'vue-property-decorator'
 import { debounce } from '../utils/debounce'
 
 @Component({
-  props: ['debounce', 'validator', 'password']
+  props: ['focus', 'debounce', 'validator', 'password']
 })
 export default class ATextField extends Vue {
+  autofocus = false
   showPassword = false
 
   created () {
+    this.autofocus = this.focus || false
+
     if (this.debounce) {
       this.$listeners.input = debounce(value => {
         this.$emit('input', value)
@@ -32,6 +35,10 @@ export default class ATextField extends Vue {
   }
 
   mounted () {
+    if (this.autofocus) {
+      this.$el.querySelector('input').focus()
+    }
+
     if (this.validator) {
       this.$refs.input.validate(true)
     }

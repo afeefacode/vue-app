@@ -5,6 +5,7 @@
         v-model="model[name]"
         :label="name"
         :validator="validator"
+        v-bind="$attrs"
       />
     </template>
 
@@ -39,13 +40,20 @@
 <script>
 import { Component, Vue } from 'vue-property-decorator'
 import { apiResources } from '@afeefa/api-resources-client'
+import EditForm from './EditForm.vue'
 
 @Component({
   props: ['name', 'options', 'clearable']
 })
 export default class FormField extends Vue {
   get model () {
-    return this.$parent.$parent.model
+    let parent = this
+    while (parent) {
+      if (parent instanceof EditForm) {
+        return parent.model
+      }
+      parent = parent.$parent
+    }
   }
 
   get modelType () {
