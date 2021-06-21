@@ -66,7 +66,8 @@ export default class ATextField extends Vue {
   }
 
   get validationRules () {
-    return (this.validator && this.validator.getRules()) || []
+    const label = this.$attrs.label
+    return (this.validator && this.validator.getRules(label)) || []
   }
 
   get counter () {
