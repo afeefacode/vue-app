@@ -1,5 +1,6 @@
 <template>
   <model-view
+    ref="modelView"
     v-bind="$attrs"
     :action="getAction"
     :model.sync="model"
@@ -106,6 +107,11 @@ export default class EditRoute extends Mixins(EditRouteMixin) {
     return {
       id: this.model.id
     }
+  }
+
+  saved (model) {
+    // reload model and recreate edit model
+    this.$refs.modelView.load()
   }
 }
 </script>

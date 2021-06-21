@@ -70,8 +70,6 @@ export default class EditRouteMixin extends Vue {
       }))
 
       const model = result.data
-
-      this.$emitOnParent('modelSaved')
       this.saved(model)
     } else {
       this.$events.dispatch(new AlertEvent(AlertEvent.ERROR, {
@@ -85,5 +83,6 @@ export default class EditRouteMixin extends Vue {
   }
 
   saved (model) {
+    // e.g. redirect after save
   }
 }
