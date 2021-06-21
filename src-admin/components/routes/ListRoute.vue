@@ -18,7 +18,7 @@
       justify="end"
     >
       <router-link
-        v-if="add !== false"
+        v-if="$has.add"
         class="button"
         :to="newLink"
       >
@@ -58,9 +58,10 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
-  props: ['icon', 'title', 'add', 'newLink']
+  props: ['icon', 'title', 'newLink']
 })
 export default class ListRoute extends Vue {
+  $hasOptions = ['add']
 }
 </script>
 

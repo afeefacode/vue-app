@@ -19,12 +19,12 @@
       </v-row>
 
       <v-row
-        v-if="hasEdit || hasRemove || hasList"
+        v-if="$has.edit || $has.remove || $has.list"
         class="buttons mr-0"
         justify="end"
       >
         <v-btn
-          v-if="hasRemove"
+          v-if="$has.remove"
           color="red"
           text
           class="white--text"
@@ -34,7 +34,7 @@
         </v-btn>
 
         <router-link
-          v-if="hasList"
+          v-if="$has.list"
           class="button"
           :to="getListLink()"
         >
@@ -42,7 +42,7 @@
         </router-link>
 
         <router-link
-          v-if="hasEdit"
+          v-if="$has.edit"
           class="button"
           :to="model.getLink('edit')"
         >
@@ -61,22 +61,12 @@ import { AlertEvent, DialogEvent, SaveEvent } from '@a-vue/events'
 import { sleep } from '@a-vue/utils/timeout'
 
 @Component({
-  props: ['icon', 'edit', 'remove', 'deleteAction', 'list', 'listLink']
+  props: ['icon', 'deleteAction', 'listLink']
 })
 export default class DetailRoute extends Vue {
+  $hasOptions = ['list', 'edit', 'remove']
+
   model = null
-
-  get hasEdit () {
-    return this.edit !== false
-  }
-
-  get hasRemove () {
-    return this.remove !== false
-  }
-
-  get hasList () {
-    return this.list !== false
-  }
 
   getListLink () {
     if (this.listLink) {

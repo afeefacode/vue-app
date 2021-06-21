@@ -56,7 +56,7 @@ import { Component, Mixins } from 'vue-property-decorator'
 import EditRouteMixin from './EditRouteMixin'
 
 @Component({
-  props: ['icon', 'title', 'createModel', 'list', 'listLink']
+  props: ['icon', 'title', 'createModel', 'listLink']
 })
 export default class CreateRoute extends Mixins(EditRouteMixin) {
   created () {
@@ -65,10 +65,6 @@ export default class CreateRoute extends Mixins(EditRouteMixin) {
 
   createModelToEdit () {
     return this.createModel(this.fields)
-  }
-
-  get hasList () {
-    return !!this.listLink
   }
 
   getListLink () {

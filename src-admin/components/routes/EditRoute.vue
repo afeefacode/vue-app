@@ -24,7 +24,7 @@
         justify="end"
       >
         <router-link
-          v-if="hasList"
+          v-if="$has.list"
           class="button"
           :to="getListLink()"
         >
@@ -32,7 +32,7 @@
         </router-link>
 
         <router-link
-          v-if="hasDetail"
+          v-if="$has.detail"
           :to="model.getLink()"
         >
           <v-btn>Ansehen</v-btn>
@@ -74,18 +74,12 @@ import { Component, Mixins, Watch } from 'vue-property-decorator'
 import EditRouteMixin from './EditRouteMixin'
 
 @Component({
-  props: ['icon', 'detail', 'getAction', 'list', 'listLink']
+  props: ['icon', 'getAction', 'listLink']
 })
 export default class EditRoute extends Mixins(EditRouteMixin) {
+  $hasOptions = ['detail', 'list']
+
   model = null
-
-  get hasDetail () {
-    return this.detail !== false
-  }
-
-  get hasList () {
-    return !!this.listLink
-  }
 
   getListLink () {
     if (this.listLink) {
