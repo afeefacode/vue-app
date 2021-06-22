@@ -4,7 +4,7 @@
       <slot name="filters" />
     </div>
 
-    <template v-if="!isLoading && models.length">
+    <template v-if="models.length">
       <div
         v-for="model in models"
         :key="model.id"
