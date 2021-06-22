@@ -27,7 +27,7 @@
 
         <a-breadcrumbs />
 
-        <router-view />
+        <router-view :class="{isLoading}" />
       </v-container>
     </v-main>
 
@@ -40,12 +40,6 @@
 <script>
 import { Component, Vue } from 'vue-property-decorator'
 import { LoadingEvent } from '@a-vue/events'
-
-// Component.registerHooks([
-//   'beforeRouteEnter',
-//   'beforeRouteLeave',
-//   'beforeRouteUpdate'
-// ])
 
 @Component({
   props: ['Menu']
@@ -73,5 +67,9 @@ export default class App extends Vue {
 <style lang="scss" scoped>
 .breadcrumbs {
   margin-bottom: 2rem;
+}
+
+.isLoading {
+  opacity: .6;
 }
 </style>
