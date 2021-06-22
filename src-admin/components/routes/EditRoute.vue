@@ -118,6 +118,10 @@ export default class EditRoute extends Mixins(EditRouteMixin) {
   }
 }
 
+.buttons {
+  gap: 1rem;
+}
+
 button {
   display: block;
   margin-bottom: 2rem;
