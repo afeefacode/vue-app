@@ -36,4 +36,5 @@ Vue.component('DetailContent', DetailContent)
 Vue.component('DetailMeta', DetailMeta)
 Vue.component('DetailTitle', DetailTitle)
 
+Vue.component('Index', Index)
 Vue.component('Splash', Splash)

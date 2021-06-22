@@ -17,9 +17,20 @@
         />
 
         <div class="ml-4">
-          Lade App
+          {{ title || 'Lade App ...' }}
         </div>
       </v-row>
     </v-container>
   </v-app>
 </template>
+
+
+<script>
+import { Component, Vue } from 'vue-property-decorator'
+
+@Component({
+  props: ['title']
+})
+export default class Splash extends Vue {
+}
+</script>
