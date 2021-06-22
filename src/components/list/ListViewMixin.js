@@ -4,7 +4,7 @@ import { QuerySourceType } from './QuerySourceType'
 import { RouteFilterSource } from './RouteFilterSource'
 
 @Component({
-  props: ['filterHistoryKey', 'filterSource', 'action', 'fields']
+  props: ['apiResponse', 'filterHistoryKey', 'filterSource', 'action', 'fields']
 })
 export default class ListViewMixin extends Vue {
   models = []
@@ -21,8 +21,10 @@ export default class ListViewMixin extends Vue {
   }
 
   init () {
-    this.models = []
-    this.meta = {}
+    if (this.apiResponse) {
+      this.models = this.apiResponse.data
+      this.meta = this.apiResponse.meta
+    }
 
     if (this.requestFilters) {
       this.requestFilters.off('change', this.filtersChanged)
@@ -36,7 +38,12 @@ export default class ListViewMixin extends Vue {
 
     this.$emit('update:filters', this.filters)
 
+    if (this.apiResponse) {
+      this.requestFilters.initFromUsed(this.meta.used_filters, this.meta.count_search)
+      this.$emit('update:count', this.meta.count_search)
+    } else {
     this.load()
+  }
   }
 
   @Watch('$route.query')
