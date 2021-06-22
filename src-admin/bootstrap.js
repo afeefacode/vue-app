@@ -38,7 +38,7 @@ export async function bootstrap ({ apis, models, routing }) {
       vuetify,
       router,
       el: '#app',
-      template: '<router-view></router-view>'
+      template: '<router-view />'
     })
   }, 500)
 }
