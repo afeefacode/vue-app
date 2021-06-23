@@ -146,14 +146,8 @@ export default class EditPage extends Mixins(EditRouteMixin) {
     }
   }
 
-  async afterSave (model) {
-    this.model_ = await new GetAction()
-      .setAction(this._getAction)
-      .setFields(this.fields)
-      .setId(model.id)
-      .noEvents()
-      .load()
-
+  afterSave (model) {
+    this.model_ = model
     this.reset()
   }
 }

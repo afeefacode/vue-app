@@ -91,6 +91,7 @@ export class SaveAction {
       .params({
         id: this.id
       })
+      .fields(this.fields)
       .data(this.data)
       .send()
 
