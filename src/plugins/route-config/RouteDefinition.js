@@ -1,6 +1,3 @@
-import { eventBus } from '../event-bus/EventBus'
-import { RouteEvent } from './RouteEvent'
-
 export class RouteDefinition {
   fullPath = ''
   fullId = ''
