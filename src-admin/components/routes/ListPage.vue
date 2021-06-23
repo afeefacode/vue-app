@@ -140,8 +140,4 @@ export default class ListPage extends Vue {
   display: block;
   margin-bottom: 2rem;
 }
-
-::v-deep .v-pagination {
-  justify-content: left;
-}
 </style>
