@@ -16,6 +16,15 @@ Component.registerHooks([
   'beforeRouteUpdate'
 ])
 
+/**
+ * keep track 'this' in beforeRouteEnter
+ * in order to avoid rendering list pages with a stale set
+ * of models because next(vm => ...) will first create the
+ * list page with the existing set of models and update the
+ * models afterwards.
+ */
+let lastVm = null
+
 @Component
 export default class ListRoute2 extends Vue {
   models = []
@@ -39,10 +48,16 @@ export default class ListRoute2 extends Vue {
       .setFiltersForRoute(to)
       .load()
 
+    if (lastVm) {
+      lastVm.isLoaded = false
+    }
+
     next(vm => {
       vm.models = models
       vm.meta = meta
       vm.isLoaded = true
+
+      lastVm = vm
     })
   }
 
