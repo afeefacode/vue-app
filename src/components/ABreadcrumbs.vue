@@ -16,8 +16,7 @@
       <template #item="{ item }">
         <breadcrumbs-item
           :to="item.to"
-          :exact-path="true"
-          :disabled="item.disabled"
+          :exact="true"
         >
           {{ item.title.toUpperCase() }}
         </breadcrumbs-item>
