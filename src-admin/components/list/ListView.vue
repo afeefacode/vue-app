@@ -1,12 +1,16 @@
 <template>
   <div>
     <div class="filters">
-      <slot name="filters" />
+      <slot
+        name="filters"
+        :filters="filters"
+        :count="count"
+      />
     </div>
 
-    <template v-if="models.length">
+    <template v-if="models_.length">
       <div
-        v-for="model in models"
+        v-for="model in models_"
         :key="model.id"
       >
         <slot
@@ -48,5 +52,9 @@ export default class ListView extends Mixins(ListViewMixin) {
 <style lang="scss" scoped>
 .filters {
   margin-bottom: 3rem;
+}
+
+::v-deep .v-pagination {
+  justify-content: left;
 }
 </style>

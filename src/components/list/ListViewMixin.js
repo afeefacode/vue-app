@@ -4,11 +4,11 @@ import { QuerySourceType } from './QuerySourceType'
 import { RouteFilterSource } from './RouteFilterSource'
 
 @Component({
-  props: ['apiResponse', 'filterHistoryKey', 'filterSource', 'action', 'fields']
+  props: ['models', 'meta', 'action', 'fields', 'filterHistoryKey', 'filterSource']
 })
 export default class ListViewMixin extends Vue {
-  models = []
-  meta = {}
+  models_ = []
+  meta_ = {}
   requestFilters = null
   isLoading = false
 
@@ -21,9 +21,9 @@ export default class ListViewMixin extends Vue {
   }
 
   init () {
-    if (this.apiResponse) {
-      this.models = this.apiResponse.data
-      this.meta = this.apiResponse.meta
+    if (this.models) {
+      this.models_ = this.models
+      this.meta_ = this.meta
     }
 
     if (this.requestFilters) {
@@ -38,9 +38,9 @@ export default class ListViewMixin extends Vue {
 
     this.$emit('update:filters', this.filters)
 
-    if (this.apiResponse) {
-      this.requestFilters.initFromUsed(this.meta.used_filters, this.meta.count_search)
-      this.$emit('update:count', this.meta.count_search)
+    if (this.models) {
+      this.requestFilters.initFromUsed(this.meta_.used_filters, this.meta_.count_search)
+      this.$emit('update:count', this.meta_.count_search)
     } else {
       this.load()
     }
@@ -57,15 +57,16 @@ export default class ListViewMixin extends Vue {
     this.load()
   }
 
-  /**
-   * Used by ListFilter
-   */
+  resetFilters () {
+    this.requestFilters.reset()
+  }
+
   get filters () {
     return this.requestFilters.getFilters()
   }
 
-  resetFilters () {
-    this.requestFilters.reset()
+  get count () {
+    return this.meta_.count_search || 0
   }
 
   async load () {
@@ -77,15 +78,15 @@ export default class ListViewMixin extends Vue {
       .filters(this.requestFilters.serialize())
       .send()
 
-    this.models = result.data
-    this.meta = result.meta
+    this.models_ = result.data
+    this.meta_ = result.meta
 
-    if (this.meta.used_filters) {
-      this.requestFilters.initFromUsed(this.meta.used_filters, this.meta.count_search)
+    if (this.meta_.used_filters) {
+      this.requestFilters.initFromUsed(this.meta_.used_filters, this.meta_.count_search)
     }
 
     this.isLoading = false
 
-    this.$emit('update:count', this.meta.count_search)
+    this.$emit('update:count', this.meta_.count_search)
   }
 }
