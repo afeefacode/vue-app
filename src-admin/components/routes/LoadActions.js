@@ -1,5 +1,5 @@
 import { RouteParamsFilterSource } from '@a-vue/components/list/RouteParamsFilterSource'
-import { AlertEvent, LoadingEvent, SaveEvent } from '@a-vue/events'
+import { AlertEvent, DialogEvent, LoadingEvent, SaveEvent } from '@a-vue/events'
 import { eventBus } from '@a-vue/plugins/event-bus/EventBus'
 import { sleep } from '@a-vue/utils/timeout'
 import { RequestFilters } from '@afeefa/api-resources-client'
@@ -119,6 +119,64 @@ export class SaveAction {
       }))
       return null
     }
+  }
+}
+
+export class DeleteAction {
+  action = null
+  id = null
+  fields = null
+  dialog = null
+
+  setAction (action) {
+    this.action = action
+    return this
+  }
+
+  setId (id) {
+    this.id = id
+    return this
+  }
+
+  setDialog (dialog) {
+    this.dialog = dialog
+    return this
+  }
+
+  async delete () {
+    const result = await eventBus.dispatch(new DialogEvent(DialogEvent.SHOW, this.dialog))
+
+    if (result === DialogEvent.RESULT_YES) {
+      eventBus.dispatch(new SaveEvent(SaveEvent.START_SAVING))
+
+      const startTime = Date.now()
+
+      const result = await this.action.request()
+        .params({
+          id: this.id
+        })
+        .send()
+
+      const diffTime = Date.now() - startTime
+      const restTime = Math.max(0, 400 - diffTime)
+      if (restTime) {
+        await sleep(restTime / 1000)
+      }
+
+      eventBus.dispatch(new SaveEvent(SaveEvent.STOP_SAVING))
+
+      if (result) {
+        eventBus.dispatch(new AlertEvent(AlertEvent.MESSAGE, {
+          message: 'Die Daten wurden gelöscht.'
+        }))
+        return true
+      } else {
+        eventBus.dispatch(new AlertEvent(AlertEvent.ERROR, {
+          message: 'Die Daten wurden nicht gelöscht.'
+        }))
+      }
+    }
+    return false
   }
 }
 

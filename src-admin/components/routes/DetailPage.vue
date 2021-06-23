@@ -23,7 +23,7 @@
         color="red"
         text
         class="white--text"
-        @click="removeModel"
+        @click="remove"
       >
         Löschen
       </v-btn>
@@ -55,8 +55,7 @@
 
 <script>
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { AlertEvent, DialogEvent, SaveEvent } from '@a-vue/events'
-import { sleep } from '@a-vue/utils/timeout'
+import { DeleteAction } from './LoadActions'
 
 @Component({
   props: ['model', 'icon', 'deleteAction', 'listLink']
@@ -109,36 +108,19 @@ export default class DetailPage extends Vue {
     return this.ModelClass.getAction(this.$routeDefinition, 'delete')
   }
 
-  async removeModel () {
-    const result = await this.$events.dispatch(new DialogEvent(DialogEvent.SHOW, {
-      title: this.model.getTitle() + ' löschen?',
-      message: 'Soll ' + this.model.getTitle() + 'gelöscht werden?',
-      yesButton: 'Ja, Löschen!'
-    }))
+  async remove () {
+    const result = await new DeleteAction()
+      .setAction(this._deleteAction)
+      .setId(this.model.id)
+      .setDialog({
+        title: this.model.getTitle() + ' löschen?',
+        message: 'Soll ' + this.model.getTitle() + 'gelöscht werden?',
+        yesButton: 'Ja, Löschen!'
+      })
+      .delete()
 
-    if (result === DialogEvent.RESULT_YES) {
-      this.$events.dispatch(new SaveEvent(SaveEvent.START_SAVING))
-
-      const result = await this._deleteAction.request()
-        .params({
-          id: this.model.id
-        })
-        .send()
-
-      await sleep()
-
-      this.$events.dispatch(new SaveEvent(SaveEvent.STOP_SAVING))
-
-      if (result) {
-        this.$events.dispatch(new AlertEvent(AlertEvent.MESSAGE, {
-          message: 'Die Daten wurden gelöscht.'
-        }))
-        this.$router.push(this.model.getLink('list'))
-      } else {
-        this.$events.dispatch(new AlertEvent(AlertEvent.ERROR, {
-          message: 'Die Daten wurden nicht gelöscht.'
-        }))
-      }
+    if (result) {
+      this.$router.push(this.model.getLink('list'))
     }
   }
 }
