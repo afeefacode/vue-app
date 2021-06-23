@@ -42,8 +42,8 @@ export default class ListViewMixin extends Vue {
       this.requestFilters.initFromUsed(this.meta.used_filters, this.meta.count_search)
       this.$emit('update:count', this.meta.count_search)
     } else {
-    this.load()
-  }
+      this.load()
+    }
   }
 
   @Watch('$route.query')
