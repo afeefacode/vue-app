@@ -54,6 +54,12 @@ export default class ListViewMixin extends Vue {
     }
   }
 
+  @Watch('models')
+  modelsChanged () {
+    this.models_ = this.models
+    this.meta_ = this.meta
+  }
+
   filtersChanged () {
     this.load()
   }
