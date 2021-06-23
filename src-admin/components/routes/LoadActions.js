@@ -183,26 +183,17 @@ export class DeleteAction {
 export class ListAction {
   action = null
   fields = null
-  filterHistoryKey = null
-  requestFilters = null
+  filters = null
+  route = null
+  events = true
 
   setAction (action) {
     this.action = action
     return this
   }
 
-  setRoute (route) {
+  setFiltersForRoute (route) {
     this.route = route
-    return this
-  }
-
-  setFilterHistoryKey (filterHistoryKey) {
-    this.filterHistoryKey = filterHistoryKey
-    return this
-  }
-
-  setRequestFilters (requestFilters) {
-    this.requestFilters = requestFilters
     return this
   }
 
@@ -211,28 +202,45 @@ export class ListAction {
     return this
   }
 
+  setFilters (filters) {
+    this.filters = filters
+    return this
+  }
+
+  noEvents () {
+    this.events = false
+    return this
+  }
+
   async load () {
-    eventBus.dispatch(new LoadingEvent(LoadingEvent.START_LOADING))
+    if (this.events) {
+      eventBus.dispatch(new LoadingEvent(LoadingEvent.START_LOADING))
+    }
 
-    const querySource = new RouteParamsFilterSource(this.route)
-    const requestFilters = this.action.createRequestFilters(null, querySource)
+    let filters = this.filters
 
-    const historyKey = [this.route.path, this.filterHistoryKey].filter(i => i).join('.')
-    const storedFilters = RequestFilters.fromHistory(historyKey)
-    if (storedFilters) {
-      requestFilters.initFromUsed(storedFilters.serialize(), 1)
+    if (this.route) {
+      const querySource = new RouteParamsFilterSource(this.route)
+      const requestFilters = this.action.createRequestFilters(null, querySource)
+      const storedFilters = RequestFilters.fromHistory(this.route.path)
+      if (storedFilters) {
+        requestFilters.initFromUsed(storedFilters.serialize(), 1)
+      }
+      filters = requestFilters.serialize()
     }
 
     const result = await this.action
       .request()
       .fields(this.fields)
-      .filters(requestFilters.serialize())
+      .filters(filters)
       .send()
 
     const models = result.data
     const meta = result.meta
 
-    eventBus.dispatch(new LoadingEvent(LoadingEvent.STOP_LOADING))
+    if (this.events) {
+      eventBus.dispatch(new LoadingEvent(LoadingEvent.STOP_LOADING))
+    }
 
     return {
       models,

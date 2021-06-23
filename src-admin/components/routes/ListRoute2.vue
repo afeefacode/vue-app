@@ -9,11 +9,7 @@
 
 <script>
 import { Component, Vue } from 'vue-property-decorator'
-import { eventBus } from '@a-vue/plugins/event-bus/EventBus'
-import { LoadingEvent } from '@a-vue/events'
-import { RouteParamsFilterSource } from '@a-vue/components/list/RouteParamsFilterSource'
-import { RequestFilters } from '@afeefa/api-resources-client'
-import { sleep } from '../../../src/utils/timeout'
+import { ListAction } from './LoadActions'
 
 Component.registerHooks([
   'beforeRouteEnter',
@@ -30,38 +26,22 @@ export default class ListRoute2 extends Vue {
     const Component = routeDefinition.config.list
     const listConfig = Component.getListConfig(routeDefinition)
 
-    eventBus.dispatch(new LoadingEvent(LoadingEvent.START_LOADING))
-
     let action = null
     if (listConfig.ModelClass) {
       action = listConfig.ModelClass.getAction(routeDefinition, 'list')
-    } else if (listConfig.action) {
-      action = listConfig.action
     } else {
-      console.warn('Component\'s getListConfig method must provide a list action.')
+      action = listConfig.action
     }
 
-    const querySource = new RouteParamsFilterSource(to)
-    const requestFilters = action.createRequestFilters(null, querySource)
-
-    const storedFilters = RequestFilters.fromHistory(to.path)
-    if (storedFilters) {
-      requestFilters.initFromUsed(storedFilters.serialize(), 1)
-    }
-
-    // await sleep()
-
-    const result = await action
-      .request()
-      .fields(listConfig.fields)
-      .filters(requestFilters.serialize())
-      .send()
-
-    eventBus.dispatch(new LoadingEvent(LoadingEvent.STOP_LOADING))
+    const {models, meta} = await new ListAction()
+      .setAction(action)
+      .setFields(listConfig.fields)
+      .setFiltersForRoute(to)
+      .load()
 
     next(vm => {
-      vm.models = result.data
-      vm.meta = result.meta
+      vm.models = models
+      vm.meta = meta
       vm.isLoaded = true
     })
   }

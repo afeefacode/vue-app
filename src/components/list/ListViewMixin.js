@@ -1,3 +1,4 @@
+import { ListAction } from '@a-admin/components/routes/LoadActions'
 import { Component, Vue, Watch } from 'vue-property-decorator'
 
 import { QuerySourceType } from './QuerySourceType'
@@ -72,14 +73,14 @@ export default class ListViewMixin extends Vue {
   async load () {
     this.isLoading = true
 
-    const result = await this.action
-      .request()
-      .fields(this.fields)
-      .filters(this.requestFilters.serialize())
-      .send()
+    const {models, meta} = await new ListAction()
+      .setAction(this.action)
+      .setFields(this.fields)
+      .setFilters(this.requestFilters.serialize())
+      .load()
 
-    this.models_ = result.data
-    this.meta_ = result.meta
+    this.models_ = models
+    this.meta_ = meta
 
     if (this.meta_.used_filters) {
       this.requestFilters.initFromUsed(this.meta_.used_filters, this.meta_.count_search)
