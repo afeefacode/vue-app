@@ -1,0 +1,180 @@
+<template>
+  <div class="editPage">
+    <v-row
+      class="header ma-0"
+      align="center"
+    >
+      <v-icon
+        :color="_icon.color"
+        size="3rem"
+        v-text="_icon.icon"
+      />
+
+      <h2>{{ modelToEdit.getTitle() }}</h2>
+    </v-row>
+
+    <v-row
+      class="buttons mr-0"
+      justify="end"
+    >
+      <router-link
+        v-if="$has.list"
+        class="button"
+        :to="_listLink"
+      >
+        <v-btn>Liste</v-btn>
+      </router-link>
+
+      <router-link
+        v-if="$has.detail"
+        :to="model.getLink()"
+      >
+        <v-btn>Ansehen</v-btn>
+      </router-link>
+    </v-row>
+
+    <component
+      :is="Component"
+      v-if="false"
+      :model="modelToEdit"
+      :valid.sync="valid"
+      :changed.sync="changed"
+    />
+
+    <edit-form
+      :model="modelToEdit"
+      :valid.sync="valid"
+      :changed.sync="changed"
+    >
+      <template #fields>
+        <slot
+          name="fields"
+          :model="modelToEdit"
+        />
+      </template>
+    </edit-form>
+
+    <v-row class="submit">
+      <v-btn
+        :disabled="!changed || !valid"
+        @click="save"
+      >
+        Speichern
+      </v-btn>
+
+      <v-btn
+        v-if="changed"
+        text
+        @click="reset"
+      >
+        Zurücksetzen
+      </v-btn>
+    </v-row>
+  </div>
+</template>
+
+<script>
+import { Component, Mixins, Watch } from 'vue-property-decorator'
+import EditRouteMixin from './EditRouteMixin'
+
+@Component({
+  props: ['model', 'icon', 'listLink', 'getAction']
+})
+export default class EditPage extends Mixins(EditRouteMixin) {
+  $hasOptions = ['detail', 'list']
+
+  model_ = null
+
+  created () {
+    if (!this.$parent.constructor.getEditConfig) {
+      console.warn('<edit-page> owner must provide a static getEditConfig method.')
+    }
+
+    this.model_ = this.model
+    this.reset()
+    this.$emit('model', this.modelToEdit)
+  }
+
+  @Watch('model')
+  modelChanged () {
+    this.model_ = this.model
+    this.reset()
+    this.$emit('model', this.modelToEdit)
+  }
+
+  get editConfig () {
+    return this.$parent.constructor.getEditConfig(this.$routeDefinition)
+  }
+
+  get modelUpateAction () {
+    return this.ModelClass.getAction(this.$routeDefinition, 'update')
+  }
+
+  get _getAction () {
+    if (this.getAction) {
+      return this.getAction
+    }
+    return this.ModelClass.getAction(this.$routeDefinition, 'get')
+  }
+
+  get _listLink () {
+    if (this.listLink) {
+      if (typeof this.listLink === 'function') {
+        return this.listLink(this.$route.params)
+      } else {
+        return this.listLink
+      }
+    }
+    return this.model.getLink('list')
+  }
+
+  get _icon () {
+    if (this.icon) {
+      return this.icon
+    }
+    return this.model.getIcon()
+  }
+
+  createModelToEdit () {
+    return this.model_.cloneForEdit(this.fields)
+  }
+
+  get saveParams () {
+    return {
+      id: this.model.id
+    }
+  }
+
+  async afterSave (_model) {
+    const result = await this._getAction.request()
+      .params(this.saveParams)
+      .fields(this.fields)
+      .send()
+
+    this.model_ = result.data
+    this.reset()
+  }
+}
+</script>
+
+
+<style lang="scss" scoped>
+.header {
+  h2 {
+    margin-left: 1rem;
+  }
+}
+
+.buttons {
+  gap: 1rem;
+}
+
+button {
+  display: block;
+  margin-bottom: 2rem;
+}
+
+.submit {
+  margin-top: 2rem;
+}
+</style>
