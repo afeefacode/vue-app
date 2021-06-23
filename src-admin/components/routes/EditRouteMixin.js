@@ -2,7 +2,11 @@ import { AlertEvent, DialogEvent, SaveEvent } from '@a-vue/events'
 import { sleep } from '@a-vue/utils/timeout'
 import { Component, Vue } from 'vue-property-decorator'
 
-@Component
+import { SaveAction } from './LoadActions'
+
+@Component({
+  props: ['saveAction']
+})
 export default class EditRouteMixin extends Vue {
   valid = false
   changed = false
@@ -36,12 +40,27 @@ export default class EditRouteMixin extends Vue {
     return null
   }
 
-  get action () {
-    return this.$attrs.action
+  get editConfig () {
+    return null
+  }
+
+  get ModelClass () {
+    return this.editConfig.ModelClass
+  }
+
+  get _saveAction () {
+    if (this.saveAction) {
+      return this.saveAction
+    }
+    return this.modelUpateAction
+  }
+
+  get modelUpateAction () {
+    return null
   }
 
   get fields () {
-    return this.$attrs.fields
+    return this.editConfig.fields
   }
 
   get saveParams () {
@@ -53,36 +72,26 @@ export default class EditRouteMixin extends Vue {
   }
 
   async save () {
-    this.$events.dispatch(new SaveEvent(SaveEvent.START_SAVING))
+    const model = await new SaveAction()
+      .setAction(this._saveAction)
+      .setFields(this.fields)
+      .setId(this.modelToEdit.id)
+      .setData(this.modelToEdit.serialize(this.fields))
+      .setAfterSaveHook(this.afterSave)
+      .save()
 
-    const result = await this.action.request()
-      .params(this.saveParams)
-      .data(this.modelToEdit.serialize(this.fields))
-      .send()
-
-    await sleep()
-
-    this.$events.dispatch(new SaveEvent(SaveEvent.STOP_SAVING))
-
-    if (result) {
-      this.$events.dispatch(new AlertEvent(AlertEvent.MESSAGE, {
-        message: 'Die Daten wurden gespeichert.'
-      }))
-
-      const model = result.data
-      this.saved(model)
-    } else {
-      this.$events.dispatch(new AlertEvent(AlertEvent.ERROR, {
-        message: 'Die Daten wurden nicht gespeichert.'
-      }))
-    }
+    this.saved(model)
   }
 
   reset () {
     this.modelToEdit = this.createModelToEdit()
   }
 
-  saved (model) {
+  afterSave (_model) {
+    // e.g. reload model
+  }
+
+  saved (_model) {
     // e.g. redirect after save
   }
 }

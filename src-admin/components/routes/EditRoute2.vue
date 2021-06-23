@@ -6,9 +6,10 @@
   />
 </template>
 
+
 <script>
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { DetailAction } from './LoadActions'
+import { GetAction } from './LoadActions'
 
 Component.registerHooks([
   'beforeRouteEnter',
@@ -26,7 +27,7 @@ function load (routeDefinition, params) {
     action = editConfig.getAction
   }
 
-  return new DetailAction()
+  return new GetAction()
     .setAction(action)
     .setFields(editConfig.fields)
     .setId(params[routeDefinition.idKey])

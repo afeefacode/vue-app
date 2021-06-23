@@ -1,5 +1,15 @@
 <template>
-  <component
-    :is="Component"
-  />
+  <component :is="Component" />
 </template>
+
+
+<script>
+import { Component, Vue } from 'vue-property-decorator'
+
+@Component
+export default class CreateRoute extends Vue {
+  get Component () {
+    return this.$routeDefinition.config.new
+  }
+}
+</script>

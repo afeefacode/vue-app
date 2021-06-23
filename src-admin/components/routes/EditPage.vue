@@ -76,6 +76,7 @@
 <script>
 import { Component, Mixins, Watch } from 'vue-property-decorator'
 import EditRouteMixin from './EditRouteMixin'
+import { GetAction } from './LoadActions'
 
 @Component({
   props: ['model', 'icon', 'listLink', 'getAction']
@@ -145,13 +146,14 @@ export default class EditPage extends Mixins(EditRouteMixin) {
     }
   }
 
-  async afterSave (_model) {
-    const result = await this._getAction.request()
-      .params(this.saveParams)
-      .fields(this.fields)
-      .send()
+  async afterSave (model) {
+    this.model_ = await new GetAction()
+      .setAction(this._getAction)
+      .setFields(this.fields)
+      .setId(model.id)
+      .noEvents()
+      .load()
 
-    this.model_ = result.data
     this.reset()
   }
 }
