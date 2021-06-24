@@ -9,15 +9,36 @@
     </div>
 
     <template v-if="models_.length">
-      <div
-        v-for="model in models_"
-        :key="model.id"
-      >
-        <slot
-          name="model"
-          :model="model"
-        />
-      </div>
+      <template v-if="table">
+        <div class="table">
+          <div class="header">
+            <slot name="header-table" />
+          </div>
+
+          <div
+            v-for="model in models_"
+            :key="model.id"
+            class="row"
+          >
+            <slot
+              name="model-table"
+              :model="model"
+            />
+          </div>
+        </div>
+      </template>
+
+      <template v-else>
+        <div
+          v-for="model in models_"
+          :key="model.id"
+        >
+          <slot
+            name="model"
+            :model="model"
+          />
+        </div>
+      </template>
     </template>
 
     <div v-else-if="!isLoading">
@@ -35,7 +56,9 @@ import { Component, Watch, Mixins } from 'vue-property-decorator'
 import ListViewMixin from '@a-vue/components/list/ListViewMixin'
 import { LoadingEvent } from '@a-vue/events'
 
-@Component
+@Component({
+  props: ['table']
+})
 export default class ListView extends Mixins(ListViewMixin) {
   @Watch('isLoading')
   isLoadingChanged () {
@@ -56,5 +79,47 @@ export default class ListView extends Mixins(ListViewMixin) {
 
 ::v-deep .v-pagination {
   justify-content: left;
+}
+
+.table {
+  display: table;
+  border-collapse: collapse;
+  width: 100%;
+
+  .header, .row {
+    display: table-row;
+    padding: 1rem;
+    > * {
+      display: table-cell;
+      padding: .5rem;
+      padding-right: 2rem;
+      white-space: nowrap;
+      vertical-align: middle;
+
+      &.info {
+        background: none !important;
+        color: #888888;
+      }
+    }
+  }
+
+  .header {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #999999;
+    font-size: .9rem;
+  }
+
+  .row {
+    border-bottom: 1px solid #CCCCCC;
+
+    &:hover {
+      background: #F4F4F4;
+    }
+
+    &:last-child {
+      border: none;
+    }
+  }
 }
 </style>

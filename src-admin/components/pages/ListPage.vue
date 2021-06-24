@@ -32,6 +32,7 @@
       :meta="meta"
       :action="action"
       :fields="fields"
+      :table="table"
       v-on="$listeners"
     >
       <template #filters="{filters, count}">
@@ -42,7 +43,39 @@
         />
       </template>
 
-      <template #model="{ model }">
+      <template
+        v-if="table"
+        #header-table
+      >
+        <div />
+
+        <slot name="header" />
+
+        <div class="lastColumn" />
+      </template>
+
+      <template
+        v-if="table"
+        #model-table="{ model }"
+      >
+        <v-icon
+          :color="model.getIcon().color"
+          size="2rem"
+          v-text="model.getIcon().icon"
+        />
+
+        <slot
+          name="model"
+          :model="model"
+        />
+
+        <div class="lastColumn" />
+      </template>
+
+      <template
+        v-if="!table"
+        #model="{ model }"
+      >
         <v-row
           align="center"
           class="item"
@@ -67,7 +100,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
-  props: ['models', 'meta', 'title', 'newLink']
+  props: ['models', 'meta', 'title', 'newLink', 'table']
 })
 export default class ListPage extends Vue {
   $hasOptions = ['add']
@@ -139,5 +172,9 @@ export default class ListPage extends Vue {
 .button {
   display: block;
   margin-bottom: 2rem;
+}
+
+.lastColumn {
+  width: 100%;
 }
 </style>

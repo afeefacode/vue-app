@@ -1,5 +1,6 @@
 <template>
   <v-icon
+    class="modelIcon"
     :color="color"
     v-bind="$attrs"
     v-text="icon"
@@ -14,11 +15,19 @@ import { Component, Vue } from 'vue-property-decorator'
 })
 export default class ModelIcon extends Vue {
   get icon () {
-    return this.modelClass.icon.icon
+    if (this.model) {
+      return this.model.getIcon().icon
+    } else {
+      return this.modelClass.icon.icon
+    }
   }
 
   get color () {
-    return this.modelClass.icon.color
+    if (this.model) {
+      return this.model.getIcon().color
+    } else {
+      return this.modelClass.icon.color
+    }
   }
 }
 </script>

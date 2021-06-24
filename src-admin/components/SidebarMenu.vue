@@ -6,7 +6,7 @@
       class="item"
     >
       <model-icon
-        :model-class="item.iconModel"
+        :modelClass="item.iconModel"
         class="mr-1"
         size="1.5rem"
       />
