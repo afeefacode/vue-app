@@ -14,8 +14,6 @@
       >
         ${{ icon }}
       </v-icon>
-
-      {{ filter.value }}
     </div>
   </div>
 </template>
