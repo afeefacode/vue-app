@@ -75,13 +75,12 @@
 
 <script>
 import { Component, Mixins, Watch } from 'vue-property-decorator'
-import EditRouteMixin from './EditRouteMixin'
-import { GetAction } from './LoadActions'
+import EditPageMixin from './EditPageMixin'
 
 @Component({
   props: ['model', 'icon', 'listLink', 'getAction']
 })
-export default class EditPage extends Mixins(EditRouteMixin) {
+export default class EditPage extends Mixins(EditPageMixin) {
   $hasOptions = ['detail', 'list']
 
   model_ = null

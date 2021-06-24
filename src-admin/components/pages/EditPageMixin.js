@@ -1,13 +1,11 @@
-import { AlertEvent, DialogEvent, SaveEvent } from '@a-vue/events'
-import { sleep } from '@a-vue/utils/timeout'
+import { SaveAction } from '@a-vue/api-resources/ApiActions'
+import { DialogEvent } from '@a-vue/events'
 import { Component, Vue } from 'vue-property-decorator'
-
-import { SaveAction } from './LoadActions'
 
 @Component({
   props: ['saveAction']
 })
-export default class EditRouteMixin extends Vue {
+export default class EditPageMixin extends Vue {
   valid = false
   changed = false
   modelToEdit = null

@@ -15,7 +15,7 @@
 
 <script>
 import { Component, Vue } from 'vue-property-decorator'
-import { debounce } from '../utils/debounce'
+import { debounce } from '@a-vue/utils/debounce'
 
 @Component({
   props: ['focus', 'debounce', 'validator', 'password']

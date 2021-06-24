@@ -9,7 +9,7 @@
 
 <script>
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { GetAction } from './LoadActions'
+import { GetAction } from '@a-vue/api-resources/ApiActions'
 
 Component.registerHooks([
   'beforeRouteEnter',

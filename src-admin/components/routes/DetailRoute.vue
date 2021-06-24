@@ -8,7 +8,7 @@
 
 <script>
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { GetAction } from './LoadActions'
+import { GetAction } from '@a-vue/api-resources/ApiActions'
 
 Component.registerHooks([
   'beforeRouteEnter',
@@ -34,7 +34,7 @@ function load (routeDefinition, params) {
 }
 
 @Component
-export default class DetailRoute2 extends Vue {
+export default class DetailRoute extends Vue {
   model = null
 
   async beforeRouteEnter (to, from, next) {

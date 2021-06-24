@@ -9,7 +9,7 @@
 
 <script>
 import { Component, Vue } from 'vue-property-decorator'
-import { ListAction } from './LoadActions'
+import { ListAction } from '@a-vue/api-resources/ApiActions'
 
 Component.registerHooks([
   'beforeRouteEnter',
@@ -26,7 +26,7 @@ Component.registerHooks([
 let lastVm = null
 
 @Component
-export default class ListRoute2 extends Vue {
+export default class ListRoute extends Vue {
   models = []
   isLoaded = false
 

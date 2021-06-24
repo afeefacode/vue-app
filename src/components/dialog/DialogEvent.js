@@ -1,4 +1,4 @@
-import { BaseEvent } from '../../plugins/event-bus/BaseEvent'
+import { BaseEvent } from '@a-vue/plugins/event-bus/BaseEvent'
 
 export class DialogEvent extends BaseEvent {
   static isAsync = true

@@ -55,7 +55,7 @@
 
 <script>
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { DeleteAction } from './LoadActions'
+import { DeleteAction } from '@a-vue/api-resources/ApiActions'
 
 @Component({
   props: ['model', 'icon', 'deleteAction', 'listLink']

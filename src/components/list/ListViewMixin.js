@@ -1,4 +1,4 @@
-import { ListAction } from '@a-admin/components/routes/LoadActions'
+import { ListAction } from '@a-vue/api-resources/ApiActions'
 import { Component, Vue, Watch } from 'vue-property-decorator'
 
 import { QuerySourceType } from './QuerySourceType'

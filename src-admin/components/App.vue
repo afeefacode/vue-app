@@ -40,7 +40,7 @@
 <script>
 import { Component, Vue } from 'vue-property-decorator'
 import { LoadingEvent } from '@a-vue/events'
-import { appConfig } from '../config/AppConfig'
+import { appConfig } from '@a-admin/config/AppConfig'
 
 @Component
 export default class App extends Vue {

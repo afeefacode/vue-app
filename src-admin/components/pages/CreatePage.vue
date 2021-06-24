@@ -56,12 +56,12 @@
 
 <script>
 import { Component, Mixins } from 'vue-property-decorator'
-import EditRouteMixin from './EditRouteMixin'
+import EditPageMixin from './EditPageMixin'
 
 @Component({
   props: ['icon', 'title', 'createModel', 'listLink']
 })
-export default class CreatePage extends Mixins(EditRouteMixin) {
+export default class CreatePage extends Mixins(EditPageMixin) {
   created () {
     if (!this.$parent.constructor.getCreateConfig) {
       console.log(this.$parent.$vnode.tag)

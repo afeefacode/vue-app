@@ -11,10 +11,10 @@ import ListTitle from './list/ListTitle'
 import ListView from './list/ListView'
 import ModelCount from './model/ModelCount'
 import ModelIcon from './model/ModelIcon'
-import CreatePage from './routes/CreatePage'
-import DetailPage from './routes/DetailPage'
-import EditPage from './routes/EditPage'
-import ListPage from './routes/ListPage'
+import CreatePage from './pages/CreatePage'
+import DetailPage from './pages/DetailPage'
+import EditPage from './pages/EditPage'
+import ListPage from './pages/ListPage'
 
 Vue.component('ListCard', ListCard)
 Vue.component('ListContent', ListContent)
