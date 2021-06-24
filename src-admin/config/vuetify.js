@@ -2,6 +2,8 @@ import {
   mdiAlarmLightOutline,
   mdiChevronRight,
   mdiClose,
+  mdiSortAlphabeticalAscending,
+  mdiSortAlphabeticalDescending,
   mdiThumbUpOutline
 } from '@mdi/js'
 import Vue from 'vue'
@@ -16,7 +18,9 @@ export default new Vuetify({
       chevronRightIcon: mdiChevronRight,
       thumbsUpIcon: mdiThumbUpOutline,
       alarmIcon: mdiAlarmLightOutline,
-      closeIcon: mdiClose
+      closeIcon: mdiClose,
+      sortAscIcon: mdiSortAlphabeticalAscending,
+      sortDescIcon: mdiSortAlphabeticalDescending
     }
   },
   breakpoint: {

@@ -84,7 +84,13 @@ import { Component, Vue } from 'vue-property-decorator'
 })
 export default class ListFilter extends Vue {
   get filters () {
-    return this.$parent.filters
+    let parent = this.$parent
+    while (parent) {
+      if (parent.filters) {
+        return parent.filters
+      }
+      parent = parent.$parent
+    }
   }
 
   get filter () {

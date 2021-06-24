@@ -108,6 +108,9 @@ export default class ListView extends Mixins(ListViewMixin) {
     letter-spacing: 1px;
     color: #999999;
     font-size: .9rem;
+    > * {
+      padding-right: 1rem;
+    }
   }
 
   .row {

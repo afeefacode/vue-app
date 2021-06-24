@@ -5,6 +5,7 @@ import DetailMeta from './detail/DetailMeta'
 import DetailTitle from './detail/DetailTitle'
 import Index from './Index'
 import ListCard from './list/ListCard'
+import ListColumnHeader from './list/ListColumnHeader'
 import ListContent from './list/ListContent'
 import ListMeta from './list/ListMeta'
 import ListTitle from './list/ListTitle'
@@ -17,6 +18,7 @@ import EditPage from './pages/EditPage'
 import ListPage from './pages/ListPage'
 
 Vue.component('ListCard', ListCard)
+Vue.component('ListColumnHeader', ListColumnHeader)
 Vue.component('ListContent', ListContent)
 Vue.component('ListMeta', ListMeta)
 Vue.component('ListTitle', ListTitle)
