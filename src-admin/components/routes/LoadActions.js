@@ -239,6 +239,8 @@ export class ListAction {
     const models = result.data
     const meta = result.meta
 
+    // await sleep(2)
+
     if (this.events) {
       eventBus.dispatch(new LoadingEvent(LoadingEvent.STOP_LOADING))
     }

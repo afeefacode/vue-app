@@ -1,16 +1,16 @@
 <template>
-  <div>
-    <splash v-if="isLoading" />
-
-    <router-view :isLoading.sync="isLoading" />
-  </div>
+  <router-view @appLoaded="appLoaded" />
 </template>
 
 <script>
 import { Component, Vue } from 'vue-property-decorator'
 
-@Component
+@Component({
+  props: ['splash']
+})
 export default class Index extends Vue {
-  isLoading = true
+  appLoaded () {
+    this.splash.$destroy()
+  }
 }
 </script>

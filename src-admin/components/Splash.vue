@@ -3,23 +3,29 @@
     <v-container
       fill-height
       fluid
-      class="pb-16 d-flex align-center"
+      class="pb-0 d-flex align-center justify-center"
     >
-      <v-row
-        align="center"
-        justify="center"
-      >
-        <v-progress-circular
-          :size="45"
-          :width="6"
-          indeterminate
-          color="green"
-        />
-
-        <div class="ml-4">
-          {{ title || 'Lade App ...' }}
+      <div>
+        <div class="logo">
+          <slot />
         </div>
-      </v-row>
+
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <v-progress-linear
+            :size="45"
+            :width="6"
+            indeterminate
+            :color="color || 'green'"
+          />
+
+          <div class="mt-4">
+            {{ title || 'Lade App ...' }}
+          </div>
+        </v-row>
+      </div>
     </v-container>
   </v-app>
 </template>
@@ -29,8 +35,22 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
-  props: ['title']
+  props: ['title', 'color']
 })
 export default class Splash extends Vue {
+  destroyed () {
+    this.$el.parentNode.removeChild(this.$el)
+  }
 }
 </script>
+
+
+<style lang="scss" scoped>
+.logo {
+  margin-bottom: 2rem;
+}
+
+.container {
+  transform: translateY(-10%);
+}
+</style>

@@ -15,7 +15,6 @@ import CreatePage from './routes/CreatePage'
 import DetailPage from './routes/DetailPage'
 import EditPage from './routes/EditPage'
 import ListPage from './routes/ListPage'
-import Splash from './Splash'
 
 Vue.component('ListCard', ListCard)
 Vue.component('ListContent', ListContent)
@@ -37,4 +36,3 @@ Vue.component('DetailTitle', DetailTitle)
 Vue.component('DetailPage', DetailPage)
 
 Vue.component('Index', Index)
-Vue.component('Splash', Splash)

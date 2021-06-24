@@ -9,7 +9,7 @@
         <v-app-bar-nav-icon @click="drawer = !drawer" />
       </div>
 
-      <component :is="Menu" />
+      <component :is="SidebarMenu" />
     </v-navigation-drawer>
 
     <v-main>
@@ -40,10 +40,9 @@
 <script>
 import { Component, Vue } from 'vue-property-decorator'
 import { LoadingEvent } from '@a-vue/events'
+import { appConfig } from '../config/AppConfig'
 
-@Component({
-  props: ['Menu']
-})
+@Component
 export default class App extends Vue {
   drawer = true
   isLoading = false
@@ -52,7 +51,11 @@ export default class App extends Vue {
     this.$events.on(LoadingEvent.START_LOADING, this.startLoading)
     this.$events.on(LoadingEvent.STOP_LOADING, this.stopLoading)
 
-    this.$emit('update:isLoading', false)
+    this.$emit('appLoaded')
+  }
+
+  get SidebarMenu () {
+    return appConfig.components.SidebarMenu
   }
 
   startLoading () {

@@ -6,6 +6,7 @@ import { timeout } from '@a-vue/utils/timeout'
 import { apiResources } from '@afeefa/api-resources-client'
 import Vue from 'vue'
 
+import { appConfig } from './config/AppConfig'
 import routeConfigPlugin from './config/routing'
 import vuetify from './config/vuetify'
 
@@ -13,15 +14,20 @@ Vue.use(hasOptionsPlugin)
 
 Vue.config.productionTip = false
 
-export async function bootstrap ({ apis, models, routing }) {
+export async function bootstrap ({ apis, models, routing, components }) {
   apiResources
     .registerModels(models)
     .registerApis(apis)
 
+  appConfig.components = components
+
   const splash = new Vue({
     vuetify,
-    el: '#app',
-    template: '<splash />'
+    el: '#splash',
+    template: '<splash />',
+    components: {
+      Splash: components.Splash
+    }
   })
 
   routing(routeConfigPlugin)
@@ -32,13 +38,14 @@ export async function bootstrap ({ apis, models, routing }) {
   // routeConfigPlugin.dumbBreadcrumbs()
 
   timeout(() => {
-    splash.$destroy()
-
     new Vue({
       vuetify,
       router,
       el: '#app',
-      template: '<index />'
+      template: '<index :splash="splash" />',
+      data: {
+        splash
+      }
     })
   }, 500)
 }
