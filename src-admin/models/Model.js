@@ -1,7 +1,7 @@
 import { Model as ApiResourcesModel } from '@afeefa/api-resources-client'
 import { mdiAlphaMCircle } from '@mdi/js'
 export class Model extends ApiResourcesModel {
-  static resourceName = null
+  static resourceType = null
   static routeName = null
   static routeIdKey = 'id'
 
@@ -10,9 +10,9 @@ export class Model extends ApiResourcesModel {
   }
 
   static getAction (routeDefinition, action) {
-    if (this.resourceName) {
+    if (this.resourceType) {
       const api = routeDefinition.config.api
-      return api.getAction(this.resourceName, action)
+      return api.getAction(this.resourceType, action)
     }
     return null
   }
