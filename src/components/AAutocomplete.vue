@@ -1,9 +1,16 @@
 <template>
   <v-autocomplete
     ref="select"
-    :rules="validationRules"
     :items="items_"
-    :value-comparator="compareValues"
+    :valueComparator="compareValues"
+
+    :noDataText="noDataText"
+    :searchInput.sync="q"
+    :loading="isLoading"
+
+    no-filter
+
+    :rules="validationRules"
     v-bind="$attrs"
     v-on="$listeners"
   />
@@ -12,39 +19,42 @@
 
 <script>
 import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Model } from '@afeefa/api-resources-client'
+import { debounce } from '@a-vue/utils/debounce'
 
 @Component({
-  props: ['validator', 'defaultValue', 'items', 'selectedText']
+  props: ['items', 'validator', 'defaultValue', 'selectedItemText', 'debounce']
 })
 export default class AAutocomplete extends Vue {
+  isLoading = false
   items_ = []
+  q = null
+  debounceFunction = null
 
   mounted () {
-    const select = this.select
-
     // monkey patch v-select setting 'undefined' on clearable
-    const setValue = select.setValue
-    select.setValue = value => {
+    const setValue = this.select.setValue
+    this.select.setValue = value => {
       if (!value && value !== false) { // if undefined alike
         value = this.defaultValue || null
       }
       setValue(value)
     }
 
-    // monkey patch v-select to set intial items while items not being loaded yet
-    // const setSelectedItems = select.setSelectedItems
-    // select.setSelectedItems = () => {
-    //   setSelectedItems()
-    //   const value = select.value
-    //   if (value && !select.selectedItems.length) {
-    //     select.selectedItems = [
-    //       {
-    //         itemText: this.selectedText(value),
-    //         itemValue: value
-    //       }
-    //     ]
-    //   }
-    // }
+    // monkey patch v-select to set selected items while list items not being loaded yet
+    const setSelectedItems = this.select.setSelectedItems
+    this.select.setSelectedItems = () => {
+      setSelectedItems()
+      const value = this.select.value
+      if (value && !this.select.selectedItems.length) {
+        this.select.selectedItems = [
+          {
+            itemText: this.selectedItemText(value),
+            itemValue: value
+          }
+        ]
+      }
+    }
 
     this.init()
   }
@@ -55,6 +65,14 @@ export default class AAutocomplete extends Vue {
   }
 
   compareValues (a, b) {
+    if (this.valueComparator) {
+      return this.valueComparator(a, b)
+    }
+
+    if (a instanceof Model && b instanceof Model) {
+      return a.id === b.id && a.type === b.type
+    }
+
     return JSON.stringify(a) === JSON.stringify(b)
   }
 
@@ -62,15 +80,53 @@ export default class AAutocomplete extends Vue {
     return (this.validator && this.validator.getRules()) || []
   }
 
+  get value () {
+    return this.$attrs.value
+  }
+
+  get valueComparator () {
+    return this.$attrs.valueComparator
+  }
+
   get select () {
     return this.$refs.select
   }
 
-  async init () {
-    if (this.items instanceof Promise) {
-      this.items_ = await this.items
+  get noDataText () {
+    if (this.q && this.q.length) {
+      return 'Nichts gefunden'
+    }
+    return 'Tippen, um zu suchen'
+  }
+
+  @Watch('q')
+  async keywordChanged (newKeyword, oldKeyword) {
+    if (this.debounce) {
+      if (!this.debounceFunction) {
+        this.debounceFunction = debounce(() => {
+          this.load(this.q)
+        }, this.debounce, () => this.q)
+      }
+      this.debounceFunction()
     } else {
-      this.items_ = this.items
+      this.load(this.q)
+    }
+  }
+
+  async load (q) {
+    this.isLoading = true
+    this.items_ = await this.items(q)
+    this.isLoading = false
+  }
+
+  async init () {
+    // load initial items only if no selected value
+    if (!this.select.value) {
+      this.items_ = await this.load()
+    } else {
+      // reset items array to trigger setSelectedItems() function
+      // in order to set our current item
+      this.items_ = []
     }
 
     if (this.validator) {

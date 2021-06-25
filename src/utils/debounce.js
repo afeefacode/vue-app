@@ -1,4 +1,8 @@
 export function debounce (callback, delay = 300, condition = () => true) {
+  if (delay === true) {
+    delay = 300
+  }
+
   let timeout = null
   return function () {
     const args = arguments

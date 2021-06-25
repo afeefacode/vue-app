@@ -12,6 +12,7 @@
 
 <script>
 import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Model } from '@afeefa/api-resources-client'
 
 @Component({
   props: ['validator', 'defaultValue', 'items']
@@ -38,6 +39,14 @@ export default class ASelect extends Vue {
   }
 
   compareValues (a, b) {
+    if (this.valueComparator) {
+      return this.valueComparator(a, b)
+    }
+
+    if (a instanceof Model && b instanceof Model) {
+      return a.id === b.id && a.type === b.type
+    }
+
     return JSON.stringify(a) === JSON.stringify(b)
   }
 
@@ -45,6 +54,9 @@ export default class ASelect extends Vue {
     return (this.validator && this.validator.getRules()) || []
   }
 
+  get valueComparator () {
+    return this.$attrs.valueComparator
+  }
 
   get select () {
     return this.$refs.select
