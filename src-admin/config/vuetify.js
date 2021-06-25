@@ -2,6 +2,7 @@ import {
   mdiAlarmLightOutline,
   mdiChevronRight,
   mdiClose,
+  mdiDotsVertical,
   mdiSortAlphabeticalAscending,
   mdiSortAlphabeticalDescending,
   mdiThumbUpOutline
@@ -20,7 +21,8 @@ export default new Vuetify({
       alarmIcon: mdiAlarmLightOutline,
       closeIcon: mdiClose,
       sortAscIcon: mdiSortAlphabeticalAscending,
-      sortDescIcon: mdiSortAlphabeticalDescending
+      sortDescIcon: mdiSortAlphabeticalDescending,
+      dotsVerticalIcon: mdiDotsVertical
     }
   },
   breakpoint: {
