@@ -2,7 +2,7 @@
   <v-select
     ref="select"
     :rules="validationRules"
-    :items="internalItems"
+    :items="items_"
     :value-comparator="compareValues"
     v-bind="$attrs"
     v-on="$listeners"
@@ -17,7 +17,7 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
   props: ['validator', 'defaultValue', 'items']
 })
 export default class ASelect extends Vue {
-  internalItems = []
+  items_ = []
 
   mounted () {
     // monkey patch v-select setting 'undefined' on clearable
@@ -48,9 +48,9 @@ export default class ASelect extends Vue {
 
   async init () {
     if (this.items instanceof Promise) {
-      this.internalItems = await this.items
+      this.items_ = await this.items
     } else {
-      this.internalItems = this.items
+      this.items_ = this.items
     }
 
     if (this.validator) {
