@@ -100,12 +100,13 @@ export default class AAutocomplete extends Vue {
   }
 
   @Watch('q')
-  async keywordChanged (newKeyword, oldKeyword) {
-    if (this.debounce) {
+  async keywordChanged () {
+    if (this.debounce !== false) {
+      const delay = this.debounce || true
       if (!this.debounceFunction) {
         this.debounceFunction = debounce(() => {
           this.load(this.q)
-        }, this.debounce, () => this.q)
+        }, delay, () => this.q)
       }
       this.debounceFunction()
     } else {
