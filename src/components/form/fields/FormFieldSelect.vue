@@ -1,7 +1,11 @@
 <template>
-  <a-text-field
+  <a-select
     v-model="model[name]"
     :label="label || name"
+
+    item-text="itemText"
+    item-value="itemValue"
+
     :validator="validator"
     v-bind="$attrs"
   />
@@ -12,6 +16,6 @@ import { Component, Mixins } from 'vue-property-decorator'
 import FormFieldMixin from '../FormFieldMixin'
 
 @Component
-export default class FormFieldText extends Mixins(FormFieldMixin) {
+export default class FormFieldSelect extends Mixins(FormFieldMixin) {
 }
 </script>

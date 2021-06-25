@@ -1,5 +1,5 @@
 <template>
-  <v-select
+  <v-autocomplete
     ref="select"
     :rules="validationRules"
     :items="items_"
@@ -14,20 +14,37 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 
 @Component({
-  props: ['validator', 'defaultValue', 'items']
+  props: ['validator', 'defaultValue', 'items', 'selectedText']
 })
-export default class ASelect extends Vue {
+export default class AAutocomplete extends Vue {
   items_ = []
 
   mounted () {
+    const select = this.select
+
     // monkey patch v-select setting 'undefined' on clearable
-    const setValue = this.select.setValue
-    this.select.setValue = value => {
+    const setValue = select.setValue
+    select.setValue = value => {
       if (!value && value !== false) { // if undefined alike
         value = this.defaultValue || null
       }
       setValue(value)
     }
+
+    // monkey patch v-select to set intial items while items not being loaded yet
+    // const setSelectedItems = select.setSelectedItems
+    // select.setSelectedItems = () => {
+    //   setSelectedItems()
+    //   const value = select.value
+    //   if (value && !select.selectedItems.length) {
+    //     select.selectedItems = [
+    //       {
+    //         itemText: this.selectedText(value),
+    //         itemValue: value
+    //       }
+    //     ]
+    //   }
+    // }
 
     this.init()
   }
@@ -45,18 +62,15 @@ export default class ASelect extends Vue {
     return (this.validator && this.validator.getRules()) || []
   }
 
-
   get select () {
     return this.$refs.select
   }
 
   async init () {
-    const items = typeof this.items === 'function' ? this.items() : this.items
-
-    if (items instanceof Promise) {
-      this.items_ = await items
+    if (this.items instanceof Promise) {
+      this.items_ = await this.items
     } else {
-      this.items_ = items
+      this.items_ = this.items
     }
 
     if (this.validator) {

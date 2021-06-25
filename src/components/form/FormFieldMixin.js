@@ -27,9 +27,11 @@ export default class FormField extends Vue {
       ? this.modelType.getUpdateFields()
       : this.modelType.getCreateFields()
     const field = fields[this.name]
+
     if (!field) {
       console.warn(`Field "${this.name}" not configured for type ${this.modelType.name}#${update ? 'update' : 'create'}`)
     }
+
     return field
   }
 
