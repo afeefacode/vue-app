@@ -3,6 +3,7 @@ import {
   mdiChevronRight,
   mdiClose,
   mdiDotsVertical,
+  mdiLogoutVariant,
   mdiSortAlphabeticalAscending,
   mdiSortAlphabeticalDescending,
   mdiThumbUpOutline
@@ -22,7 +23,8 @@ export default new Vuetify({
       closeIcon: mdiClose,
       sortAscIcon: mdiSortAlphabeticalAscending,
       sortDescIcon: mdiSortAlphabeticalDescending,
-      dotsVerticalIcon: mdiDotsVertical
+      dotsVerticalIcon: mdiDotsVertical,
+      logoutIcon: mdiLogoutVariant
     }
   },
   breakpoint: {

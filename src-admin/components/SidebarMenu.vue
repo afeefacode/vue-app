@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pl-8 d-flex flex-column">
+  <v-container class="d-flex flex-column">
     <div
       v-for="item in config.items"
       :key="item.title"

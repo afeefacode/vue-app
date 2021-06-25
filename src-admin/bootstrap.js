@@ -14,11 +14,12 @@ Vue.use(hasOptionsPlugin)
 
 Vue.config.productionTip = false
 
-export async function bootstrap ({ apis, models, routing, components }) {
+export async function bootstrap ({ apis, models, routing, authService, authAppName, components }) {
   apiResources
     .registerModels(models)
     .registerApis(apis)
 
+  appConfig.authService = authService
   appConfig.components = components
 
   const splash = new Vue({
@@ -33,6 +34,9 @@ export async function bootstrap ({ apis, models, routing, components }) {
   routing(routeConfigPlugin)
   const router = await routeConfigPlugin.getRouter()
   await apiResources.schemasLoaded()
+
+  authService.appName = authAppName
+  authService.initApp(router)
 
   // routeConfigPlugin.dumpRoutes()
   // routeConfigPlugin.dumbBreadcrumbs()

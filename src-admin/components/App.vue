@@ -5,11 +5,40 @@
       app
       fixed
     >
-      <div class="pt-8 pl-8 d-flex align-start flex-column">
-        <v-app-bar-nav-icon @click="drawer = !drawer" />
-      </div>
+      <v-container
+        flex-column
+        align-start
+        fill-height
+      >
+        <div class="ma-2">
+          <v-app-bar-nav-icon @click="drawer = !drawer" />
+        </div>
 
-      <component :is="SidebarMenu" />
+        <component
+          :is="SidebarMenu"
+          class="mt-8"
+          flex-grow-1
+        />
+
+        <div class="flex-grow-1 d-flex flex-column justify-end align-end">
+          <div class="ma-4 d-flex align-center">
+            <v-avatar
+              color="primary white--text"
+              size="40"
+              class="mr-4"
+            >
+              {{ account.first_name.charAt(0) }}{{ account.last_name.charAt(0) }}
+            </v-avatar>
+
+            <div>
+              <div>{{ account.first_name }} {{ account.last_name }}</div>
+              <v-icon class="ml-n1">
+                $logoutIcon
+              </v-icon> <a @click="logout()">Logout</a>
+            </div>
+          </div>
+        </div>
+      </v-container>
     </v-navigation-drawer>
 
     <v-main>
@@ -19,13 +48,20 @@
         fluid
         class="pa-8"
       >
-        <v-app-bar-nav-icon
-          v-if="!drawer"
-          class=" mb-8"
-          @click="drawer = !drawer"
-        />
+        <v-row
+          align="center"
+          class="mb-8"
+          style="height: 36px;"
+        >
+          <v-app-bar-nav-icon
+            v-if="!drawer"
+            class="mr-2"
+            size="2rem"
+            @click="drawer = !drawer"
+          />
 
-        <a-breadcrumbs />
+          <a-breadcrumbs class="ma-0" />
+        </v-row>
 
         <router-view :class="{isLoading}" />
       </v-container>
@@ -64,6 +100,14 @@ export default class App extends Vue {
 
   stopLoading () {
     this.isLoading = false
+  }
+
+  logout () {
+    appConfig.authService.forwardToLogoutEndpoint()
+  }
+
+  get account () {
+    return appConfig.authService.getAccount()
   }
 }
 </script>
