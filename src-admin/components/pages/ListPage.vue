@@ -1,30 +1,31 @@
 <template>
-  <div>
-    <v-row
-      class="header ma-0"
-      align="center"
-    >
-      <v-icon
-        :color="_icon.color"
-        size="3rem"
-        v-text="_icon.icon"
-      />
+  <div class="listPage">
+    <div class="d-flex align-center">
+      <div class="d-flex align-center gap-4">
+        <v-icon
+          :color="_icon.color"
+          size="3rem"
+          v-text="_icon.icon"
+        />
 
-      <h2>{{ _title }}</h2>
-    </v-row>
+        <h2>{{ _title }}</h2>
+      </div>
 
-    <v-row
-      class="buttons mr-0"
-      justify="end"
-    >
-      <router-link
-        v-if="$has.add"
-        class="button"
-        :to="_newLink"
-      >
-        <v-btn>Neu</v-btn>
-      </router-link>
-    </v-row>
+      <v-spacer />
+
+      <div class="buttons">
+        <v-btn
+          v-if="$has.add"
+          :to="_newLink"
+          color="green white--text"
+        >
+          <v-icon left>
+            $plusIcon
+          </v-icon>
+          Neu
+        </v-btn>
+      </div>
+    </div>
 
     <list-view
       v-bind="$attrs"

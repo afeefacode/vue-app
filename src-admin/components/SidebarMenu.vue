@@ -1,29 +1,37 @@
 <template>
-  <v-container class="d-flex flex-column">
-    <div
-      v-for="item in config.items"
-      :key="item.title"
-      class="item"
-    >
-      <model-icon
-        :modelClass="item.iconModel"
-        class="mr-1"
-        size="1.5rem"
-      />
-
-      <router-link
+  <v-container
+    d-flex
+    flex-column
+  >
+    <v-list class="pa-0">
+      <v-list-item
+        v-for="item in config.items"
+        :key="item.title"
         :to="item.to"
-        :exactPath="false"
       >
-        {{ item.title }}
-      </router-link>
+        <v-list-item-icon class="ma-0 mr-4 align-self-center">
+          <model-icon
+            :modelClass="item.iconModel"
+            size="2rem"
+          />
+        </v-list-item-icon>
 
-      <component
-        :is="item.badge.component"
-        v-if="item.badge"
-        v-bind="item.badge.props"
-      />
-    </div>
+        <v-list-item-content>
+          <div class="d-flex align-baseline">
+            <v-list-item-title>
+              {{ item.title }}
+            </v-list-item-title>
+
+            <component
+              :is="item.badge.component"
+              v-if="item.badge"
+              v-bind="item.badge.props"
+              class="ml-1"
+            />
+          </div>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
   </v-container>
 </template>
 
@@ -36,17 +44,3 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class SidebarMenu extends Vue {
 }
 </script>
-
-<style scoped lang="scss">
-.item {
-  display: flex;
-  align-items: center;
-  gap: .3rem;
-  margin-bottom: 1rem;
-
-  a.active {
-    text-decoration: none;
-    color: rgba(0, 0, 0, 0.38);
-  }
-}
-</style>

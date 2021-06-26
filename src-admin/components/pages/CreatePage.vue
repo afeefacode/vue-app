@@ -17,9 +17,9 @@
       class="buttons mr-0"
       justify="end"
     >
-      <router-link :to="_listLink">
-        <v-btn>Liste</v-btn>
-      </router-link>
+      <v-btn :to="_listLink">
+        Liste
+      </v-btn>
     </v-row>
 
     <edit-form

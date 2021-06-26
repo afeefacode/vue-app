@@ -17,20 +17,19 @@
       class="buttons mr-0"
       justify="end"
     >
-      <router-link
+      <v-btn
         v-if="$has.list"
-        class="button"
         :to="_listLink"
       >
-        <v-btn>Liste</v-btn>
-      </router-link>
+        Liste
+      </v-btn>
 
-      <router-link
+      <v-btn
         v-if="$has.detail"
         :to="model.getLink()"
       >
-        <v-btn>Ansehen</v-btn>
-      </router-link>
+        Ansehen
+      </v-btn>
     </v-row>
 
     <component
@@ -54,9 +53,10 @@
       </template>
     </edit-form>
 
-    <v-row class="submit">
+    <v-row class="mt-8 gap-2">
       <v-btn
         :disabled="!changed || !valid"
+        color="green white--text"
         @click="save"
       >
         Speichern
@@ -81,7 +81,7 @@ import EditPageMixin from './EditPageMixin'
   props: ['model', 'icon', 'listLink', 'getAction']
 })
 export default class EditPage extends Mixins(EditPageMixin) {
-  $hasOptions = ['detail', 'list']
+  $hasOptions = ['detail', {list: false}]
 
   model_ = null
 
@@ -167,9 +167,5 @@ export default class EditPage extends Mixins(EditPageMixin) {
 button {
   display: block;
   margin-bottom: 2rem;
-}
-
-.submit {
-  margin-top: 2rem;
 }
 </style>

@@ -116,5 +116,9 @@ export default class ABreadcrumbs extends Vue {
   ::v-deep .v-breadcrumbs__divider {
     padding: 0 4px 0 8px;
   }
+
+  ::v-deep li {
+    font-size: 1rem;
+  }
 }
 </style>

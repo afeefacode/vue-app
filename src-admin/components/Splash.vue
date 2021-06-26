@@ -3,7 +3,10 @@
     <v-container
       fill-height
       fluid
-      class="pb-0 d-flex align-center justify-center"
+      pb-0
+      d-flex
+      align-center
+      justify-center
     >
       <div>
         <div class="logo">

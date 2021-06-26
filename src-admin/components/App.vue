@@ -3,66 +3,126 @@
     <v-navigation-drawer
       v-model="drawer"
       app
-      fixed
+      fixeds
+      left
     >
       <v-container
         flex-column
         align-start
         fill-height
       >
-        <div class="ma-2">
-          <v-app-bar-nav-icon @click="toggleDrawer" />
+        <div class="d-flex flex-column pa-6">
+          <img
+            v-if="logoUrl"
+            class="logo"
+            :src="logoUrl"
+          >
+
+          <div class="appTitle text-button">
+            {{ title }}
+          </div>
         </div>
 
         <component
           :is="SidebarMenu"
-          class="mt-8"
-          flex-grow-1
+          class="px-0 mt-0 flex-grow-1"
         />
 
-        <div class="flex-grow-1 d-flex flex-column justify-end align-end">
-          <div class="ma-4 d-flex align-center">
+        <v-container
+          d-flex
+          align-center
+          gap-4
+          pa-6
+          pb-8
+        >
+          <div class="d-flex align-center gap-3">
             <v-avatar
               color="primary white--text"
               size="40"
-              class="mr-4"
             >
               {{ account.first_name.charAt(0) }}{{ account.last_name.charAt(0) }}
             </v-avatar>
 
             <div>
-              <div>{{ account.first_name }} {{ account.last_name }}</div>
-              <v-icon class="ml-n1">
-                $logoutIcon
-              </v-icon> <a @click="logout()">Logout</a>
+              <div class="accountName">
+                {{ account.first_name }}
+              </div>
+
+              <div class="body-2">
+                <v-icon class="ml-n1 mr-1">
+                  $logoutIcon
+                </v-icon>
+                <a @click="logout()">Logout</a>
+              </div>
             </div>
+
+            <v-menu
+              v-if="false"
+              top
+            >
+              <template #activator="{ on, attrs }">
+                <v-icon
+                  class="contextButton"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  $dotsVerticalIcon
+                </v-icon>
+              </template>
+
+              <v-list
+                class="pa-0"
+              >
+                <v-list-item @click="logout()">
+                  <v-list-item-icon class="ma-0 mr-2 align-self-center">
+                    <v-icon class="ml-n1 mr-1">
+                      $logoutIcon
+                    </v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-title>
+                    Logout
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </div>
-        </div>
+        </v-container>
       </v-container>
     </v-navigation-drawer>
 
+    <v-navigation-drawer
+      v-if="false"
+      app
+      clipped
+      right
+    >
+      <v-list>
+        <v-list-item
+          v-for="n in 5"
+          :key="n"
+          link
+        >
+          <v-list-item-content>
+            <v-list-item-title>Item {{ n }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
     <v-main>
-      <a-loading-indicator :isLoading="isLoading" />
+      <div class="breadcrumbsContainer d-flex align-center px-3 py-2 mb-8">
+        <v-app-bar-nav-icon
+          size="2rem"
+          @click="toggleDrawer"
+        />
+
+        <a-breadcrumbs class="" />
+      </div>
 
       <v-container
         fluid
-        class="pa-8"
+        class="pa-6 mt-12"
       >
-        <v-row
-          align="center"
-          class="mb-8"
-          style="height: 36px;"
-        >
-          <v-app-bar-nav-icon
-            v-if="mainDrawer"
-            class="mr-2"
-            size="2rem"
-            @click="toggleDrawer"
-          />
-
-          <a-breadcrumbs class="ma-0" />
-        </v-row>
-
         <router-view :class="{isLoading}" />
       </v-container>
     </v-main>
@@ -74,10 +134,11 @@
 </template>
 
 <script>
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { LoadingEvent } from '@a-vue/events'
 import { appConfig } from '@a-admin/config/AppConfig'
 import { sleep } from '@a-vue/utils/timeout'
+import '../styles.scss'
 
 @Component
 export default class App extends Vue {
@@ -96,6 +157,18 @@ export default class App extends Vue {
     return appConfig.components.SidebarMenu
   }
 
+  get logoUrl () {
+    return appConfig.app.logo
+  }
+
+  get title () {
+    return appConfig.app.title
+  }
+
+  get loaderColor () {
+    return appConfig.app.loaderColor
+  }
+
   startLoading () {
     this.isLoading = true
   }
@@ -104,9 +177,12 @@ export default class App extends Vue {
     this.isLoading = false
   }
 
-  async toggleDrawer () {
+  toggleDrawer () {
     this.drawer = !this.drawer
+  }
 
+  @Watch('drawer')
+  async drawerChanged () {
     if (this.drawer) {
       this.mainDrawer = false
     } else {
@@ -127,11 +203,25 @@ export default class App extends Vue {
 
 
 <style lang="scss" scoped>
-.breadcrumbs {
-  margin-bottom: 2rem;
+.accountName {
+  line-height: 1.2;
+  word-break: break-all;
+  text-overflow: ellipsis;
+}
+
+.logo {
+  max-height: 80px;
+  max-width: 90%;
 }
 
 .isLoading {
   opacity: .6;
+}
+
+.breadcrumbsContainer {
+  position:fixed;
+  background: #FAFAFA;
+  width: 100%;
+  z-index: 1;
 }
 </style>

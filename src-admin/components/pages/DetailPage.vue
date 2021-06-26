@@ -28,21 +28,23 @@
         Löschen
       </v-btn>
 
-      <router-link
+      <v-btn
         v-if="$has.list"
-        class="button"
         :to="_listLink"
       >
-        <v-btn>Liste</v-btn>
-      </router-link>
+        Liste
+      </v-btn>
 
-      <router-link
+      <v-btn
         v-if="$has.edit"
-        class="button"
         :to="model.getLink('edit')"
+        color="green white--text"
       >
-        <v-btn>Bearbeiten</v-btn>
-      </router-link>
+        <v-icon left>
+          $pencilIcon
+        </v-icon>
+        Bearbeiten
+      </v-btn>
     </v-row>
 
     <slot

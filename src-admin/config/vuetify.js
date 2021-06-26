@@ -4,6 +4,8 @@ import {
   mdiClose,
   mdiDotsVertical,
   mdiLogoutVariant,
+  mdiPencil,
+  mdiPlus,
   mdiSortAlphabeticalAscending,
   mdiSortAlphabeticalDescending,
   mdiThumbUpOutline
@@ -24,7 +26,9 @@ export default new Vuetify({
       sortAscIcon: mdiSortAlphabeticalAscending,
       sortDescIcon: mdiSortAlphabeticalDescending,
       dotsVerticalIcon: mdiDotsVertical,
-      logoutIcon: mdiLogoutVariant
+      logoutIcon: mdiLogoutVariant,
+      plusIcon: mdiPlus,
+      pencilIcon: mdiPencil
     }
   },
   breakpoint: {

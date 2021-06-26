@@ -1,6 +1,11 @@
 class AppConfig {
   authService = null
 
+  app = {
+    logo: null,
+    title: null
+  }
+
   components = {
     Splash: null,
     SidebarMenu: null
