@@ -33,21 +33,48 @@ function load (routeDefinition, params) {
     .load()
 }
 
+let routerHookCalled = false
+
 @Component
 export default class DetailRoute extends Vue {
   model = null
 
+  /**
+   * triggered, when the route name changes
+   * not triggered, when only route params change
+   */
   async beforeRouteEnter (to, from, next) {
+    routerHookCalled = true
     const model = await load(to.meta.routeDefinition, to.params)
     next(vm => {
       vm.model = model
+      routerHookCalled = false
     })
   }
 
+  /**
+   * triggered both, if route name or route params change
+   * not triggered, when only params change
+   */
   @Watch('$route.params')
-  async routeParamsChanged () {
+  async routeParamsChanged (newp, oldp) {
+    if (routerHookCalled) {
+      // set model to null in order to not recreate detail route's
+      // child components with the state model before vm.model is
+      // set in the router hook
+      this.model = null
+      return
+    }
     this.model = await load(this.$routeDefinition, this.$route.params)
   }
+
+  // probably not needed
+  // @Watch('$route.name')
+  // async routeNameChanged () {
+  //   if (routerHookCalled) {
+  //     // this.model = null
+  //   }
+  // }
 
   get Component () {
     return this.$routeDefinition.config.detail
