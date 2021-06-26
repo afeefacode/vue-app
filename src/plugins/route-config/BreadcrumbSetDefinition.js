@@ -20,7 +20,6 @@ export class BreadcrumbSetDefinition {
     this.titles = titles
     this.getTitle = getTitle
     this.breadcrumbTitles = breadcrumbTitles
-
     this.children = children.flat()
   }
 

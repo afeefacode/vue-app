@@ -211,7 +211,7 @@ class RouteConfigPlugin {
   validateBreadcrumbs () {
     for (const id in this._definitionMap) {
       const r = this._definitionMap[id]
-      if (r.fullName) {
+      if (r.fullName && !r.ignoreBreadcrumb) {
         const breadcrumbDefinition = this._breadcrumbDefinitionMap[r.fullName]
         if (!breadcrumbDefinition) {
           console.warn(`Route "${r.fullName}" does not have a breadcrumb definition`)

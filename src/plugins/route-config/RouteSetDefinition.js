@@ -4,6 +4,7 @@ export class RouteSetDefinition {
   constructor ({
     path,
     name,
+    ignoreBreadcrumb = false,
     idKey = 'id',
     components,
     routePaths,
@@ -12,6 +13,7 @@ export class RouteSetDefinition {
   }) {
     this.path = path
     this.name = name
+    this.ignoreBreadcrumb = ignoreBreadcrumb
     this.idKey = idKey
     this.components = components
     this.routePaths = routePaths
@@ -55,6 +57,7 @@ export class RouteSetDefinition {
       path,
       component: this.components[action],
       name: hasRouteName ? action : '',
+      ignoreBreadcrumb: this.ignoreBreadcrumb,
       config: this.config,
       children
     }

@@ -11,16 +11,18 @@ export class RouteDefinition {
     component,
     id = '',
     name = '',
+    ignoreBreadcrumb = false,
     idKey = 'id',
     childrenNamePrefix = '',
     config = {},
     children = [],
-    ...options
+    ...options // put all other args into an options object
   }) {
     this.path = path
     this.component = component
     this.id = id || this.getId(path, name)
     this.name = name
+    this.ignoreBreadcrumb = ignoreBreadcrumb
     this.idKey = idKey
     this.childrenNamePrefix = childrenNamePrefix
     this.config = config
