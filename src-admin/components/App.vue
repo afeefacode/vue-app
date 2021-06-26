@@ -110,6 +110,11 @@
     </v-navigation-drawer>
 
     <v-main>
+      <a-loading-indicator
+        class="loadingIndicator"
+        :isLoading="isLoading"
+      />
+
       <div class="breadcrumbsContainer d-flex align-center px-3 py-2 mb-8">
         <v-app-bar-nav-icon
           size="2rem"
@@ -223,5 +228,10 @@ export default class App extends Vue {
   background: #FAFAFA;
   width: 100%;
   z-index: 1;
+}
+
+.loadingIndicator {
+  position:fixed;
+  z-index:2;
 }
 </style>

@@ -1,7 +1,6 @@
 <template>
   <v-progress-linear
     v-if="isLoading_"
-    style="position:absolute;top:0;left:0;"
     indeterminate
     color="green darken-2"
   />
