@@ -11,7 +11,7 @@
         fill-height
       >
         <div class="ma-2">
-          <v-app-bar-nav-icon @click="drawer = !drawer" />
+          <v-app-bar-nav-icon @click="toggleDrawer" />
         </div>
 
         <component
@@ -54,10 +54,10 @@
           style="height: 36px;"
         >
           <v-app-bar-nav-icon
-            v-if="!drawer"
+            v-if="mainDrawer"
             class="mr-2"
             size="2rem"
-            @click="drawer = !drawer"
+            @click="toggleDrawer"
           />
 
           <a-breadcrumbs class="ma-0" />
@@ -77,10 +77,12 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { LoadingEvent } from '@a-vue/events'
 import { appConfig } from '@a-admin/config/AppConfig'
+import { sleep } from '@a-vue/utils/timeout'
 
 @Component
 export default class App extends Vue {
   drawer = true
+  mainDrawer = false
   isLoading = false
 
   created () {
@@ -100,6 +102,17 @@ export default class App extends Vue {
 
   stopLoading () {
     this.isLoading = false
+  }
+
+  async toggleDrawer () {
+    this.drawer = !this.drawer
+
+    if (this.drawer) {
+      this.mainDrawer = false
+    } else {
+      await sleep(0.1)
+      this.mainDrawer = true
+    }
   }
 
   logout () {
