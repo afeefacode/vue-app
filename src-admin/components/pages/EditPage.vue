@@ -148,6 +148,7 @@ export default class EditPage extends Mixins(EditPageMixin) {
   afterSave (model) {
     this.model_ = model
     this.reset()
+    this.$emit('saved', model)
   }
 }
 </script>
