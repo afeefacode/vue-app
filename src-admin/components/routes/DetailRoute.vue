@@ -15,9 +15,10 @@ Component.registerHooks([
   'beforeRouteUpdate'
 ])
 
-function load (routeDefinition, params) {
+function load (route) {
+  const routeDefinition = route.meta.routeDefinition
   const Component = routeDefinition.config.detail
-  const detailConfig = Component.getDetailConfig(routeDefinition)
+  const detailConfig = Component.getDetailConfig(route)
 
   let action = null
   if (detailConfig.ModelClass) {
@@ -29,7 +30,7 @@ function load (routeDefinition, params) {
   return new GetAction()
     .setAction(action)
     .setFields(detailConfig.fields)
-    .setId(params[routeDefinition.idKey])
+    .setId(route.params[routeDefinition.idKey])
     .load()
 }
 
@@ -45,7 +46,7 @@ export default class DetailRoute extends Vue {
    */
   async beforeRouteEnter (to, from, next) {
     routerHookCalled = true
-    const model = await load(to.meta.routeDefinition, to.params)
+    const model = await load(to)
     next(vm => {
       vm.model = model
       routerHookCalled = false
@@ -65,7 +66,7 @@ export default class DetailRoute extends Vue {
       this.model = null
       return
     }
-    this.model = await load(this.$routeDefinition, this.$route.params)
+    this.model = await load(this.$route)
   }
 
   // probably not needed

@@ -184,7 +184,7 @@ export class DeleteAction {
 export class ListAction {
   action = null
   fields = null
-  filters = null
+  filters = {}
   route = null
   events = true
 
@@ -193,7 +193,8 @@ export class ListAction {
     return this
   }
 
-  setFiltersForRoute (route) {
+  setFiltersForRoute (route, filters) {
+    this.filters = {...this.filters, ...filters}
     this.route = route
     return this
   }
@@ -204,7 +205,7 @@ export class ListAction {
   }
 
   setFilters (filters) {
-    this.filters = filters
+    this.filters = {...this.filters, ...filters}
     return this
   }
 
@@ -227,7 +228,10 @@ export class ListAction {
       if (storedFilters) {
         requestFilters.initFromUsed(storedFilters.serialize(), 1)
       }
-      filters = requestFilters.serialize()
+      filters = {
+        ...filters,
+        ...requestFilters.serialize()
+      }
     }
 
     const result = await this.action

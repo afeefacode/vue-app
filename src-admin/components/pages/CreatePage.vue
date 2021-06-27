@@ -73,7 +73,7 @@ export default class CreatePage extends Mixins(EditPageMixin) {
   }
 
   get editConfig () {
-    return this.$parent.constructor.getCreateConfig(this.$routeDefinition)
+    return this.$parent.constructor.getCreateConfig(this.$route)
   }
 
   get modelUpateAction () {

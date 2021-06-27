@@ -16,9 +16,10 @@ Component.registerHooks([
   'beforeRouteUpdate'
 ])
 
-function load (routeDefinition, params) {
+function load (route) {
+  const routeDefinition = route.meta.routeDefinition
   const Component = routeDefinition.config.edit
-  const editConfig = Component.getEditConfig(routeDefinition)
+  const editConfig = Component.getEditConfig(route)
 
   let action = null
   if (editConfig.ModelClass) {
@@ -30,7 +31,7 @@ function load (routeDefinition, params) {
   return new GetAction()
     .setAction(action)
     .setFields(editConfig.fields)
-    .setId(params[routeDefinition.idKey])
+    .setId(route.params[routeDefinition.idKey])
     .load()
 }
 
@@ -39,7 +40,7 @@ export default class EditRoute extends Vue {
   model = null
 
   async beforeRouteEnter (to, from, next) {
-    const model = await load(to.meta.routeDefinition, to.params)
+    const model = await load(to)
     next(vm => {
       vm.model = model
     })
@@ -47,7 +48,7 @@ export default class EditRoute extends Vue {
 
   @Watch('$route.params')
   async routeParamsChanged () {
-    this.model = await load(this.$routeDefinition, this.$route.params)
+    this.model = await load(this.$route)
   }
 
   get Component () {

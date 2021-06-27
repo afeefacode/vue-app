@@ -113,7 +113,7 @@ export default class ListPage extends Vue {
   }
 
   get listConfig () {
-    return this.$parent.constructor.getListConfig(this.$routeDefinition)
+    return this.$parent.constructor.getListConfig(this.$route)
   }
 
   get ModelClass () {

@@ -78,7 +78,7 @@ export default class DetailPage extends Vue {
   }
 
   get detailConfig () {
-    return this.$parent.constructor.getDetailConfig(this.$routeDefinition)
+    return this.$parent.constructor.getDetailConfig(this.$route)
   }
 
   get ModelClass () {

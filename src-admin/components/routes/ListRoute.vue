@@ -33,7 +33,7 @@ export default class ListRoute extends Vue {
   async beforeRouteEnter (to, from, next) {
     const routeDefinition = to.meta.routeDefinition
     const Component = routeDefinition.config.list
-    const listConfig = Component.getListConfig(routeDefinition)
+    const listConfig = Component.getListConfig(to)
 
     let action = null
     if (listConfig.ModelClass) {
@@ -42,10 +42,12 @@ export default class ListRoute extends Vue {
       action = listConfig.action
     }
 
+    console.log(listConfig.filters)
+
     const {models, meta} = await new ListAction()
       .setAction(action)
       .setFields(listConfig.fields)
-      .setFiltersForRoute(to)
+      .setFiltersForRoute(to, listConfig.filters)
       .load()
 
     if (lastVm) {
