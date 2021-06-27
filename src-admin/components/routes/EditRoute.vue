@@ -48,7 +48,6 @@ export default class EditRoute extends Vue {
   @Watch('$route.params')
   async routeParamsChanged () {
     this.model = await load(this.$routeDefinition, this.$route.params)
-    this.reset()
   }
 
   get Component () {
