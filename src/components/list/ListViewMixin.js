@@ -5,7 +5,7 @@ import { QuerySourceType } from './QuerySourceType'
 import { RouteFilterSource } from './RouteFilterSource'
 
 @Component({
-  props: ['models', 'meta', 'action', 'fields', 'filterHistoryKey', 'filterSource']
+  props: ['models', 'meta', 'action', 'scope', 'fields', 'filterHistoryKey', 'filterSource']
 })
 export default class ListViewMixin extends Vue {
   models_ = []
@@ -82,6 +82,7 @@ export default class ListViewMixin extends Vue {
     const {models, meta} = await new ListAction()
       .setAction(this.action)
       .setFields(this.fields)
+      .setScope(this.scope)
       .setFilters(this.requestFilters.serialize())
       .load()
 
