@@ -40,7 +40,7 @@
               color="primary white--text"
               size="40"
             >
-              {{ account.first_name.charAt(0) }}{{ account.last_name.charAt(0) }}
+              {{ account.first_name.charAt(0).toUpperCase() }}{{ account.last_name.charAt(0).toUpperCase() }}
             </v-avatar>
 
             <div>
@@ -48,7 +48,7 @@
                 {{ account.first_name }}
               </div>
 
-              <div class="body-2">
+              <div class="body-2 d-flex align-center">
                 <v-icon class="ml-n1 mr-1">
                   $logoutIcon
                 </v-icon>
@@ -56,10 +56,7 @@
               </div>
             </div>
 
-            <v-menu
-              v-if="false"
-              top
-            >
+            <v-menu top>
               <template #activator="{ on, attrs }">
                 <v-icon
                   class="contextButton"
@@ -73,14 +70,14 @@
               <v-list
                 class="pa-0"
               >
-                <v-list-item @click="logout()">
+                <v-list-item :to="{name: 'accounts.edit', params: {accountId: account.id}}">
                   <v-list-item-icon class="ma-0 mr-2 align-self-center">
                     <v-icon class="ml-n1 mr-1">
-                      $logoutIcon
+                      $pencilIcon
                     </v-icon>
                   </v-list-item-icon>
                   <v-list-item-title>
-                    Logout
+                    Einstellungen
                   </v-list-item-title>
                 </v-list-item>
               </v-list>
@@ -150,10 +147,13 @@ export default class App extends Vue {
   drawer = true
   mainDrawer = false
   isLoading = false
+  account = null
 
   created () {
     this.$events.on(LoadingEvent.START_LOADING, this.startLoading)
     this.$events.on(LoadingEvent.STOP_LOADING, this.stopLoading)
+
+    this.account = appConfig.authService.getAccount()
 
     this.$emit('appLoaded')
   }
@@ -198,10 +198,6 @@ export default class App extends Vue {
 
   logout () {
     appConfig.authService.forwardToLogoutEndpoint()
-  }
-
-  get account () {
-    return appConfig.authService.getAccount()
   }
 }
 </script>
