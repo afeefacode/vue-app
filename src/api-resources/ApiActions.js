@@ -46,7 +46,15 @@ export class GetAction {
       eventBus.dispatch(new LoadingEvent(LoadingEvent.STOP_LOADING))
     }
 
-    return result.data
+    if (result.error) {
+      eventBus.dispatch(new AlertEvent(AlertEvent.ERROR, {
+        headline: 'Die Daten konntent nicht geladen werden.',
+        message: result.message,
+        detail: result.detail
+      }))
+    }
+
+    return result.data || false
   }
 }
 
@@ -249,7 +257,9 @@ export class ListAction {
       }
 
       eventBus.dispatch(new AlertEvent(AlertEvent.ERROR, {
-        message: 'Die Daten konntent nicht geladen werden.'
+        headline: 'Die Daten konntent nicht geladen werden.',
+        message: result.message,
+        detail: result.detail
       }))
 
       return false

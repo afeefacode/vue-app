@@ -86,7 +86,8 @@ export default class ListViewMixin extends Vue {
       .setFilters(this.requestFilters.serialize())
       .load()
 
-    if (!models) {
+    if (!models) { // error, reset filters
+      this.resetFilters()
       return
     }
 

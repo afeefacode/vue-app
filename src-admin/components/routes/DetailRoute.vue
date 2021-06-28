@@ -46,23 +46,25 @@ export default class DetailRoute extends Vue {
    */
   async beforeRouteEnter (to, from, next) {
     routerHookCalled = true
-    const model = await load(to)
+    const result = await load(to)
     next(vm => {
-      vm.model = model
+      if (result !== false) {
+        vm.model = result
+      }
       routerHookCalled = false
     })
   }
 
   /**
    * triggered both, if route name or route params change
-   * not triggered, when only params change
    */
   @Watch('$route.params')
   async routeParamsChanged (newp, oldp) {
     if (routerHookCalled) {
       // set model to null in order to not recreate detail route's
-      // child components with the state model before vm.model is
-      // set in the router hook
+      // child components with the stale model which is still active
+      // in between resolving the route with next() + creating the
+      // route detail component and resetting vm.model later in the callback
       this.model = null
       return
     }

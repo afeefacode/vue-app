@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { ListAction } from '@a-vue/api-resources/ApiActions'
 
 Component.registerHooks([
@@ -25,46 +25,74 @@ Component.registerHooks([
  */
 let lastVm = null
 
+function load (route) {
+  const routeDefinition = route.meta.routeDefinition
+  const Component = routeDefinition.config.list
+  const listConfig = Component.getListConfig(route)
+
+  let action = null
+  if (listConfig.ModelClass) {
+    action = listConfig.ModelClass.getAction(routeDefinition, 'list')
+  } else {
+    action = listConfig.action
+  }
+
+  return new ListAction()
+    .setAction(action)
+    .setFields(listConfig.fields)
+    .setScopes(listConfig.scopes)
+    .setFiltersForRoute(route)
+    .load()
+}
+
+let routerHookCalled = false
+
 @Component
 export default class ListRoute extends Vue {
-  models = []
+  models = null
+  meta = null
   isLoaded = false
 
   async beforeRouteEnter (to, from, next) {
-    const routeDefinition = to.meta.routeDefinition
-    const Component = routeDefinition.config.list
-    const listConfig = Component.getListConfig(to)
-
-    let action = null
-    if (listConfig.ModelClass) {
-      action = listConfig.ModelClass.getAction(routeDefinition, 'list')
-    } else {
-      action = listConfig.action
-    }
-
-    const {models, meta} = await new ListAction()
-      .setAction(action)
-      .setFields(listConfig.fields)
-      .setScopes(listConfig.scopes)
-      .setFiltersForRoute(to)
-      .load()
-
-    if (!models) {
-      next(false)
-      return
-    }
+    routerHookCalled = true
+    const result = await load(to)
 
     if (lastVm) {
       lastVm.isLoaded = false
     }
 
     next(vm => {
-      vm.models = models
-      vm.meta = meta
-      vm.isLoaded = true
+      if (result !== false) {
+        const {models, meta} = result
+        vm.models = models
+        vm.meta = meta
+        vm.isLoaded = true
+      }
 
       lastVm = vm
+      routerHookCalled = false
     })
+  }
+
+  /**
+   * triggered both, if route name or route params change
+   */
+  @Watch('$route.params')
+  async routeParamsChanged () {
+    if (routerHookCalled) {
+      return
+    }
+
+    if (!this.isLoaded) {
+      const result = await load(this.$route)
+
+      if (result !== false) {
+        const {models, meta} = result
+        this.models = models
+        this.meta = meta
+        this.isLoaded = true
+      }
+    }
   }
 
   get Component () {
