@@ -2,7 +2,8 @@
   <v-progress-linear
     v-if="isLoading_"
     indeterminate
-    color="green darken-2"
+    :color="color"
+    v-bind="$attrs"
   />
 </template>
 
@@ -19,6 +20,10 @@ export default class ALoadingIndicator extends Vue {
 
   created () {
     this.isLoading_ = this.isLoading
+  }
+
+  get color () {
+    return this.$attrs.color || 'green darken-2'
   }
 
   @Watch('isLoading')
