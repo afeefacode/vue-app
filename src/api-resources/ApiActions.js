@@ -243,6 +243,18 @@ export class ListAction {
       .fields(this.fields)
       .send()
 
+    if (result.error) {
+      if (this.events) {
+        eventBus.dispatch(new LoadingEvent(LoadingEvent.STOP_LOADING))
+      }
+
+      eventBus.dispatch(new AlertEvent(AlertEvent.ERROR, {
+        message: 'Die Daten konntent nicht geladen werden.'
+      }))
+
+      return false
+    }
+
     const models = result.data
     const meta = result.meta
 

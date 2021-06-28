@@ -86,6 +86,10 @@ export default class ListViewMixin extends Vue {
       .setFilters(this.requestFilters.serialize())
       .load()
 
+    if (!models) {
+      return
+    }
+
     this.models_ = models
     this.meta_ = meta
 

@@ -49,6 +49,11 @@ export default class ListRoute extends Vue {
       .setFiltersForRoute(to)
       .load()
 
+    if (!models) {
+      next(false)
+      return
+    }
+
     if (lastVm) {
       lastVm.isLoaded = false
     }

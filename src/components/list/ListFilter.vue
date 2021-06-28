@@ -3,7 +3,7 @@
     <template v-if="filter.type === 'Afeefa.KeywordFilter'">
       <a-text-field
         v-model="filter.value"
-        label="Suche"
+        :label="label || name"
         :debounce="500"
         clearable
       />
@@ -21,7 +21,7 @@
     <template v-if="filter.type === 'Afeefa.OrderFilter'">
       <a-select
         v-model="filter.value"
-        :label="filter.name"
+        :label="label || name"
         :items="orderItems"
         item-text="itemText"
         item-value="itemValue"
@@ -33,7 +33,7 @@
     <template v-if="filter.type === 'Afeefa.PageSizeFilter'">
       <a-select
         v-model="filter.value"
-        :label="filter.name"
+        :label="label || name"
         :items="filter.options"
         :defaultValue="filter.defaultValue"
         :clearable="!filter.hasDefaultValue()"
@@ -43,7 +43,7 @@
     <template v-if="filter.type === 'Afeefa.BooleanFilter' && filter.options.includes(false)">
       <a-select
         v-model="filter.value"
-        :label="filter.name"
+        :label="label || name"
         :items="booleanOptions"
         itemText="itemTitle"
         itemValue="itemValue"
@@ -57,14 +57,14 @@
           :id="'checkbox-' + name"
           v-model="filter.value"
           type="checkbox"
-        > <label :for="'checkbox-' + name">{{ name }}</label>
+        > <label :for="'checkbox-' + name">{{ label || name }}</label>
       </p>
     </template>
 
     <template v-if="filter.type === 'Afeefa.IdFilter'">
       <a-select
         v-model="filter.value"
-        :label="filter.name"
+        :label="label || name"
         :items="getIdItems(filter)"
         itemText="itemTitle"
         itemValue="itemValue"
@@ -80,7 +80,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
-  props: ['name', 'count', 'page_size']
+  props: ['name', 'label', 'count', 'page_size']
 })
 export default class ListFilter extends Vue {
   get filters () {
