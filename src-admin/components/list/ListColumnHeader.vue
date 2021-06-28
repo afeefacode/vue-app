@@ -8,12 +8,13 @@
         {{ text }}
       </div>
 
-      <v-icon
+      <svg
         v-if="order"
-        :class="['sortIcon', {active}]"
-      >
-        ${{ icon }}
-      </v-icon>
+        :class="['sortIcon', direction, {active}]"
+        xmlns="http://www.w3.org/2000/svg"
+        width="8"
+        height="16.014"
+      ><path d="M5 12.01h3l-4 4.004-4-4.003h3V0h2" /></svg>
     </div>
   </div>
 </template>
@@ -73,10 +74,6 @@ export default class ListColumnHeader extends Vue {
       [this.order]: direction
     }
   }
-
-  get icon () {
-    return this.direction === 'asc' ? 'sortAscIcon' : 'sortDescIcon'
-  }
 }
 </script>
 
@@ -85,7 +82,7 @@ export default class ListColumnHeader extends Vue {
 .content {
   display: flex;
   align-items: center;
-  gap: .5rem;
+  gap: .3rem;
 
   &.order {
     user-select: none;
@@ -94,7 +91,7 @@ export default class ListColumnHeader extends Vue {
 }
 
 .text.active {
-  color: black;
+  color: #333333;
 }
 
 .sortIcon {
@@ -102,5 +99,13 @@ export default class ListColumnHeader extends Vue {
   &.active {
     opacity: 1;
   }
+}
+
+svg {
+  fill: #666666;
+}
+
+svg.desc {
+  transform: rotate(180deg);
 }
 </style>

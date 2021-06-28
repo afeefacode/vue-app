@@ -6,8 +6,6 @@ import {
   mdiLogoutVariant,
   mdiPencil,
   mdiPlus,
-  mdiSortAlphabeticalAscending,
-  mdiSortAlphabeticalDescending,
   mdiThumbUpOutline
 } from '@mdi/js'
 import Vue from 'vue'
@@ -23,8 +21,6 @@ export default new Vuetify({
       thumbsUpIcon: mdiThumbUpOutline,
       alarmIcon: mdiAlarmLightOutline,
       closeIcon: mdiClose,
-      sortAscIcon: mdiSortAlphabeticalAscending,
-      sortDescIcon: mdiSortAlphabeticalDescending,
       dotsVerticalIcon: mdiDotsVertical,
       logoutIcon: mdiLogoutVariant,
       plusIcon: mdiPlus,
