@@ -120,7 +120,7 @@
           @click="toggleDrawer"
         />
 
-        <a-breadcrumbs class="" />
+        <a-breadcrumbs />
       </div>
 
       <v-container
