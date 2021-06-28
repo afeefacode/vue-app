@@ -13,14 +13,15 @@
       {{ error ? '$alarmIcon' : '$thumbsUpIcon' }}
     </v-icon>
 
-    <div v-if="error">
-      <h3>Ein Fehler ist aufgetreten.</h3>
-      <span v-html="error" />
-    </div>
+    <div>
+      <h3>{{ _headline }}</h3>
 
-    <div v-if="success">
-      <h3>Alles super!</h3>
-      <span v-html="success" />
+      <div v-html="message" />
+      <div
+        v-if="detail"
+        class="pt-3"
+        v-html="detail"
+      />
     </div>
 
     <v-btn
@@ -40,8 +41,12 @@ import { AlertEvent } from './alert/AlertEvent'
 @Component
 export default class AAlert extends Vue {
   snackbar = false
-  error = null
-  success = null
+  success = false
+  error = false
+
+  headline = null
+  message = null
+  detail = null
 
   created () {
     this.$events.on(AlertEvent.ERROR, this.onError)
@@ -49,13 +54,26 @@ export default class AAlert extends Vue {
     window.addEventListener('mouseup', this.onMouseDown)
   }
 
+  get _headline () {
+    return this.headline || this.error ? 'Ein Fehler ist aufgetreten.' : 'Alles super!'
+  }
+
   onError (alertEvent) {
-    this.error = alertEvent.payload.message
-    this.snackbar = true
+    this.success = false
+    this.error = true
+    this.show(alertEvent.payload)
   }
 
   onMessage (alertEvent) {
-    this.success = alertEvent.payload.message
+    this.success = true
+    this.error = false
+    this.show(alertEvent.payload)
+  }
+
+  show (alert) {
+    this.headline = alert.headline
+    this.message = alert.message
+    this.detail = alert.detail
     this.snackbar = true
   }
 
@@ -68,8 +86,8 @@ export default class AAlert extends Vue {
   }
 
   hideSnackbar () {
-    this.error = null
-    this.success = null
+    this.error = false
+    this.success = false
     this.snackbar = false
   }
 }
