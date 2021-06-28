@@ -38,3 +38,10 @@
     color: blue;
   }
 }
+
+.v-application {
+  .text-strike {
+    color: inherit;
+    text-decoration: line-through;
+  }
+}
