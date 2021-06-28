@@ -184,7 +184,7 @@ export class DeleteAction {
 export class ListAction {
   action = null
   fields = null
-  scope = {}
+  scopes = {}
   filters = {}
   route = null
   events = true
@@ -204,8 +204,8 @@ export class ListAction {
     return this
   }
 
-  setScope (scope) {
-    this.scope = scope
+  setScopes (scopes) {
+    this.scopes = scopes
     return this
   }
 
@@ -236,15 +236,11 @@ export class ListAction {
       filters = requestFilters.serialize()
     }
 
-    filters = {
-      ...this.scope,
-      ...filters
-    }
-
     const result = await this.action
       .request()
-      .fields(this.fields)
+      .scopes(this.scopes)
       .filters(filters)
+      .fields(this.fields)
       .send()
 
     const models = result.data

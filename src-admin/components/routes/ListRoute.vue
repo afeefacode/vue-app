@@ -45,7 +45,7 @@ export default class ListRoute extends Vue {
     const {models, meta} = await new ListAction()
       .setAction(action)
       .setFields(listConfig.fields)
-      .setScope(listConfig.scope)
+      .setScopes(listConfig.scopes)
       .setFiltersForRoute(to)
       .load()
 
