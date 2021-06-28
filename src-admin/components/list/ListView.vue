@@ -88,11 +88,10 @@ export default class ListView extends Mixins(ListViewMixin) {
 
   .header, .row {
     display: table-row;
-    padding: 1rem;
     > * {
       display: table-cell;
-      padding: .5rem;
-      padding-right: 2rem;
+      padding: .4rem;
+      padding-right: 1.5rem;
       white-space: nowrap;
       vertical-align: middle;
 
