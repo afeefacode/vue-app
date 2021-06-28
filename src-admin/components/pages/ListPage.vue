@@ -61,7 +61,7 @@
       >
         <v-icon
           :color="model.getIcon().color"
-          size="2rem"
+          size="1.5rem"
           v-text="model.getIcon().icon"
         />
 
