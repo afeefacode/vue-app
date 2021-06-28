@@ -11,17 +11,19 @@
         align-start
         fill-height
       >
-        <div class="d-flex flex-column pa-6">
+        <router-link
+          :to="{name: 'root'}"
+          class="logoContainer d-flex flex-column pa-6"
+        >
           <img
             v-if="logoUrl"
             class="logo"
             :src="logoUrl"
           >
-
-          <div class="appTitle text-button">
+          <div class="text-button">
             {{ title }}
           </div>
-        </div>
+        </router-link>
 
         <component
           :is="SidebarMenu"
@@ -207,7 +209,10 @@ export default class App extends Vue {
 .accountName {
   line-height: 1.2;
   word-break: break-all;
-  text-overflow: ellipsis;
+}
+
+.logoContainer {
+  text-decoration: none;
 }
 
 .logo {
