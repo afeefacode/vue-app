@@ -1,5 +1,8 @@
 <template>
-  <router-view @appLoaded="appLoaded" />
+  <v-app>
+    <router-view @appLoaded="appLoaded" />
+    <a-alert />
+  </v-app>
 </template>
 
 <script>

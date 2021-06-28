@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div>
     <v-navigation-drawer
       v-model="drawer"
       app
@@ -132,9 +132,8 @@
     </v-main>
 
     <a-dialog />
-    <a-alert />
     <a-save-indicator />
-  </v-app>
+  </div>
 </template>
 
 <script>
