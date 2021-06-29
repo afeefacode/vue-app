@@ -29,7 +29,6 @@ export default class ASelect extends Vue {
       }
       setValue(value)
     }
-
     this.init()
   }
 

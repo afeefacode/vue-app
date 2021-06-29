@@ -3,6 +3,7 @@
     v-model="model[name]"
     :label="label || name"
 
+    :items="items"
     item-text="itemText"
     item-value="itemValue"
 
@@ -17,5 +18,16 @@ import FormFieldMixin from '../FormFieldMixin'
 
 @Component
 export default class FormFieldSelect2 extends Mixins(FormFieldMixin) {
+  asyncItems = null
+
+  created () {
+    if (this.fieldHasOptionsRequest()) {
+      this.asyncItems = q => this.getSelectOptions({q})
+    }
+  }
+
+  get items () {
+    return this.$attrs.items || this.asyncItems
+  }
 }
 </script>

@@ -190,12 +190,18 @@ export class DeleteAction {
 }
 
 export class ListAction {
+  request = null
   action = null
   fields = null
   scopes = {}
   filters = {}
   route = null
   events = true
+
+  setRequest (request) {
+    this.request = request
+    return this
+  }
 
   setAction (action) {
     this.action = action
@@ -244,12 +250,14 @@ export class ListAction {
       filters = requestFilters.serialize()
     }
 
-    const result = await this.action
-      .request()
-      .scopes(this.scopes)
-      .filters(filters)
-      .fields(this.fields)
-      .send()
+    const request = this.request ||
+      this.action
+        .request()
+        .scopes(this.scopes)
+        .filters(filters)
+        .fields(this.fields)
+
+    const result = await request.send()
 
     if (result.error) {
       if (this.events) {

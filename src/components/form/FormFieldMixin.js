@@ -1,3 +1,4 @@
+import { ListAction } from '@a-vue/api-resources/ApiActions'
 import { apiResources } from '@afeefa/api-resources-client'
 import { Component, Vue } from 'vue-property-decorator'
 
@@ -31,6 +32,29 @@ export default class FormField extends Vue {
     }
 
     return field
+  }
+
+  fieldHasOptionsRequest () {
+    return this.modelType
+      .getUpdateField(this.name)
+      .getOptionsRequest()
+  }
+
+  async getSelectOptions (filters) {
+    const request = this.modelType
+      .getUpdateField(this.name)
+      .getOptionsRequest()
+      .addFilters(filters)
+
+    const {models} = await new ListAction()
+      .setRequest(request)
+      .noEvents()
+      .load()
+
+    return models.map(model => ({
+      itemText: model.getTitle(),
+      itemValue: model
+    }))
   }
 
   get validator () {

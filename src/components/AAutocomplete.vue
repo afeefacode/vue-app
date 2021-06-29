@@ -116,7 +116,14 @@ export default class AAutocomplete extends Vue {
 
   async load (q) {
     this.isLoading = true
-    this.items_ = await this.items(q)
+
+    const items = typeof this.items === 'function' ? this.items(q) : this.items
+    if (items instanceof Promise) {
+      this.items_ = await items
+    } else {
+      this.items_ = items
+    }
+
     this.isLoading = false
   }
 
