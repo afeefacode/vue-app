@@ -94,6 +94,7 @@
 
 <script>
 import { Component, Vue } from 'vue-property-decorator'
+import { apiResources } from '@afeefa/api-resources-client'
 
 @Component({
   props: ['models', 'meta', 'title', 'newLink', 'table']
@@ -130,7 +131,18 @@ export default class ListPage extends Vue {
     if (this.title) {
       return this.title
     }
-    return this.ModelClass.title
+
+    const type = apiResources.getType(this.ModelClass.type)
+    return type.t('TITLE_PLURAL')
+  }
+
+  get titleNew () {
+    if (this.title) {
+      return this.title
+    }
+
+    const type = apiResources.getType(this.ModelClass.type)
+    return type.t('TITLE_PLURAL')
   }
 
   get _icon () {

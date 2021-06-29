@@ -2,7 +2,7 @@
   <div class="createPage">
     <app-bar-title
       :icon="_icon"
-      :title="modelToEdit.getTitle() || title"
+      :title="_title"
     />
 
     <app-bar-button>
@@ -49,6 +49,7 @@
 <script>
 import { Component, Mixins } from 'vue-property-decorator'
 import EditPageMixin from './EditPageMixin'
+import { apiResources } from '@afeefa/api-resources-client'
 
 @Component({
   props: ['icon', 'title', 'createModel', 'listLink']
@@ -69,6 +70,20 @@ export default class CreatePage extends Mixins(EditPageMixin) {
 
   get modelUpateAction () {
     return this.ModelClass.getAction(this.$routeDefinition, 'create')
+  }
+
+  get _title () {
+    const title = this.modelToEdit.getTitle()
+    if (title) {
+      return title
+    }
+
+    if (this.title) {
+      return this.title
+    }
+
+    const type = apiResources.getType(this.ModelClass.type)
+    return type.t('TITLE_NEW')
   }
 
   get _listLink () {

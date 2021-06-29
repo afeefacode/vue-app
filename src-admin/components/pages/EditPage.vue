@@ -2,7 +2,7 @@
   <div class="editPage">
     <app-bar-title
       :icon="_icon"
-      :title="modelToEdit.getTitle() || title"
+      :title="_title"
     />
 
     <app-bar-button v-if="$has.list">
@@ -66,6 +66,7 @@
 
 <script>
 import { Component, Mixins, Watch } from 'vue-property-decorator'
+import { apiResources } from '@afeefa/api-resources-client'
 import EditPageMixin from './EditPageMixin'
 
 @Component({
@@ -106,6 +107,20 @@ export default class EditPage extends Mixins(EditPageMixin) {
       return this.getAction
     }
     return this.ModelClass.getAction(this.$routeDefinition, 'get')
+  }
+
+  get _title () {
+    const title = this.modelToEdit.getTitle()
+    if (title) {
+      return title
+    }
+
+    if (this.title) {
+      return this.title
+    }
+
+    const type = apiResources.getType(this.ModelClass.type)
+    return type.t('TITLE_EMPTY')
   }
 
   get _listLink () {
