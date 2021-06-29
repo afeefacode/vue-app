@@ -12,7 +12,7 @@
         <v-list-item-icon class="ma-0 mr-4 align-self-center">
           <model-icon
             :modelClass="item.iconModel"
-            size="2rem"
+            size="1.8rem"
           />
         </v-list-item-icon>
 

@@ -1,27 +1,21 @@
 <template>
-  <div class="breadcrumbs">
-    <v-icon class="pr-1">
-      $chevronRightIcon
-    </v-icon>
-
-    <v-breadcrumbs
-      :items="breadcrumbs"
-      class="pa-0"
-      dense
+  <div class="d-flex flex-wrap align-center">
+    <div
+      v-for="(breadcrumb, index) in breadcrumbs"
+      :key="index"
+      class="item mr-1 d-flex align-center"
     >
-      <template #divider>
-        <v-icon>$chevronRightIcon</v-icon>
-      </template>
+      <v-icon class="">
+        $chevronRightIcon
+      </v-icon>
 
-      <template #item="{ item }">
-        <breadcrumbs-item
-          :to="item.to"
-          :exact="true"
-        >
-          {{ item.title.toUpperCase() }}
-        </breadcrumbs-item>
-      </template>
-    </v-breadcrumbs>
+      <router-link
+        :to="breadcrumb.to"
+        :exact="true"
+      >
+        {{ getItemTitle(breadcrumb.title) }}
+      </router-link>
+    </div>
   </div>
 </template>
 
@@ -30,13 +24,8 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { SaveEvent } from './save-indicator/SaveEvent'
 import { routeConfigPlugin } from '@a-vue/plugins/route-config/RouteConfigPlugin'
-import BreadcrumbsItem from './breadcrumbs/BreadcrumbsItem'
 
-@Component({
-  components: {
-    BreadcrumbsItem
-  }
-})
+@Component
 export default class ABreadcrumbs extends Vue {
   breadcrumbs = []
   titleCache = {}
@@ -79,7 +68,7 @@ export default class ABreadcrumbs extends Vue {
   }
 
   async init () {
-    const breadcrumbs = []
+    let breadcrumbs = []
 
     const breadcrumbDefinitions = await routeConfigPlugin.getBreadcrumbs(this.$route.name)
 
@@ -102,23 +91,45 @@ export default class ABreadcrumbs extends Vue {
       breadcrumbs.push(item)
     }
 
+
+    // breadcrumbs = breadcrumbs.concat(breadcrumbs).concat(breadcrumbs)
+    if (breadcrumbs.length > 5) {
+      breadcrumbs = breadcrumbs.slice(0, 2).concat([
+        {
+          to: {},
+          title: '...'
+        }
+      ]).concat(breadcrumbs.slice(-2))
+    }
+
     this.breadcrumbs = breadcrumbs
+  }
+
+  getItemTitle (title) {
+    // title = title.concat(title).concat(title)
+    if (title.length > 20) {
+      title = title.slice(0, 10).trim() + '...' + title.slice(-10).trim()
+    }
+    return title.toUpperCase()
   }
 }
 </script>
 
 
 <style lang="scss" scoped>
-.breadcrumbs {
-  display: flex;
-  align-items: center;
+.item {
+  white-space: nowrap;
 
-  ::v-deep .v-breadcrumbs__divider {
-    padding: 0 4px 0 8px;
+  .v-icon {
+    margin-right: -2px;
   }
 
-  ::v-deep li {
-    font-size: 1rem;
+  a {
+    text-decoration: none;
+
+    &.active {
+      color: rgba(0,0,0,.38);
+    }
   }
 }
 </style>
