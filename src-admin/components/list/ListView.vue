@@ -74,7 +74,7 @@ export default class ListView extends Mixins(ListViewMixin) {
 
 <style lang="scss" scoped>
 .filters {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
 ::v-deep .v-pagination {

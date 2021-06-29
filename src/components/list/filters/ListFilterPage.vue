@@ -1,7 +1,7 @@
 <template>
-  <div
+  <a-row
     v-if="numPages > 1"
-    class="d-flex align-center gap-8"
+    gap="8"
   >
     <v-pagination
       v-if="count"
@@ -17,7 +17,7 @@
       :defaultValue="pageSizeFilter.defaultValue"
       :clearable="!pageSizeFilter.hasDefaultValue()"
     />
-  </div>
+  </a-row>
 </template>
 
 
@@ -25,9 +25,7 @@
 import { Component, Mixins } from 'vue-property-decorator'
 import ListFilterMixin from '../ListFilterMixin'
 
-@Component({
-  props: ['pageSizeLabel']
-})
+@Component
 export default class ListFilter extends Mixins(ListFilterMixin) {
   name_ = 'page'
 

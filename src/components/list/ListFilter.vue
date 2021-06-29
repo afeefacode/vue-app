@@ -1,14 +1,5 @@
 <template>
-  <div>
-    <template v-if="filter.type === 'Afeefa.KeywordFilter'">
-      <a-text-field
-        v-model="filter.value"
-        :label="label || name"
-        :debounce="500"
-        clearable
-      />
-    </template>
-
+  <div :style="widthStyle">
     <template v-if="filter.type === 'Afeefa.OrderFilter'">
       <a-select
         v-model="filter.value"
@@ -17,7 +8,6 @@
         item-text="itemText"
         item-value="itemValue"
         :clearable="!filter.hasDefaultValue()"
-        :value-comparator="compareOrderValues"
       />
     </template>
 
@@ -50,7 +40,6 @@
         itemText="itemTitle"
         itemValue="itemValue"
         :clearable="filter.value !== null"
-        :value-comparator="compareOrderValues"
       />
     </template>
   </div>
@@ -63,10 +52,6 @@ import ListFilterMixin from './ListFilterMixin'
 
 @Component
 export default class ListFilter extends Mixins(ListFilterMixin) {
-  compareOrderValues (a, b) {
-    return JSON.stringify(a) === JSON.stringify(b)
-  }
-
   get orderItems () {
     const items = []
     for (const [fieldName, directions] of Object.entries(this.filter.options)) {

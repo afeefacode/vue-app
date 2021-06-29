@@ -3,7 +3,7 @@
     ref="select"
     :rules="validationRules"
     :items="items_"
-    :value-comparator="compareValues"
+    :valueComparator="compareValues"
     v-bind="$attrs"
     v-on="$listeners"
   />
