@@ -9,7 +9,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
-  props: ['fullWidth', 'gap', 'start', 'vertical']
+  props: ['fullWidth', 'gap', 'start', 'center', 'vertical']
 })
 export default class ARow extends Vue {
   get widthClass () {
@@ -28,7 +28,12 @@ export default class ARow extends Vue {
     if (this.start !== undefined) {
       return 'left'
     }
-    return this.vertical !== undefined ? 'left' : 'center'
+
+    if (this.vertical !== undefined) {
+      return this.center !== undefined ? 'center' : 'left'
+    }
+
+    return 'center'
   }
 
   get directionClass () {

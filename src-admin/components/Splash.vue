@@ -13,7 +13,10 @@
           <slot />
         </div>
 
-        <a-row vertical>
+        <a-row
+          vertical
+          center
+        >
           <v-progress-linear
             :size="45"
             :width="6"
