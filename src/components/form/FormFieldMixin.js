@@ -1,8 +1,6 @@
 import { apiResources } from '@afeefa/api-resources-client'
 import { Component, Vue } from 'vue-property-decorator'
 
-import EditForm from './EditForm.vue'
-
 @Component({
   props: ['name', 'label']
 })
@@ -10,7 +8,7 @@ export default class FormField extends Vue {
   get model () {
     let parent = this
     while (parent) {
-      if (parent instanceof EditForm) {
+      if (parent.EDIT_FORM) {
         return parent.model
       }
       parent = parent.$parent

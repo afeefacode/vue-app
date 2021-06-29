@@ -16,6 +16,8 @@ import { apiResources } from '@afeefa/api-resources-client'
   props: ['model']
 })
 export default class EditForm extends Vue {
+  EDIT_FORM = true
+
   valid = false
   lastJson = null
 
