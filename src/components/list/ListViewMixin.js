@@ -8,6 +8,8 @@ import { RouteFilterSource } from './RouteFilterSource'
   props: ['models', 'meta', 'action', 'scopes', 'fields', 'filterHistoryKey', 'filterSource']
 })
 export default class ListViewMixin extends Vue {
+  LIST_VIEW = true
+
   models_ = []
   meta_ = {}
   requestFilters = null

@@ -9,15 +9,6 @@
       />
     </template>
 
-    <template v-if="filter.type === 'Afeefa.PageFilter'">
-      <v-pagination
-        v-if="count"
-        v-model="filter.value"
-        :length="numPages"
-        :total-visible="8"
-      />
-    </template>
-
     <template v-if="filter.type === 'Afeefa.OrderFilter'">
       <a-select
         v-model="filter.value"
@@ -27,16 +18,6 @@
         item-value="itemValue"
         :clearable="!filter.hasDefaultValue()"
         :value-comparator="compareOrderValues"
-      />
-    </template>
-
-    <template v-if="filter.type === 'Afeefa.PageSizeFilter'">
-      <a-select
-        v-model="filter.value"
-        :label="label || name"
-        :items="filter.options"
-        :defaultValue="filter.defaultValue"
-        :clearable="!filter.hasDefaultValue()"
       />
     </template>
 
@@ -77,30 +58,11 @@
 
 
 <script>
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Mixins } from 'vue-property-decorator'
+import ListFilterMixin from './ListFilterMixin'
 
-@Component({
-  props: ['name', 'label', 'count', 'page_size']
-})
-export default class ListFilter extends Vue {
-  get filters () {
-    let parent = this.$parent
-    while (parent) {
-      if (parent.filters) {
-        return parent.filters
-      }
-      parent = parent.$parent
-    }
-  }
-
-  get filter () {
-    return this.filters[this.name]
-  }
-
-  get numPages () {
-    return Math.ceil(this.count / this.page_size)
-  }
-
+@Component
+export default class ListFilter extends Mixins(ListFilterMixin) {
   compareOrderValues (a, b) {
     return JSON.stringify(a) === JSON.stringify(b)
   }
