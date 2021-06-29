@@ -4,43 +4,69 @@
     flex-column
   >
     <v-list class="pa-0">
-      <v-list-item
-        v-for="item in config.items"
-        :key="item.title"
-        :to="item.to"
-      >
-        <v-list-item-icon class="ma-0 mr-4 align-self-center">
-          <model-icon
-            :modelClass="item.iconModel"
-            size="1.8rem"
-          />
-        </v-list-item-icon>
-
-        <v-list-item-content>
-          <div class="d-flex align-baseline">
-            <v-list-item-title>
-              {{ item.title }}
-            </v-list-item-title>
-
-            <component
-              :is="item.badge.component"
-              v-if="item.badge"
-              v-bind="item.badge.props"
-              class="ml-1"
+      <template v-for="item in config.items">
+        <v-list-group
+          v-if="item.group"
+          :key="item.title"
+          :value="false"
+        >
+          <template #activator>
+            <sidebar-menu-item
+              :item="item"
             />
-          </div>
-        </v-list-item-content>
-      </v-list-item>
+          </template>
+
+          <sidebar-menu-item
+            v-for="subItem in item.items"
+            :key="subItem.to.name"
+            :item="subItem"
+          />
+        </v-list-group>
+
+        <sidebar-menu-item
+          v-else
+          :key="item.to.name"
+          :item="item"
+        />
+      </template>
     </v-list>
   </v-container>
 </template>
 
 <script>
 import { Component, Vue } from 'vue-property-decorator'
+import SidebarMenuItem from './menu/SidebarMenuItem'
 
 @Component({
-  props: ['config']
+  props: ['config'],
+  components: {
+    SidebarMenuItem
+  }
 })
 export default class SidebarMenu extends Vue {
 }
 </script>
+
+
+<style lang="scss" scoped>
+::v-deep .v-list-group {
+  > .v-list-item {
+    padding: 0;
+    > .v-list-item {
+        padding: 0;
+        padding-left: 19px;
+        flex: 0;
+        color: #999999 !important;
+
+      .v-list-item__icon {
+        margin-right: 18px !important;
+      }
+    }
+
+    .v-list-item__icon {
+      margin-left: .3rem;
+      justify-content: flex-start;
+    }
+  }
+}
+</style>
