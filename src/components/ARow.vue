@@ -1,5 +1,5 @@
 <template>
-  <div :class="['a-row', gapClass]">
+  <div :class="['a-row', gapClass, directionClass]">
     <slot />
   </div>
 </template>
@@ -9,12 +9,18 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
-  props: ['gap']
+  props: ['gap', 'vertical']
 })
 export default class ARow extends Vue {
   get gapClass () {
     if (this.gap) {
       return 'gap-' + this.gap
+    }
+  }
+
+  get directionClass () {
+    if (this.vertical !== undefined) {
+      return 'vertical'
     }
   }
 }
@@ -25,5 +31,9 @@ export default class ARow extends Vue {
 .a-row {
   display: flex;
   align-items: center;
+
+  &.vertical {
+    flex-direction: column;
+  }
 }
 </style>

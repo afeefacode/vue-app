@@ -250,5 +250,4 @@ export default class App extends Vue {
   height: 36px !important;
   margin-top: 1px;
 }
-
 </style>

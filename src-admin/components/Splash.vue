@@ -13,10 +13,7 @@
           <slot />
         </div>
 
-        <v-row
-          align="center"
-          justify="center"
-        >
+        <a-row vertical>
           <v-progress-linear
             :size="45"
             :width="6"
@@ -27,7 +24,7 @@
           <div class="mt-4">
             {{ title || 'Lade App ...' }}
           </div>
-        </v-row>
+        </a-row>
       </div>
     </v-container>
   </v-app>
