@@ -113,7 +113,7 @@ export default class ListView extends Mixins(ListViewMixin) {
   }
 
   .row {
-    border-bottom: 1px solid #CCCCCC;
+    border-bottom: 1px solid #DDDDDD;
 
     &:hover {
       background: #F4F4F4;
