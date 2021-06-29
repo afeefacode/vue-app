@@ -1,5 +1,5 @@
 <template>
-  <div class="detailPage">
+  <div class="detailPage ml-4 mt-12">
     <app-bar-title
       :icon="_icon"
       :title="model.getTitle()"

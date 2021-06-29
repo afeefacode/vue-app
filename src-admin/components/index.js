@@ -2,8 +2,10 @@ import Vue from 'vue'
 
 import AppBarButton from './app/AppBarButton'
 import AppBarTitle from './app/AppBarTitle'
+import DetailColumn from './detail/DetailColumn'
 import DetailContent from './detail/DetailContent'
 import DetailMeta from './detail/DetailMeta'
+import DetailProperty from './detail/DetailProperty'
 import DetailTitle from './detail/DetailTitle'
 import Index from './Index'
 import ListCard from './list/ListCard'
@@ -38,6 +40,8 @@ Vue.component('DetailContent', DetailContent)
 Vue.component('DetailMeta', DetailMeta)
 Vue.component('DetailTitle', DetailTitle)
 Vue.component('DetailPage', DetailPage)
+Vue.component('DetailProperty', DetailProperty)
+Vue.component('DetailColumn', DetailColumn)
 
 Vue.component('AppBarButton', AppBarButton)
 Vue.component('AppBarTitle', AppBarTitle)
