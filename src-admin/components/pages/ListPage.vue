@@ -18,7 +18,7 @@
         >
           $plusIcon
         </v-icon>
-        Neu
+        {{ _newTitle }}
       </v-btn>
     </app-bar-button>
 
@@ -94,7 +94,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import { apiResources } from '@afeefa/api-resources-client'
 
 @Component({
-  props: ['models', 'meta', 'title', 'newLink', 'table']
+  props: ['models', 'meta', 'title', 'newTitle', 'newLink', 'table']
 })
 export default class ListPage extends Vue {
   $hasOptions = ['add']
@@ -133,13 +133,13 @@ export default class ListPage extends Vue {
     return type.t('TITLE_PLURAL')
   }
 
-  get titleNew () {
-    if (this.title) {
-      return this.title
+  get _newTitle () {
+    if (this.newTitle) {
+      return this.newTitle
     }
 
     const type = apiResources.getType(this.ModelClass.type)
-    return type.t('TITLE_PLURAL')
+    return type.t('TITLE_SINGULAR')
   }
 
   get _icon () {
