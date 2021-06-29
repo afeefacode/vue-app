@@ -72,10 +72,7 @@
         v-if="!table"
         #model="{ model }"
       >
-        <v-row
-          align="center"
-          class="gap-4"
-        >
+        <a-row gap="4">
           <v-icon
             :color="model.getIcon().color"
             size="2rem"
@@ -86,7 +83,7 @@
             name="model"
             :model="model"
           />
-        </v-row>
+        </a-row>
       </template>
     </list-view>
   </div>

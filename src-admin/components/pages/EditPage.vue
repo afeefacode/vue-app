@@ -44,7 +44,7 @@
       </template>
     </edit-form>
 
-    <v-row class="mt-8 gap-2">
+    <a-row class="mt-8">
       <v-btn
         :disabled="!changed || !valid"
         color="green white--text"
@@ -60,7 +60,7 @@
       >
         Zurücksetzen
       </v-btn>
-    </v-row>
+    </a-row>
   </div>
 </template>
 
@@ -158,21 +158,3 @@ export default class EditPage extends Mixins(EditPageMixin) {
   }
 }
 </script>
-
-
-<style lang="scss" scoped>
-.header {
-  h2 {
-    margin-left: 1rem;
-  }
-}
-
-.buttons {
-  gap: 1rem;
-}
-
-button {
-  display: block;
-  margin-bottom: 2rem;
-}
-</style>

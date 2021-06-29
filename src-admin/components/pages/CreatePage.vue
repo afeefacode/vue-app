@@ -27,7 +27,7 @@
       </template>
     </edit-form>
 
-    <v-row class="submit">
+    <a-row class="mt-6">
       <v-btn
         :disabled="!changed || !valid"
         @click="save"
@@ -42,7 +42,7 @@
       >
         Zurücksetzen
       </v-btn>
-    </v-row>
+    </a-row>
   </div>
 </template>
 
@@ -117,21 +117,3 @@ export default class CreatePage extends Mixins(EditPageMixin) {
   }
 }
 </script>
-
-
-<style lang="scss" scoped>
-.header {
-  h2 {
-    margin-left: 1rem;
-  }
-}
-
-button {
-  display: block;
-  margin-bottom: 2rem;
-}
-
-.submit {
-  margin-top: 2rem;
-}
-</style>

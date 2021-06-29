@@ -3,7 +3,7 @@
     <div
       v-for="(breadcrumb, index) in breadcrumbs"
       :key="index"
-      class="item mr-1 d-flex align-center"
+      class="item mr-2 d-flex align-center"
     >
       <v-icon class="">
         $chevronRightIcon
