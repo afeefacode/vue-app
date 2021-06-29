@@ -4,7 +4,7 @@
     class="black--text"
     inline
     v-bind="$attrs"
-    :content="internalContent"
+    :content="content"
   />
 </template>
 
@@ -19,7 +19,7 @@ import { SaveEvent } from '@a-vue/events'
 })
 export default class ModelCount extends Vue {
   countRequest = null
-  internalContent = null
+  content = null
 
   created () {
     this.$events.on(SaveEvent.STOP_SAVING, this.loadCount)
@@ -29,7 +29,7 @@ export default class ModelCount extends Vue {
   }
 
   loadCount () {
-    this.internalContent = this.countRequest.get(this.field)
+    this.content = this.countRequest.get(this.field)
   }
 }
 </script>

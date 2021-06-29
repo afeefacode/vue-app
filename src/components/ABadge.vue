@@ -1,6 +1,6 @@
 <template>
   <v-badge
-    :content="internalContent"
+    :content="content_"
     v-bind="$attrs"
   />
 </template>
@@ -13,7 +13,7 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
   props: ['content']
 })
 export default class ABadge extends Vue {
-  internalContent = ''
+  content_ = ''
 
   created () {
     this.init()
@@ -26,9 +26,9 @@ export default class ABadge extends Vue {
 
   async init () {
     if (this.content instanceof Promise) {
-      this.internalContent = await this.content
+      this.content_ = await this.content
     } else {
-      this.internalContent = this.content
+      this.content_ = this.content
     }
   }
 }
