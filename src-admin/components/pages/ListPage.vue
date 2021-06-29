@@ -1,31 +1,26 @@
 <template>
   <div class="listPage">
-    <div class="d-flex align-center">
-      <div class="d-flex align-center gap-4">
+    <app-bar-title
+      :icon="_icon"
+      :title="_title"
+    />
+
+    <app-bar-button v-if="$has.add">
+      <v-btn
+        v-if="$has.add"
+        :to="_newLink"
+        small
+        color="green white--text"
+      >
         <v-icon
-          :color="_icon.color"
-          size="3rem"
-          v-text="_icon.icon"
-        />
-
-        <h2>{{ _title }}</h2>
-      </div>
-
-      <v-spacer />
-
-      <div class="buttons">
-        <v-btn
-          v-if="$has.add"
-          :to="_newLink"
-          color="green white--text"
+          left
+          class="mr-0"
         >
-          <v-icon left>
-            $plusIcon
-          </v-icon>
-          Neu
-        </v-btn>
-      </div>
-    </div>
+          $plusIcon
+        </v-icon>
+        Neu
+      </v-btn>
+    </app-bar-button>
 
     <list-view
       v-bind="$attrs"
@@ -37,11 +32,13 @@
       v-on="$listeners"
     >
       <template #filters="{filters, count}">
-        <slot
-          name="filters"
-          :filters="filters"
-          :count="count"
-        />
+        <div class="pl-2">
+          <slot
+            name="filters"
+            :filters="filters"
+            :count="count"
+          />
+        </div>
       </template>
 
       <template
@@ -51,8 +48,6 @@
         <div />
 
         <slot name="header" />
-
-        <div class="lastColumn" />
       </template>
 
       <template
@@ -79,7 +74,7 @@
       >
         <v-row
           align="center"
-          class="item"
+          class="gap-4"
         >
           <v-icon
             :color="model.getIcon().color"
@@ -160,21 +155,6 @@ export default class ListPage extends Vue {
 
 
 <style lang="scss" scoped>
-.header {
-  h2 {
-    margin-left: 1rem;
-  }
-}
-
-.item {
-  gap: 1rem;
-}
-
-.button {
-  display: block;
-  margin-bottom: 2rem;
-}
-
 .lastColumn {
   width: 100%;
 }

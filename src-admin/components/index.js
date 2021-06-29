@@ -1,5 +1,7 @@
 import Vue from 'vue'
 
+import AppBarButton from './app/AppBarButton'
+import AppBarTitle from './app/AppBarTitle'
 import DetailContent from './detail/DetailContent'
 import DetailMeta from './detail/DetailMeta'
 import DetailTitle from './detail/DetailTitle'
@@ -36,5 +38,8 @@ Vue.component('DetailContent', DetailContent)
 Vue.component('DetailMeta', DetailMeta)
 Vue.component('DetailTitle', DetailTitle)
 Vue.component('DetailPage', DetailPage)
+
+Vue.component('AppBarButton', AppBarButton)
+Vue.component('AppBarTitle', AppBarTitle)
 
 Vue.component('Index', Index)

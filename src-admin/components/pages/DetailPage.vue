@@ -1,43 +1,25 @@
 <template>
   <div class="detailPage">
-    <v-row
-      class="header ma-0"
-      align="center"
-    >
-      <v-icon
-        :color="_icon.color"
-        size="3rem"
-        v-text="_icon.icon"
-      />
+    <app-bar-title
+      :icon="_icon"
+      :title="model.getTitle()"
+    />
 
-      <h2>{{ model.getTitle() }}</h2>
-    </v-row>
-
-    <v-row
-      v-if="$has.edit || $has.remove || $has.list"
-      class="buttons mr-0"
-      justify="end"
-    >
+    <app-bar-button v-if="$has.remove && false">
       <v-btn
-        v-if="$has.remove"
+        small
         color="red"
-        text
         class="white--text"
         @click="remove"
       >
         Löschen
       </v-btn>
+    </app-bar-button>
 
+    <app-bar-button v-if="$has.edit">
       <v-btn
-        v-if="$has.list"
-        :to="_listLink"
-      >
-        Liste
-      </v-btn>
-
-      <v-btn
-        v-if="$has.edit"
         :to="model.getLink('edit')"
+        small
         color="green white--text"
       >
         <v-icon left>
@@ -45,7 +27,7 @@
         </v-icon>
         Bearbeiten
       </v-btn>
-    </v-row>
+    </app-bar-button>
 
     <slot
       name="model"
@@ -134,14 +116,5 @@ export default class DetailPage extends Vue {
   h2 {
     margin-left: 1rem;
   }
-}
-
-.buttons {
-  gap: 1rem;
-}
-
-button, .button {
-  display: block;
-  margin-bottom: 2rem;
 }
 </style>

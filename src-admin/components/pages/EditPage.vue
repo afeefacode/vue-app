@@ -1,36 +1,27 @@
 <template>
   <div class="editPage">
-    <v-row
-      class="header ma-0"
-      align="center"
-    >
-      <v-icon
-        :color="_icon.color"
-        size="3rem"
-        v-text="_icon.icon"
-      />
+    <app-bar-title
+      :icon="_icon"
+      :title="modelToEdit.getTitle() || title"
+    />
 
-      <h2>{{ modelToEdit.getTitle() }}</h2>
-    </v-row>
-
-    <v-row
-      class="buttons mr-0"
-      justify="end"
-    >
+    <app-bar-button v-if="$has.list">
       <v-btn
-        v-if="$has.list"
         :to="_listLink"
+        small
       >
         Liste
       </v-btn>
+    </app-bar-button>
 
+    <app-bar-button v-if="$has.detail">
       <v-btn
-        v-if="$has.detail"
         :to="model.getLink()"
+        small
       >
         Ansehen
       </v-btn>
-    </v-row>
+    </app-bar-button>
 
     <component
       :is="Component"
@@ -78,7 +69,7 @@ import { Component, Mixins, Watch } from 'vue-property-decorator'
 import EditPageMixin from './EditPageMixin'
 
 @Component({
-  props: ['model', 'icon', 'listLink', 'getAction']
+  props: ['model', 'icon', 'title', 'listLink', 'getAction']
 })
 export default class EditPage extends Mixins(EditPageMixin) {
   $hasOptions = ['detail', {list: false}]

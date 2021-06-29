@@ -108,25 +108,40 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-main>
-      <a-loading-indicator
-        class="loadingIndicator"
-        :isLoading="isLoading"
-      />
-
-      <div class="breadcrumbsContainer d-flex align-center px-3 py-2 mb-8">
+    <v-app-bar
+      app
+      flat
+      dense
+      color="#FAFAFA"
+    >
+      <div class="d-flex align-start mt-n2">
         <v-app-bar-nav-icon
-          size="2rem"
+          class="sidebarToggleButton mr-2 ml-n1"
           @click="toggleDrawer"
         />
-
-        <a-breadcrumbs />
+        <a-breadcrumbs class="mt-2" />
       </div>
 
+      <a-loading-indicator
+        fixed
+        top
+        left
+        class="loadingIndicator"
+        :isLoading="isLoading"
+        :color="loaderColor"
+      />
+    </v-app-bar>
+
+    <v-main>
       <v-container
         fluid
-        class="pa-6 mt-12"
+        class="pa-4"
       >
+        <div class="d-flex align-center mb-4">
+          <app-bar-title-container class="flex-grow-1" />
+          <app-bar-buttons class="mr-2" />
+        </div>
+
         <router-view :class="{isLoading}" />
       </v-container>
     </v-main>
@@ -141,9 +156,16 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 import { LoadingEvent } from '@a-vue/events'
 import { appConfig } from '@a-admin/config/AppConfig'
 import { sleep } from '@a-vue/utils/timeout'
+import AppBarButtons from './app/AppBarButtons'
+import AppBarTitleContainer from './app/AppBarTitleContainer'
 import '../styles.scss'
 
-@Component
+@Component({
+  components: {
+    AppBarButtons,
+    AppBarTitleContainer
+  }
+})
 export default class App extends Vue {
   drawer = true
   mainDrawer = false
@@ -223,15 +245,10 @@ export default class App extends Vue {
   opacity: .6;
 }
 
-.breadcrumbsContainer {
-  position:fixed;
-  background: #FAFAFA;
-  width: 100%;
-  z-index: 1;
+.sidebarToggleButton {
+  width: 36px !important;
+  height: 36px !important;
+  margin-top: 1px;
 }
 
-.loadingIndicator {
-  position:fixed;
-  z-index:2;
-}
 </style>

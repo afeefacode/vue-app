@@ -1,26 +1,18 @@
 <template>
   <div class="createPage">
-    <v-row
-      class="header ma-0"
-      align="center"
-    >
-      <v-icon
-        :color="_icon.color"
-        size="3rem"
-        v-text="_icon.icon"
-      />
+    <app-bar-title
+      :icon="_icon"
+      :title="modelToEdit.getTitle() || title"
+    />
 
-      <h2>{{ modelToEdit.getTitle() || title }}</h2>
-    </v-row>
-
-    <v-row
-      class="buttons mr-0"
-      justify="end"
-    >
-      <v-btn :to="_listLink">
+    <app-bar-button>
+      <v-btn
+        :to="_listLink"
+        small
+      >
         Liste
       </v-btn>
-    </v-row>
+    </app-bar-button>
 
     <edit-form
       :model="modelToEdit"
@@ -64,7 +56,6 @@ import EditPageMixin from './EditPageMixin'
 export default class CreatePage extends Mixins(EditPageMixin) {
   created () {
     if (!this.$parent.constructor.getCreateConfig) {
-      console.log(this.$parent.$vnode.tag)
       console.warn('<create-page> owner must provide a static getCreateConfig method.')
     }
 
