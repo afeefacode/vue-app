@@ -95,18 +95,22 @@ export default class AAlert extends Vue {
 
 <style lang="scss" scoped>
 .v-snack {
+  padding: .5rem !important;
+
   .icon {
     font-size: 2rem;
   }
+
   ::v-deep {
     .v-snack__wrapper {
       width: 500px;
-      margin-top: 1rem;
+      // margin-top: 1rem;
     }
+
     .v-snack__content {
       display: flex;
       align-items: center;
-      padding: 1.2rem;
+      padding: 1rem .2rem .8rem 1.5rem;
       font-size: 1rem;
 
       > *:not(:last-child) {
@@ -119,6 +123,12 @@ export default class AAlert extends Vue {
 
       h3 {
         margin-bottom: .5rem;
+        font-size: 1.4rem;
+      }
+
+      .closeButton {
+        align-self: flex-start;
+        margin-top: -.5rem;
       }
     }
   }
