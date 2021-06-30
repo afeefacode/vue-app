@@ -16,7 +16,7 @@
       <a-row
         class="content"
         vertical
-        gap="10"
+        gap="6"
       >
         <slot />
       </a-row>

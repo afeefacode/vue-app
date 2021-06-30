@@ -12,6 +12,19 @@
   }
 }
 
+.contextButton {
+  &:hover {
+    color: #333333;
+  }
+}
+
+.v-application {
+  .text-strike {
+    color: inherit;
+    text-decoration: line-through;
+  }
+}
+
 .gap-0 {
   gap: 0;
 }
@@ -56,16 +69,90 @@
   gap: 40px;
 }
 
-.contextButton {
-  color: red;
-  &:hover {
-    color: blue;
-  }
+.h-gap-0 {
+  column-gap: 0;
 }
 
-.v-application {
-  .text-strike {
-    color: inherit;
-    text-decoration: line-through;
-  }
+.h-gap-1 {
+  column-gap: 4px;
+}
+
+.h-gap-2 {
+  column-gap: 8px;
+}
+
+.h-gap-3 {
+  column-gap: 12px;
+}
+
+.h-gap-4 {
+  column-gap: 16px;
+}
+
+.h-gap-5 {
+  column-gap: 20px;
+}
+
+.h-gap-6 {
+  column-gap: 24px;
+}
+
+.h-gap-7 {
+  column-gap: 28px;
+}
+
+.h-gap-8 {
+  column-gap: 32px;
+}
+
+.h-gap-9 {
+  column-gap: 36px;
+}
+
+.h-gap-10 {
+  column-gap: 40px;
+}
+
+.v-gap-0 {
+  row-gap: 0;
+}
+
+.v-gap-1 {
+  row-gap: 4px;
+}
+
+.v-gap-2 {
+  row-gap: 8px;
+}
+
+.v-gap-3 {
+  row-gap: 12px;
+}
+
+.v-gap-4 {
+  row-gap: 16px;
+}
+
+.v-gap-5 {
+  row-gap: 20px;
+}
+
+.v-gap-6 {
+  row-gap: 24px;
+}
+
+.v-gap-7 {
+  row-gap: 28px;
+}
+
+.v-gap-8 {
+  row-gap: 32px;
+}
+
+.v-gap-9 {
+  row-gap: 36px;
+}
+
+.v-gap-10 {
+  row-gap: 40px;
 }
