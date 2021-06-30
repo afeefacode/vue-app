@@ -27,6 +27,7 @@
       :models="models"
       :meta="meta"
       :action="action"
+      :scopes="scopes"
       :fields="fields"
       :table="table"
       v-on="$listeners"
@@ -118,6 +119,10 @@ export default class ListPage extends Vue {
       return this.listConfig.action
     }
     return this.ModelClass.getAction(this.$routeDefinition, 'list')
+  }
+
+  get scopes () {
+    return this.listConfig.scopes
   }
 
   get fields () {
