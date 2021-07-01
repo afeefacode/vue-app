@@ -2,11 +2,11 @@
   <div class="detailProperty d-flex align-start">
     <div class="icon">
       <v-icon
-        v-if="icon"
-        :color="icon.color"
+        v-if="_icon"
+        :color="_icon.color"
         size="2rem"
       >
-        {{ icon.icon }}
+        {{ _icon.icon }}
       </v-icon>
     </div>
 
@@ -27,11 +27,20 @@
 
 <script>
 import { Component, Vue } from 'vue-property-decorator'
+import { apiResources } from '@afeefa/api-resources-client'
 
 @Component({
-  props: ['icon', 'label']
+  props: ['icon', 'iconModelType', 'label']
 })
 export default class DetailProperty extends Vue {
+  get _icon () {
+    if (this.icon) {
+      return this.icon
+    }
+
+    const model = apiResources.getModel(this.iconModelType)
+    return model.icon
+  }
 }
 </script>
 
