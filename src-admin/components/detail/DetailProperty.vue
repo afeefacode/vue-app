@@ -38,8 +38,10 @@ export default class DetailProperty extends Vue {
       return this.icon
     }
 
-    const model = apiResources.getModel(this.iconModelType)
-    return model.icon
+    if (this.iconModelType) {
+      const model = apiResources.getModel(this.iconModelType)
+      return model.icon
+    }
   }
 }
 </script>
