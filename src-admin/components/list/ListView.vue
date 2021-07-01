@@ -53,7 +53,7 @@
 
 <script>
 import { Component, Watch, Mixins } from 'vue-property-decorator'
-import ListViewMixin from '@a-vue/components/list/ListViewMixin'
+import { ListViewMixin } from '@a-vue/components/list/ListViewMixin'
 import { LoadingEvent } from '@a-vue/events'
 
 @Component({
