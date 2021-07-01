@@ -5,7 +5,7 @@ import { Component, Vue } from 'vue-property-decorator'
 @Component({
   props: ['name', 'label']
 })
-export default class FormField extends Vue {
+export class FormFieldMixin extends Vue {
   get model () {
     let parent = this
     while (parent) {

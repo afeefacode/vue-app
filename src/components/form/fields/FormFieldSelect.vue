@@ -14,7 +14,7 @@
 
 <script>
 import { Component, Mixins } from 'vue-property-decorator'
-import FormFieldMixin from '../FormFieldMixin'
+import { FormFieldMixin } from '../FormFieldMixin'
 
 @Component
 export default class FormFieldSelect extends Mixins(FormFieldMixin) {
