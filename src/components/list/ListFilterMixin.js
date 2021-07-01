@@ -3,7 +3,7 @@ import { Component, Vue } from 'vue-property-decorator'
 @Component({
   props: ['name', 'label', 'width']
 })
-export default class ListFilterMixin extends Vue {
+export class ListFilterMixin extends Vue {
   name_ = null
   width_ = 'auto'
 

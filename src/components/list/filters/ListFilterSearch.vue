@@ -11,7 +11,7 @@
 
 <script>
 import { Component, Mixins } from 'vue-property-decorator'
-import ListFilterMixin from '../ListFilterMixin'
+import { ListFilterMixin } from '../ListFilterMixin'
 
 @Component
 export default class ListFilterSearch extends Mixins(ListFilterMixin) {
