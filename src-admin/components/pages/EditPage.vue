@@ -67,7 +67,7 @@
 <script>
 import { Component, Mixins, Watch } from 'vue-property-decorator'
 import { apiResources } from '@afeefa/api-resources-client'
-import EditPageMixin from './EditPageMixin'
+import { EditPageMixin } from './EditPageMixin'
 
 @Component({
   props: ['model', 'icon', 'title', 'listLink', 'getAction']

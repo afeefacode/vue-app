@@ -48,7 +48,7 @@
 
 <script>
 import { Component, Mixins } from 'vue-property-decorator'
-import EditPageMixin from './EditPageMixin'
+import { EditPageMixin } from './EditPageMixin'
 import { apiResources } from '@afeefa/api-resources-client'
 
 @Component({

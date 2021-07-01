@@ -5,7 +5,7 @@ import { Component, Vue } from 'vue-property-decorator'
 @Component({
   props: ['saveAction']
 })
-export default class EditPageMixin extends Vue {
+export class EditPageMixin extends Vue {
   valid = false
   changed = false
   modelToEdit = null
