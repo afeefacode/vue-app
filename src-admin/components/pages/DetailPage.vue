@@ -8,8 +8,8 @@
     <app-bar-button v-if="$has.remove">
       <v-btn
         small
-        color="red"
-        class="removeButton white--text"
+        color="red white--text"
+        class="removeButton"
         @click="remove"
       >
         Löschen
@@ -111,7 +111,8 @@ export default class DetailPage extends Vue {
         id: 'removeDialog',
         title: this.model.getTitle() + ' löschen?',
         message: 'Soll ' + this.model.getTitle() + 'gelöscht werden?',
-        yesButton: 'Ja, Löschen!'
+        yesButton: 'Löschen!',
+        yesColor: 'red white--text'
       })
       .delete()
 

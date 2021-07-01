@@ -21,21 +21,22 @@
         <slot />
       </v-card-text>
 
-      <v-card-actions>
+      <v-card-actions class="gap-1 mr-1 mb-1">
         <v-spacer />
-
-        <v-btn
-          small
-          @click="ok"
-        >
-          {{ yesButton }}
-        </v-btn>
 
         <v-btn
           small
           @click="cancel"
         >
           {{ cancelButton }}
+        </v-btn>
+
+        <v-btn
+          small
+          :color="yesColor"
+          @click="ok"
+        >
+          {{ yesButton }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -55,6 +56,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
   title = null
   message = null
   yesButton = null
+  yesColor = null
   cancelButton = null
 
   dialog = false
@@ -70,7 +72,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
 
   get maxWidth () {
     const margin = this.position.targetMargin || 0
-    return `min(500px, 100vw - 2 * ${margin})`
+    return `min(400px, 100vw - 2 * ${margin})`
   }
 
   setPosition (anchor) {
@@ -106,6 +108,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
     this.title = dialogEvent.payload.title
     this.message = dialogEvent.payload.message
     this.yesButton = dialogEvent.payload.yesButton || 'Ja'
+    this.yesColor = dialogEvent.payload.yesColor || 'green white--text'
     this.cancelButton = dialogEvent.payload.cancelButton || 'Abbrechen'
 
     this.dialogEvent = dialogEvent
@@ -126,6 +129,15 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
 
 
 <style lang="scss" scoped>
+.v-card__title {
+  background: #EEEEEE;
+  padding: .3rem 1rem !important;
+}
+
+.v-card__text {
+  padding: .5rem 1rem !important;
+}
+
 ::v-deep .v-dialog {
   position: absolute;
   top: 0;
