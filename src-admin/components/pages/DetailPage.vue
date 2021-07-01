@@ -5,11 +5,11 @@
       :title="model.getTitle()"
     />
 
-    <app-bar-button v-if="$has.remove && false">
+    <app-bar-button v-if="$has.remove">
       <v-btn
         small
         color="red"
-        class="white--text"
+        class="removeButton white--text"
         @click="remove"
       >
         Löschen
@@ -33,6 +33,13 @@
       name="model"
       :model="model"
     />
+
+    <a-dialog
+      id="removeDialog"
+      :anchor="[document, '.removeButton']"
+    >
+      11111!!!!!!PASSSWORRRRRSDDDD
+    </a-dialog>
   </div>
 </template>
 
@@ -61,6 +68,10 @@ export default class DetailPage extends Vue {
 
   get detailConfig () {
     return this.$parent.constructor.getDetailConfig(this.$route)
+  }
+
+  get document () {
+    return document
   }
 
   get ModelClass () {
@@ -97,6 +108,7 @@ export default class DetailPage extends Vue {
       .setAction(this._deleteAction)
       .setId(this.model.id)
       .setDialog({
+        id: 'removeDialog',
         title: this.model.getTitle() + ' löschen?',
         message: 'Soll ' + this.model.getTitle() + 'gelöscht werden?',
         yesButton: 'Ja, Löschen!'

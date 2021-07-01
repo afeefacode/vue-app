@@ -2,6 +2,9 @@
   <v-dialog
     v-model="dialog"
     max-width="500px"
+    :contentClass="id"
+    transition="v-fade-transition"
+    v-bind="$attrs"
     @click:outside="cancel"
     @keydown.esc="cancel"
   >
@@ -14,17 +17,24 @@
         <span v-html="message" />
       </v-card-text>
 
+      <v-card-text>
+        <slot />
+      </v-card-text>
+
       <v-card-actions>
         <v-spacer />
 
         <v-btn
-          class="mr-4"
+          small
           @click="ok"
         >
           {{ yesButton }}
         </v-btn>
 
-        <v-btn @click="cancel">
+        <v-btn
+          small
+          @click="cancel"
+        >
           {{ cancelButton }}
         </v-btn>
       </v-card-actions>
@@ -33,11 +43,15 @@
 </template>
 
 <script>
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Mixins } from 'vue-property-decorator'
 import { DialogEvent } from './dialog/DialogEvent'
+import { PositionConfig } from '../services/PositionService'
+import { UsesPositionServiceMixin } from '@a-vue/services/position/UsesPositionServiceMixin'
 
-@Component
-export default class ADialog extends Vue {
+@Component({
+  props: ['id', 'anchor']
+})
+export default class ADialog extends Mixins(UsesPositionServiceMixin) {
   title = null
   message = null
   yesButton = null
@@ -48,9 +62,40 @@ export default class ADialog extends Vue {
 
   created () {
     this.$events.on(DialogEvent.SHOW, this.show)
+
+    this.setPosition(this.anchor)
+  }
+
+  setPosition (anchor) {
+    this.urp_unregisterPositionWatchers()
+
+    anchor = anchor
+      ? Array.isArray(anchor) ? anchor : [anchor]
+      : [document.documentElement]
+
+    const position = new PositionConfig()
+      .setAnchor(...anchor)
+      .setTarget(document, '.' + this.id)
+      .diffY('-2rem')
+      .margin('2rem')
+
+    this.urp_registerPositionWatcher(position)
   }
 
   show (dialogEvent) {
+    // listens on all events but shows up only if targeted by its id
+    // if no id provided, the global app dialog will be used
+    const id = dialogEvent.payload.id || 'app'
+    if (id !== this.id) {
+      return
+    }
+
+    if (dialogEvent.payload.anchor) {
+      this.setPosition(dialogEvent.payload.anchor)
+    } else {
+      this.setPosition(this.anchor)
+    }
+
     this.title = dialogEvent.payload.title
     this.message = dialogEvent.payload.message
     this.yesButton = dialogEvent.payload.yesButton || 'Ja'
@@ -71,3 +116,23 @@ export default class ADialog extends Vue {
   }
 }
 </script>
+
+
+<style lang="scss" scoped>
+::v-deep .v-dialog {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+
+  &.v-fade-transition {
+    &-enter-active, &-leave, &-leave-to {
+      transition: opacity .2s ease;
+    }
+
+    &-enter, &-leave-to {
+      opacity: 0;
+    }
+  }
+}
+</style>

@@ -146,7 +146,8 @@
       </v-container>
     </v-main>
 
-    <a-dialog />
+    <a-dialog id="app" />
+
     <a-save-indicator />
   </div>
 </template>
