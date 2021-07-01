@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="dialog"
-    max-width="500px"
+    :maxWidth="maxWidth"
     :contentClass="id"
     transition="v-fade-transition"
     v-bind="$attrs"
@@ -60,10 +60,17 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
   dialog = false
   dialogEvent = null
 
+  position = null
+
   created () {
     this.$events.on(DialogEvent.SHOW, this.show)
 
     this.setPosition(this.anchor)
+  }
+
+  get maxWidth () {
+    const margin = this.position.targetMargin || 0
+    return `min(500px, 100vw - 2 * ${margin})`
   }
 
   setPosition (anchor) {
@@ -73,13 +80,13 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
       ? Array.isArray(anchor) ? anchor : [anchor]
       : [document.documentElement]
 
-    const position = new PositionConfig()
+    this.position = new PositionConfig()
       .setAnchor(...anchor)
       .setTarget(document, '.' + this.id)
       .diffY('-2rem')
       .margin('2rem')
 
-    this.urp_registerPositionWatcher(position)
+    this.urp_registerPositionWatcher(this.position)
   }
 
   show (dialogEvent) {
