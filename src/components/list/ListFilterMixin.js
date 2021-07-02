@@ -5,7 +5,7 @@ import { Component, Vue } from 'vue-property-decorator'
 })
 export class ListFilterMixin extends Vue {
   name_ = null
-  width_ = 'auto'
+  width_ = null
 
   get _name () {
     return this.name || this.name_
@@ -13,7 +13,9 @@ export class ListFilterMixin extends Vue {
 
   get widthStyle () {
     const width = this.width || this.width_
-    return `min-width: 100px; max-width: ${width}px;`
+    if (width) {
+      return `min-width: 100px; max-width: ${width}px;`
+    }
   }
 
   get listView () {
