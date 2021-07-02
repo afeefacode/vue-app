@@ -4,6 +4,11 @@
     autocomplete="off"
   >
     <slot name="fields" />
+
+    <slot
+      :changed="changed"
+      :valid="valid"
+    />
   </v-form>
 </template>
 

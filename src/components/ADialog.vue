@@ -16,7 +16,10 @@
       />
     </template>
 
-    <v-card class="pb-1">
+    <v-card
+      v-if="dialog"
+      class="pb-1"
+    >
       <v-card-title>
         {{ title }}
       </v-card-title>
@@ -26,7 +29,7 @@
       </v-card-text>
 
       <v-card-text>
-        <slot :isOpen="!!dialog" />
+        <slot />
       </v-card-text>
 
       <v-card-actions class="gap-1 mr-1 mb-1">

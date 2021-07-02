@@ -39,16 +39,13 @@
       :anchor="[document, '.removeButton']"
       :active="protectRemove ? removeKey === removeConfirmed : true"
     >
-      <template
-        v-if="protectRemove"
-        #default="{isOpen}"
-      >
+      <template v-if="protectRemove">
         <div>Bitte folgenden Key eingeben: <strong class="removeKey">{{ removeKey }}</strong></div>
 
         <a-text-field
           v-model="removeConfirmed"
           label="Key"
-          :focus="isOpen"
+          :focus="true"
           width="100"
         />
       </template>

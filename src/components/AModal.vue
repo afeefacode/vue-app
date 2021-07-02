@@ -16,13 +16,13 @@
       />
     </template>
 
-    <v-card>
+    <v-card v-if="modal">
       <v-card-title v-if="title">
         {{ title }}
       </v-card-title>
 
       <v-card-text>
-        <slot :isOpen="!!modal" />
+        <slot />
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -65,6 +65,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
   @Watch('show')
   showChanged () {
     this.modal = this.show
+    this.$emit('update:show', this.show)
   }
 
   @Watch('modal')
@@ -72,6 +73,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
     if (this.modal) {
       this.setPosition(this.anchor)
     }
+    this.$emit('update:show', this.modal)
   }
 
   get maxWidth () {

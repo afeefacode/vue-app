@@ -35,14 +35,18 @@ export class FormFieldMixin extends Vue {
   }
 
   fieldHasOptionsRequest () {
-    return this.modelType
-      .getUpdateField(this.name)
-      .getOptionsRequest()
+    const field = this.model.id
+      ? this.modelType.getUpdateField(this.name)
+      : this.modelType.getCreateField(this.name)
+    return field.getOptionsRequest()
   }
 
   async getSelectOptions (filters) {
-    const request = this.modelType
-      .getUpdateField(this.name)
+    const field = this.model.id
+      ? this.modelType.getUpdateField(this.name)
+      : this.modelType.getCreateField(this.name)
+
+    const request = field
       .getOptionsRequest()
       .addFilters(filters)
 
