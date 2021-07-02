@@ -2,10 +2,11 @@
   <v-text-field
     ref="input"
     :type="type"
-    :append-icon="appendIcon"
+    :appendIcon="appendIcon"
     :autocomplete="autocomplete"
     :rules="validationRules"
     :counter="counter"
+    :style="widthStyle"
     v-bind="$attrs"
     v-on="$listeners"
     @click:append="showPassword = !showPassword"
@@ -14,19 +15,16 @@
 
 
 <script>
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { debounce } from '@a-vue/utils/debounce'
 
 @Component({
-  props: ['focus', 'debounce', 'validator', 'password']
+  props: ['focus', 'debounce', 'validator', 'password', 'width']
 })
 export default class ATextField extends Vue {
-  autofocus = false
   showPassword = false
 
   created () {
-    this.autofocus = this.focus || false
-
     if (this.debounce) {
       this.$listeners.input = debounce(value => {
         this.$emit('input', value)
@@ -35,12 +33,32 @@ export default class ATextField extends Vue {
   }
 
   mounted () {
-    if (this.autofocus) {
-      this.$el.querySelector('input').focus()
-    }
+    this.setFocus()
 
     if (this.validator) {
       this.$refs.input.validate(true)
+    }
+  }
+
+  @Watch('focus')
+  focusChanged () {
+    this.setFocus()
+  }
+
+  setFocus () {
+    const focus = this.focus || false
+    if (focus) {
+      // if run in a v-dialog, the dialog background would
+      // steal the focus without requestAnimationFrame
+      requestAnimationFrame(() => {
+        this.$el.querySelector('input').focus()
+      })
+    }
+  }
+
+  get widthStyle () {
+    if (this.width) {
+      return `min-width: 100px; max-width: ${this.width}px;`
     }
   }
 
