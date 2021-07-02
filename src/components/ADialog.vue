@@ -2,15 +2,23 @@
   <v-dialog
     v-model="dialog"
     :maxWidth="maxWidth"
-    :contentClass="id"
+    :contentClass="_id"
     transition="v-fade-transition"
     v-bind="$attrs"
     @click:outside="cancel"
     @keydown.esc="cancel"
   >
+    <template #activator="{ on, attrs }">
+      <slot
+        name="activator"
+        :on="on"
+        :attrs="attrs"
+      />
+    </template>
+
     <v-card class="pb-1">
       <v-card-title>
-        <span>{{ title }}</span>
+        {{ title }}
       </v-card-title>
 
       <v-card-text v-if="message">
@@ -28,16 +36,16 @@
           small
           @click="cancel"
         >
-          {{ cancelButton }}
+          {{ cancelButton || 'Abbrechen' }}
         </v-btn>
 
         <v-btn
           small
-          :color="yesColor"
+          :color="yesColor || 'green white--text'"
           :disabled="!_active"
           @click="ok"
         >
-          {{ yesButton }}
+          {{ yesButton || 'Ja' }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -45,15 +53,18 @@
 </template>
 
 <script>
-import { Component, Mixins } from 'vue-property-decorator'
+import { Component, Mixins, Watch } from 'vue-property-decorator'
 import { DialogEvent } from './dialog/DialogEvent'
 import { PositionConfig } from '../services/PositionService'
 import { UsesPositionServiceMixin } from '@a-vue/services/position/UsesPositionServiceMixin'
+import { randomCssClass } from '../utils/random'
 
 @Component({
-  props: ['id', 'anchor', 'active']
+  props: ['id', 'anchor', 'active', 'payload']
 })
 export default class ADialog extends Mixins(UsesPositionServiceMixin) {
+  id_ = randomCssClass(10)
+
   title = null
   message = null
   yesButton = null
@@ -63,12 +74,37 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
   dialog = false
   dialogEvent = null
 
+  calledViaEvent = false
   position = null
 
   created () {
     this.$events.on(DialogEvent.SHOW, this.show)
+  }
 
-    this.setPosition(this.anchor)
+  destroyed () {
+    this.$events.off(DialogEvent.SHOW, this.show)
+  }
+
+  @Watch('dialog')
+  dialogChanged () {
+    // called without event from activator
+    if (this.dialog && !this.calledViaEvent) {
+      this.setPosition(this.anchor)
+
+      this.title = this.payload.title
+      this.message = this.payload.message
+      this.yesButton = this.payload.yesButton
+      this.yesColor = this.payload.yesColor
+      this.cancelButton = this.payload.cancelButton
+
+      this.dialogEvent = null
+
+      this.calledViaEvent = false
+    }
+  }
+
+  get _id () {
+    return this.id || this.id_
   }
 
   get _active () {
@@ -79,6 +115,9 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
   }
 
   get maxWidth () {
+    if (!this.position) {
+      return
+    }
     const margin = this.position.targetMargin || 0
     return `min(400px, 100vw - 2 * ${margin})`
   }
@@ -86,13 +125,17 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
   setPosition (anchor) {
     this.urp_unregisterPositionWatchers()
 
-    anchor = anchor
-      ? Array.isArray(anchor) ? anchor : [anchor]
-      : [document.documentElement]
+    if (!Array.isArray(anchor)) {
+      if (typeof anchor === 'string') {
+        anchor = [document.documentElement, anchor]
+      } else {
+        anchor = [document.documentElement]
+      }
+    }
 
     this.position = new PositionConfig()
       .setAnchor(...anchor)
-      .setTarget(document, '.' + this.id)
+      .setTarget(document, '.' + this._id)
       .diffY('-2rem')
       .margin('2rem')
 
@@ -103,7 +146,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
     // listens on all events but shows up only if targeted by its id
     // if no id provided, the global app dialog will be used
     const id = dialogEvent.payload.id || 'app'
-    if (id !== this.id) {
+    if (id !== this._id) {
       return
     }
 
@@ -115,21 +158,27 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
 
     this.title = dialogEvent.payload.title
     this.message = dialogEvent.payload.message
-    this.yesButton = dialogEvent.payload.yesButton || 'Ja'
-    this.yesColor = dialogEvent.payload.yesColor || 'green white--text'
-    this.cancelButton = dialogEvent.payload.cancelButton || 'Abbrechen'
+    this.yesButton = dialogEvent.payload.yesButton
+    this.yesColor = dialogEvent.payload.yesColor
+    this.cancelButton = dialogEvent.payload.cancelButton
 
     this.dialogEvent = dialogEvent
+
+    this.calledViaEvent = true
     this.dialog = true
   }
 
   ok () {
-    this.dialogEvent.resolve(DialogEvent.RESULT_YES)
+    if (this.dialogEvent) {
+      this.dialogEvent.resolve(DialogEvent.RESULT_YES)
+    }
     this.dialog = false
   }
 
   cancel () {
-    this.dialogEvent.resolve(DialogEvent.RESULT_CANCEL)
+    if (this.dialogEvent) {
+      this.dialogEvent.resolve(DialogEvent.RESULT_CANCEL)
+    }
     this.dialog = false
   }
 }
