@@ -37,8 +37,21 @@
     <a-dialog
       id="removeDialog"
       :anchor="[document, '.removeButton']"
+      :active="protectRemove ? removeKey === removeConfirmed : true"
     >
-      11111!!!!!!PASSSWORRRRRSDDDD
+      <template
+        v-if="protectRemove"
+        #default="{isOpen}"
+      >
+        <div>Bitte folgenden Key eingeben: <strong class="removeKey">{{ removeKey }}</strong></div>
+
+        <a-text-field
+          v-model="removeConfirmed"
+          label="Key"
+          :focus="isOpen"
+          width="100"
+        />
+      </template>
     </a-dialog>
   </div>
 </template>
@@ -49,10 +62,13 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 import { RemoveAction } from '@a-vue/api-resources/ApiActions'
 
 @Component({
-  props: ['model', 'icon', 'removeAction', 'listLink']
+  props: ['model', 'icon', 'removeAction', 'protectRemove', 'listLink']
 })
 export default class DetailPage extends Vue {
   $hasOptions = ['edit', 'remove', 'list']
+
+  removeKey = null
+  removeConfirmed = null
 
   created () {
     if (!this.$parent.constructor.getDetailConfig) {
@@ -104,6 +120,8 @@ export default class DetailPage extends Vue {
   }
 
   async remove () {
+    this.removeKey = [...Array(6)].map(() => Math.floor(Math.random() * 16).toString(16)).join('')
+
     const result = await new RemoveAction()
       .setAction(this._deleteAction)
       .setId(this.model.id)
@@ -125,9 +143,7 @@ export default class DetailPage extends Vue {
 
 
 <style lang="scss" scoped>
-.header {
-  h2 {
-    margin-left: 1rem;
-  }
+.removeKey {
+  user-select: none;
 }
 </style>
