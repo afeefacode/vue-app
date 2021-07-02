@@ -131,7 +131,7 @@ export class SaveAction {
   }
 }
 
-export class DeleteAction {
+export class RemoveAction {
   action = null
   id = null
   fields = null

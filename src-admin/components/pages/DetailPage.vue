@@ -46,10 +46,10 @@
 
 <script>
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { DeleteAction } from '@a-vue/api-resources/ApiActions'
+import { RemoveAction } from '@a-vue/api-resources/ApiActions'
 
 @Component({
-  props: ['model', 'icon', 'deleteAction', 'listLink']
+  props: ['model', 'icon', 'removeAction', 'listLink']
 })
 export default class DetailPage extends Vue {
   $hasOptions = ['edit', 'remove', 'list']
@@ -97,14 +97,14 @@ export default class DetailPage extends Vue {
   }
 
   get _deleteAction () {
-    if (this.deleteAction) {
-      return this.deleteAction
+    if (this.removeAction) {
+      return this.removeAction
     }
     return this.ModelClass.getAction(this.$routeDefinition, 'delete')
   }
 
   async remove () {
-    const result = await new DeleteAction()
+    const result = await new RemoveAction()
       .setAction(this._deleteAction)
       .setId(this.model.id)
       .setDialog({
