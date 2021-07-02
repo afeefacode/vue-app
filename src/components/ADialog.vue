@@ -18,7 +18,7 @@
       </v-card-text>
 
       <v-card-text>
-        <slot />
+        <slot :isOpen="!!dialog" />
       </v-card-text>
 
       <v-card-actions class="gap-1 mr-1 mb-1">
@@ -34,6 +34,7 @@
         <v-btn
           small
           :color="yesColor"
+          :disabled="!_active"
           @click="ok"
         >
           {{ yesButton }}
@@ -50,7 +51,7 @@ import { PositionConfig } from '../services/PositionService'
 import { UsesPositionServiceMixin } from '@a-vue/services/position/UsesPositionServiceMixin'
 
 @Component({
-  props: ['id', 'anchor']
+  props: ['id', 'anchor', 'active']
 })
 export default class ADialog extends Mixins(UsesPositionServiceMixin) {
   title = null
@@ -68,6 +69,13 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
     this.$events.on(DialogEvent.SHOW, this.show)
 
     this.setPosition(this.anchor)
+  }
+
+  get _active () {
+    if (this.active !== undefined) {
+      return this.active
+    }
+    return true
   }
 
   get maxWidth () {
