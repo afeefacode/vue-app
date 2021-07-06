@@ -65,10 +65,6 @@ export class EditPageMixin extends Vue {
     return {}
   }
 
-  get json () {
-    return this.modelToEdit.serialize(this.fields)
-  }
-
   async save () {
     const model = await new SaveAction()
       .setAction(this._saveAction)
