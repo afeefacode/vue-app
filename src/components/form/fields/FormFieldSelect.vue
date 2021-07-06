@@ -27,7 +27,7 @@ export default class FormFieldSelect extends Mixins(FormFieldMixin) {
   }
 
   get items () {
-    return this.$attrs.items || this.asyncItems
+    return this.$attrs.items || this.asyncItems || []
   }
 }
 </script>
