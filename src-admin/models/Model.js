@@ -31,6 +31,10 @@ export class Model extends ApiResourcesModel {
     }
   }
 
+  getAction (routeDefinition, action) {
+    return this.constructor.getAction(routeDefinition, action)
+  }
+
   getIcon () {
     return this.constructor.icon
   }
