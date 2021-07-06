@@ -59,5 +59,13 @@ export default class AGrid extends Vue {
   &.cols-3 {
     grid-template-columns: auto auto auto;
   }
+
+  &.cols-4 {
+    grid-template-columns: repeat(4, auto);
+  }
+
+  &.cols-5 {
+    grid-template-columns: repeat(5, auto);
+  }
 }
 </style>
