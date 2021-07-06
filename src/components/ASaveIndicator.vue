@@ -1,7 +1,7 @@
 <template>
   <v-overlay
     :value="overlay"
-    z-index="7"
+    :zIndex="300"
   >
     <v-progress-circular
       :size="100"
