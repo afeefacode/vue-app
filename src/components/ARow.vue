@@ -1,5 +1,5 @@
 <template>
-  <div :class="['a-row', widthClass, alignClass, gapClass, directionClass]">
+  <div :class="['a-row', widthClass, alignClass, gapClass, directionClass, justifyClass]">
     <slot />
   </div>
 </template>
@@ -9,7 +9,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
-  props: ['fullWidth', 'gap', 'start', 'center', 'vertical']
+  props: ['fullWidth', 'gap', 'start', 'center', 'vertical', 'right']
 })
 export default class ARow extends Vue {
   get widthClass () {
@@ -26,11 +26,11 @@ export default class ARow extends Vue {
 
   get alignClass () {
     if (this.start !== undefined) {
-      return 'left'
+      return 'start'
     }
 
     if (this.vertical !== undefined) {
-      return this.center !== undefined ? 'center' : 'left'
+      return this.center !== undefined ? 'center' : 'start'
     }
 
     return 'center'
@@ -39,6 +39,12 @@ export default class ARow extends Vue {
   get directionClass () {
     if (this.vertical !== undefined) {
       return 'vertical'
+    }
+  }
+
+  get justifyClass () {
+    if (this.right !== undefined) {
+      return 'right'
     }
   }
 }
@@ -61,8 +67,12 @@ export default class ARow extends Vue {
     align-items: center;
   }
 
-  &.left {
+  &.start {
     align-items: flex-start;
+  }
+
+  &.right {
+    justify-content: flex-end;
   }
 }
 </style>
