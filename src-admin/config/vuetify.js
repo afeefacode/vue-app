@@ -1,5 +1,6 @@
 import {
   mdiAlarmLightOutline,
+  mdiCalendar,
   mdiChevronRight,
   mdiClose,
   mdiDelete,
@@ -28,7 +29,8 @@ export default new Vuetify({
       logoutIcon: mdiLogoutVariant,
       plusIcon: mdiPlus,
       pencilIcon: mdiPencil,
-      trashCanIcon: mdiDelete
+      trashCanIcon: mdiDelete,
+      calendarIcon: mdiCalendar
     }
   },
   breakpoint: {
