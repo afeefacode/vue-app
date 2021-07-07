@@ -58,16 +58,24 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
     this.position = new PositionConfig()
       .setAnchor(...anchor)
       .setTarget(document, '.' + this.id)
+      .anchorTop().targetBottom()
       .diffY('-2rem')
       .margin('2rem')
   }
 
+  /**
+   * visiblility changes from outside
+   * this will trigger the modal watcher
+   * and emit a visibility event
+   */
   @Watch('show')
   showChanged () {
     this.modal = this.show
-    this.$emit('update:show', this.modal)
   }
 
+  /**
+   * visiblility changes from inside
+   */
   @Watch('modal')
   modalChanged () {
     if (this.modal) {
@@ -84,11 +92,6 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
   setPosition () {
     this.urp_unregisterPositionWatchers()
     this.urp_registerPositionWatcher(this.position)
-  }
-
-  open () {
-    this.modal = true
-    this.$emit('update:show', this.show)
   }
 
   cancel () {

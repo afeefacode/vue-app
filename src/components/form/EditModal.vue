@@ -2,7 +2,7 @@
   <a-modal
     :anchor="anchor"
     title="Neue Fachleistung"
-    :show.sync="show"
+    :show.sync="show_"
     v-bind="$attrs"
   >
     <template #activator="{ on, attrs }">
@@ -14,7 +14,7 @@
     </template>
 
     <edit-form
-      v-if="show"
+      v-if="show_"
       :model="model"
     >
       <template #fields>
@@ -62,29 +62,32 @@ import { Component, Watch, Mixins } from 'vue-property-decorator'
 import { EditFormViewMixin } from './EditFormViewMixin'
 
 @Component({
-  props: ['anchor']
+  props: ['show', 'anchor']
 })
 export default class EditModal extends Mixins(EditFormViewMixin) {
-  show = false
+  show_ = false
 
-  mounted () {
-    if (this.$attrs.show) {
-      this.open()
-    }
-  }
-
-  @Watch('$attrs.show')
-  attrsShowChanged () {
-    if (this.$attrs.show) {
+  /**
+   * visiblility changes from outside
+   * this will trigger the show_ watcher,
+   * forward the change to the modal and
+   * later emit a open/close event
+   */
+  @Watch('show')
+  showChanged () {
+    if (this.show) {
       this.open()
     } else {
       this.close()
     }
   }
 
-  @Watch('show')
-  showChanged () {
-    if (this.show) {
+  /**
+   * visiblility changes by modal close
+   */
+  @Watch('show_')
+  show_Changed () {
+    if (this.show_) {
       this.$emit('open')
     } else {
       this.$emit('close')
@@ -92,15 +95,15 @@ export default class EditModal extends Mixins(EditFormViewMixin) {
   }
 
   open () {
-    this.show = true
+    this.show_ = true
   }
 
   close () {
-    this.show = false
+    this.show_ = false
   }
 
   _saved () {
-    this.show = false
+    this.close()
   }
 }
 </script>
