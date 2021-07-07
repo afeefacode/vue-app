@@ -45,21 +45,6 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
 
   created () {
     this.modal = this.show
-
-    let anchor = this.anchor
-    if (!Array.isArray(anchor)) {
-      if (typeof anchor === 'string') {
-        anchor = [document.documentElement, anchor]
-      } else {
-        anchor = [document.documentElement]
-      }
-    }
-
-    this.position = new PositionConfig()
-      .setAnchor(...anchor)
-      .setTarget(document, '.' + this.id)
-      .diffY('-2rem')
-      .margin('2rem')
   }
 
   /**
@@ -84,11 +69,28 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
   }
 
   get maxWidth () {
-    const margin = this.position.targetMargin || 0
-    return `min(600px, 100vw - 2 * ${margin})`
+    if (this.position) {
+      const margin = this.position.targetMargin || 0
+      return `min(600px, 100vw - 2 * ${margin})`
+    }
   }
 
   setPosition () {
+    let anchor = this.anchor
+    if (!Array.isArray(anchor)) {
+      if (typeof anchor === 'string') {
+        anchor = [document.documentElement, anchor]
+      } else {
+        anchor = [document.documentElement]
+      }
+    }
+
+    this.position = new PositionConfig()
+      .setAnchor(...anchor)
+      .setTarget(document, '.' + this.id)
+      .diffY('-2rem')
+      .margin('2rem')
+
     this.urp_unregisterPositionWatchers()
     this.urp_registerPositionWatcher(this.position)
   }
