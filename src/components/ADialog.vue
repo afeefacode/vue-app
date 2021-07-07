@@ -59,7 +59,7 @@
 import { Component, Mixins, Watch } from 'vue-property-decorator'
 import { DialogEvent } from './dialog/DialogEvent'
 import { PositionConfig } from '../services/PositionService'
-import { UsesPositionServiceMixin } from '@a-vue/services/position/UsesPositionServiceMixin'
+import { UsesPositionServiceMixin } from '../services/position/UsesPositionServiceMixin'
 import { randomCssClass } from '../utils/random'
 
 @Component({
