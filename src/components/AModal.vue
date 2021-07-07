@@ -58,7 +58,6 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
     this.position = new PositionConfig()
       .setAnchor(...anchor)
       .setTarget(document, '.' + this.id)
-      .anchorTop().targetBottom()
       .diffY('-2rem')
       .margin('2rem')
   }
