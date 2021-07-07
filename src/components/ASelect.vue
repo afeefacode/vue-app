@@ -4,6 +4,7 @@
     :rules="validationRules"
     :items="items_"
     :valueComparator="compareValues"
+    :style="widthStyle"
     v-bind="$attrs"
     v-on="$listeners"
   />
@@ -15,7 +16,7 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 import { Model } from '@afeefa/api-resources-client'
 
 @Component({
-  props: ['validator', 'defaultValue', 'items']
+  props: ['validator', 'defaultValue', 'items', 'width']
 })
 export default class ASelect extends Vue {
   items_ = []
@@ -47,6 +48,16 @@ export default class ASelect extends Vue {
     }
 
     return JSON.stringify(a) === JSON.stringify(b)
+  }
+
+  get widthStyle () {
+    if (this.width) {
+      let width = this.width
+      if (!isNaN(width)) {
+        width = width + 'px'
+      }
+      return `max-width: ${width};`
+    }
   }
 
   get validationRules () {

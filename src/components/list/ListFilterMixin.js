@@ -12,9 +12,12 @@ export class ListFilterMixin extends Vue {
   }
 
   get widthStyle () {
-    const width = this.width || this.width_
+    let width = this.width || this.width_
     if (width) {
-      return `min-width: 100px; max-width: ${width}px;`
+      if (!isNaN(width)) {
+        width = width + 'px'
+      }
+      return `max-width: ${width};`
     }
   }
 

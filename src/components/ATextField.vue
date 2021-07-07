@@ -58,7 +58,11 @@ export default class ATextField extends Vue {
 
   get widthStyle () {
     if (this.width) {
-      return `min-width: 100px; max-width: ${this.width}px;`
+      let width = this.width
+      if (!isNaN(width)) {
+        width = width + 'px'
+      }
+      return `max-width: ${width};`
     }
   }
 
