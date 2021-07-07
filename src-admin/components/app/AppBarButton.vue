@@ -7,7 +7,9 @@
 <script>
 import { Component, Vue } from 'vue-property-decorator'
 
-@Component
+@Component({
+  props: ['prepend']
+})
 export default class AppBarButton extends Vue {
   render (createElement) {
     return createElement('div', {}, this.$slots.default)
