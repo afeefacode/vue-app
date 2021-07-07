@@ -29,7 +29,7 @@
       </v-card-text>
 
       <v-card-text>
-        <slot />
+        <slot :props="props" />
       </v-card-text>
 
       <v-card-actions class="gap-1 mr-1 mb-1">
@@ -80,6 +80,8 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
   calledViaEvent = false
   position = null
 
+  props = {}
+
   created () {
     this.$events.on(DialogEvent.SHOW, this.show)
   }
@@ -99,6 +101,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
       this.yesButton = this.payload.yesButton
       this.yesColor = this.payload.yesColor
       this.cancelButton = this.payload.cancelButton
+      this.props = this.payload.props
 
       this.dialogEvent = null
 
@@ -164,6 +167,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
     this.yesButton = dialogEvent.payload.yesButton
     this.yesColor = dialogEvent.payload.yesColor
     this.cancelButton = dialogEvent.payload.cancelButton
+    this.props = dialogEvent.payload.props
 
     this.dialogEvent = dialogEvent
 
