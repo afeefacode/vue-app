@@ -135,6 +135,7 @@ export class RemoveAction {
   action = null
   id = null
   fields = null
+  afterRemoveHook = null
   dialog = null
 
   setAction (action) {
@@ -144,6 +145,11 @@ export class RemoveAction {
 
   setId (id) {
     this.id = id
+    return this
+  }
+
+  setAfterRemoveHook (afterRemoveHook) {
+    this.afterRemoveHook = afterRemoveHook
     return this
   }
 
@@ -165,6 +171,10 @@ export class RemoveAction {
           id: this.id
         })
         .send()
+
+      if (this.afterRemoveHook) {
+        await this.afterRemoveHook()
+      }
 
       const diffTime = Date.now() - startTime
       const restTime = Math.max(0, 400 - diffTime)
