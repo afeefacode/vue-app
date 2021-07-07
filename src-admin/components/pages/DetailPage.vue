@@ -35,7 +35,7 @@
     />
 
     <a-dialog
-      id="removeDialog"
+      id="detailPageRemoveDialog"
       :anchor="[document, '.removeButton']"
       :active="protectRemove ? removeKey === removeConfirmed : true"
     >
@@ -123,10 +123,10 @@ export default class DetailPage extends Vue {
       .setAction(this._deleteAction)
       .setId(this.model.id)
       .setDialog({
-        id: 'removeDialog',
+        id: 'detailPageRemoveDialog',
         title: this.model.getTitle() + ' löschen?',
-        message: 'Soll ' + this.model.getTitle() + 'gelöscht werden?',
-        yesButton: 'Löschen!',
+        message: 'Soll ' + this.model.getTitle() + ' gelöscht werden?',
+        yesButton: 'Löschen',
         yesColor: 'red white--text'
       })
       .delete()
