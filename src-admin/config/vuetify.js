@@ -2,6 +2,8 @@ import {
   mdiAlarmLightOutline,
   mdiChevronRight,
   mdiClose,
+  mdiDelete,
+  mdiDotsHorizontal,
   mdiDotsVertical,
   mdiLogoutVariant,
   mdiPencil,
@@ -22,9 +24,11 @@ export default new Vuetify({
       alarmIcon: mdiAlarmLightOutline,
       closeIcon: mdiClose,
       dotsVerticalIcon: mdiDotsVertical,
+      dotsHorizontalIcon: mdiDotsHorizontal,
       logoutIcon: mdiLogoutVariant,
       plusIcon: mdiPlus,
-      pencilIcon: mdiPencil
+      pencilIcon: mdiPencil,
+      trashCanIcon: mdiDelete
     }
   },
   breakpoint: {
