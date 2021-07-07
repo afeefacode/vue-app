@@ -25,7 +25,17 @@
       </template>
 
       <template #default="{changed, valid}">
-        <a-row class="mt-8 mb-2 gap-4">
+        <a-row
+          class="mt-8 mb-2 gap-4"
+          right
+        >
+          <v-btn
+            small
+            @click="close"
+          >
+            Schließen
+          </v-btn>
+
           <v-btn
             small
             :disabled="!changed || !valid"
@@ -42,13 +52,6 @@
             @click="reset"
           >
             Zurücksetzen
-          </v-btn>
-
-          <v-btn
-            small
-            @click="close"
-          >
-            Schließen
           </v-btn>
         </a-row>
       </template>
