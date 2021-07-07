@@ -2,9 +2,9 @@
   <v-dialog
     v-model="modal"
     :maxWidth="maxWidth"
+    v-bind="$attrs"
     :contentClass="id"
     transition="v-fade-transition"
-    v-bind="$attrs"
     @click:outside="cancel"
     @keydown.esc="cancel"
   >
@@ -65,7 +65,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
   @Watch('show')
   showChanged () {
     this.modal = this.show
-    this.$emit('update:show', this.show)
+    this.$emit('update:show', this.modal)
   }
 
   @Watch('modal')
@@ -84,6 +84,11 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
   setPosition () {
     this.urp_unregisterPositionWatchers()
     this.urp_registerPositionWatcher(this.position)
+  }
+
+  open () {
+    this.modal = true
+    this.$emit('update:show', this.show)
   }
 
   cancel () {

@@ -3,6 +3,7 @@
     :anchor="anchor"
     title="Neue Fachleistung"
     :show.sync="show"
+    v-bind="$attrs"
   >
     <template #activator="{ on, attrs }">
       <slot
@@ -24,8 +25,6 @@
       </template>
 
       <template #default="{changed, valid}">
-        changed: {{ changed }}
-        valid: {{ valid }}
         <a-row class="mt-8 mb-2 gap-4">
           <v-btn
             small
@@ -47,7 +46,7 @@
 
           <v-btn
             small
-            @click="$emit('close')"
+            @click="close"
           >
             Schließen
           </v-btn>
@@ -59,7 +58,7 @@
 
 
 <script>
-import { Component, Mixins } from 'vue-property-decorator'
+import { Component, Watch, Mixins } from 'vue-property-decorator'
 import { EditFormViewMixin } from './EditFormViewMixin'
 
 @Component({
@@ -67,6 +66,38 @@ import { EditFormViewMixin } from './EditFormViewMixin'
 })
 export default class EditModal extends Mixins(EditFormViewMixin) {
   show = false
+
+  mounted () {
+    if (this.$attrs.show) {
+      this.open()
+    }
+  }
+
+  @Watch('$attrs.show')
+  attrsShowChanged () {
+    if (this.$attrs.show) {
+      this.open()
+    } else {
+      this.close()
+    }
+  }
+
+  @Watch('show')
+  showChanged () {
+    if (this.show) {
+      this.$emit('open')
+    } else {
+      this.$emit('close')
+    }
+  }
+
+  open () {
+    this.show = true
+  }
+
+  close () {
+    this.show = false
+  }
 
   _saved () {
     this.show = false
