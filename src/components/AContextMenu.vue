@@ -81,6 +81,8 @@ export default class AContextMenu extends Mixins(UsesPositionServiceMixin) {
     this.positionize()
 
     this.isOpen = true
+
+    this.$emit('open')
   }
 
   close () {
