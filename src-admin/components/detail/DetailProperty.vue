@@ -51,7 +51,7 @@ export default class DetailProperty extends Vue {
 .detailProperty {
   width: 100%;
   .icon {
-    flex-basis: 50px;
+    flex: 0 0 50px;
   }
 
   label {
