@@ -64,6 +64,7 @@ export class SaveAction {
   fields = null
   data = null
   afterSaveHook = null
+  dialog = null
 
   setAction (action) {
     this.action = action
@@ -90,7 +91,20 @@ export class SaveAction {
     return this
   }
 
+  setDialog (dialog) {
+    this.dialog = dialog
+    return this
+  }
+
   async save () {
+    if (this.dialog) {
+      const result = await eventBus.dispatch(new DialogEvent(DialogEvent.SHOW, this.dialog))
+
+      if (result !== DialogEvent.RESULT_YES) {
+        return null
+      }
+    }
+
     eventBus.dispatch(new SaveEvent(SaveEvent.START_SAVING))
 
     const startTime = Date.now()
@@ -105,8 +119,10 @@ export class SaveAction {
 
     const model = result.data
 
-    if (this.afterSaveHook) {
-      await this.afterSaveHook(model)
+    if (!result.error) {
+      if (this.afterSaveHook) {
+        await this.afterSaveHook(model)
+      }
     }
 
     const diffTime = Date.now() - startTime
@@ -117,17 +133,21 @@ export class SaveAction {
 
     eventBus.dispatch(new SaveEvent(SaveEvent.STOP_SAVING))
 
-    if (result) {
-      eventBus.dispatch(new AlertEvent(AlertEvent.MESSAGE, {
-        message: 'Die Daten wurden gespeichert.'
-      }))
-      return model
-    } else {
+    if (result.error) {
+      eventBus.dispatch(new SaveEvent(SaveEvent.STOP_SAVING))
+
       eventBus.dispatch(new AlertEvent(AlertEvent.ERROR, {
-        message: 'Die Daten wurden nicht gespeichert.'
+        headline: 'Die Daten wurden nicht gespeichert',
+        message: result.message,
+        detail: result.detail
       }))
       return null
     }
+
+    eventBus.dispatch(new AlertEvent(AlertEvent.MESSAGE, {
+      message: 'Die Daten wurden gespeichert.'
+    }))
+    return model
   }
 }
 
