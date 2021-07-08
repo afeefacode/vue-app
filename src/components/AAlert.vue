@@ -55,7 +55,10 @@ export default class AAlert extends Vue {
   }
 
   get _headline () {
-    return this.headline || this.error ? 'Ein Fehler ist aufgetreten.' : 'Alles super!'
+    if (this.headline) {
+      return this.headline
+    }
+    return this.error ? 'Ein Fehler ist aufgetreten.' : 'Alles super!'
   }
 
   onError (alertEvent) {
