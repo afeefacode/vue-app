@@ -1,7 +1,7 @@
 <template>
   <a-modal
     :anchor="anchor"
-    title="Neue Fachleistung"
+    :title="title"
     :show.sync="show_"
     v-bind="$attrs"
   >
@@ -65,7 +65,7 @@ import { Component, Watch, Mixins } from 'vue-property-decorator'
 import { EditFormViewMixin } from './EditFormViewMixin'
 
 @Component({
-  props: ['show', 'anchor']
+  props: ['title', 'show', 'anchor']
 })
 export default class EditModal extends Mixins(EditFormViewMixin) {
   show_ = false
