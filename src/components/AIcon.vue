@@ -13,13 +13,11 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
-  props: {
-    button: Boolean
-  }
+  props: ['button']
 })
 export default class AIcon extends Vue {
   get isButton () {
-    return this.button
+    return this.button !== undefined
   }
 }
 </script>
