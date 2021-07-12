@@ -2,7 +2,7 @@
   <div class="detailPage ml-4 mt-12">
     <app-bar-title
       :icon="_icon"
-      :title="model.getTitle()"
+      :title="_title"
     />
 
     <app-bar-button v-if="$has.remove">
@@ -59,7 +59,7 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 import { RemoveAction } from '@a-vue/api-resources/ApiActions'
 
 @Component({
-  props: ['model', 'icon', 'removeAction', 'protectRemove', 'listLink']
+  props: ['model', 'title', 'icon', 'removeAction', 'protectRemove', 'listLink']
 })
 export default class DetailPage extends Vue {
   $hasOptions = ['edit', 'remove', 'list']
@@ -77,6 +77,10 @@ export default class DetailPage extends Vue {
   @Watch('model')
   modelChanged () {
     this.$emit('model', this.model)
+  }
+
+  get _title () {
+    return this.title || this.model.getTitle()
   }
 
   get detailConfig () {
