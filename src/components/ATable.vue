@@ -1,5 +1,5 @@
 <template>
-  <div :class="['a-table']">
+  <div :class="['a-table', widthClass]">
     <slot />
   </div>
 </template>
@@ -8,11 +8,19 @@
 <script>
 import { Component, Vue } from 'vue-property-decorator'
 
-@Component
+@Component({
+  props: ['width']
+})
 export default class ATable extends Vue {
   $hasOptions = ['border']
 
   A_TABLE = true
+
+  get widthClass () {
+    if (this.width === 'auto') {
+      return 'width-auto'
+    }
+  }
 }
 </script>
 
@@ -22,6 +30,10 @@ export default class ATable extends Vue {
   display: table;
   border-collapse: collapse;
   width: 100%;
+
+  &.width-auto {
+    width: auto;
+  }
 
   > * {
     display: table-row;
