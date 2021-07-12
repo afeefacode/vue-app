@@ -59,7 +59,7 @@ export default class DetailRoute extends Vue {
    * triggered both, if route name or route params change
    */
   @Watch('$route.params')
-  async routeParamsChanged (newp, oldp) {
+  async routeParamsChanged () {
     if (routerHookCalled) {
       // set model to null in order to not recreate detail route's
       // child components with the stale model which is still active
