@@ -46,6 +46,7 @@ export default class ATableRow extends Vue {
     &:last-child {
       padding-right: .1rem;
     }
+    overflow: hidden;
   }
 
   &.border {
