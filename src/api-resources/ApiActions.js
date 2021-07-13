@@ -25,8 +25,8 @@ export class GetAction {
     return this
   }
 
-  noEvents () {
-    this.events = false
+  noEvents (noEvents) {
+    this.events = noEvents === undefined ? false : !noEvents
     return this
   }
 
@@ -258,8 +258,8 @@ export class ListAction {
     return this
   }
 
-  noEvents () {
-    this.events = false
+  noEvents (noEvents) {
+    this.events = noEvents === undefined ? false : !noEvents
     return this
   }
 
