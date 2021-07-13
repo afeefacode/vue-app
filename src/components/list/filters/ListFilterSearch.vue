@@ -4,6 +4,7 @@
     :style="widthStyle"
     :label="label || 'Suche'"
     :debounce="500"
+    v-bind="$attrs"
     clearable
   />
 </template>
