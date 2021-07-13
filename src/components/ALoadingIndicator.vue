@@ -1,6 +1,7 @@
 <template>
   <v-progress-linear
     v-if="isLoading_"
+    class="loadingIndicator"
     indeterminate
     :color="color"
     v-bind="$attrs"
