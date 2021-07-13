@@ -5,7 +5,12 @@ import { QuerySourceType } from './QuerySourceType'
 import { RouteFilterSource } from './RouteFilterSource'
 
 @Component({
-  props: ['models', 'meta', 'action', 'scopes', 'fields', 'filterHistoryKey', 'filterSource']
+  props: [
+    'models', 'meta',
+    'action', 'scopes', 'fields',
+    'noEvents', 'noHistory', 'filterHistoryKey', 'filterSource',
+    'loadOnlyIfKeyword'
+  ]
 })
 export class ListViewMixin extends Vue {
   LIST_VIEW = true
@@ -33,7 +38,9 @@ export class ListViewMixin extends Vue {
       this.requestFilters.off('change', this.filtersChanged)
     }
 
-    const historyKey = [this.$route.path, this.filterHistoryKey].filter(i => i).join('.')
+    const historyKey = this.noHistory
+      ? undefined
+      : [this.$route.path, this.filterHistoryKey].filter(i => i).join('.')
     const querySource = this.filterSource === QuerySourceType.OBJECT ? undefined : new RouteFilterSource(this.$router)
     this.requestFilters = this.action.createRequestFilters(historyKey, querySource)
 
@@ -78,14 +85,27 @@ export class ListViewMixin extends Vue {
     return this.meta_.count_search || 0
   }
 
+  get _loadOnlyIfKeyword () {
+    return this.loadOnlyIfKeyword
+  }
+
   async load () {
+    if (this._loadOnlyIfKeyword && !this.filters.q.value) {
+      this.models_ = []
+      this.meta_ = {}
+      this.$emit('update:count', 0)
+      return
+    }
+
     this.isLoading = true
+    this.$emit('update:isLoading', this.isLoading)
 
     const {models, meta} = await new ListAction()
       .setAction(this.action)
       .setFields(this.fields)
       .setScopes(this.scopes)
       .setFilters(this.requestFilters.serialize())
+      .noEvents(this.noEvents)
       .load()
 
     if (!models) { // error, reset filters
@@ -101,6 +121,7 @@ export class ListViewMixin extends Vue {
     }
 
     this.isLoading = false
+    this.$emit('update:isLoading', this.isLoading)
 
     this.$emit('update:count', this.meta_.count_search)
   }

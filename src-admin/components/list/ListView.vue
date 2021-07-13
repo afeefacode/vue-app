@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="listView">
     <div class="filters">
       <slot
         name="filters"
@@ -62,11 +62,14 @@ import { LoadingEvent } from '@a-vue/events'
 export default class ListView extends Mixins(ListViewMixin) {
   @Watch('isLoading')
   isLoadingChanged () {
-    if (this.isLoading) {
-      this.$events.dispatch(new LoadingEvent(LoadingEvent.START_LOADING))
-    } else {
-      this.$events.dispatch(new LoadingEvent(LoadingEvent.STOP_LOADING))
+    if (this.noEvents === undefined || !this.noEvents) {
+      if (this.isLoading) {
+        this.$events.dispatch(new LoadingEvent(LoadingEvent.START_LOADING))
+      } else {
+        this.$events.dispatch(new LoadingEvent(LoadingEvent.STOP_LOADING))
+      }
     }
+    this.$emit('update:isLoading', this.isLoading)
   }
 }
 </script>
