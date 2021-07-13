@@ -2,15 +2,21 @@
   <a-row
     v-if="numPages > 1"
     gap="8"
+    fullWidth
   >
-    <v-pagination
+    <a-pagination
       v-if="count"
       v-model="filter.value"
       :length="numPages"
-      :total-visible="8"
-    />
+      :total-visible="_totalVisible"
+    >
+      <template v-if="$has.page_number">
+        {{ filter.value }} / {{ numPages }}
+      </template>
+    </a-pagination>
 
     <a-select
+      v-if="$has.page_size"
       v-model="pageSizeFilter.value"
       :label="label || 'Anzahl'"
       :items="pageSizeFilter.options"
@@ -25,12 +31,20 @@
 import { Component, Mixins } from 'vue-property-decorator'
 import { ListFilterMixin } from '../ListFilterMixin'
 
-@Component
+@Component({
+  props: ['totalVisible']
+})
 export default class ListFilter extends Mixins(ListFilterMixin) {
+  $hasOptions = ['page_size', {page_number: false}]
+
   name_ = 'page'
 
   get pageSizeFilter () {
     return this.filters.page_size
+  }
+
+  get _totalVisible () {
+    return this.totalVisible === undefined ? 7 : this.totalVisible // allow 0 for totalVisible
   }
 
   get numPages () {
