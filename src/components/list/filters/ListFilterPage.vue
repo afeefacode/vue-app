@@ -2,7 +2,6 @@
   <a-row
     v-if="numPages > 1"
     gap="8"
-    fullWidth
   >
     <a-pagination
       v-if="count"
