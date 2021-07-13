@@ -47,6 +47,7 @@ export class ListViewMixin extends Vue {
     this.requestFilters.on('change', this.filtersChanged)
 
     this.$emit('update:filters', this.filters)
+    this._filtersInitialized()
 
     if (this.models) {
       this.requestFilters.initFromUsed(this.meta_.used_filters, this.meta_.count_search)
@@ -67,6 +68,9 @@ export class ListViewMixin extends Vue {
   modelsChanged () {
     this.models_ = this.models
     this.meta_ = this.meta
+  }
+
+  _filtersInitialized () {
   }
 
   filtersChanged () {
