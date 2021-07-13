@@ -217,11 +217,17 @@ export default class ASearchSelect extends Mixins(UsesPositionServiceMixin, Canc
   }
 
   close () {
+    if (!this.isOpen) {
+      return
+    }
+
     this.urp_unregisterPositionWatchers()
 
     window.removeEventListener('mousedown', this.onClickOutside)
 
     this.$el.appendChild(this.popUp)
+
+    this.$el.appendChild(this.listPopUp)
 
     this.isOpen = false
 
