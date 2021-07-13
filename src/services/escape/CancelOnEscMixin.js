@@ -13,7 +13,6 @@ export class CancelOnEscMixin extends Vue {
   }
 
   coe_onKeyUp (e) {
-    console.log('cancel', e)
     const key = e.key || e.keyCode
     if (key === 'Escape' || key === 'Esc' || key === 27) {
       return this.coe_cancelOnEsc()
