@@ -12,7 +12,7 @@ import { Component, Vue } from 'vue-property-decorator'
   props: ['width']
 })
 export default class ATable extends Vue {
-  $hasOptions = ['border']
+  $hasOptions = ['border'] // consumed by a-table-row and a-table-header
 
   A_TABLE = true
 
