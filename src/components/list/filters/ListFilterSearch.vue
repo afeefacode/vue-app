@@ -6,6 +6,7 @@
     :debounce="500"
     v-bind="$attrs"
     clearable
+    @keyup.esc="clearValue"
   />
 </template>
 
@@ -18,5 +19,12 @@ import { ListFilterMixin } from '../ListFilterMixin'
 export default class ListFilterSearch extends Mixins(ListFilterMixin) {
   name_ = 'q'
   width_ = 200
+
+  clearValue (e) {
+    if (this.filter.value) {
+      e.stopPropagation()
+      this.filter.value = null
+    }
+  }
 }
 </script>
