@@ -77,10 +77,6 @@ export default class ListView extends Mixins(ListViewMixin) {
   margin-bottom: 2rem;
 }
 
-::v-deep .v-pagination {
-  justify-content: left;
-}
-
 .table {
   display: table;
   border-collapse: collapse;

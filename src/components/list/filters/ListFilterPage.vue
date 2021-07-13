@@ -44,8 +44,4 @@ export default class ListFilter extends Mixins(ListFilterMixin) {
 .v-select {
   max-width: 100px;
 }
-
-::v-deep .v-pagination__navigation {
-  margin: 0;
-}
 </style>
