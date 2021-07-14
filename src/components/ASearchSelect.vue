@@ -302,7 +302,7 @@ export default class ASearchSelect extends Mixins(UsesPositionServiceMixin, Canc
 .controls {
   min-width: 400px;
   position: absolute;
-  z-index: 200;
+  z-index: 300;
   display: block;
   padding: 0 0.5rem;
 }
@@ -310,7 +310,7 @@ export default class ASearchSelect extends Mixins(UsesPositionServiceMixin, Canc
 .searchSelectList {
   min-width: 400px;
   position: absolute;
-  z-index: 201;
+  z-index: 301;
 
   max-height: 40vh;
   overflow-y: auto;
