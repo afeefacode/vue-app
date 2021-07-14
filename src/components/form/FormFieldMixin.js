@@ -38,7 +38,14 @@ export class FormFieldMixin extends Vue {
     const field = this.model.id
       ? this.modelType.getUpdateField(this.name)
       : this.modelType.getCreateField(this.name)
-    return field.getOptionsRequest()
+    return field.hasOptionsRequest()
+  }
+
+  fieldHasOptions () {
+    const field = this.model.id
+      ? this.modelType.getUpdateField(this.name)
+      : this.modelType.getCreateField(this.name)
+    return field.hasOptions()
   }
 
   async getSelectOptions (filters) {
@@ -46,19 +53,25 @@ export class FormFieldMixin extends Vue {
       ? this.modelType.getUpdateField(this.name)
       : this.modelType.getCreateField(this.name)
 
-    const request = field
-      .getOptionsRequest()
-      .addFilters(filters)
+    if (field.hasOptionsRequest()) {
+      const request = field
+        .getOptionsRequest()
+        .addFilters(filters)
 
-    const {models} = await new ListAction()
-      .setRequest(request)
-      .noEvents()
-      .load()
+      const {models} = await new ListAction()
+        .setRequest(request)
+        .noEvents()
+        .load()
 
-    return models.map(model => ({
-      itemText: model.getTitle(),
-      itemValue: model
-    }))
+      return models.map(model => ({
+        itemText: model.getTitle(),
+        itemValue: model
+      }))
+    }
+
+    if (field.hasOptions()) {
+      return field.getOptions()
+    }
   }
 
   get validator () {
