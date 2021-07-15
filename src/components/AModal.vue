@@ -1,5 +1,6 @@
 <template>
   <v-dialog
+    ref="dialog"
     v-model="modal"
     :maxWidth="maxWidth"
     v-bind="$attrs"
@@ -33,6 +34,7 @@ import { Component, Mixins, Watch } from 'vue-property-decorator'
 import { PositionConfig } from '../services/PositionService'
 import { UsesPositionServiceMixin } from '@a-vue/services/position/UsesPositionServiceMixin'
 import { randomCssClass } from '../utils/random'
+import { getZIndex } from 'vuetify/lib/util/helpers'
 
 @Component({
   props: ['show', 'anchor', 'title']
@@ -45,6 +47,20 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
 
   created () {
     this.modal = this.show
+  }
+
+  mounted () {
+    // monkey patch onFousin to allow non vuetify-popups to receive focus
+    const dialog = this.$refs.dialog
+    const onFocusin = dialog.onFocusin
+    dialog.onFocusin = e => {
+      const dialogIndex = getZIndex(document.querySelector('.' + this.id))
+      const targetIndex = getZIndex(e.target)
+      if (targetIndex > dialogIndex) {
+        return
+      }
+      onFocusin(e)
+    }
   }
 
   /**
