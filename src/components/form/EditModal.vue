@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    :anchor="anchor"
+    :anchor="'.' + id"
     :title="title"
     :show.sync="show_"
     v-bind="$attrs"
@@ -9,7 +9,7 @@
       <slot
         name="activator"
         :on="on"
-        :attrs="attrs"
+        :attrs="{...attrs, class: id}"
       />
     </template>
 
@@ -61,13 +61,14 @@
 
 
 <script>
-import { Component, Watch, Mixins } from 'vue-property-decorator'
-import { EditFormViewMixin } from './EditFormViewMixin'
+import { Component, Vue, Watch } from 'vue-property-decorator'
+import { randomCssClass } from '@a-vue/utils/random'
 
 @Component({
-  props: ['title', 'show', 'anchor']
+  props: ['model', 'title', 'show']
 })
-export default class EditModal extends Mixins(EditFormViewMixin) {
+export default class EditModal extends Vue {
+  id = randomCssClass(10)
   show_ = false
 
   /**
@@ -91,6 +92,7 @@ export default class EditModal extends Mixins(EditFormViewMixin) {
   @Watch('show_')
   show_Changed () {
     if (this.show_) {
+      this.reset()
       this.$emit('open')
     } else {
       this.$emit('close')
@@ -105,8 +107,12 @@ export default class EditModal extends Mixins(EditFormViewMixin) {
     this.show_ = false
   }
 
-  _saved () {
-    this.close()
+  reset () {
+    this.$emit('reset')
+  }
+
+  save () {
+    this.$emit('save')
   }
 }
 </script>
