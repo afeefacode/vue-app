@@ -14,6 +14,7 @@ export class Model extends ApiResourcesModel {
       const api = routeDefinition.config.api
       return api.getAction(this.resourceType, action)
     }
+    console.warn('You can\'t get an action of a model without resourceType:', this.type)
     return null
   }
 
