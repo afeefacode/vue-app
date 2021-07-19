@@ -11,9 +11,7 @@
           :value="false"
         >
           <template #activator>
-            <sidebar-menu-item
-              :item="item"
-            />
+            <sidebar-menu-item :item="item" />
           </template>
 
           <sidebar-menu-item

@@ -6,20 +6,13 @@
     />
 
     <app-bar-button v-if="$has.add">
-      <v-btn
+      <a-icon-button
         v-if="$has.add"
         :to="_newLink"
-        small
+        icon="$plusIcon"
+        :text="_newTitle"
         color="green white--text"
-      >
-        <v-icon
-          left
-          class="mr-0"
-        >
-          $plusIcon
-        </v-icon>
-        {{ _newTitle }}
-      </v-btn>
+      />
     </app-bar-button>
 
     <list-view

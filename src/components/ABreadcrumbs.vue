@@ -5,9 +5,7 @@
       :key="index"
       class="item mr-2 d-flex align-center"
     >
-      <v-icon class="">
-        $chevronRightIcon
-      </v-icon>
+      <v-icon>$chevronRightIcon</v-icon>
 
       <router-link
         :to="breadcrumb.to"

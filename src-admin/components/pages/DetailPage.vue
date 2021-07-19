@@ -17,16 +17,12 @@
     </app-bar-button>
 
     <app-bar-button v-if="$has.edit">
-      <v-btn
+      <a-icon-button
         :to="model.getLink('edit')"
-        small
+        icon="$pencilIcon"
+        text="Bearbeiten"
         color="green white--text"
-      >
-        <v-icon left>
-          $pencilIcon
-        </v-icon>
-        Bearbeiten
-      </v-btn>
+      />
     </app-bar-button>
 
     <slot

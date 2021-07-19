@@ -2,18 +2,16 @@
   <v-dialog
     v-model="dialog"
     :maxWidth="maxWidth"
-    :contentClass="_id"
+    :contentClass="_dialogId"
     transition="v-fade-transition"
     v-bind="$attrs"
     @click:outside="cancel"
     @keydown.esc="cancel"
   >
-    <template #activator="{ on, attrs }">
-      <slot
-        name="activator"
-        :on="on"
-        :attrs="attrs"
-      />
+    <template #activator="{ on }">
+      <div v-on="on">
+        <slot name="activator" />
+      </div>
     </template>
 
     <v-card
@@ -66,7 +64,7 @@ import { randomCssClass } from '../utils/random'
   props: ['id', 'anchor', 'active', 'payload']
 })
 export default class ADialog extends Mixins(UsesPositionServiceMixin) {
-  id_ = randomCssClass(10)
+  dialogId = randomCssClass(10)
 
   title = null
   message = null
@@ -109,8 +107,8 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
     }
   }
 
-  get _id () {
-    return this.id || this.id_
+  get _dialogId () {
+    return this.id || this.dialogId
   }
 
   get _active () {
@@ -141,7 +139,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
 
     this.position = new PositionConfig()
       .setAnchor(...anchor)
-      .setTarget(document, '.' + this._id)
+      .setTarget(document, '.' + this._dialogId)
       .diffY('-2rem')
       .margin('2rem')
 
@@ -152,7 +150,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
     // listens on all events but shows up only if targeted by its id
     // if no id provided, the global app dialog will be used
     const id = dialogEvent.payload.id || 'app'
-    if (id !== this._id) {
+    if (id !== this._dialogId) {
       return
     }
 

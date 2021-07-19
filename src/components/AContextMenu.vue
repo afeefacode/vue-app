@@ -1,17 +1,15 @@
 <template>
   <div class="contextEditor">
-    <slot
-      name="activator"
-      :on="{ click: open }"
-      :attrs="{ ...$attrs, class: 'activator' }"
+    <div
+      class="activator"
+      @click="open"
     >
-      <a-icon
-        class="activator contextButton"
-        @click="open"
-      >
-        $dotsHorizontalIcon
-      </a-icon>
-    </slot>
+      <slot name="activator">
+        <a-icon class="contextButton">
+          $dotsHorizontalIcon
+        </a-icon>
+      </slot>
+    </div>
 
     <div :class="popUpCssClass">
       <div
@@ -37,12 +35,12 @@ import { randomCssClass } from '../utils/random'
 })
 export default class AContextMenu extends Mixins(UsesPositionServiceMixin) {
   CONTEXT_MENU = true
-  id = randomCssClass(10)
+  menuId = randomCssClass(10)
   nosePosition = 'left'
   isOpen = false
 
   get popUpCssClass () {
-    return 'popUp-' + this.id
+    return 'popUp-' + this.menuId
   }
 
   positionize () {

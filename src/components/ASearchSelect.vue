@@ -1,17 +1,15 @@
 <template>
   <div :class="['a-search-select', widthClass]">
-    <slot
-      name="activator"
-      :on="{ click: open }"
-      :attrs="{ ...$attrs, class: 'activator' }"
+    <div
+      class="activator"
+      @click="open"
     >
-      <a-icon
-        class="activator contextButton"
-        @click="open"
-      >
-        $dotsHorizontalIcon
-      </a-icon>
-    </slot>
+      <slot name="activator">
+        <a-icon class="contextButton">
+          $dotsHorizontalIcon
+        </a-icon>
+      </slot>
+    </div>
 
     <div :class="panelCssClass">
       <div
@@ -100,7 +98,7 @@ import { CancelOnEscMixin } from '@a-vue/services/escape/CancelOnEscMixin'
   }
 })
 export default class ASearchSelect extends Mixins(UsesPositionServiceMixin, CancelOnEscMixin) {
-  id = randomCssClass(10)
+  selectId = randomCssClass(10)
   isOpen = false
   items_ = []
   filterSource = QuerySourceType.OBJECT
@@ -131,11 +129,11 @@ export default class ASearchSelect extends Mixins(UsesPositionServiceMixin, Canc
   }
 
   get panelCssClass () {
-    return 'searchSelect-' + this.id
+    return 'searchSelect-' + this.selectId
   }
 
   get listCssClass () {
-    return 'searchSelectList-' + this.id
+    return 'searchSelectList-' + this.selectId
   }
 
   getContainer () {
@@ -199,6 +197,7 @@ export default class ASearchSelect extends Mixins(UsesPositionServiceMixin, Canc
   }
 
   open () {
+    console.log('open', open)
     window.addEventListener('mousedown', this.onClickOutside)
 
     const container = this.getContainer()

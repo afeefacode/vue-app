@@ -11,10 +11,6 @@ import { Component, Vue } from 'vue-property-decorator'
   props: ['prepend']
 })
 export default class AppBarButton extends Vue {
-  render (createElement) {
-    return createElement('div', {}, this.$slots.default)
-  }
-
   mounted () {
     const section = this.getButtonBar()
     section.appendChild(this.$el)

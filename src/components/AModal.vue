@@ -4,17 +4,19 @@
     v-model="modal"
     :maxWidth="maxWidth"
     v-bind="$attrs"
-    :contentClass="id"
+    :contentClass="modalId"
     transition="v-fade-transition"
     @click:outside="cancel"
     @keydown.esc="cancel"
   >
-    <template #activator="{ on, attrs }">
-      <slot
-        name="activator"
-        :on="on"
-        :attrs="attrs"
-      />
+    <template #activator="{ on }">
+      <div
+        style="width: max-content;"
+        :class="activatorClass"
+        v-on="on"
+      >
+        <slot name="activator" />
+      </div>
     </template>
 
     <v-card v-if="modal">
@@ -37,10 +39,10 @@ import { randomCssClass } from '../utils/random'
 import { getZIndex } from 'vuetify/lib/util/helpers'
 
 @Component({
-  props: ['show', 'anchor', 'title']
+  props: ['show', 'title']
 })
 export default class ADialog extends Mixins(UsesPositionServiceMixin) {
-  id = randomCssClass(10)
+  modalId = randomCssClass(10)
 
   modal = false
   position = null
@@ -49,12 +51,16 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
     this.modal = this.show
   }
 
+  get activatorClass () {
+    return this.modalId + '-activator'
+  }
+
   mounted () {
     // monkey patch onFousin to allow non vuetify-popups to receive focus
     const dialog = this.$refs.dialog
     const onFocusin = dialog.onFocusin
     dialog.onFocusin = e => {
-      const dialogIndex = getZIndex(document.querySelector('.' + this.id))
+      const dialogIndex = getZIndex(document.querySelector('.' + this.modalId))
       const targetIndex = getZIndex(e.target)
       if (targetIndex > dialogIndex) {
         return
@@ -79,7 +85,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
   @Watch('modal')
   modalChanged () {
     if (this.modal) {
-      this.setPosition(this.anchor)
+      this.setPosition()
     }
     this.$emit('update:show', this.modal)
   }
@@ -92,18 +98,11 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
   }
 
   setPosition () {
-    let anchor = this.anchor
-    if (!Array.isArray(anchor)) {
-      if (typeof anchor === 'string') {
-        anchor = [document.documentElement, anchor]
-      } else {
-        anchor = [document.documentElement]
-      }
-    }
+    const anchor = [document.documentElement, '.' + this.activatorClass]
 
     this.position = new PositionConfig()
       .setAnchor(...anchor)
-      .setTarget(document, '.' + this.id)
+      .setTarget(document, '.' + this.modalId)
       .diffY('-2rem')
       .margin('2rem')
 

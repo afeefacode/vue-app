@@ -18,10 +18,6 @@ import { Component, Vue } from 'vue-property-decorator'
   props: ['icon', 'title']
 })
 export default class appBarTitle extends Vue {
-  render (createElement) {
-    return createElement('div', {}, this.$slots.default)
-  }
-
   mounted () {
     const section = this.getButtonBar()
     section.appendChild(this.$el)

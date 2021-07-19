@@ -1,16 +1,11 @@
 <template>
   <a-modal
-    :anchor="'.' + id"
     :title="title"
     :show.sync="show_"
     v-bind="$attrs"
   >
-    <template #activator="{ on, attrs }">
-      <slot
-        name="activator"
-        :on="on"
-        :attrs="{...attrs, class: id}"
-      />
+    <template #activator>
+      <slot name="activator" />
     </template>
 
     <edit-form
@@ -62,13 +57,11 @@
 
 <script>
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { randomCssClass } from '@a-vue/utils/random'
 
 @Component({
   props: ['model', 'title', 'show']
 })
 export default class EditModal extends Vue {
-  id = randomCssClass(10)
   show_ = false
 
   /**
