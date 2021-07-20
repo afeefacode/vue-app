@@ -2,6 +2,7 @@
   <div :class="['a-search-select', widthClass]">
     <div
       class="activator"
+      style="width: max-content;"
       @click="open"
     >
       <slot name="activator">
@@ -197,7 +198,6 @@ export default class ASearchSelect extends Mixins(UsesPositionServiceMixin, Canc
   }
 
   open () {
-    console.log('open', open)
     window.addEventListener('mousedown', this.onClickOutside)
 
     const container = this.getContainer()

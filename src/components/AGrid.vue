@@ -1,5 +1,5 @@
 <template>
-  <div :class="['a-grid', widthClass, colsClass, gapClass]">
+  <div :class="['a-grid', widthClass, colsClass, gapClass, evenClass]">
     <slot />
   </div>
 </template>
@@ -9,7 +9,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
-  props: ['fullWidth', 'gap', 'hGap', 'cols']
+  props: ['fullWidth', 'gap', 'hGap', 'cols', 'even']
 })
 export default class AGrid extends Vue {
   get widthClass () {
@@ -21,6 +21,12 @@ export default class AGrid extends Vue {
   get colsClass () {
     const cols = this.cols || 2
     return 'cols-' + cols
+  }
+
+  get evenClass () {
+    if (this.even !== undefined) {
+      return 'even'
+    }
   }
 
   get gapClass () {
@@ -54,18 +60,30 @@ export default class AGrid extends Vue {
 
   &.cols-2 {
     grid-template-columns: auto auto;
+    &.even {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 
   &.cols-3 {
     grid-template-columns: auto auto auto;
+    &.even {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
   }
 
   &.cols-4 {
     grid-template-columns: repeat(4, auto);
+    &.even {
+      grid-template-columns: repeat(4, 1fr);
+    }
   }
 
   &.cols-5 {
     grid-template-columns: repeat(5, auto);
+    &.even {
+      grid-template-columns: repeat(5, 1fr);
+    }
   }
 }
 </style>

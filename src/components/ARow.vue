@@ -9,7 +9,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
-  props: ['fullWidth', 'gap', 'start', 'center', 'vertical', 'right']
+  props: ['fullWidth', 'gap', 'start', 'stretch', 'center', 'vertical', 'right']
 })
 export default class ARow extends Vue {
   get widthClass () {
@@ -27,6 +27,10 @@ export default class ARow extends Vue {
   get alignClass () {
     if (this.start !== undefined) {
       return 'start'
+    }
+
+    if (this.stretch !== undefined) {
+      return 'stretch'
     }
 
     if (this.vertical !== undefined) {
@@ -69,6 +73,10 @@ export default class ARow extends Vue {
 
   &.start {
     align-items: flex-start;
+  }
+
+  &.stretch {
+    align-items: stretch;
   }
 
   &.right {

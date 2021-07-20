@@ -2,7 +2,8 @@
   <v-dialog
     ref="dialog"
     v-model="modal"
-    :maxWidth="maxWidth"
+    :width="cwm_width"
+    :maxWidth="cwm_maxWidth"
     v-bind="$attrs"
     :contentClass="modalId"
     transition="v-fade-transition"
@@ -37,15 +38,18 @@ import { PositionConfig } from '../services/PositionService'
 import { UsesPositionServiceMixin } from '@a-vue/services/position/UsesPositionServiceMixin'
 import { randomCssClass } from '../utils/random'
 import { getZIndex } from 'vuetify/lib/util/helpers'
+import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
   props: ['show', 'title']
 })
-export default class ADialog extends Mixins(UsesPositionServiceMixin) {
+export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentWidthMixin) {
   modalId = randomCssClass(10)
 
   modal = false
   position = null
+
+  cwm_maxWidth_ = 600
 
   created () {
     this.modal = this.show
@@ -90,12 +94,12 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
     this.$emit('update:show', this.modal)
   }
 
-  get maxWidth () {
-    if (this.position) {
-      const margin = this.position.targetMargin || 0
-      return `min(600px, 100vw - 2 * ${margin})`
-    }
-  }
+  // get maxWidth () {
+  //   if (this.position) {
+  //     const margin = this.position.targetMargin || 0
+  //     return `min(600px, 100vw - 2 * ${margin})`
+  //   }
+  // }
 
   setPosition () {
     const anchor = [document.documentElement, '.' + this.activatorClass]

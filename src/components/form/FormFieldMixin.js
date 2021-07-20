@@ -81,4 +81,9 @@ export class FormFieldMixin extends Vue {
   get validator () {
     return this.field.getValidator()
   }
+
+  get validationRules () {
+    const label = this.label || this.name
+    return (this.validator && this.validator.getRules(label)) || []
+  }
 }

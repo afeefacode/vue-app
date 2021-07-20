@@ -1,24 +1,14 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
-  props: ['name', 'label', 'width']
+  props: ['name', 'label']
 })
 export class ListFilterMixin extends Vue {
   name_ = null
-  width_ = null
+  maxWidth_ = null
 
   get _name () {
     return this.name || this.name_
-  }
-
-  get widthStyle () {
-    let width = this.width || this.width_
-    if (width) {
-      if (!isNaN(width)) {
-        width = width + 'px'
-      }
-      return `max-width: ${width};`
-    }
   }
 
   get listView () {

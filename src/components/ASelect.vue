@@ -4,7 +4,7 @@
     :rules="validationRules"
     :items="items_"
     :valueComparator="compareValues"
-    :style="widthStyle"
+    :style="cwm_widthStyle"
     v-bind="$attrs"
     v-on="$listeners"
   />
@@ -12,13 +12,14 @@
 
 
 <script>
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Watch } from 'vue-property-decorator'
 import { Model } from '@afeefa/api-resources-client'
+import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['validator', 'defaultValue', 'items', 'width']
+  props: ['validator', 'defaultValue', 'items']
 })
-export default class ASelect extends Vue {
+export default class ASelect extends Mixins(ComponentWidthMixin) {
   items_ = []
 
   mounted () {
@@ -50,18 +51,9 @@ export default class ASelect extends Vue {
     return JSON.stringify(a) === JSON.stringify(b)
   }
 
-  get widthStyle () {
-    if (this.width) {
-      let width = this.width
-      if (!isNaN(width)) {
-        width = width + 'px'
-      }
-      return `max-width: ${width};`
-    }
-  }
-
   get validationRules () {
-    return (this.validator && this.validator.getRules()) || []
+    const label = this.$attrs.label
+    return (this.validator && this.validator.getRules(label)) || []
   }
 
   get valueComparator () {

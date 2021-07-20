@@ -6,7 +6,7 @@
     :autocomplete="autocomplete"
     :rules="validationRules"
     :counter="counter"
-    :style="widthStyle"
+    :style="cwm_widthStyle"
     v-bind="$attrs"
     v-on="$listeners"
     @click:append="showPassword = !showPassword"
@@ -15,13 +15,14 @@
 
 
 <script>
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Watch, Mixins } from 'vue-property-decorator'
 import { debounce } from '@a-vue/utils/debounce'
+import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['focus', 'debounce', 'validator', 'password', 'width']
+  props: ['focus', 'debounce', 'validator', 'password']
 })
-export default class ATextField extends Vue {
+export default class ATextField extends Mixins(ComponentWidthMixin) {
   showPassword = false
 
   created () {
@@ -53,16 +54,6 @@ export default class ATextField extends Vue {
       requestAnimationFrame(() => {
         this.$el.querySelector('input').focus()
       })
-    }
-  }
-
-  get widthStyle () {
-    if (this.width) {
-      let width = this.width
-      if (!isNaN(width)) {
-        width = width + 'px'
-      }
-      return `max-width: ${width};`
     }
   }
 

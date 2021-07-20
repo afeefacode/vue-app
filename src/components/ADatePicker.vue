@@ -10,7 +10,7 @@
       <v-combobox
         :value="formattedDate"
         :label="label"
-        :style="widthStyle"
+        :style="cwm_widthStyle"
         readonly
         v-bind="attrs"
         v-on="on"
@@ -27,13 +27,14 @@
 
 
 <script>
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Mixins } from 'vue-property-decorator'
 import { formatDate } from '@a-vue/utils/format-date'
+import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['value', 'validator', 'width']
+  props: ['value', 'validator']
 })
-export default class ADatePicker extends Vue {
+export default class ADatePicker extends Mixins(ComponentWidthMixin) {
   value_ = new Date()
   menu = false
 
@@ -47,16 +48,6 @@ export default class ADatePicker extends Vue {
   mounted () {
     if (this.validator) {
       this.$refs.input.validate(true)
-    }
-  }
-
-  get widthStyle () {
-    if (this.width) {
-      let width = this.width
-      if (!isNaN(width)) {
-        width = width + 'px'
-      }
-      return `max-width: ${width};`
     }
   }
 
