@@ -2,6 +2,7 @@
   <a-autocomplete
     v-model="model[name]"
     :label="label || name"
+    :style="cwm_widthStyle"
 
     :items="items"
     item-text="itemText"
@@ -15,9 +16,10 @@
 <script>
 import { Component, Mixins } from 'vue-property-decorator'
 import { FormFieldMixin } from '../FormFieldMixin'
+import { ComponentWidthMixin } from '../../mixins/ComponentWidthMixin'
 
 @Component
-export default class FormFieldSelect2 extends Mixins(FormFieldMixin) {
+export default class FormFieldSelect2 extends Mixins(FormFieldMixin, ComponentWidthMixin) {
   asyncItems = null
 
   created () {

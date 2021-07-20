@@ -13,7 +13,7 @@
     <template #activator="{ on }">
       <div
         style="width: max-content;"
-        :class="activatorClass"
+        :class="[activatorClass, triggerClass]"
         v-on="on"
       >
         <slot name="activator" />
@@ -41,7 +41,7 @@ import { getZIndex } from 'vuetify/lib/util/helpers'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['show', 'title']
+  props: ['show', 'title', 'triggerClass']
 })
 export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentWidthMixin) {
   modalId = randomCssClass(10)

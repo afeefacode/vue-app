@@ -14,10 +14,12 @@
         readonly
         v-bind="attrs"
         v-on="on"
+        @click.native="on.click"
       />
     </template>
 
     <v-date-picker
+      v-if="menu"
       :value="date"
       no-title
       @input="dateChanged"
@@ -27,7 +29,7 @@
 
 
 <script>
-import { Component, Mixins } from 'vue-property-decorator'
+import { Component, Mixins, Watch } from 'vue-property-decorator'
 import { formatDate } from '@a-vue/utils/format-date'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
@@ -49,6 +51,11 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
     if (this.validator) {
       this.$refs.input.validate(true)
     }
+  }
+
+  @Watch('value')
+  valueChanged () {
+    this.value_ = this.value
   }
 
   get date () {
