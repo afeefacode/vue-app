@@ -206,9 +206,11 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
   left: 0;
   margin: 0;
 
+  transition: none;
+
   &.v-fade-transition {
     &-enter-active, &-leave, &-leave-to {
-      transition: opacity .2s ease;
+      transition: opacity .3s ease;
     }
 
     &-enter, &-leave-to {
