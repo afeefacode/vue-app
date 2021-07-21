@@ -11,10 +11,9 @@ import FormFieldText from './form/fields/FormFieldText'
 import FormFieldTextArea from './form/fields/FormFieldTextArea'
 import ListFilterPage from './list/filters/ListFilterPage'
 import ListFilterSearch from './list/filters/ListFilterSearch'
-import ListFilter from './list/ListFilter'
+import ListFilterSelect from './list/filters/ListFilterSelect'
 import ListFilterRow from './list/ListFilterRow'
 
-Vue.component('ListFilter', ListFilter)
 Vue.component('EditForm', EditForm)
 Vue.component('EditModal', EditModal)
 Vue.component('FormFieldText', FormFieldText)
@@ -27,3 +26,4 @@ Vue.component('FormFieldSelect2', FormFieldSelect2)
 Vue.component('ListFilterPage', ListFilterPage)
 Vue.component('ListFilterSearch', ListFilterSearch)
 Vue.component('ListFilterRow', ListFilterRow)
+Vue.component('ListFilterSelect', ListFilterSelect)
