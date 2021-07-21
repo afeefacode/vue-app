@@ -1,5 +1,8 @@
 <template>
-  <div :class="['a-table-row', getFontSizeCssClass, {border: hasBorder, selected}]">
+  <div
+    :class="['a-table-row', getFontSizeCssClass, {border: hasBorder, selected}]"
+    @click="$emit('click')"
+  >
     <slot />
   </div>
 </template>
