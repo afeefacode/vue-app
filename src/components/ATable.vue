@@ -1,5 +1,5 @@
 <template>
-  <div :class="['a-table', widthClass]">
+  <div :class="['a-table', widthClass, fixedClass]">
     <slot />
   </div>
 </template>
@@ -9,7 +9,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
-  props: ['width']
+  props: ['width', 'fixed']
 })
 export default class ATable extends Vue {
   $hasOptions = ['border'] // consumed by a-table-row and a-table-header
@@ -19,6 +19,12 @@ export default class ATable extends Vue {
   get widthClass () {
     if (this.width === 'auto') {
       return 'width-auto'
+    }
+  }
+
+  get fixedClass () {
+    if (this.fixed !== undefined) {
+      return 'fixed'
     }
   }
 }
@@ -33,6 +39,10 @@ export default class ATable extends Vue {
 
   &.width-auto {
     width: auto;
+  }
+
+  &.fixed {
+    table-layout: fixed;
   }
 
   > * {
