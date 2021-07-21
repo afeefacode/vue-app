@@ -10,7 +10,7 @@
       :total-visible="_totalVisible"
     >
       <template v-if="$has.page_number">
-        {{ filter.value }} / {{ numPages }}
+        <span class="pageNumber">{{ filter.value }} / {{ numPages }}</span>
       </template>
     </a-pagination>
 
@@ -56,5 +56,9 @@ export default class ListFilterPage extends Mixins(ListFilterMixin) {
 <style lang="scss" scoped>
 .v-select {
   max-width: 100px;
+}
+
+.pageNumber {
+  white-space: nowrap;
 }
 </style>
