@@ -1,5 +1,8 @@
 <template>
-  <v-list-item :to="item.to">
+  <v-list-item
+    :to="item.to"
+    :exactPath="item.exact"
+  >
     <v-list-item-icon
       v-if="item.iconModel"
       class="ma-0 mr-4 align-self-center"
@@ -14,7 +17,9 @@
       v-else-if="item.icon"
       class="ma-0 mr-4 align-self-center"
     >
-      <v-icon>{{ item.icon }}</v-icon>
+      <v-icon :color="item.iconColor">
+        {{ item.icon }}
+      </v-icon>
     </v-list-item-icon>
 
     <div
