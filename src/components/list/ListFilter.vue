@@ -1,5 +1,5 @@
 <template>
-  <div :style="widthStyle">
+  <div>
     <template v-if="filter.type === 'Afeefa.OrderFilter'">
       <a-select
         v-model="filter.value"
