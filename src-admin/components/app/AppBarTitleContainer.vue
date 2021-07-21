@@ -2,6 +2,7 @@
   <div id="appBarTitleContainer" />
 </template>
 
+
 <script>
 import { Component, Vue } from 'vue-property-decorator'
 
@@ -9,3 +10,10 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class AppBarTitleContainer extends Vue {
 }
 </script>
+
+
+<style lang="scss" scoped>
+#appBarTitleContainer:empty {
+  display: none;
+}
+</style>

@@ -12,3 +12,10 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class AppBarButtons extends Vue {
 }
 </script>
+
+
+<style lang="scss" scoped>
+#appBarButtons:empty {
+  display: none !important;
+}
+</style>

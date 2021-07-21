@@ -137,9 +137,9 @@
         fluid
         class="pa-4"
       >
-        <div class="d-flex align-center mb-4">
-          <app-bar-title-container class="flex-grow-1" />
-          <app-bar-buttons class="mr-2" />
+        <div class="d-flex align-center">
+          <app-bar-title-container class="flex-grow-1 mb-4" />
+          <app-bar-buttons class="mr-2  mb-4" />
         </div>
 
         <router-view :class="{isLoading}" />
