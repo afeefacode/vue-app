@@ -33,7 +33,7 @@ import { ListFilterMixin } from '../ListFilterMixin'
 @Component({
   props: ['totalVisible']
 })
-export default class ListFilter extends Mixins(ListFilterMixin) {
+export default class ListFilterPage extends Mixins(ListFilterMixin) {
   $hasOptions = ['page_size', {page_number: false}]
 
   name_ = 'page'
