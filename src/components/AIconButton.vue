@@ -3,7 +3,6 @@
     small
     v-bind="$attrs"
     v-on="$listeners"
-    @click="$emit('click')"
   >
     <v-icon
       left
