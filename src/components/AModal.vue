@@ -94,13 +94,6 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
     this.$emit('update:show', this.modal)
   }
 
-  // get maxWidth () {
-  //   if (this.position) {
-  //     const margin = this.position.targetMargin || 0
-  //     return `min(600px, 100vw - 2 * ${margin})`
-  //   }
-  // }
-
   setPosition () {
     const anchor = [document.documentElement, '.' + this.activatorClass]
 
@@ -138,9 +131,11 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
   left: 0;
   margin: 0;
 
+  transition: none;
+
   &.v-fade-transition {
     &-enter-active, &-leave, &-leave-to {
-      transition: opacity .2s ease;
+      transition: opacity .3s ease;
     }
 
     &-enter, &-leave-to {
