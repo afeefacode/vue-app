@@ -26,7 +26,9 @@
       v-else-if="showNotFound"
       class="notFound"
     >
-      Nichts gefunden.
+      <slot name="not-found">
+        Nichts gefunden.
+      </slot>
     </div>
   </div>
 </template>

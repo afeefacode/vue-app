@@ -75,6 +75,13 @@
 
           <div class="lastColumn" />
         </template>
+
+        <template #not-found>
+          <slot
+            name="not-found"
+            :filters="filters"
+          />
+        </template>
       </search-select-list>
     </div>
   </div>
