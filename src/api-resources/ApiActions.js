@@ -64,6 +64,7 @@ export class SaveAction {
   fields = null
   data = null
   afterSaveHook = null
+  returnAfterSaveHookResult = false
   dialog = null
 
   setAction (action) {
@@ -86,8 +87,9 @@ export class SaveAction {
     return this
   }
 
-  setAfterSaveHook (afterSaveHook) {
+  setAfterSaveHook (afterSaveHook, returnAfterSaveHookResult = false) {
     this.afterSaveHook = afterSaveHook
+    this.returnAfterSaveHookResult = returnAfterSaveHookResult
     return this
   }
 
@@ -111,7 +113,7 @@ export class SaveAction {
 
     const result = await this.action.request()
       .params({
-        id: this.id
+        id: this.id || undefined
       })
       .fields(this.fields)
       .data(this.data)
@@ -119,9 +121,11 @@ export class SaveAction {
 
     const model = result.data
 
+    let afterSaveHookResult = null
+
     if (!result.error) {
       if (this.afterSaveHook) {
-        await this.afterSaveHook(model)
+        afterSaveHookResult = await this.afterSaveHook(model)
       }
     }
 
@@ -147,6 +151,11 @@ export class SaveAction {
     eventBus.dispatch(new AlertEvent(AlertEvent.MESSAGE, {
       message: 'Die Daten wurden gespeichert.'
     }))
+
+    if (this.returnAfterSaveHookResult) {
+      return afterSaveHookResult
+    }
+
     return model
   }
 }
