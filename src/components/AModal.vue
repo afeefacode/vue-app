@@ -41,7 +41,7 @@ import { getZIndex } from 'vuetify/lib/util/helpers'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['show', 'title', 'triggerClass']
+  props: ['show', 'title', 'triggerClass', 'anchorPosition']
 })
 export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentWidthMixin) {
   modalId = randomCssClass(10)
@@ -57,6 +57,10 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
 
   get activatorClass () {
     return this.modalId + '-activator'
+  }
+
+  get transientAnchorClass () {
+    return this.modalId + '-anchor'
   }
 
   mounted () {
@@ -90,12 +94,22 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
   modalChanged () {
     if (this.modal) {
       this.setPosition()
+    } else {
+      this.removeTransientAnchor()
     }
     this.$emit('update:show', this.modal)
   }
 
   setPosition () {
-    const anchor = [document.documentElement, '.' + this.activatorClass]
+    let anchor
+
+    if (this.anchorPosition) {
+      this.createTransientAnchor()
+      anchor = [document.documentElement, '.' + this.transientAnchorClass]
+    } else {
+      this.removeTransientAnchor()
+      anchor = [document.documentElement, '.' + this.activatorClass]
+    }
 
     this.position = new PositionConfig()
       .setAnchor(...anchor)
@@ -109,6 +123,26 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
 
   cancel () {
     this.modal = false
+  }
+
+  createTransientAnchor () {
+    let transientAnchorEl = document.querySelector('.' + this.transientAnchorClass)
+    console.log('anchor', this.anchorPosition)
+    if (!transientAnchorEl) {
+      transientAnchorEl = document.createElement('div')
+      transientAnchorEl.classList.add(this.transientAnchorClass)
+      transientAnchorEl.style.position = 'absolute'
+      transientAnchorEl.style.left = `${this.anchorPosition.x}px`
+      transientAnchorEl.style.top = `${this.anchorPosition.y}px`
+      document.body.appendChild(transientAnchorEl)
+    }
+  }
+
+  removeTransientAnchor () {
+    const transientAnchorEl = document.querySelector('.' + this.transientAnchorClass)
+    if (transientAnchorEl && document.body.contains(transientAnchorEl)) {
+      document.body.removeChild(transientAnchorEl)
+    }
   }
 }
 </script>
