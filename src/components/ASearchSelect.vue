@@ -236,11 +236,13 @@ export default class ASearchSelect extends Mixins(UsesPositionServiceMixin, Canc
   }
 
   selectHandler (model) {
-    return () => {
+    return event => {
       if (this._closeOnSelect) {
         this.close()
       }
-      this.$emit('select', model, this.close)
+      this.$emit('select', model, {
+        event
+      })
     }
   }
 
