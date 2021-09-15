@@ -39,7 +39,8 @@ export default class ListColumnHeader extends Vue {
     if (this.orderValue) {
       return this.orderValue
     } else {
-      return 'asc'
+      const direction = this.filter.options[this.order][0]
+      return direction || 'asc'
     }
   }
 
@@ -95,17 +96,16 @@ export default class ListColumnHeader extends Vue {
 }
 
 .sortIcon {
+  fill: #666666;
   opacity: .3;
+
   &.active {
     opacity: 1;
   }
+
+  &.desc {
+    transform: rotate(180deg);
+  }
 }
 
-svg {
-  fill: #666666;
-}
-
-svg.desc {
-  transform: rotate(180deg);
-}
 </style>

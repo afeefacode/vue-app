@@ -20,7 +20,7 @@
       :label="label || 'Anzahl'"
       :items="pageSizeFilter.options"
       :defaultValue="pageSizeFilter.defaultValue"
-      :clearable="!pageSizeFilter.hasDefaultValue()"
+      :clearable="!pageSizeFilter.hasDefaultValueSet()"
     />
   </a-row>
 </template>
