@@ -14,6 +14,7 @@
 <script>
 import { Component, Mixins } from 'vue-property-decorator'
 import { ListFilterMixin } from '../ListFilterMixin'
+import { ListAction } from '@a-vue/api-resources/ApiActions'
 
 @Component({
   props: ['totalVisible']
@@ -22,7 +23,9 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
   items = null
 
   created () {
-    if (this.hasOptions()) {
+    if (this.hasOptionsRequest()) {
+      this.items = this.loadRequestOptions()
+    } else if (this.hasOptions()) {
       this.items = this.getOptions()
     }
   }
@@ -33,6 +36,29 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
 
   hasOptions () {
     return this.filter.options
+  }
+
+  hasOptionsRequest () {
+    return this.filter.request
+  }
+
+  async loadRequestOptions () {
+    const {models} = await new ListAction()
+      .setRequest(this.filter.request)
+      .noEvents()
+      .load()
+
+    return [
+      {
+        itemTitle: 'Alle',
+        itemValue: null
+      },
+      ...models.map(model => ({
+        itemTitle: model.name,
+        itemValue: model.id
+      }))
+
+    ]
   }
 
   getOptions () {
