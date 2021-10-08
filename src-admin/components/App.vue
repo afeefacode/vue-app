@@ -31,6 +31,7 @@
         />
 
         <v-container
+          v-if="hasAuthService"
           d-flex
           align-center
           gap-4
@@ -177,7 +178,9 @@ export default class App extends Vue {
     this.$events.on(LoadingEvent.START_LOADING, this.startLoading)
     this.$events.on(LoadingEvent.STOP_LOADING, this.stopLoading)
 
-    this.account = appConfig.authService.getAccount()
+    if (this.hasAuthService) {
+      this.account = appConfig.authService.getAccount()
+    }
 
     this.$emit('appLoaded')
   }
@@ -218,6 +221,10 @@ export default class App extends Vue {
       await sleep(0.1)
       this.mainDrawer = true
     }
+  }
+
+  get hasAuthService () {
+    return !!appConfig.authService
   }
 
   logout () {

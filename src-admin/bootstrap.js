@@ -36,7 +36,9 @@ export async function bootstrap ({ apis, models, routing, authService, app, comp
   const router = await routeConfigPlugin.getRouter()
   await apiResources.schemasLoaded()
 
-  authService.initApp(router)
+  if (authService) {
+    authService.initApp(router)
+  }
 
   // routeConfigPlugin.dumpRoutes()
   // routeConfigPlugin.dumbBreadcrumbs()
