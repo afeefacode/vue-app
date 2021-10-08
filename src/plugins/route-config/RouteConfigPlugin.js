@@ -47,10 +47,6 @@ class RouteConfigPlugin {
 
   _promise = Promise.resolve(true)
 
-  baseUrl (url) {
-    return this
-  }
-
   router (options = {}) {
     this._routerOptions = {...this._routerOptions, ...options}
     return this
