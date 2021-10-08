@@ -3,7 +3,9 @@ class AppConfig {
 
   app = {
     logo: null,
-    title: null
+    title: null,
+    loaderColor: null,
+    rootRouteName: null
   }
 
   components = {

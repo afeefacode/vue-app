@@ -12,7 +12,7 @@
         fill-height
       >
         <router-link
-          :to="{name: 'root'}"
+          :to="{name: rootRouteName}"
           class="logoContainer d-flex flex-column pa-6"
         >
           <img
@@ -199,6 +199,10 @@ export default class App extends Vue {
 
   get loaderColor () {
     return appConfig.app.loaderColor
+  }
+
+  get rootRouteName () {
+    return appConfig.app.rootRouteName || 'root'
   }
 
   startLoading () {
