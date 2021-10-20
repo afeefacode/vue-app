@@ -23,6 +23,7 @@
       :scopes="scopes"
       :fields="fields"
       :table="table"
+      :initialFilters="initialFilters"
       v-on="$listeners"
     >
       <template #filters="{filters, count}">
@@ -116,6 +117,10 @@ export default class ListPage extends Vue {
 
   get scopes () {
     return this.listConfig.scopes
+  }
+
+  get initialFilters () {
+    return this.listConfig.initialFilters
   }
 
   get fields () {

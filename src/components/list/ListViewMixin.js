@@ -7,7 +7,7 @@ import { RouteFilterSource } from './RouteFilterSource'
 @Component({
   props: [
     'models', 'meta',
-    'action', 'scopes', 'fields',
+    'action', 'scopes', 'initialFilters', 'fields',
     'noEvents', 'noHistory', 'filterHistoryKey', 'filterSource',
     'loadOnlyIfKeyword'
   ]
@@ -43,6 +43,11 @@ export class ListViewMixin extends Vue {
       : [this.$route.path, this.filterHistoryKey].filter(i => i).join('.')
     const querySource = this.filterSource === QuerySourceType.OBJECT ? undefined : new RouteFilterSource(this.$router)
     this.requestFilters = this.action.createRequestFilters(historyKey, querySource)
+
+    console.log('Initial Filters: ', this.initialFilters)
+    if (this.initialFilters) {
+      this.requestFilters.initFromUsed(this.initialFilters)
+    }
 
     this.requestFilters.on('change', this.filtersChanged)
 
