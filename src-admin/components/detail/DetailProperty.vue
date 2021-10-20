@@ -1,6 +1,6 @@
 <template>
-  <div class="detailProperty d-flex align-start">
-    <div class="icon">
+  <div class="detailProperty">
+    <div class="header">
       <v-icon
         v-if="_icon"
         :color="_icon.color"
@@ -8,13 +8,12 @@
       >
         {{ _icon.icon }}
       </v-icon>
+      <label class="label">{{ label }}</label>
     </div>
 
-    <div>
-      <label>{{ label }}</label>
+    <div :class="['content', {'content--withIcon': _icon }]">
 
       <a-row
-        class="content"
         vertical
         gap="6"
       >
@@ -50,15 +49,26 @@ export default class DetailProperty extends Vue {
 <style lang="scss" scoped>
 .detailProperty {
   width: 100%;
-  .icon {
-    flex: 0 0 50px;
+  .header {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    height: 40px;
+    .v-icon {
+      flex: 0 0 40px;
+      margin-right: 15px;
+    }
+    .label {
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+  }
+  .content {
+    &--withIcon {
+      padding-left: 55px;
+    }
   }
 
-  label {
-    display: block;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: .5rem;
-  }
 }
 </style>
