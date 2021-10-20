@@ -8,11 +8,10 @@
       >
         {{ _icon.icon }}
       </v-icon>
-      <label class="label">{{ label }}</label>
+      <label :class="['label', {'label--withIcon': this._icon != null}]">{{ label }}</label>
     </div>
 
-    <div :class="['content', {'content--withIcon': _icon }]">
-
+    <div :class="['content', {'content--withIcon': this._icon != null}]">
       <a-row
         vertical
         gap="6"
@@ -62,10 +61,19 @@ export default class DetailProperty extends Vue {
       display: block;
       text-transform: uppercase;
       letter-spacing: 2px;
+      @media (max-width: 900px), (orientation : portrait) {
+        padding-left: 55px;
+        &--withIcon {
+          padding-left: 0; 
+        }
+      }
     }
   }
   .content {
     &--withIcon {
+      padding-left: 55px;
+    }
+    @media (max-width: 900px), (orientation : portrait) {
       padding-left: 55px;
     }
   }

@@ -58,6 +58,15 @@ export default class ARow extends Vue {
 <style scoped lang="scss">
 .a-row {
   display: flex;
+  width: 100%;
+  overflow-x: scroll;
+
+  @media (max-width: 900px), (orientation : portrait) {
+    flex-wrap: wrap;
+    & > * {
+      flex: 0 0 auto;
+    }
+  }
 
   &.full {
     width: 100%;
