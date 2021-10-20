@@ -1,5 +1,5 @@
 <template>
-  <div :class="['a-grid', widthClass, colsClass, gapClass, evenClass]">
+  <div :class="['a-grid', widthClass, colsClass, gapClass, evenClass, breakMobileClass]">
     <slot />
   </div>
 </template>
@@ -9,12 +9,18 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
-  props: ['fullWidth', 'gap', 'hGap', 'cols', 'even']
+  props: ['fullWidth', 'gap', 'hGap', 'vGap', 'cols', 'even', 'breakMobile']
 })
 export default class AGrid extends Vue {
   get widthClass () {
     if (this.fullWidth !== undefined) {
       return 'full'
+    }
+  }
+
+  get breakMobileClass () {
+    if (this.breakMobile !== undefined) {
+      return 'breakMobile'
     }
   }
 
@@ -85,5 +91,14 @@ export default class AGrid extends Vue {
       grid-template-columns: repeat(5, 1fr);
     }
   }
+  &.breakMobile {
+    @media (max-width: 900px), (orientation : portrait) {
+      grid-template-columns: 1fr;
+      &.even {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+
 }
 </style>
