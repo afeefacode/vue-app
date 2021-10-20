@@ -7,7 +7,7 @@ import DetailContent from './detail/DetailContent'
 import DetailMeta from './detail/DetailMeta'
 import DetailProperty from './detail/DetailProperty'
 import DetailTitle from './detail/DetailTitle'
-import Index from './Index'
+import Start from './Start.vue'
 import ListCard from './list/ListCard'
 import ListColumnHeader from './list/ListColumnHeader'
 import ListContent from './list/ListContent'
@@ -46,4 +46,4 @@ Vue.component('DetailColumn', DetailColumn)
 Vue.component('AppBarButton', AppBarButton)
 Vue.component('AppBarTitle', AppBarTitle)
 
-Vue.component('Index', Index)
+Vue.component('Start', Start)

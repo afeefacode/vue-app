@@ -48,7 +48,7 @@ export async function bootstrap ({ apis, models, routing, authService, app, comp
       vuetify,
       router,
       el: '#app',
-      template: '<index :splash="splash" />',
+      template: '<start :splash="splash" />',
       data: {
         splash
       }
