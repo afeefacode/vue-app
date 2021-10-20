@@ -76,6 +76,11 @@ export default class ListView extends Mixins(ListViewMixin) {
 
 
 <style lang="scss" scoped>
+.listView {
+  max-width: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
 .filters {
   margin-bottom: 2rem;
 }
