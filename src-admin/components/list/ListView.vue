@@ -9,23 +9,31 @@
     </div>
 
     <template v-if="models_.length">
-      <template v-if="table">
-        <div class="table">
-          <div class="header">
-            <slot name="header-table" />
-          </div>
+      <template v-if="_table">
+        <a-table>
+          <a-table-header>
+            <div v-if="$has.icon" />
 
-          <div
+            <slot name="header-table" />
+          </a-table-header>
+
+          <a-table-row
             v-for="model in models_"
             :key="model.id"
-            class="row"
           >
+            <v-icon
+              v-if="$has.icon"
+              :color="model.getIcon().color"
+              size="1.2rem"
+              v-text="model.getIcon().icon"
+            />
+
             <slot
               name="model-table"
               :model="model"
             />
-          </div>
-        </div>
+          </a-table-row>
+        </a-table>
       </template>
 
       <template v-else>
@@ -60,6 +68,8 @@ import { LoadingEvent } from '@a-vue/events'
   props: ['table']
 })
 export default class ListView extends Mixins(ListViewMixin) {
+  $hasOptions = ['icon']
+
   @Watch('isLoading')
   isLoadingChanged () {
     if (this.noEvents === undefined || !this.noEvents) {
@@ -71,6 +81,10 @@ export default class ListView extends Mixins(ListViewMixin) {
     }
     this.$emit('update:isLoading', this.isLoading)
   }
+
+  get _table () {
+    return this.table !== false
+  }
 }
 </script>
 
@@ -81,51 +95,13 @@ export default class ListView extends Mixins(ListViewMixin) {
   overflow-x: auto;
   overflow-y: hidden;
 }
+
 .filters {
+  margin-left: 4px;
   margin-bottom: 2rem;
 }
 
-.table {
-  display: table;
-  border-collapse: collapse;
+.a-table-row > :last-child {
   width: 100%;
-
-  .header, .row {
-    display: table-row;
-    > * {
-      display: table-cell;
-      padding: .4rem;
-      padding-right: 1.5rem;
-      white-space: nowrap;
-      vertical-align: middle;
-
-      &.info {
-        background: none !important;
-        color: #888888;
-      }
-    }
-  }
-
-  .header {
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #999999;
-    font-size: .9rem;
-    > * {
-      padding-right: 1rem;
-    }
-  }
-
-  .row {
-    border-bottom: 1px solid #DDDDDD;
-
-    &:hover {
-      background: #F4F4F4;
-    }
-
-    &:last-child {
-      border: none;
-    }
-  }
 }
 </style>

@@ -56,7 +56,7 @@ export default class ATableHeader extends Vue {
     > * {
       padding-left: .5rem;
       padding-right: 1rem;
-      padding-bottom: .2rem;
+      padding-bottom: .6rem;
       &:last-child {
         padding-right: .2rem;
       }
