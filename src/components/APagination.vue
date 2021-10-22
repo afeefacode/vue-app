@@ -33,10 +33,6 @@ export default class APagination extends Vue {
 
 
 <style scoped lang="scss">
-.pagination-nav {
-  line-height: 1;
-}
-
 ::v-deep .v-pagination {
   gap: .3rem;
   .v-pagination__item,
