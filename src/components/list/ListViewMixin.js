@@ -6,7 +6,7 @@ import { RouteFilterSource } from './RouteFilterSource'
 
 @Component({
   props: [
-    'models', 'meta',
+    'models', 'meta', // if already loaded
     'action', 'scopes', 'initialFilters', 'fields',
     'noEvents', 'noHistory', 'filterHistoryKey', 'filterSource',
     'loadOnlyIfKeyword'
@@ -112,9 +112,9 @@ export class ListViewMixin extends Vue {
 
     const {models, meta} = await new ListAction()
       .setAction(this.action)
-      .setFields(this.fields)
       .setScopes(this.scopes)
       .setFilters(this.requestFilters.serialize())
+      .setFields(this.fields)
       .noEvents(this.noEvents)
       .load()
 
