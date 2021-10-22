@@ -15,72 +15,7 @@
       />
     </app-bar-button>
 
-    <list-view
-      v-bind="$attrs"
-      :models="models"
-      :meta="meta"
-      :action="action"
-      :scopes="scopes"
-      :fields="fields"
-      :table="table"
-      :initialFilters="initialFilters"
-      v-on="$listeners"
-    >
-      <template #filters="{filters, count}">
-        <div class="pl-2">
-          <slot
-            name="filters"
-            :filters="filters"
-            :count="count"
-          />
-        </div>
-      </template>
-
-      <template
-        v-if="table"
-        #header-table
-      >
-        <div />
-
-        <slot name="header" />
-      </template>
-
-      <template
-        v-if="table"
-        #model-table="{ model }"
-      >
-        <v-icon
-          :color="model.getIcon().color"
-          size="1.5rem"
-          v-text="model.getIcon().icon"
-        />
-
-        <slot
-          name="model"
-          :model="model"
-        />
-
-        <div class="lastColumn" />
-      </template>
-
-      <template
-        v-if="!table"
-        #model="{ model }"
-      >
-        <a-row gap="4">
-          <v-icon
-            :color="model.getIcon().color"
-            size="2rem"
-            v-text="model.getIcon().icon"
-          />
-
-          <slot
-            name="model"
-            :model="model"
-          />
-        </a-row>
-      </template>
-    </list-view>
+    <slot />
   </div>
 </template>
 
@@ -89,43 +24,10 @@ import { Component, Vue } from 'vue-property-decorator'
 import { apiResources } from '@afeefa/api-resources-client'
 
 @Component({
-  props: ['models', 'meta', 'title', 'newTitle', 'newLink', 'table']
+  props: ['title', 'newTitle', 'newLink', 'ModelClass']
 })
 export default class ListPage extends Vue {
   $hasOptions = ['add']
-
-  created () {
-    if (!this.$parent.constructor.getListConfig) {
-      console.warn('<list-view> owner must provide a static getListConfig method.')
-    }
-  }
-
-  get listConfig () {
-    return this.$parent.constructor.getListConfig(this.$route)
-  }
-
-  get ModelClass () {
-    return this.listConfig.ModelClass
-  }
-
-  get action () {
-    if (this.listConfig.action) {
-      return this.listConfig.action
-    }
-    return this.ModelClass.getAction(this.$routeDefinition, 'list')
-  }
-
-  get scopes () {
-    return this.listConfig.scopes
-  }
-
-  get initialFilters () {
-    return this.listConfig.initialFilters
-  }
-
-  get fields () {
-    return this.listConfig.fields
-  }
 
   get _title () {
     if (this.title) {
@@ -164,10 +66,3 @@ export default class ListPage extends Vue {
   }
 }
 </script>
-
-
-<style lang="scss" scoped>
-.lastColumn {
-  width: 100%;
-}
-</style>
