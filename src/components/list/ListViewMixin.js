@@ -44,8 +44,8 @@ export class ListViewMixin extends Vue {
     const querySource = this.filterSource === QuerySourceType.OBJECT ? undefined : new RouteFilterSource(this.$router)
     this.requestFilters = this.action.createRequestFilters(historyKey, querySource)
 
-    console.log('Initial Filters: ', this.initialFilters)
     if (this.initialFilters) {
+      console.log('set initial Filters: ', this.initialFilters)
       this.requestFilters.initFromUsed(this.initialFilters)
     }
 
@@ -79,6 +79,7 @@ export class ListViewMixin extends Vue {
   }
 
   filtersChanged () {
+    console.log('filters changed')
     this.load()
   }
 
