@@ -29,13 +29,7 @@ function load (route) {
   const routeDefinition = route.meta.routeDefinition
   const Component = routeDefinition.config.list
   const listConfig = Component.getListConfig(route)
-
-  let action = null
-  if (listConfig.ModelClass) {
-    action = listConfig.ModelClass.getAction(routeDefinition, 'list')
-  } else {
-    action = listConfig.action
-  }
+  const action = listConfig.action || listConfig.ModelClass.getAction(routeDefinition, 'list')
 
   return new ListAction()
     .setAction(action)

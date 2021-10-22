@@ -19,13 +19,7 @@ function load (route) {
   const routeDefinition = route.meta.routeDefinition
   const Component = routeDefinition.config.detail
   const detailConfig = Component.getDetailConfig(route)
-
-  let action = null
-  if (detailConfig.ModelClass) {
-    action = detailConfig.ModelClass.getAction(routeDefinition, 'get')
-  } else {
-    action = detailConfig.action
-  }
+  const action = detailConfig.action || detailConfig.ModelClass.getAction(routeDefinition, 'get')
 
   return new GetAction()
     .setAction(action)
