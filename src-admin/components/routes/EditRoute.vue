@@ -20,7 +20,7 @@ function load (route) {
   const routeDefinition = route.meta.routeDefinition
   const Component = routeDefinition.config.edit
   const editConfig = Component.getEditConfig(route)
-  const action = editConfig.getAction || editConfig.ModelClass.getAction(routeDefinition, 'get')
+  const action = editConfig.getAction || editConfig.ModelClass.getAction('get')
 
   return new GetAction()
     .setAction(action)

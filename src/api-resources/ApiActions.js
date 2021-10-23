@@ -35,7 +35,7 @@ export class GetAction {
       eventBus.dispatch(new LoadingEvent(LoadingEvent.START_LOADING))
     }
 
-    const result = await this.action.request()
+    const result = await this.action.createRequest()
       .params({
         id: this.id
       })
@@ -111,7 +111,7 @@ export class SaveAction {
 
     const startTime = Date.now()
 
-    const result = await this.action.request()
+    const result = await this.action.createRequest()
       .params({
         id: this.id || undefined
       })
@@ -195,7 +195,7 @@ export class RemoveAction {
 
       const startTime = Date.now()
 
-      const result = await this.action.request()
+      const result = await this.action.createRequest()
         .params({
           id: this.id
         })
@@ -290,8 +290,7 @@ export class ListAction {
     }
 
     const request = this.request ||
-      this.action
-        .request()
+      this.action.createRequest()
         .scopes(this.scopes)
         .filters(filters)
         .fields(this.fields)

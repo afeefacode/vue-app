@@ -1,5 +1,6 @@
-import { Model as ApiResourcesModel } from '@afeefa/api-resources-client'
+import { Model as ApiResourcesModel, apiResources } from '@afeefa/api-resources-client'
 import { mdiAlphaMCircle } from '@mdi/js'
+
 export class Model extends ApiResourcesModel {
   static resourceType = null
   static routeName = null
@@ -9,12 +10,14 @@ export class Model extends ApiResourcesModel {
     return (new this()).getLink(action)
   }
 
-  static getAction (routeDefinition, action) {
+  static getAction (action) {
     if (this.resourceType) {
-      const api = routeDefinition.config.api
-      return api.getAction(this.resourceType, action)
+      return apiResources.getAction({
+        resource: this.resourceType,
+        action
+      })
     }
-    console.warn('You can\'t get an action of a model without resourceType:', this.type)
+    console.warn('You can\'t get an action out of a model without resourceType:', this.type)
     return null
   }
 
@@ -32,8 +35,8 @@ export class Model extends ApiResourcesModel {
     }
   }
 
-  getAction (routeDefinition, action) {
-    return this.constructor.getAction(routeDefinition, action)
+  getAction (action) {
+    return this.constructor.getAction(action)
   }
 
   getIcon () {

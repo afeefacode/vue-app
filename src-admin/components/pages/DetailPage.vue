@@ -113,7 +113,7 @@ export default class DetailPage extends Vue {
     if (this.removeAction) {
       return this.removeAction
     }
-    return this.ModelClass.getAction(this.$routeDefinition, 'delete')
+    return this.ModelClass.getAction('delete')
   }
 
   async remove () {

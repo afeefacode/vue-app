@@ -99,14 +99,14 @@ export default class EditPage extends Mixins(EditPageMixin) {
   }
 
   get modelUpateAction () {
-    return this.ModelClass.getAction(this.$routeDefinition, 'update')
+    return this.ModelClass.getAction('update')
   }
 
   get _getAction () {
     if (this.getAction) {
       return this.getAction
     }
-    return this.ModelClass.getAction(this.$routeDefinition, 'get')
+    return this.ModelClass.getAction('get')
   }
 
   get _title () {
