@@ -23,14 +23,22 @@ export default class ASelect extends Mixins(ComponentWidthMixin) {
   items_ = []
 
   mounted () {
-    // monkey patch v-select setting 'undefined' on clearable
+    // monkey patch v-select to set default value on clear
+    const clearableCallback = this.select.clearableCallback
+    this.select.clearableCallback = () => {
+      this.select.isClear = true
+      clearableCallback()
+      this.select.isClear = false
+    }
+
     const setValue = this.select.setValue
     this.select.setValue = value => {
-      if (!value && value !== false) { // if undefined alike
+      if (this.select.isClear) {
         value = this.defaultValue || null
       }
       setValue(value)
     }
+
     this.init()
   }
 
