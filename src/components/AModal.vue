@@ -64,7 +64,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
   }
 
   mounted () {
-    // monkey patch onFousin to allow non vuetify-popups to receive focus
+    // monkey patch onFocusin to allow non vuetify-popups to receive focus
     const dialog = this.$refs.dialog
     const onFocusin = dialog.onFocusin
     dialog.onFocusin = e => {
