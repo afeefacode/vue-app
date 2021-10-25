@@ -109,6 +109,10 @@ export default class EditPage extends Mixins(EditPageMixin) {
     return this.ModelClass.getAction('get')
   }
 
+  get _icon () {
+    return this.icon || this.model.getIcon()
+  }
+
   get _title () {
     const title = this.modelToEdit.getTitle()
     if (title) {
@@ -126,19 +130,12 @@ export default class EditPage extends Mixins(EditPageMixin) {
   get _listLink () {
     if (this.listLink) {
       if (typeof this.listLink === 'function') {
-        return this.listLink(this.$route.params)
+        return this.listLink()
       } else {
         return this.listLink
       }
     }
     return this.model.getLink('list')
-  }
-
-  get _icon () {
-    if (this.icon) {
-      return this.icon
-    }
-    return this.model.getIcon()
   }
 
   createModelToEdit () {

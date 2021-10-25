@@ -94,7 +94,7 @@ export default class DetailPage extends Vue {
   get _listLink () {
     if (this.listLink) {
       if (typeof this.listLink === 'function') {
-        return this.listLink(this.$route.params)
+        return this.listLink()
       } else {
         return this.listLink
       }

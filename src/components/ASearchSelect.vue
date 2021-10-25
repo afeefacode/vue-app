@@ -93,7 +93,7 @@ import { Component, Watch, Mixins } from 'vue-property-decorator'
 import { UsesPositionServiceMixin } from '../services/position/UsesPositionServiceMixin'
 import { PositionConfig } from '../services/PositionService'
 import { randomCssClass } from '../utils/random'
-import { QuerySourceType } from '@a-vue/components/list/QuerySourceType'
+import { FilterSourceType } from '@a-vue/components/list/FilterSourceType'
 import SearchSelectFilters from './search-select/SearchSelectFilters'
 import SearchSelectList from './search-select/SearchSelectList'
 import { CancelOnEscMixin } from '@a-vue/services/escape/CancelOnEscMixin'
@@ -109,7 +109,7 @@ export default class ASearchSelect extends Mixins(UsesPositionServiceMixin, Canc
   selectId = randomCssClass(10)
   isOpen = false
   items_ = []
-  filterSource = QuerySourceType.OBJECT
+  filterSource = FilterSourceType.OBJECT
 
   isLoading = false
   filters = []

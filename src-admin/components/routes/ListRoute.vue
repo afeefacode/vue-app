@@ -10,6 +10,7 @@
 <script>
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { ListAction } from '@a-vue/api-resources/ApiActions'
+import { RouteQueryFilterSource } from '@a-vue/components/list/RouteQueryFilterSource'
 
 Component.registerHooks([
   'beforeRouteEnter',
@@ -28,14 +29,18 @@ let lastVm = null
 function load (route) {
   const routeDefinition = route.meta.routeDefinition
   const Component = routeDefinition.config.list
-  const listConfig = Component.getListConfig(route)
-  const action = listConfig.action || listConfig.ModelClass.getAction('list')
+
+  if (!Component.listViewRequest) {
+    console.warn('A list route component must implement a static listViewRequest property.')
+  }
+
+  const request = Component.listViewRequest.clone()
+    .initFromFilterSource(new RouteQueryFilterSource(route))
+    .recreateFromHistory(route.path)
+    .toApiRequest()
 
   return new ListAction()
-    .setAction(action)
-    .setFields(listConfig.fields)
-    .setScopes(listConfig.scopes)
-    .setFiltersForRoute(route)
+    .setRequest(request)
     .load()
 }
 

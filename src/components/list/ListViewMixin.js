@@ -1,14 +1,15 @@
 import { ListAction } from '@a-vue/api-resources/ApiActions'
 import { Component, Vue, Watch } from 'vue-property-decorator'
 
-import { QuerySourceType } from './QuerySourceType'
+import { FilterSourceType } from './FilterSourceType'
 import { RouteFilterSource } from './RouteFilterSource'
 
 @Component({
   props: [
     'models', 'meta', // if already loaded
-    'action', 'scopes', 'initialFilters', 'fields',
-    'noEvents', 'noHistory', 'filterHistoryKey', 'filterSource',
+    'listViewRequest',
+    'noEvents', 'noHistory',
+    'filterHistoryKey', 'filterSource',
     'loadOnlyIfKeyword'
   ]
 })
@@ -35,19 +36,16 @@ export class ListViewMixin extends Vue {
     }
 
     if (this.requestFilters) {
+      // this can happen only on HMR-reload
       this.requestFilters.off('change', this.filtersChanged)
     }
 
     const historyKey = this.noHistory
       ? undefined
       : [this.$route.path, this.filterHistoryKey].filter(i => i).join('.')
-    const querySource = this.filterSource === QuerySourceType.OBJECT ? undefined : new RouteFilterSource(this.$router)
-    this.requestFilters = this.action.createRequestFilters(historyKey, querySource)
-
-    if (this.initialFilters) {
-      console.log('set initial Filters: ', this.initialFilters)
-      this.requestFilters.initFromUsed(this.initialFilters)
-    }
+    const filterSource = this.filterSource === FilterSourceType.OBJECT ? undefined : new RouteFilterSource(this.$router)
+    const action = this.listViewRequest.getAction()
+    this.requestFilters = action.createRequestFilters(historyKey, filterSource)
 
     this.requestFilters.on('change', this.filtersChanged)
 
@@ -64,8 +62,8 @@ export class ListViewMixin extends Vue {
 
   @Watch('$route.query')
   routeQueryChanged () {
-    if (this.filterSource !== QuerySourceType.ROUTE) {
-      this.requestFilters.querySourceChanged()
+    if (this.filterSource !== FilterSourceType.QUERY_STRING) {
+      this.requestFilters.filterSourceChanged()
     }
   }
 
@@ -79,7 +77,6 @@ export class ListViewMixin extends Vue {
   }
 
   filtersChanged () {
-    console.log('filters changed')
     this.load()
   }
 
@@ -110,11 +107,12 @@ export class ListViewMixin extends Vue {
     this.isLoading = true
     this.$emit('update:isLoading', this.isLoading)
 
+    const request = this.listViewRequest
+      .filters(this.requestFilters.serialize())
+      .toApiRequest()
+
     const {models, meta} = await new ListAction()
-      .setAction(this.action)
-      .setScopes(this.scopes)
-      .setFilters(this.requestFilters.serialize())
-      .setFields(this.fields)
+      .setRequest(request)
       .noEvents(this.noEvents)
       .load()
 

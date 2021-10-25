@@ -24,17 +24,21 @@ import { Component, Vue } from 'vue-property-decorator'
 import { apiResources } from '@afeefa/api-resources-client'
 
 @Component({
-  props: ['title', 'newTitle', 'newLink', 'ModelClass']
+  props: ['icon', 'title', 'newTitle', 'newLink', 'Model']
 })
 export default class ListPage extends Vue {
   $hasOptions = ['add']
+
+  get _icon () {
+    return this.icon || this.Model.icon
+  }
 
   get _title () {
     if (this.title) {
       return this.title
     }
 
-    const type = apiResources.getType(this.ModelClass.type)
+    const type = apiResources.getType(this.Model.type)
     return type.t('TITLE_PLURAL')
   }
 
@@ -43,26 +47,12 @@ export default class ListPage extends Vue {
       return this.newTitle
     }
 
-    const type = apiResources.getType(this.ModelClass.type)
+    const type = apiResources.getType(this.Model.type)
     return type.t('TITLE_SINGULAR')
   }
 
-  get _icon () {
-    if (this.icon) {
-      return this.icon
-    }
-    return this.ModelClass.icon
-  }
-
   get _newLink () {
-    if (this.newLink) {
-      if (typeof this.newLink === 'function') {
-        return this.newLink(this.$route.params)
-      } else {
-        return this.newLink
-      }
-    }
-    return this.ModelClass.getLink('new')
+    return this.newLink || this.Model.getLink('new')
   }
 }
 </script>

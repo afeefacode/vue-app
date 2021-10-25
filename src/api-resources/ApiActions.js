@@ -1,8 +1,6 @@
-import { RouteParamsFilterSource } from '@a-vue/components/list/RouteParamsFilterSource'
 import { AlertEvent, DialogEvent, LoadingEvent, SaveEvent } from '@a-vue/events'
 import { eventBus } from '@a-vue/plugins/event-bus/EventBus'
 import { sleep } from '@a-vue/utils/timeout'
-import { RequestFilters } from '@afeefa/api-resources-client'
 
 export class GetAction {
   action = null
@@ -230,40 +228,10 @@ export class RemoveAction {
 
 export class ListAction {
   request = null
-  action = null
-  fields = null
-  scopes = {}
-  filters = {}
-  route = null
   events = true
 
   setRequest (request) {
     this.request = request
-    return this
-  }
-
-  setAction (action) {
-    this.action = action
-    return this
-  }
-
-  setFiltersForRoute (route) {
-    this.route = route
-    return this
-  }
-
-  setFields (fields) {
-    this.fields = fields
-    return this
-  }
-
-  setScopes (scopes) {
-    this.scopes = scopes
-    return this
-  }
-
-  setFilters (filters) {
-    this.filters = filters
     return this
   }
 
@@ -277,25 +245,7 @@ export class ListAction {
       eventBus.dispatch(new LoadingEvent(LoadingEvent.START_LOADING))
     }
 
-    let filters = this.filters
-
-    if (this.route) {
-      const querySource = new RouteParamsFilterSource(this.route)
-      const requestFilters = this.action.createRequestFilters(null, querySource)
-      const storedFilters = RequestFilters.fromHistory(this.route.path)
-      if (storedFilters) {
-        requestFilters.initFromUsed(storedFilters.serialize(), 1)
-      }
-      filters = requestFilters.serialize()
-    }
-
-    const request = this.request ||
-      this.action.createRequest()
-        .scopes(this.scopes)
-        .filters(filters)
-        .fields(this.fields)
-
-    const result = await request.send()
+    const result = await this.request.send()
 
     if (result.error) {
       if (this.events) {

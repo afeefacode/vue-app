@@ -8,10 +8,10 @@
       >
         {{ _icon.icon }}
       </v-icon>
-      <label :class="['label', {'label--withIcon': this._icon != null}]">{{ label }}</label>
+      <label :class="['label', {'label--withIcon': _icon != null}]">{{ label }}</label>
     </div>
 
-    <div :class="['content', {'content--withIcon': this._icon != null}]">
+    <div :class="['content', {'content--withIcon': _icon != null}]">
       <a-row
         vertical
         gap="6"
@@ -37,8 +37,8 @@ export default class DetailProperty extends Vue {
     }
 
     if (this.iconModelType) {
-      const model = apiResources.getModel(this.iconModelType)
-      return model.icon
+      const ModelClass = apiResources.getModelClass(this.iconModelType)
+      return ModelClass.icon
     }
   }
 }
@@ -64,7 +64,7 @@ export default class DetailProperty extends Vue {
       @media (max-width: 900px), (orientation : portrait) {
         padding-left: 55px;
         &--withIcon {
-          padding-left: 0; 
+          padding-left: 0;
         }
       }
     }

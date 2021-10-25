@@ -31,6 +31,7 @@
             <slot
               name="model-table"
               :model="model"
+              :setFilter="setFilter"
             />
           </a-table-row>
         </a-table>
@@ -84,6 +85,10 @@ export default class ListView extends Mixins(ListViewMixin) {
 
   get _table () {
     return this.table !== false
+  }
+
+  setFilter (name, value) {
+    this.filters[name].value = value
   }
 }
 </script>
