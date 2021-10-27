@@ -113,11 +113,12 @@ export class ListViewMixin extends Vue {
 
     const {models, meta} = await new ListAction()
       .setRequest(request)
-      .noEvents(this.noEvents)
+      .noEvents(this.noEvents === true)
       .load()
 
-    if (!models) { // error, reset filters
-      this.resetFilters()
+    if (!models) { // error happened
+      this.isLoading = false
+      this.$emit('update:isLoading', this.isLoading)
       return
     }
 
