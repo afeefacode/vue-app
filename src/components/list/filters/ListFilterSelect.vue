@@ -5,7 +5,8 @@
     :items="_items"
     itemText="itemTitle"
     itemValue="itemValue"
-    :clearable="filter.value !== null"
+    :clearable="filter.value !== filter.defaultValue"
+    :defaultValue="filter.defaultValue"
     v-bind="$attrs"
   />
 </template>
@@ -16,16 +17,14 @@ import { Component, Mixins } from 'vue-property-decorator'
 import { ListFilterMixin } from '../ListFilterMixin'
 import { ListAction } from '@a-vue/api-resources/ApiActions'
 
-@Component({
-  props: ['totalVisible']
-})
+@Component
 export default class ListFilterSelect extends Mixins(ListFilterMixin) {
   items = null
 
   created () {
-    if (this.hasOptionsRequest()) {
+    if (this.filter.hasRequest()) {
       this.items = this.loadRequestOptions()
-    } else if (this.hasOptions()) {
+    } else if (this.filter.hasOptions()) {
       this.items = this.getOptions()
     }
   }
@@ -34,12 +33,23 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
     return this.$attrs.items || this.items || []
   }
 
-  hasOptions () {
-    return this.filter.options
+  get showNullOption () {
+    // either null is a selectable option, than it should be shown in the list
+    // or the default is null, so the list should offer a 'null' option for the unselected state
+    return this.filter.nullIsOption || this.filter.defaultValue === null
   }
 
-  hasOptionsRequest () {
-    return this.filter.request
+  createOptions () {
+    const options = []
+
+    if (this.showNullOption) {
+      options.push({
+        itemTitle: 'Alle',
+        itemValue: null
+      })
+    }
+
+    return options
   }
 
   async loadRequestOptions () {
@@ -49,28 +59,23 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
       .load()
 
     return [
-      {
-        itemTitle: 'Alle',
-        itemValue: null
-      },
+      ...this.createOptions(),
       ...models.map(model => ({
         itemTitle: model.name,
         itemValue: model.id
       }))
-
     ]
   }
 
   getOptions () {
     return [
-      {
-        itemTitle: 'Alle',
-        itemValue: null
-      },
-      ...this.filter.options.map(o => ({
-        itemTitle: o ? 'Ja' : 'Nein',
-        itemValue: o
-      }))
+      ...this.createOptions(),
+      ...this.filter.options
+        .filter(o => o !== null) // null is already set in options (if any)
+        .map(o => ({
+          itemTitle: o ? 'Ja' : 'Nein',
+          itemValue: o
+        }))
     ]
   }
 }
