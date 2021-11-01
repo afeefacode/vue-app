@@ -28,12 +28,9 @@ export class ListFilterMixin extends Vue {
 
   get filter () {
     const filter = this.filters[this._name]
-
-
     if (!filter) {
       console.warn(`Filter "${this._name}" not found`)
     }
-
     return filter
   }
 
