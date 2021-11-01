@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="splash">
     <v-container
       fill-height
       fluid
@@ -49,6 +49,13 @@ export default class Splash extends Vue {
 
 
 <style lang="scss" scoped>
+.splash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+}
+
 .logo {
   margin-bottom: 2rem;
 }

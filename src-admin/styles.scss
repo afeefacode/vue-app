@@ -21,12 +21,14 @@
 }
 
 .v-application {
-  margin-bottom: 2rem;
-
   .text-strike {
     color: inherit;
     text-decoration: line-through;
   }
+}
+
+.v-main {
+  margin-bottom: 2rem;
 }
 
 .theme--light.v-btn.v-btn--has-bg {
