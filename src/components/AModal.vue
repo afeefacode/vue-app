@@ -127,7 +127,6 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
 
   createTransientAnchor () {
     let transientAnchorEl = document.querySelector('.' + this.transientAnchorClass)
-    console.log('anchor', this.anchorPosition)
     if (!transientAnchorEl) {
       transientAnchorEl = document.createElement('div')
       transientAnchorEl.classList.add(this.transientAnchorClass)
