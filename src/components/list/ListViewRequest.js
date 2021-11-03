@@ -86,35 +86,28 @@ export class ListViewRequest {
       .params(this._params)
       .fields(this._fields)
 
-    // filters set on the request will be skipped if filterSource or historyKey are given
-    // and produce results
-    let filtersToUse = this._filters
-    let useHistory = true
+    let filtersToUse = {}
 
     // create and init request filters based on the current filter source state
     if (this._filterSource) {
-      const requestFilters = action.createRequestFilters(null, this._filterSource)
-      const requestFiltersToUse = requestFilters.serialize()
-      // do not use history if any filter given by the given filter source
-      if (Object.keys(requestFiltersToUse).length) {
-        useHistory = false
-      }
+      const requestFilters = action.createRequestFilters(undefined, this._filterSource)
+      filtersToUse = requestFilters.serialize()
+    }
 
-      filtersToUse = {
-        ...filtersToUse,
-        ...requestFiltersToUse
+    // no filters based on filter source found, check history
+    if (!Object.keys(filtersToUse).length) {
+      if (this._historyKey) {
+        // check any already stored filters from a previous request
+        const storedFilters = RequestFilters.fromHistory(this._historyKey)
+        if (storedFilters) {
+          filtersToUse = storedFilters.serialize()
+        }
       }
     }
 
-    // if any filters is set by current filter source
-    // skip history and give that filter precedence
-    // otherwise: set stored filters
-    if (useHistory && this._historyKey) {
-      // check any already stored filters from a previous request
-      const storedFilters = RequestFilters.fromHistory(this._historyKey)
-      if (storedFilters) {
-        filtersToUse = storedFilters.serialize()
-      }
+    // no source or history filters found, check given filters at last
+    if (!Object.keys(filtersToUse).length) {
+      filtersToUse = this._filters
     }
 
     request.filters(filtersToUse)
