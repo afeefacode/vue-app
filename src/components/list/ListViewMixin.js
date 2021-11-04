@@ -1,4 +1,5 @@
 import { ListAction } from '@a-vue/api-resources/ApiActions'
+import { ListViewModel } from '@afeefa/api-resources-client'
 import { Component, Vue, Watch } from 'vue-property-decorator'
 
 import { FilterSourceType } from './FilterSourceType'
@@ -7,7 +8,7 @@ import { RouteFilterSource } from './RouteFilterSource'
 @Component({
   props: [
     'models', 'meta', // if already loaded
-    'listViewRequest',
+    'listViewConfig',
     'noEvents', 'noHistory',
     'filterHistoryKey', 'filterSource',
     'loadOnlyIfKeyword'
@@ -18,15 +19,15 @@ export class ListViewMixin extends Vue {
 
   models_ = []
   meta_ = {}
-  requestFilters = null
   isLoading = false
+  listViewModel = null
 
   created () {
     this.init()
   }
 
   destroyed () {
-    this.requestFilters.off('change', this.filtersChanged)
+    this.listViewModel.off('change', this.filtersChanged)
   }
 
   init () {
@@ -35,25 +36,26 @@ export class ListViewMixin extends Vue {
       this.meta_ = this.meta
     }
 
-    if (this.requestFilters) {
+    if (this.listViewModel) {
       // this can happen only on HMR-reload
-      this.requestFilters.off('change', this.filtersChanged)
+      this.listViewModel.off('change', this.filtersChanged)
     }
 
     const historyKey = this.noHistory
       ? undefined
       : [this.$route.path, this.filterHistoryKey].filter(i => i).join('.')
     const filterSource = this.filterSource === FilterSourceType.OBJECT ? undefined : new RouteFilterSource(this.$router)
-    const action = this.listViewRequest.getAction()
-    this.requestFilters = action.createRequestFilters(historyKey, filterSource)
 
-    this.requestFilters.on('change', this.filtersChanged)
+    this.listViewModel = new ListViewModel(this.listViewConfig)
+      .initFilters({filterSource, historyKey}) // init filters from source (e.g. route.query) or (if empty) from history
+      .saveFiltersInHistory() // save this model in filter history
+      .on('change', this.filtersChanged) // listen to change
 
     this.$emit('update:filters', this.filters)
     this._filtersInitialized()
 
     if (this.models) {
-      this.requestFilters.initFromUsed(this.meta_.used_filters, this.meta_.count_search)
+      this.listViewModel.initFromUsedFilters(this.meta_.used_filters, this.meta_.count_search)
       this.$emit('update:count', this.meta_.count_search)
     } else {
       this.load()
@@ -63,7 +65,7 @@ export class ListViewMixin extends Vue {
   @Watch('$route.query')
   routeQueryChanged () {
     if (this.filterSource !== FilterSourceType.QUERY_STRING) {
-      this.requestFilters.filterSourceChanged()
+      this.listViewModel.filterSourceChanged()
     }
   }
 
@@ -81,11 +83,11 @@ export class ListViewMixin extends Vue {
   }
 
   resetFilters () {
-    this.requestFilters.reset()
+    this.listViewModel.resetFilters()
   }
 
   get filters () {
-    return this.requestFilters.getFilters()
+    return this.listViewModel.getFilters().getEntries()
   }
 
   get count () {
@@ -107,9 +109,7 @@ export class ListViewMixin extends Vue {
     this.isLoading = true
     this.$emit('update:isLoading', this.isLoading)
 
-    const request = this.listViewRequest
-      .filters(this.requestFilters.serialize())
-      .toApiRequest()
+    const request = this.listViewModel.getApiRequest()
 
     const {models, meta} = await new ListAction()
       .setRequest(request)
@@ -126,7 +126,7 @@ export class ListViewMixin extends Vue {
     this.meta_ = meta
 
     if (this.meta_.used_filters) {
-      this.requestFilters.initFromUsed(this.meta_.used_filters, this.meta_.count_search)
+      this.listViewModel.initFromUsedFilters(this.meta_.used_filters, this.meta_.count_search)
     }
 
     this.isLoading = false
