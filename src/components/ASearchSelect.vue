@@ -50,7 +50,6 @@
         :noHistory="true"
         :filterSource="filterSource"
         :loadOnlyIfKeyword="_loadOnlyIfKeyword"
-        :filters.sync="filters"
         :count.sync="count"
         :isLoading.sync="isLoading"
       >
@@ -76,7 +75,7 @@
           <div class="lastColumn" />
         </template>
 
-        <template #not-found>
+        <template #not-found="{ filters }">
           <slot
             name="not-found"
             :filters="filters"
