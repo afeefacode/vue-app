@@ -36,9 +36,11 @@ function load (route) {
   }
 
   const request = new ListViewModel(Component.listViewConfig)
+    .filterSource(new RouteQueryFilterSource(route), false)
+    .historyKey(route.path, false)
     .initFilters({
-      filterSource: new RouteQueryFilterSource(route),
-      historyKey: route.path
+      source: true,
+      history: true
     })
     .getApiRequest()
 

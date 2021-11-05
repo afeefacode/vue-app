@@ -31,11 +31,6 @@ export class ListViewMixin extends Vue {
   }
 
   init () {
-    if (this.models) {
-      this.models_ = this.models
-      this.meta_ = this.meta
-    }
-
     if (this.listViewModel) {
       // this can happen only on HMR-reload
       this.listViewModel.off('change', this.filtersChanged)
@@ -46,16 +41,25 @@ export class ListViewMixin extends Vue {
       : [this.$route.path, this.filterHistoryKey].filter(i => i).join('.')
     const filterSource = this.filterSource === FilterSourceType.OBJECT ? undefined : new RouteFilterSource(this.$router)
 
+    if (this.models) {
+      this.models_ = this.models
+      this.meta_ = this.meta
+    }
+
     this.listViewModel = new ListViewModel(this.listViewConfig)
-      .initFilters({filterSource, historyKey}) // init filters from source (e.g. route.query) or (if empty) from history
-      .saveFiltersInHistory() // save this model in filter history
+      .filterSource(filterSource, true)
+      .historyKey(historyKey, true)
+      .usedFilters(this.meta_.used_filters || null, this.meta_.count_search || 0)
+      .initFilters({
+        source: true,
+        history: true,
+        used: !!this.models
+      })
       .on('change', this.filtersChanged) // listen to change
 
-    this.$emit('update:filters', this.filters)
     this._filtersInitialized()
 
     if (this.models) {
-      this.listViewModel.initFromUsedFilters(this.meta_.used_filters, this.meta_.count_search)
       this.$emit('update:count', this.meta_.count_search)
     } else {
       this.load()
