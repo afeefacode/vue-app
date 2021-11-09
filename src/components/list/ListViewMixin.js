@@ -3,8 +3,8 @@ import { propsWithDefaults } from '@a-vue/utils/props-helper'
 import { ListViewModel } from '@afeefa/api-resources-client'
 import { Component, Vue, Watch } from 'vue-property-decorator'
 
+import { CurrentRouteFilterSource } from './CurrentRouteFilterSource'
 import { FilterSourceType } from './FilterSourceType'
-import { RouteFilterSource } from './RouteFilterSource'
 
 @Component({
   ...propsWithDefaults([
@@ -22,10 +22,10 @@ import { RouteFilterSource } from './RouteFilterSource'
 export class ListViewMixin extends Vue {
   LIST_VIEW = true
 
+  listViewModel = null
   models_ = []
   meta_ = {}
   isLoading = false
-  listViewModel = null
 
   created () {
     this.init()
@@ -44,6 +44,7 @@ export class ListViewMixin extends Vue {
     const historyKey = this.history
       ? [this.$route.path, this.filterHistoryKey].filter(i => i).join('.')
       : undefined
+    const filterSource = this.filterSource === FilterSourceType.OBJECT ? undefined : new CurrentRouteFilterSource(this.$router)
 
     if (this.models) {
       this.models_ = this.models

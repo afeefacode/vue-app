@@ -10,7 +10,7 @@
 <script>
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { ListAction } from '@a-vue/api-resources/ApiActions'
-import { RouteQueryFilterSource } from '@a-vue/components/list/RouteQueryFilterSource'
+import { NextRouteFilterSource } from '@a-vue/components/list/NextRouteFilterSource'
 import { ListViewModel } from '@afeefa/api-resources-client'
 
 Component.registerHooks([
@@ -36,7 +36,7 @@ function load (route) {
   }
 
   const request = new ListViewModel(Component.listViewConfig)
-    .filterSource(new RouteQueryFilterSource(route), false)
+    .filterSource(new NextRouteFilterSource(route), false)
     .historyKey(route.path, false)
     .initFilters({
       source: true,

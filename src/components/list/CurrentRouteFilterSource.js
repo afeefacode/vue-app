@@ -1,6 +1,6 @@
-import { BaseFilterSource } from '@afeefa/api-resources-client'
+import { ListViewFilterSource } from '@afeefa/api-resources-client'
 
-export class RouteFilterSource extends BaseFilterSource {
+export class CurrentRouteFilterSource extends ListViewFilterSource {
   router = null
 
   constructor (router) {
