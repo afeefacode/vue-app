@@ -73,7 +73,7 @@ export default class ListView extends Mixins(ListViewMixin) {
 
   @Watch('isLoading')
   isLoadingChanged () {
-    if (this.noEvents === undefined || !this.noEvents) {
+    if (this.events) {
       if (this.isLoading) {
         this.$events.dispatch(new LoadingEvent(LoadingEvent.START_LOADING))
       } else {

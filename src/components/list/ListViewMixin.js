@@ -1,4 +1,5 @@
 import { ListAction } from '@a-vue/api-resources/ApiActions'
+import { propsWithDefaults } from '@a-vue/utils/props-helper'
 import { ListViewModel } from '@afeefa/api-resources-client'
 import { Component, Vue, Watch } from 'vue-property-decorator'
 
@@ -6,13 +7,17 @@ import { FilterSourceType } from './FilterSourceType'
 import { RouteFilterSource } from './RouteFilterSource'
 
 @Component({
-  props: [
-    'models', 'meta', // if already loaded
+  ...propsWithDefaults([
+    'models', 'meta', // given, if already loaded
     'listViewConfig',
-    'noEvents', 'noHistory',
-    'filterHistoryKey', 'filterSource',
-    'loadOnlyIfKeyword'
-  ]
+    'filterSource',
+    'filterHistoryKey',
+    'loadOnlyIfKeyword',
+    {
+      events: true,
+      history: true
+    }
+  ])
 })
 export class ListViewMixin extends Vue {
   LIST_VIEW = true
@@ -36,10 +41,9 @@ export class ListViewMixin extends Vue {
       this.listViewModel.off('change', this.filtersChanged)
     }
 
-    const historyKey = this.noHistory
-      ? undefined
-      : [this.$route.path, this.filterHistoryKey].filter(i => i).join('.')
-    const filterSource = this.filterSource === FilterSourceType.OBJECT ? undefined : new RouteFilterSource(this.$router)
+    const historyKey = this.history
+      ? [this.$route.path, this.filterHistoryKey].filter(i => i).join('.')
+      : undefined
 
     if (this.models) {
       this.models_ = this.models
@@ -117,7 +121,7 @@ export class ListViewMixin extends Vue {
 
     const {models, meta} = await new ListAction()
       .setRequest(request)
-      .noEvents(this.noEvents === true)
+      .noEvents(!this.events)
       .load()
 
     if (!models) { // error happened
