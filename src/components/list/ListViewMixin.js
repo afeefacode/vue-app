@@ -10,10 +10,10 @@ import { FilterSourceType } from './FilterSourceType'
   ...propsWithDefaults([
     'models', 'meta', // given, if already loaded
     'listViewConfig',
-    'filterSource',
     'filterHistoryKey',
     'loadOnlyIfKeyword',
     {
+      filterSource: FilterSourceType.QUERY_STRING,
       events: true,
       history: true
     }
@@ -44,7 +44,9 @@ export class ListViewMixin extends Vue {
     const historyKey = this.history
       ? [this.$route.path, this.filterHistoryKey].filter(i => i).join('.')
       : undefined
-    const filterSource = this.filterSource === FilterSourceType.OBJECT ? undefined : new CurrentRouteFilterSource(this.$router)
+    const filterSource = this.filterSource === FilterSourceType.QUERY_STRING
+      ? new CurrentRouteFilterSource(this.$router)
+      : undefined
 
     if (this.models) {
       this.models_ = this.models
@@ -53,7 +55,7 @@ export class ListViewMixin extends Vue {
 
     this.listViewModel = new ListViewModel(this.listViewConfig)
       .filterSource(filterSource, true)
-      .historyKey(historyKey, true)
+      .historyKey(historyKey, this.history)
       .usedFilters(this.meta_.used_filters || null, this.meta_.count_search || 0)
       .initFilters({
         source: true,
