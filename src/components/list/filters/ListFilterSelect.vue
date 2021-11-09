@@ -22,7 +22,7 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
   items = null
 
   created () {
-    if (this.filter.hasRequest()) {
+    if (this.filter.hasOptionsRequest()) {
       this.items = this.loadRequestOptions()
     } else if (this.filter.hasOptions()) {
       this.items = this.getOptions()
@@ -54,7 +54,7 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
 
   async loadRequestOptions () {
     const {models} = await new ListAction()
-      .setRequest(this.filter.request)
+      .setRequest(this.filter.createOptionsRequest())
       .noEvents()
       .load()
 
