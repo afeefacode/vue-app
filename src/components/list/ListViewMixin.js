@@ -75,7 +75,7 @@ export class ListViewMixin extends Vue {
 
   @Watch('$route.query')
   routeQueryChanged () {
-    if (this.filterSource !== FilterSourceType.QUERY_STRING) {
+    if (this.filterSource === FilterSourceType.QUERY_STRING) {
       this.listViewModel.filterSourceChanged()
     }
   }
