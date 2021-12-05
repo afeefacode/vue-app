@@ -54,12 +54,12 @@ export class ListViewMixin extends Vue {
     }
 
     this.listViewModel = new ListViewModel(this.listViewConfig)
-      .filterSource(filterSource, true)
+      .filterSource(filterSource, !!filterSource)
       .historyKey(historyKey, this.history)
       .usedFilters(this.meta_.used_filters || null, this.meta_.count_search || 0)
       .initFilters({
-        source: true,
-        history: true,
+        source: !!filterSource,
+        history: !!historyKey,
         used: !!this.models
       })
       .on('change', this.filtersChanged) // listen to change
