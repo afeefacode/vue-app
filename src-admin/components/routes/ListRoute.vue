@@ -36,7 +36,11 @@ function load (route) {
   }
 
   const request = new ListViewModel(Component.listViewConfig)
+    // read from next route query string, but do not push
+    // list component will be init with used_filters
     .filterSource(new NextRouteFilterSource(route), false)
+    // read from history, but do not push
+    // list component will be init with used_filters
     .historyKey(route.path, false)
     .initFilters({
       source: true,
