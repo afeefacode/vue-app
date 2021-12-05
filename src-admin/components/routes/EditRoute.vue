@@ -19,7 +19,12 @@ Component.registerHooks([
 function load (route) {
   const routeDefinition = route.meta.routeDefinition
   const Component = routeDefinition.config.edit
-  const editConfig = Component.getEditConfig(route)
+
+  if (!Component.editRouteConfig) {
+    console.warn('An edit route component must implement a static editRouteConfig property.')
+  }
+
+  const editConfig = Component.editRouteConfig
   const action = editConfig.getAction || editConfig.ModelClass.getAction('get')
 
   return new GetAction()

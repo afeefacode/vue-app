@@ -56,8 +56,8 @@ import { apiResources } from '@afeefa/api-resources-client'
 })
 export default class CreatePage extends Mixins(EditPageMixin) {
   created () {
-    if (!this.$parent.constructor.getCreateConfig) {
-      console.warn('<create-page> owner must provide a static getCreateConfig method.')
+    if (!this.$parent.constructor.createRouteConfig) {
+      console.warn('<create-page> owner must provide a static createRouteConfig method.')
     }
 
     this.reset()
@@ -65,11 +65,11 @@ export default class CreatePage extends Mixins(EditPageMixin) {
   }
 
   get editConfig () {
-    return this.$parent.constructor.getCreateConfig(this.$route)
+    return this.$parent.constructor.createRouteConfig
   }
 
   get modelUpateAction () {
-    return this.ModelClass.getAction('create')
+    return this.editConfig.createAction || this.ModelClass.getAction('create')
   }
 
   get _icon () {

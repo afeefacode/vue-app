@@ -78,8 +78,8 @@ export default class EditPage extends Mixins(EditPageMixin) {
   model_ = null
 
   created () {
-    if (!this.$parent.constructor.getEditConfig) {
-      console.warn('<edit-page> owner must provide a static getEditConfig method.')
+    if (!this.$parent.constructor.editRouteConfig) {
+      console.warn('<edit-page> owner must provide a static editRouteConfig method.')
     }
 
     this.model_ = this.model
@@ -95,11 +95,11 @@ export default class EditPage extends Mixins(EditPageMixin) {
   }
 
   get editConfig () {
-    return this.$parent.constructor.getEditConfig(this.$route)
+    return this.$parent.constructor.editRouteConfig
   }
 
   get modelUpateAction () {
-    return this.ModelClass.getAction('update')
+    return this.editConfig.updateAction || this.ModelClass.getAction('update')
   }
 
   get _getAction () {
