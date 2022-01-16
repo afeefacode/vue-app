@@ -55,7 +55,7 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 import { RemoveAction } from '@a-vue/api-resources/ApiActions'
 
 @Component({
-  props: ['model', 'title', 'icon', 'removeAction', 'protectRemove', 'listLink']
+  props: ['model', 'title', 'icon', 'protectRemove', 'listLink']
 })
 export default class DetailPage extends Vue {
   $hasOptions = ['edit', 'remove', 'list']
@@ -64,7 +64,7 @@ export default class DetailPage extends Vue {
   removeConfirmed = null
 
   created () {
-    if (!this.$parent.constructor.getDetailConfig) {
+    if (!this.$parent.constructor.detailRouteConfig) {
       console.warn('<detail-page> owner must provide a static getDetailConfig method.')
     }
     this.$emit('model', this.model)
@@ -80,7 +80,7 @@ export default class DetailPage extends Vue {
   }
 
   get detailConfig () {
-    return this.$parent.constructor.getDetailConfig(this.$route)
+    return this.$parent.constructor.detailRouteConfig
   }
 
   get document () {
@@ -110,10 +110,7 @@ export default class DetailPage extends Vue {
   }
 
   get _deleteAction () {
-    if (this.removeAction) {
-      return this.removeAction
-    }
-    return this.ModelClass.getAction('delete')
+    return this.detailConfig.removeAction || this.ModelClass.getAction('delete')
   }
 
   async remove () {

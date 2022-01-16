@@ -18,7 +18,12 @@ Component.registerHooks([
 function load (route) {
   const routeDefinition = route.meta.routeDefinition
   const Component = routeDefinition.config.detail
-  const detailConfig = Component.getDetailConfig(route)
+
+  if (!Component.detailRouteConfig) {
+    console.warn('A detail route component must implement a static detailRouteConfig property.')
+  }
+
+  const detailConfig = Component.detailRouteConfig
   const action = detailConfig.action || detailConfig.ModelClass.getAction('get')
 
   return new GetAction()
