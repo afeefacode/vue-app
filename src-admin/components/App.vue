@@ -59,32 +59,14 @@
               </div>
             </div>
 
-            <v-menu top>
-              <template #activator="{ on, attrs }">
-                <v-icon
-                  class="contextButton"
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  $dotsVerticalIcon
-                </v-icon>
-              </template>
-
-              <v-list
-                class="pa-0"
+            <a-context-menu triggerIcon="$dotsVerticalIcon">
+              <a-context-menu-item
+                :to="{name: 'accounts.edit', params: {accountId: account.id}}"
               >
-                <v-list-item :to="{name: 'accounts.edit', params: {accountId: account.id}}">
-                  <v-list-item-icon class="ma-0 mr-2 align-self-center">
-                    <v-icon class="ml-n1 mr-1">
-                      $pencilIcon
-                    </v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-title>
-                    Einstellungen
-                  </v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
+                <v-icon>$pencilIcon</v-icon>
+                Einstellungen
+              </a-context-menu-item>
+            </a-context-menu>
           </div>
         </v-container>
       </v-container>
