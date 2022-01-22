@@ -197,6 +197,7 @@ export class RemoveAction {
         .params({
           id: this.id
         })
+        .data(null)
         .send()
 
       if (this.afterRemoveHook) {
