@@ -6,7 +6,7 @@
     >
       <slot name="activator">
         <a-icon class="contextButton">
-          $dotsHorizontalIcon
+          {{ triggerIcon || '$dotsHorizontalIcon' }}
         </a-icon>
       </slot>
     </div>
@@ -31,7 +31,7 @@ import { Positions, PositionConfig } from '../services/PositionService'
 import { randomCssClass } from '../utils/random'
 
 @Component({
-  props: ['contentHeight', 'repositionWatchKey']
+  props: ['contentHeight', 'repositionWatchKey', 'triggerIcon']
 })
 export default class AContextMenu extends Mixins(UsesPositionServiceMixin) {
   CONTEXT_MENU = true
