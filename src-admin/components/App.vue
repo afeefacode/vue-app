@@ -61,7 +61,7 @@
 
             <a-context-menu triggerIcon="$dotsVerticalIcon">
               <a-context-menu-item
-                :to="{name: 'accounts.edit', params: {accountId: account.id}}"
+                :to="{name: 'settings', params: {accountId: account.id}}"
               >
                 <v-icon>$pencilIcon</v-icon>
                 Einstellungen
