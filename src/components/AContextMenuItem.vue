@@ -10,7 +10,9 @@
 <script>
 import { Component, Vue } from 'vue-property-decorator'
 
-@Component
+@Component({
+  props: ['to']
+})
 export default class AContextMenuItem extends Vue {
   get contextMenu () {
     let parent = this.$parent
@@ -25,7 +27,12 @@ export default class AContextMenuItem extends Vue {
 
   click () {
     this.contextMenu.close()
-    this.$emit('click')
+    if (this.to) {
+      this.$router.push(this.to)
+        .catch(() => null) // prevent duplicated navigation
+    } else {
+      this.$emit('click')
+    }
   }
 }
 </script>
