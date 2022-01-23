@@ -30,7 +30,7 @@ function load (route) {
   return new GetAction()
     .setAction(action)
     .setFields(editConfig.fields)
-    .setId(route.params[routeDefinition.idKey])
+    .setId(editConfig.id || route.params[routeDefinition.idKey])
     .load()
 }
 

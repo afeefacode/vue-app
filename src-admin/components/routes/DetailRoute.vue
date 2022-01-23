@@ -29,7 +29,7 @@ function load (route) {
   return new GetAction()
     .setAction(action)
     .setFields(detailConfig.fields)
-    .setId(route.params[routeDefinition.idKey])
+    .setId(detailConfig.id || route.params[routeDefinition.idKey])
     .load()
 }
 
