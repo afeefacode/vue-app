@@ -69,7 +69,7 @@ export default class CreatePage extends Mixins(EditPageMixin) {
   }
 
   get modelUpateAction () {
-    return this.editConfig.createAction || this.ModelClass.getAction('create')
+    return this.editConfig.createAction || this.ModelClass.getAction('save')
   }
 
   get _icon () {

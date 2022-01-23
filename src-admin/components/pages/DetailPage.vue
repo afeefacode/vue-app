@@ -110,7 +110,7 @@ export default class DetailPage extends Vue {
   }
 
   get _deleteAction () {
-    return this.detailConfig.removeAction || this.ModelClass.getAction('delete')
+    return this.detailConfig.removeAction || this.ModelClass.getAction('save')
   }
 
   async remove () {

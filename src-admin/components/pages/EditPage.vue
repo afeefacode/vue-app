@@ -99,7 +99,7 @@ export default class EditPage extends Mixins(EditPageMixin) {
   }
 
   get modelUpateAction () {
-    return this.editConfig.updateAction || this.ModelClass.getAction('update')
+    return this.editConfig.updateAction || this.ModelClass.getAction('save')
   }
 
   get _getAction () {
