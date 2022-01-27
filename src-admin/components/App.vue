@@ -13,7 +13,7 @@
       >
         <router-link
           :to="{name: rootRouteName}"
-          class="logoContainer d-flex flex-column pa-6"
+          class="logoContainer d-flex flex-column align-center pa-6"
         >
           <img
             v-if="logoUrl"
