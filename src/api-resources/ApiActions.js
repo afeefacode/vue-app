@@ -228,11 +228,35 @@ export class RemoveAction {
 }
 
 export class ListAction {
+  action = null
   request = null
+  params = {}
+  fields = {}
+  filters = {}
   events = true
+
+  setAction (action) {
+    this.action = action
+    return this
+  }
 
   setRequest (request) {
     this.request = request
+    return this
+  }
+
+  setParams (params) {
+    this.params = params
+    return this
+  }
+
+  setFields (fields) {
+    this.fields = fields
+    return this
+  }
+
+  setFilters (filters) {
+    this.filters = filters
     return this
   }
 
@@ -244,6 +268,13 @@ export class ListAction {
   async load () {
     if (this.events) {
       eventBus.dispatch(new LoadingEvent(LoadingEvent.START_LOADING))
+    }
+
+    if (!this.request) {
+      this.request = this.action.createRequest()
+        .params(this.params)
+        .fields(this.fields)
+        .filters(this.filters)
     }
 
     const result = await this.request.send()
