@@ -91,6 +91,7 @@ export default class AGrid extends Vue {
       grid-template-columns: repeat(5, 1fr);
     }
   }
+
   &.breakMobile {
     @media (max-width: 900px), (orientation : portrait) {
       grid-template-columns: 1fr;
