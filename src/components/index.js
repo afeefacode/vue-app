@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 import EditForm from './form/EditForm'
 import EditModal from './form/EditModal'
+import FormFieldCheckbox from './form/fields/FormFieldCheckbox'
 import FormFieldDate from './form/fields/FormFieldDate'
 import FormFieldRadioGroup from './form/fields/FormFieldRadioGroup'
 import FormFieldSearchSelect from './form/fields/FormFieldSearchSelect'
@@ -19,6 +20,7 @@ Vue.component('EditModal', EditModal)
 Vue.component('FormFieldText', FormFieldText)
 Vue.component('FormFieldTextArea', FormFieldTextArea)
 Vue.component('FormFieldRadioGroup', FormFieldRadioGroup)
+Vue.component('FormFieldCheckbox', FormFieldCheckbox)
 Vue.component('FormFieldDate', FormFieldDate)
 Vue.component('FormFieldSearchSelect', FormFieldSearchSelect)
 Vue.component('FormFieldSelect', FormFieldSelect)
