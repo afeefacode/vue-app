@@ -44,7 +44,7 @@
     <div :class="listCssClass">
       <search-select-list
         v-if="isOpen"
-        v-bind="listConfig"
+        :listViewConfig="listViewConfig"
         :q="q"
         :events="false"
         :history="false"
@@ -98,7 +98,7 @@ import SearchSelectList from './search-select/SearchSelectList'
 import { CancelOnEscMixin } from '@a-vue/services/escape/CancelOnEscMixin'
 
 @Component({
-  props: ['listConfig', 'q', 'width', 'closeOnSelect', 'loadOnlyIfKeyword'],
+  props: ['listViewConfig', 'q', 'width', 'closeOnSelect', 'loadOnlyIfKeyword'],
   components: {
     SearchSelectFilters,
     SearchSelectList
