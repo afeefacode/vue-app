@@ -50,6 +50,7 @@
         :history="false"
         :filterSource="filterSource"
         :loadOnlyIfKeyword="_loadOnlyIfKeyword"
+        :filters.sync="filters"
         :count.sync="count"
         :isLoading.sync="isLoading"
       >
