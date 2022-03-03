@@ -46,6 +46,7 @@
         v-if="isOpen"
         :listViewConfig="listViewConfig"
         :q="q"
+        :selectedItems="selectedItems"
         :events="false"
         :history="false"
         :filterSource="filterSource"
@@ -89,7 +90,7 @@
 
 
 <script>
-import { Component, Watch, Mixins } from 'vue-property-decorator'
+import { Component, Watch, Mixins } from '@a-vue'
 import { UsesPositionServiceMixin } from '../services/position/UsesPositionServiceMixin'
 import { PositionConfig } from '../services/PositionService'
 import { randomCssClass } from '../utils/random'
@@ -99,7 +100,16 @@ import SearchSelectList from './search-select/SearchSelectList'
 import { CancelOnEscMixin } from '@a-vue/services/escape/CancelOnEscMixin'
 
 @Component({
-  props: ['listViewConfig', 'q', 'width', 'closeOnSelect', 'loadOnlyIfKeyword'],
+  props: [
+    'listViewConfig',
+    'q',
+    'width',
+    'closeOnSelect',
+    'loadOnlyIfKeyword',
+    {
+      selectedItems: []
+    }
+  ],
   components: {
     SearchSelectFilters,
     SearchSelectList
@@ -324,8 +334,13 @@ export default class ASearchSelect extends Mixins(UsesPositionServiceMixin, Canc
   overflow-y: auto;
   overscroll-behavior: contain;
 
-  ::v-deep .a-table-row > * {
-    cursor: pointer;
+  ::v-deep .a-table-row {
+    &:not(.selected) {
+      cursor: pointer;
+    }
+    &.selected {
+      pointer-events: none;
+    }
   }
 }
 

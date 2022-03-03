@@ -13,6 +13,7 @@
           v-for="model in models_"
           :key="model.id"
           small
+          :class="{selected: isSelected(model)}"
         >
           <slot
             name="row"
@@ -42,7 +43,7 @@ import { Component, Mixins } from 'vue-property-decorator'
 import { ListViewMixin } from '@a-vue/components/list/ListViewMixin'
 
 @Component({
-  props: ['q']
+  props: ['q', 'selectedItems']
 })
 export default class SearchSelectList extends Mixins(ListViewMixin) {
   get hasHeader () {
@@ -56,6 +57,10 @@ export default class SearchSelectList extends Mixins(ListViewMixin) {
       }
       return true
     }
+  }
+
+  isSelected (model) {
+    return !!this.selectedItems.find(i => i.equals(model))
   }
 
   _filtersInitialized () {
