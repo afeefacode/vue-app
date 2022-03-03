@@ -1,13 +1,12 @@
+import { Component, Vue, Watch } from '@a-vue'
 import { ListAction } from '@a-vue/api-resources/ApiActions'
-import { propsWithDefaults } from '@a-vue/utils/props-helper'
 import { ListViewModel } from '@afeefa/api-resources-client'
-import { Component, Vue, Watch } from 'vue-property-decorator'
 
 import { CurrentRouteFilterSource } from './CurrentRouteFilterSource'
 import { FilterSourceType } from './FilterSourceType'
 
 @Component({
-  ...propsWithDefaults([
+  props: [
     'models', 'meta', // given, if already loaded
     'listViewConfig',
     'filterHistoryKey',
@@ -17,7 +16,7 @@ import { FilterSourceType } from './FilterSourceType'
       events: true,
       history: true
     }
-  ])
+  ]
 })
 export class ListViewMixin extends Vue {
   LIST_VIEW = true
