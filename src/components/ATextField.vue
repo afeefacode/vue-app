@@ -15,7 +15,7 @@
 
 
 <script>
-import { Component, Watch, Mixins } from 'vue-property-decorator'
+import { Component, Watch, Mixins } from '@a-vue'
 import { debounce } from '@a-vue/utils/debounce'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 

@@ -29,7 +29,7 @@
 
 
 <script>
-import { Component, Mixins, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Watch } from '@a-vue'
 import { formatDate } from '@a-vue/utils/format-date'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 

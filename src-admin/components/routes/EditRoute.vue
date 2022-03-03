@@ -8,7 +8,7 @@
 
 
 <script>
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue, Watch } from '@a-vue'
 import { GetAction } from '@a-vue/api-resources/ApiActions'
 
 Component.registerHooks([

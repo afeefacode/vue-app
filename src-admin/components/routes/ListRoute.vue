@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue, Watch } from '@a-vue'
 import { ListAction } from '@a-vue/api-resources/ApiActions'
 import { NextRouteFilterSource } from '@a-vue/components/list/NextRouteFilterSource'
 import { ListViewModel } from '@afeefa/api-resources-client'

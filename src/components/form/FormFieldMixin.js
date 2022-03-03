@@ -1,6 +1,6 @@
 import { ListAction } from '@a-vue/api-resources/ApiActions'
 import { apiResources } from '@afeefa/api-resources-client'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from '@a-vue'
 
 @Component({
   props: ['name', 'label']

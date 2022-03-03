@@ -27,7 +27,7 @@
 
 
 <script>
-import { Component, Mixins } from 'vue-property-decorator'
+import { Component, Mixins } from '@a-vue'
 import { ListFilterMixin } from '../ListFilterMixin'
 
 @Component({

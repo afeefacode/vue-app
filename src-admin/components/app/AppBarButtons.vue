@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from '@a-vue'
 
 @Component
 export default class AppBarButtons extends Vue {

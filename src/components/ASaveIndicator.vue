@@ -14,7 +14,7 @@
 
 
 <script>
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from '@a-vue'
 import { SaveEvent } from './save-indicator/SaveEvent'
 
 @Component

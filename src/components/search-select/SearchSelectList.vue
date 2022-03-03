@@ -39,7 +39,7 @@
 
 
 <script>
-import { Component, Mixins } from 'vue-property-decorator'
+import { Component, Mixins } from '@a-vue'
 import { ListViewMixin } from '@a-vue/components/list/ListViewMixin'
 
 @Component({

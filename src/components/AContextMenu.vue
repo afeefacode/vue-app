@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { Component, Mixins, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Watch } from '@a-vue'
 import { UsesPositionServiceMixin } from '../services/position/UsesPositionServiceMixin'
 import { Positions, PositionConfig } from '../services/PositionService'
 import { randomCssClass } from '../utils/random'

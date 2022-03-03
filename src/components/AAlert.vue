@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from '@a-vue'
 import { AlertEvent } from './alert/AlertEvent'
 
 @Component

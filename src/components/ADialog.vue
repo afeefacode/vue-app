@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { Component, Mixins, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Watch } from '@a-vue'
 import { DialogEvent } from './dialog/DialogEvent'
 import { PositionConfig } from '../services/PositionService'
 import { UsesPositionServiceMixin } from '../services/position/UsesPositionServiceMixin'

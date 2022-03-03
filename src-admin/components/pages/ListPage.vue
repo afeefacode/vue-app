@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from '@a-vue'
 import { apiResources } from '@afeefa/api-resources-client'
 
 @Component({

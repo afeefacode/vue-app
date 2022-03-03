@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { Component, Mixins, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Watch } from '@a-vue'
 import { apiResources } from '@afeefa/api-resources-client'
 import { EditPageMixin } from './EditPageMixin'
 

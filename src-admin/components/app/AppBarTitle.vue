@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from '@a-vue'
 
 @Component({
   props: ['icon', 'title']

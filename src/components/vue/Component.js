@@ -1,9 +1,15 @@
 import { Component as VueComponent } from 'vue-property-decorator'
 
-export function Component (options) {
-  options.props = propsWithDefaults(options.props)
+const Component = function (options) {
+  if (options.props) {
+    options.props = propsWithDefaults(options.props)
+  }
   return VueComponent(options)
 }
+
+Component.registerHooks = VueComponent.registerHooks
+
+export { Component }
 
 function propsWithDefaults (props) {
   if (props && typeof props === 'object' && props.constructor === Object) {

@@ -10,7 +10,7 @@
 
 
 <script>
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from '@a-vue'
 import { modelCountService } from './ModelCountService'
 import { SaveEvent } from '@a-vue/events'
 

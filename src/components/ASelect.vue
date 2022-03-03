@@ -12,7 +12,7 @@
 
 
 <script>
-import { Component, Mixins, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Watch } from '@a-vue'
 import { Model } from '@afeefa/api-resources-client'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 

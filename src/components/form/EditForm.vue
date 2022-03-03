@@ -14,7 +14,7 @@
 
 
 <script>
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue, Watch } from '@a-vue'
 import { apiResources } from '@afeefa/api-resources-client'
 
 @Component({

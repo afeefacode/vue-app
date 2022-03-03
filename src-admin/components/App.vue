@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue, Watch } from '@a-vue'
 import { LoadingEvent } from '@a-vue/events'
 import { appConfig } from '@a-admin/config/AppConfig'
 import { sleep } from '@a-vue/utils/timeout'

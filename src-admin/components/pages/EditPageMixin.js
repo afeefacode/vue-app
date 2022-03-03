@@ -1,6 +1,6 @@
 import { SaveAction } from '@a-vue/api-resources/ApiActions'
 import { DialogEvent } from '@a-vue/events'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from '@a-vue'
 
 @Component({
   props: ['saveAction']

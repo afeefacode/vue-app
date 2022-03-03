@@ -7,7 +7,7 @@
 
 
 <script>
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue, Watch } from '@a-vue'
 
 @Component({
   props: ['content']

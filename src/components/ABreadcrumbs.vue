@@ -19,7 +19,7 @@
 
 
 <script>
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue, Watch } from '@a-vue'
 import { SaveEvent } from './save-indicator/SaveEvent'
 import { routeConfigPlugin } from '@a-vue/plugins/route-config/RouteConfigPlugin'
 
