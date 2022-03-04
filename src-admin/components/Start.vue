@@ -11,7 +11,7 @@ import { Component, Vue } from '@a-vue'
 @Component({
   props: ['splash']
 })
-export default class Index extends Vue {
+export default class Start extends Vue {
   appLoaded () {
     this.splash.$destroy()
   }
