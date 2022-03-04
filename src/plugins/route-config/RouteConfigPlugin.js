@@ -121,7 +121,8 @@ class RouteConfigPlugin {
     this._promise = this._promise.then(() => {
       callback = callback({
         ROUTESET: this.routeSet,
-        ROUTE: this.route
+        ROUTE: this.route,
+        GETROUTE: this.getRoute
       })
 
       if (!(callback instanceof Promise)) {
@@ -288,6 +289,28 @@ class RouteConfigPlugin {
       ...options.config
     }
     return new RouteSetDefinition(options).getDefinitions()
+  }
+
+  getRoute = (name, component) => {
+    switch (name) {
+      case 'notfound':
+        return this.route({
+          path: '/:pathMatch(.*)*',
+          name: 'notfound',
+          component: component || {
+            template: '<div>Not found</div>'
+          }
+        })
+      case 'auth':
+        return this.route({
+          path: '/auth2',
+          name: 'auth',
+          ignoreBreadcrumb: true,
+          component: {
+            template: '<div>Auth</div>'
+          }
+        })
+    }
   }
 
   breadcrumb = options => {
