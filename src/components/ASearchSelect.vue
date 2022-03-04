@@ -207,7 +207,7 @@ export default class ASearchSelect extends Mixins(UsesPositionServiceMixin, Canc
         p
           .anchorTop()
           .targetBottom()
-          .diffY('-1rem')
+          .diffY('-.5rem')
       })
       .onPosition(this.onListPositionChanged)
 
