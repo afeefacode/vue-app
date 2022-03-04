@@ -1,35 +1,31 @@
 <template>
   <v-app class="splash">
-    <v-container
-      fill-height
-      fluid
-      pb-0
-      d-flex
-      align-center
-      justify-center
+    <a-row
+      vertical
+      center
+      class="content"
     >
-      <div>
-        <div class="logo">
-          <slot />
-        </div>
-
-        <a-row
-          vertical
-          center
-        >
-          <v-progress-linear
-            :size="45"
-            :width="6"
-            indeterminate
-            :color="color || 'green'"
-          />
-
-          <div class="mt-4">
-            {{ title || 'Lade App ...' }}
-          </div>
-        </a-row>
+      <div class="logo">
+        <slot />
       </div>
-    </v-container>
+
+      <a-row
+        vertical
+        center
+        fullWidth
+      >
+        <v-progress-linear
+          :size="45"
+          :width="6"
+          indeterminate
+          :color="color || 'green'"
+        />
+
+        <div class="mt-4">
+          {{ title || 'Lade App ...' }}
+        </div>
+      </a-row>
+    </a-row>
   </v-app>
 </template>
 
@@ -47,20 +43,24 @@ export default class Splash extends Vue {
 }
 </script>
 
-
 <style lang="scss" scoped>
 .splash {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
+  height: 100vh;
+}
+
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-height: 50vh;
+  transform: translate(-50%, -50%);
 }
 
 .logo {
   margin-bottom: 2rem;
-}
-
-.container {
-  transform: translateY(-10%);
 }
 </style>
