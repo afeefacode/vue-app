@@ -297,6 +297,7 @@ class RouteConfigPlugin {
         return this.route({
           path: '/:pathMatch(.*)*',
           name: 'notfound',
+          ignoreBreadcrumb: true,
           component: component || {
             template: '<div>Not found</div>'
           }
