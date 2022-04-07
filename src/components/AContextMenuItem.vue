@@ -29,7 +29,7 @@ export default class AContextMenuItem extends Vue {
     this.contextMenu.close()
     if (this.to) {
       this.$router.push(this.to)
-        .catch(() => null) // prevent duplicated navigation
+        .catch(() => null) // prevent duplicated navigation warning
     } else {
       this.$emit('click')
     }
