@@ -31,11 +31,11 @@ function load (route) {
   const routeDefinition = route.meta.routeDefinition
   const Component = routeDefinition.config.list
 
-  if (!Component.listViewConfig) {
-    console.warn('A list route component must implement a static listViewConfig property.')
+  if (!Component.getListRouteConfig) {
+    console.warn('A list route component must implement a static getListRouteConfig property.')
   }
 
-  const request = new ListViewModel(Component.listViewConfig)
+  const request = new ListViewModel(Component.getListRouteConfig(route))
     // read from next route query string, but do not push
     // list component will be init with used_filters
     .filterSource(new NextRouteFilterSource(route), false)

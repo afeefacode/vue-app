@@ -64,8 +64,8 @@ export default class DetailPage extends Vue {
   removeConfirmed = null
 
   created () {
-    if (!this.$parent.constructor.detailRouteConfig) {
-      console.warn('<detail-page> owner must provide a static getDetailConfig method.')
+    if (!this.$parent.constructor.getDetailRouteConfig) {
+      console.warn('<detail-page> owner must provide a static getDetailRouteConfig method.')
     }
     this.$emit('model', this.model)
   }
@@ -80,7 +80,7 @@ export default class DetailPage extends Vue {
   }
 
   get detailConfig () {
-    return this.$parent.constructor.detailRouteConfig
+    return this.$parent.constructor.getDetailRouteConfig(this.$route)
   }
 
   get document () {

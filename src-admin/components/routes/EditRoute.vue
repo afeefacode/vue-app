@@ -20,11 +20,11 @@ function load (route) {
   const routeDefinition = route.meta.routeDefinition
   const Component = routeDefinition.config.edit
 
-  if (!Component.editRouteConfig) {
-    console.warn('An edit route component must implement a static editRouteConfig property.')
+  if (!Component.getEditRouteConfig) {
+    console.warn('An edit route component must implement a static getEditRouteConfig property.')
   }
 
-  const editConfig = Component.editRouteConfig
+  const editConfig = Component.getEditRouteConfig(route)
   const action = editConfig.getAction || editConfig.ModelClass.getAction('get')
 
   return new GetAction()

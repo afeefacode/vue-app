@@ -19,11 +19,11 @@ function load (route) {
   const routeDefinition = route.meta.routeDefinition
   const Component = routeDefinition.config.detail
 
-  if (!Component.detailRouteConfig) {
-    console.warn('A detail route component must implement a static detailRouteConfig property.')
+  if (!Component.getDetailRouteConfig) {
+    console.warn('A detail route component must implement a static getDetailRouteConfig property.')
   }
 
-  const detailConfig = Component.detailRouteConfig
+  const detailConfig = Component.getDetailRouteConfig(route)
   const action = detailConfig.action || detailConfig.ModelClass.getAction('get')
 
   return new GetAction()
