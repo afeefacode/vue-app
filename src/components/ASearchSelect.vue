@@ -16,6 +16,7 @@
       <div
         v-if="isOpen"
         class="controls"
+        :style="cwm_widthStyle"
       >
         <div class="background elevation-6" />
 
@@ -54,6 +55,7 @@
         :filters.sync="filters"
         :count.sync="count"
         :isLoading.sync="isLoading"
+        :style="cwm_widthStyle"
       >
         <template #header>
           <div />
@@ -90,6 +92,7 @@ import { FilterSourceType } from '@a-vue/components/list/FilterSourceType'
 import SearchSelectFilters from './search-select/SearchSelectFilters'
 import SearchSelectList from './search-select/SearchSelectList'
 import { CancelOnEscMixin } from '@a-vue/services/escape/CancelOnEscMixin'
+import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
   props: [
@@ -107,7 +110,7 @@ import { CancelOnEscMixin } from '@a-vue/services/escape/CancelOnEscMixin'
     SearchSelectList
   }
 })
-export default class ASearchSelect extends Mixins(UsesPositionServiceMixin, CancelOnEscMixin) {
+export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPositionServiceMixin, CancelOnEscMixin) {
   selectId = randomCssClass(10)
   isOpen = false
   items_ = []
@@ -310,15 +313,19 @@ export default class ASearchSelect extends Mixins(UsesPositionServiceMixin, Canc
 }
 
 .controls {
-  min-width: 400px;
+  width: 400px;
   position: absolute;
   z-index: 300;
   display: block;
   padding: 0 0.5rem;
+
+  ::v-deep .a-row {
+    overflow: unset;
+  }
 }
 
 .searchSelectList {
-  min-width: 400px;
+  width: 400px;
   position: absolute;
   z-index: 301;
 
