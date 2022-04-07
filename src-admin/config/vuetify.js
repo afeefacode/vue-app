@@ -6,6 +6,7 @@ import {
   mdiDelete,
   mdiDotsHorizontal,
   mdiDotsVertical,
+  mdiLock,
   mdiLogoutVariant,
   mdiMagnify,
   mdiPencil,
@@ -32,7 +33,8 @@ export default new Vuetify({
       pencilIcon: mdiPencil,
       trashCanIcon: mdiDelete,
       calendarIcon: mdiCalendar,
-      searchIcon: mdiMagnify
+      searchIcon: mdiMagnify,
+      lockIcon: mdiLock
     }
   },
   breakpoint: {
