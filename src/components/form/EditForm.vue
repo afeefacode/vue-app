@@ -8,6 +8,7 @@
     <slot
       :changed="changed"
       :valid="valid"
+      :model="model"
     />
   </v-form>
 </template>
@@ -15,7 +16,6 @@
 
 <script>
 import { Component, Vue, Watch } from '@a-vue'
-import { apiResources } from '@afeefa/api-resources-client'
 
 @Component({
   props: ['model']
@@ -51,10 +51,6 @@ export default class EditForm extends Vue {
   @Watch('changed')
   changedChanged () {
     this.$emit('update:changed', this.changed)
-  }
-
-  get type () {
-    return apiResources.getType(this.model.type)
   }
 }
 </script>
