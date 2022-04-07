@@ -92,6 +92,10 @@ export class ListViewMixin extends Vue {
     this.load()
   }
 
+  reload () {
+    this.load()
+  }
+
   resetFilters () {
     this.listViewModel.resetFilters()
   }
