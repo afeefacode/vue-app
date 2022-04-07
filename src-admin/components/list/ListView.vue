@@ -9,7 +9,7 @@
     </div>
 
     <template v-if="models_.length">
-      <template v-if="_table">
+      <template v-if="table">
         <a-table>
           <a-table-header>
             <div v-if="$has.icon" />
@@ -66,7 +66,7 @@ import { ListViewMixin } from '@a-vue/components/list/ListViewMixin'
 import { LoadingEvent } from '@a-vue/events'
 
 @Component({
-  props: ['table']
+  props: [{table: true}]
 })
 export default class ListView extends Mixins(ListViewMixin) {
   $hasOptions = ['icon']
@@ -81,10 +81,6 @@ export default class ListView extends Mixins(ListViewMixin) {
       }
     }
     this.$emit('update:isLoading', this.isLoading)
-  }
-
-  get _table () {
-    return this.table !== false
   }
 
   setFilter (name, value) {
