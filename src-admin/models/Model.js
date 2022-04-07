@@ -1,10 +1,14 @@
 import { Model as ApiResourcesModel, apiResources } from '@afeefa/api-resources-client'
 import { mdiAlphaMCircle } from '@mdi/js'
 
+export { ModelAdminConfig } from './ModelAdminConfig'
+
 export class Model extends ApiResourcesModel {
   static resourceType = null
   static routeName = null
   static routeIdKey = 'id'
+
+  static config = null
 
   static getLink (action) {
     return (new this()).getLink(action)
