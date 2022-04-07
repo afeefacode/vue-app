@@ -4,9 +4,10 @@
       :class="['content', {order}]"
       @click="toggleSort"
     >
-      <div :class="['text', {active}]">
-        {{ text }}
-      </div>
+      <div
+        :class="['text', {active}]"
+        v-html="text"
+      />
 
       <svg
         v-if="order"
