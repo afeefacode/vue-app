@@ -62,19 +62,11 @@
         </template>
 
         <template #row="{ model }">
-          <v-icon
-            :color="model.getIcon().color"
-            size="1.5rem"
-            v-text="model.getIcon().icon"
-          />
-
           <slot
             name="row"
             :model="model"
             :on="{ click: selectHandler(model) }"
           />
-
-          <div class="lastColumn" />
         </template>
 
         <template #not-found="{ filters }">
