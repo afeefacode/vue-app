@@ -1,7 +1,9 @@
 import { Model as ApiResourcesModel, apiResources } from '@afeefa/api-resources-client'
 import { mdiAlphaMCircle } from '@mdi/js'
 
-export { ModelAdminConfig } from './ModelAdminConfig'
+import { ModelAdminConfig } from './ModelAdminConfig'
+
+export { ModelAdminConfig }
 
 export class Model extends ApiResourcesModel {
   static resourceType = null
@@ -23,6 +25,13 @@ export class Model extends ApiResourcesModel {
     }
     console.warn('You can\'t get an action out of a model without resourceType:', this.type)
     return null
+  }
+
+  static get adminConfig () {
+    return new ModelAdminConfig()
+      .setIcon({
+        icon: mdiAlphaMCircle
+      })
   }
 
   static icon = {
