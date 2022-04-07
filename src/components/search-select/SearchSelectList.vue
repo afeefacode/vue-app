@@ -1,5 +1,5 @@
 <template>
-  <div class="searchSelectList">
+  <div :class="['searchSelectList', {isLoading}]">
     <template v-if="models_.length">
       <a-table v-bind="$attrs">
         <a-table-header
@@ -74,6 +74,10 @@ export default class SearchSelectList extends Mixins(ListViewMixin) {
 
 
 <style scoped lang="scss">
+.isLoading {
+  opacity: .6;
+}
+
 .notFound {
   padding: 0 .5rem .3rem;
 }
