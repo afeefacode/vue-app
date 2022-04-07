@@ -140,7 +140,7 @@ export default class AContextMenu extends Mixins(UsesPositionServiceMixin) {
 .popUpContent {
   min-height: 2.2rem;
   position: absolute;
-  z-index: 200;
+  z-index: 400;
   display: block;
   background-color: white;
   padding: 0.5rem;
