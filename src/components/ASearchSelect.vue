@@ -317,7 +317,7 @@ export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPosit
   position: absolute;
   z-index: 300;
   display: block;
-  padding: 0 0.5rem;
+  padding: 0 .5rem;
 
   ::v-deep .a-row {
     overflow: unset;
@@ -331,6 +331,7 @@ export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPosit
 
   max-height: 40vh;
   overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
 
   ::v-deep .a-table-row {
