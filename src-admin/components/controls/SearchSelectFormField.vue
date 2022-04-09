@@ -21,13 +21,12 @@
         :key="item.id"
         :selected="isClicked(item)"
       >
-        <template
-          v-for="(column, index2) in selectedColumns"
-        >
+        <template v-for="(column, index2) in selectedColumns">
           <v-icon
             v-if="column.icon"
             :key="'icon' + index2"
             :color="column.icon.color"
+            class="selectedIcon"
             size="1.5rem"
             v-text="column.icon.icon"
           />
@@ -35,12 +34,11 @@
           <div
             v-else
             :key="'text' + index2"
+            class="selectedContent"
           >
             {{ column.text(item) }}
           </div>
         </template>
-
-        <div class="spacer" />
 
         <div>
           <a-context-menu
@@ -71,7 +69,7 @@
       <template #activator>
         <a-icon-button
           icon="$plusIcon"
-          text="Berater:in"
+          :text="selectableConfig.addButtonTitle || 'Hinzufügen'"
           class="mt-4"
         />
       </template>
@@ -100,6 +98,7 @@
             v-if="column.icon"
             :key="'icon' + index"
             :color="column.icon.color"
+            class="selectableIcon"
             size="1.5rem"
             v-on="on"
             v-text="column.icon.icon"
@@ -108,6 +107,7 @@
           <div
             v-else
             :key="'text' + index"
+            class="selectableContent"
             v-on="on"
           >
             {{ column.text(model) }}
@@ -123,7 +123,13 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: ['value', 'selectedConfig', 'selectedWidth', 'selectableConfig', 'selectableWidth']
+  props: [
+    'value',
+    'selectedConfig',
+    'selectedWidth',
+    'selectableConfig',
+    'selectableWidth'
+  ]
 })
 export default class SearchSelectFormField extends Vue {
   clickedItem = null
@@ -198,12 +204,20 @@ export default class SearchSelectFormField extends Vue {
 </script>
 
 
-<style lang="scss" scoped>
-.a-table-row > .v-icon:first-child {
-  padding-right: 2rem;
+<style scoped lang="scss">
+.selectedIcon::v-deep {
+  padding-right: .3rem !important;
 }
 
-.a-table-row > *:last-child {
+.selectableIcon::v-deep {
+  padding-right: 2rem !important;
+}
+
+.selectedContent::v-deep {
+  width: 100%;
+}
+
+.selectableContent::v-deep {
   width: 100%;
 }
 </style>
