@@ -9,7 +9,15 @@
     </div>
 
     <template v-if="models_.length">
-      <template v-if="table">
+      <template v-if="$scopedSlots.models">
+        <slot
+          name="models"
+          :models="models_"
+          :setFilter="setFilter"
+        />
+      </template>
+
+      <template v-else-if="$scopedSlots['model-table']">
         <a-table>
           <a-table-header>
             <div v-if="$has.icon" />
@@ -37,7 +45,7 @@
         </a-table>
       </template>
 
-      <template v-else>
+      <template v-else-if="$scopedSlots.model">
         <div
           v-for="model in models_"
           :key="model.id"
@@ -65,9 +73,7 @@ import { Component, Watch, Mixins } from '@a-vue'
 import { ListViewMixin } from '@a-vue/components/list/ListViewMixin'
 import { LoadingEvent } from '@a-vue/events'
 
-@Component({
-  props: [{table: true}]
-})
+@Component
 export default class ListView extends Mixins(ListViewMixin) {
   $hasOptions = ['icon']
 
