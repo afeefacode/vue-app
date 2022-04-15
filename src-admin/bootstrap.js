@@ -4,7 +4,6 @@ import './config/components'
 import { apiResourcesPlugin } from '@a-vue/plugins/api-resources/ApiResourcesPlugin'
 import { hasOptionsPlugin } from '@a-vue/plugins/has-options/HasOptionsPlugin'
 import { timeout } from '@a-vue/utils/timeout'
-import { apiResources } from '@afeefa/api-resources-client'
 import Vue from 'vue'
 
 import { appConfig } from './config/AppConfig'
@@ -17,9 +16,7 @@ Vue.use(hasOptionsPlugin)
 Vue.config.productionTip = false
 
 export async function bootstrap ({ apis, models, routing, authService, app, components }) {
-  apiResources
-    .registerModels(models)
-    .registerApis(apis)
+  apiResourcesPlugin.register(models, apis)
 
   appConfig.authService = authService
   appConfig.app = app
@@ -36,7 +33,7 @@ export async function bootstrap ({ apis, models, routing, authService, app, comp
 
   routing(routeConfigPlugin)
   const router = await routeConfigPlugin.getRouter()
-  await apiResources.schemasLoaded()
+  await apiResourcesPlugin.schemasLoaded()
 
   if (authService) {
     authService.initApp(router)

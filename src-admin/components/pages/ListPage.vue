@@ -21,7 +21,6 @@
 
 <script>
 import { Component, Vue } from '@a-vue'
-import { apiResources } from '@afeefa/api-resources-client'
 
 @Component({
   props: ['icon', 'title', 'newTitle', 'newLink', 'Model']
@@ -38,7 +37,7 @@ export default class ListPage extends Vue {
       return this.title
     }
 
-    const type = apiResources.getType(this.Model.type)
+    const type = this.$apiResources.getType(this.Model.type)
     return type.t('TITLE_PLURAL')
   }
 
@@ -47,7 +46,7 @@ export default class ListPage extends Vue {
       return this.newTitle
     }
 
-    const type = apiResources.getType(this.Model.type)
+    const type = this.$apiResources.getType(this.Model.type)
     return type.t('TITLE_SINGULAR')
   }
 

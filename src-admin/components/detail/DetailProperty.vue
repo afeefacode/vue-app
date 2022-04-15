@@ -25,7 +25,6 @@
 
 <script>
 import { Component, Vue } from '@a-vue'
-import { apiResources } from '@afeefa/api-resources-client'
 
 @Component({
   props: ['icon', 'iconModelType', 'label']
@@ -37,7 +36,7 @@ export default class DetailProperty extends Vue {
     }
 
     if (this.iconModelType) {
-      const ModelClass = apiResources.getModelClass(this.iconModelType)
+      const ModelClass = this.$apiResources.getModelClass(this.iconModelType)
       return ModelClass.icon
     }
   }
@@ -77,6 +76,5 @@ export default class DetailProperty extends Vue {
       padding-left: 55px;
     }
   }
-
 }
 </style>

@@ -1,6 +1,5 @@
-import { ListAction } from '@a-vue/api-resources/ApiActions'
-import { apiResources } from '@afeefa/api-resources-client'
 import { Component, Vue } from '@a-vue'
+import { ListAction } from '@a-vue/api-resources/ApiActions'
 
 @Component({
   props: ['name', 'label']
@@ -17,7 +16,7 @@ export class FormFieldMixin extends Vue {
   }
 
   get modelType () {
-    return apiResources.getType(this.model.type)
+    return this.$apiResources.getType(this.model.type)
   }
 
   get field () {

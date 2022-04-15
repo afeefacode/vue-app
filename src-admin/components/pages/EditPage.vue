@@ -66,7 +66,6 @@
 
 <script>
 import { Component, Mixins, Watch } from '@a-vue'
-import { apiResources } from '@afeefa/api-resources-client'
 import { EditPageMixin } from './EditPageMixin'
 
 @Component({
@@ -123,7 +122,7 @@ export default class EditPage extends Mixins(EditPageMixin) {
       return this.title
     }
 
-    const type = apiResources.getType(this.ModelClass.type)
+    const type = this.$apiResources.getType(this.ModelClass.type)
     return type.t('TITLE_EMPTY')
   }
 

@@ -49,7 +49,6 @@
 <script>
 import { Component, Mixins } from '@a-vue'
 import { EditPageMixin } from './EditPageMixin'
-import { apiResources } from '@afeefa/api-resources-client'
 
 @Component({
   props: ['icon', 'title', 'createModel', 'listLink']
@@ -86,7 +85,7 @@ export default class CreatePage extends Mixins(EditPageMixin) {
       return this.title
     }
 
-    const type = apiResources.getType(this.ModelClass.type)
+    const type = this.$apiResources.getType(this.ModelClass.type)
     return type.t('TITLE_NEW')
   }
 
