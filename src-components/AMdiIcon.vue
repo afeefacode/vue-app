@@ -1,11 +1,15 @@
 <template>
-  <div>ICON</div>
+  <div>TEST</div>
 </template>
 
 
 <script>
-export default {
+import { Component, Vue } from '@a-vue'
 
+@Component({
+  props: ['name']
+})
+export default class Splash extends Vue {
 }
 </script>
 
