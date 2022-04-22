@@ -1,21 +1,18 @@
 <template>
   <div :class="['a-rich-text-editor a-text-input', {'a-text-input-focused': focus}]">
     <div v-if="editor">
-      <button
-        type="button"
-        :class="{ 'is-active': editor.isActive('bold') }"
+      <a-icon-button
+        :class="['menu-button', {'is-active': editor.isActive('bold')}]"
+        :icon="boldIcon"
         @click="editor.chain().focus().toggleBold().run()"
-      >
-        bold
-        <a-mdi-icon />
-      </button>
-      <button
-        type="button"
-        :class="{ 'is-active': editor.isActive('italic') }"
+      />
+
+      <a-icon-button
+        :icon="italicIcon"
+        :class="['menu-button', {'is-active': editor.isActive('italic')}]"
         @click="editor.chain().focus().toggleItalic().run()"
-      >
-        italic
-      </button>
+      />
+
       <button
         type="button"
         :class="{ 'is-active': editor.isActive('strike') }"
@@ -37,6 +34,7 @@
 import { Component, Vue, Watch } from '@a-vue'
 import { Editor, EditorContent } from '@tiptap/vue-2'
 import StarterKit from '@tiptap/starter-kit'
+import { mdiFormatBold, mdiFormatItalic } from '@mdi/js'
 
 @Component({
   props: ['value', 'validator'],
@@ -48,6 +46,9 @@ export default class ARichTextArea extends Vue {
   editor = null
   internalValue = null
   focus = false
+
+  boldIcon = mdiFormatBold
+  italicIcon = mdiFormatItalic
 
   created () {
     this.internalValue = this.value
@@ -116,6 +117,21 @@ export default class ARichTextArea extends Vue {
     &-focused {
       outline: none;
     }
+  }
+}
+
+.menu-button {
+  padding: 0 !important;
+  width: 30px !important;
+  min-width: unset !important;
+  text-align: center;
+
+  ::v-deep svg {
+    width: unset;
+  }
+
+  &.is-active {
+    background: #CCCCCC !important;
   }
 }
 </style>
