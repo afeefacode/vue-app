@@ -1,25 +1,88 @@
 <template>
   <div :class="['a-rich-text-editor a-text-input', {'a-text-input-focused': focus}]">
-    <div v-if="editor">
-      <a-icon-button
-        :class="['menu-button', {'is-active': editor.isActive('bold')}]"
-        :icon="boldIcon"
+    <div
+      v-if="editor"
+      class="menu-bar"
+    >
+      <v-btn
+        small
+        :class="['menu-button', {'is-active': focus && editor.isActive('bold')}]"
         @click="editor.chain().focus().toggleBold().run()"
-      />
+      >
+        <v-icon>{{ boldIcon }}</v-icon>
+      </v-btn>
 
-      <a-icon-button
-        :icon="italicIcon"
-        :class="['menu-button', {'is-active': editor.isActive('italic')}]"
+      <v-btn
+        small
+        :class="['menu-button', {'is-active': focus && editor.isActive('italic')}]"
         @click="editor.chain().focus().toggleItalic().run()"
-      />
+      >
+        <v-icon>{{ italicIcon }}</v-icon>
+      </v-btn>
 
-      <button
-        type="button"
-        :class="{ 'is-active': editor.isActive('strike') }"
+      <v-btn
+        small
+        :class="['menu-button', 'strike', {'is-active': focus && editor.isActive('strike')}]"
         @click="editor.chain().focus().toggleStrike().run()"
       >
-        strike
-      </button>
+        <v-icon>{{ strikeIcon }}</v-icon>
+      </v-btn>
+
+      <v-btn
+        small
+        :class="['menu-button', {'is-active': focus && editor.isActive('heading', {level: 1})}]"
+        @click="editor.chain().focus().toggleHeading({level: 1}).run()"
+      >
+        <v-icon>{{ h1Icon }}</v-icon>
+      </v-btn>
+
+      <v-btn
+        small
+        :class="['menu-button', {'is-active': focus && editor.isActive('heading', {level: 2})}]"
+        @click="editor.chain().focus().toggleHeading({level: 2}).run()"
+      >
+        <v-icon>{{ h2Icon }}</v-icon>
+      </v-btn>
+
+      <v-btn
+        small
+        :class="['menu-button', {'is-active': focus && editor.isActive('bulletList')}]"
+        @click="editor.chain().focus().toggleBulletList().run()"
+      >
+        <v-icon>{{ ulIcon }}</v-icon>
+      </v-btn>
+
+      <v-btn
+        small
+        :class="['menu-button', {'is-active': focus && editor.isActive('orderedList')}]"
+        @click="editor.chain().focus().toggleOrderedList().run()"
+      >
+        <v-icon>{{ olIcon }}</v-icon>
+      </v-btn>
+
+      <v-btn
+        small
+        :class="['menu-button', {'is-active': focus && editor.isActive('blockquote')}]"
+        @click="editor.chain().focus().toggleBlockquote().run()"
+      >
+        <v-icon>{{ commentIcon }}</v-icon>
+      </v-btn>
+
+      <v-btn
+        small
+        class="menu-button"
+        @click="editor.chain().focus().undo().run()"
+      >
+        <v-icon>{{ undoIcon }}</v-icon>
+      </v-btn>
+
+      <v-btn
+        small
+        class="menu-button"
+        @click="editor.chain().focus().redo().run()"
+      >
+        <v-icon>{{ redoIcon }}</v-icon>
+      </v-btn>
     </div>
 
     <editor-content
@@ -34,7 +97,18 @@
 import { Component, Vue, Watch } from '@a-vue'
 import { Editor, EditorContent } from '@tiptap/vue-2'
 import StarterKit from '@tiptap/starter-kit'
-import { mdiFormatBold, mdiFormatItalic } from '@mdi/js'
+import {
+  mdiFormatBold,
+  mdiFormatItalic,
+  mdiFormatStrikethroughVariant,
+  mdiFormatHeader1,
+  mdiFormatHeader2,
+  mdiFormatListBulleted,
+  mdiFormatListNumbered,
+  mdiFormatQuoteClose,
+  mdiRotateLeft,
+  mdiRotateRight
+} from '@mdi/js'
 
 @Component({
   props: ['value', 'validator'],
@@ -49,6 +123,14 @@ export default class ARichTextArea extends Vue {
 
   boldIcon = mdiFormatBold
   italicIcon = mdiFormatItalic
+  strikeIcon = mdiFormatStrikethroughVariant
+  h1Icon = mdiFormatHeader1
+  h2Icon = mdiFormatHeader2
+  ulIcon = mdiFormatListBulleted
+  olIcon = mdiFormatListNumbered
+  commentIcon = mdiFormatQuoteClose
+  undoIcon = mdiRotateLeft
+  redoIcon = mdiRotateRight
 
   created () {
     this.internalValue = this.value
@@ -60,7 +142,7 @@ export default class ARichTextArea extends Vue {
     }
 
     this.editor = new Editor({
-      content: '<p>I’m running Tiptap with Vue.js. 🎉</p>',
+      content: this.internalValue,
       extensions: [
         StarterKit
       ],
@@ -120,18 +202,56 @@ export default class ARichTextArea extends Vue {
   }
 }
 
+.menu-bar {
+  margin: -.2rem 0 .5rem -.2rem;
+}
+
 .menu-button {
   padding: 0 !important;
   width: 30px !important;
+  height: 32px !important;
   min-width: unset !important;
   text-align: center;
+  font-size: 1rem;
+  background: white !important;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
 
-  ::v-deep svg {
+  ::v-deep .v-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  &.strike {
+    ::v-deep .v-icon {
+      width: 15px;
+    }
+  }
+
+  svg {
     width: unset;
   }
 
   &.is-active {
-    background: #CCCCCC !important;
+    background: #ECECEC !important;
+  }
+}
+
+::v-deep .ProseMirror {
+  min-height: 200px;
+
+  > :last-child {
+    margin: 0;
+  }
+
+  li p {
+    margin: 0;
+  }
+
+  ul {
+    margin: 16px 0;
   }
 }
 </style>
