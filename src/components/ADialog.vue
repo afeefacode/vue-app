@@ -132,6 +132,8 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
     if (!Array.isArray(anchor)) {
       if (typeof anchor === 'string') {
         anchor = [document.documentElement, anchor]
+      } else if (typeof anchor === 'object') { // dom element or vue ref
+        anchor = [anchor]
       } else {
         anchor = [document.documentElement]
       }
