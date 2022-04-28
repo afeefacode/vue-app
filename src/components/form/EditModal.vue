@@ -21,7 +21,7 @@
 
       <template #default="{changed, valid}">
         <a-row
-          class="mt-8 mb-2 gap-4"
+          class="mt-8 mb-1 pb-1 gap-4"
           right
         >
           <v-btn
@@ -31,23 +31,25 @@
             Schließen
           </v-btn>
 
-          <v-btn
-            small
-            :disabled="!changed || !valid"
-            color="green white--text"
-            @click="save"
-          >
-            Speichern
-          </v-btn>
+          <a-row gap="2">
+            <v-btn
+              small
+              :disabled="!changed || !valid"
+              color="green white--text"
+              @click="save"
+            >
+              Speichern
+            </v-btn>
 
-          <v-btn
-            v-if="changed"
-            small
-            text
-            @click="reset"
-          >
-            Zurücksetzen
-          </v-btn>
+            <v-icon
+              v-if="changed"
+              small
+              text
+              @click="reset"
+            >
+              {{ undoIcon }}
+            </v-icon>
+          </a-row>
         </a-row>
       </template>
     </edit-form>
@@ -57,12 +59,15 @@
 
 <script>
 import { Component, Vue, Watch } from '@a-vue'
+import { mdiRotateLeft} from '@mdi/js'
 
 @Component({
   props: ['model', 'title', 'show']
 })
 export default class EditModal extends Vue {
   show_ = false
+
+  undoIcon = mdiRotateLeft
 
   /**
    * visiblility changes from outside
