@@ -17,7 +17,9 @@ import { Component, Mixins } from '@a-vue'
 import { ListFilterMixin } from '../ListFilterMixin'
 import { ListAction } from '@a-vue/api-resources/ApiActions'
 
-@Component
+@Component({
+  props: ['itemTitle']
+})
 export default class ListFilterSelect extends Mixins(ListFilterMixin) {
   items = null
 
@@ -61,7 +63,7 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
     return [
       ...this.createOptions(),
       ...models.map(model => ({
-        itemTitle: model.name,
+        itemTitle: (this.itemTitle && this.itemTitle(model)) || model.name || model.title,
         itemValue: model.id
       }))
     ]
