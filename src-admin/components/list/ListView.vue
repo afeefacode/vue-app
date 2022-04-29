@@ -28,6 +28,7 @@
           <a-table-row
             v-for="model in models_"
             :key="model.id"
+            :class="getModelClass(model)"
           >
             <v-icon
               v-if="$has.icon"
@@ -49,6 +50,7 @@
         <div
           v-for="model in models_"
           :key="model.id"
+          :class="getModelClass(model)"
         >
           <slot
             name="model"
@@ -73,7 +75,9 @@ import { Component, Watch, Mixins } from '@a-vue'
 import { ListViewMixin } from '@a-vue/components/list/ListViewMixin'
 import { LoadingEvent } from '@a-vue/events'
 
-@Component
+@Component({
+  props: ['modelClass']
+})
 export default class ListView extends Mixins(ListViewMixin) {
   $hasOptions = ['icon']
 
@@ -87,6 +91,10 @@ export default class ListView extends Mixins(ListViewMixin) {
       }
     }
     this.$emit('update:isLoading', this.isLoading)
+  }
+
+  getModelClass (model) {
+    return this.modelClass && this.modelClass(model)
   }
 
   setFilter (name, value) {
