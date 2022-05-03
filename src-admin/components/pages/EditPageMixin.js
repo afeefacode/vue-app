@@ -1,6 +1,6 @@
+import { Component, Vue } from '@a-vue'
 import { SaveAction } from '@a-vue/api-resources/ApiActions'
 import { DialogEvent } from '@a-vue/events'
-import { Component, Vue } from '@a-vue'
 
 @Component({
   props: ['saveAction']
@@ -79,6 +79,7 @@ export class EditPageMixin extends Vue {
 
   reset () {
     this.modelToEdit = this.createModelToEdit()
+    this.$emit('model', this.modelToEdit)
   }
 
   afterSave (_model) {

@@ -23,14 +23,6 @@
       </v-btn>
     </app-bar-button>
 
-    <component
-      :is="Component"
-      v-if="false"
-      :model="modelToEdit"
-      :valid.sync="valid"
-      :changed.sync="changed"
-    />
-
     <edit-form
       :model="modelToEdit"
       :valid.sync="valid"
@@ -83,14 +75,12 @@ export default class EditPage extends Mixins(EditPageMixin) {
 
     this.model_ = this.model
     this.reset()
-    this.$emit('model', this.modelToEdit)
   }
 
   @Watch('model')
   modelChanged () {
     this.model_ = this.model
     this.reset()
-    this.$emit('model', this.modelToEdit)
   }
 
   get editConfig () {
