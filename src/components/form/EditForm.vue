@@ -26,8 +26,17 @@ export default class EditForm extends Vue {
   valid = false
   lastJson = null
 
-  created () {
+  /**
+   * This will be triggered after the this.model has been set
+   * but before sub components may have changed model values
+   * as a date field, which could turn a null to a default date.
+   * Using the created() method would result in already having set
+   * the default date, hence not detecting a valid "change" anymore.
+   */
+  @Watch('model', {immediate: true})
+  modelChanged () {
     this.lastJson = this.json
+    this.$emit('update:changed', this.changed)
   }
 
   get json () {
@@ -36,11 +45,6 @@ export default class EditForm extends Vue {
 
   get changed () {
     return this.json !== this.lastJson
-  }
-
-  @Watch('model')
-  modelChanged () {
-    this.lastJson = this.json
   }
 
   @Watch('valid')
