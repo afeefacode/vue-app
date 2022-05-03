@@ -8,11 +8,13 @@
   >
     <template #activator="{ on, attrs }">
       <v-combobox
+        ref="input"
         :value="formattedDate"
         :label="label"
         :style="cwm_widthStyle"
         readonly
         v-bind="attrs"
+        :rules="validationRules"
         v-on="on"
         @click.native="on.click"
       />
@@ -37,7 +39,7 @@ import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
   props: ['value', 'validator']
 })
 export default class ADatePicker extends Mixins(ComponentWidthMixin) {
-  value_ = new Date()
+  value_ = null
   menu = false
 
   created () {
