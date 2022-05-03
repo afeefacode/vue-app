@@ -11,12 +11,14 @@ import FormFieldSelect from './form/fields/FormFieldSelect'
 import FormFieldSelect2 from './form/fields/FormFieldSelect2'
 import FormFieldText from './form/fields/FormFieldText'
 import FormFieldTextArea from './form/fields/FormFieldTextArea'
+import NestedEditForm from './form/NestedEditForm'
 import ListFilterPage from './list/filters/ListFilterPage'
 import ListFilterSearch from './list/filters/ListFilterSearch'
 import ListFilterSelect from './list/filters/ListFilterSelect'
 import ListFilterRow from './list/ListFilterRow'
 
 Vue.component('EditForm', EditForm)
+Vue.component('NestedEditForm', NestedEditForm)
 Vue.component('EditModal', EditModal)
 Vue.component('FormFieldText', FormFieldText)
 Vue.component('FormFieldTextArea', FormFieldTextArea)
