@@ -44,6 +44,8 @@ export default class EditForm extends Vue {
   }
 
   get changed () {
+    // console.log(this.json)
+    // console.log(this.lastJson)
     return this.json !== this.lastJson
   }
 
