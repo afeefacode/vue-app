@@ -151,9 +151,11 @@ export default class ARichTextArea extends Vue {
       },
       onFocus: ({ editor, event }) => {
         this.focus = true
+        this.$emit('focus')
       },
       onBlur: ({ editor, event }) => {
         this.focus = false
+        this.$emit('blur')
       }
     })
 
