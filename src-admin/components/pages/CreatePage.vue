@@ -30,6 +30,7 @@
     <a-row class="mt-6">
       <v-btn
         :disabled="!changed || !valid"
+        color="green white--text"
         @click="save"
       >
         Anlegen
@@ -55,16 +56,15 @@ import { EditPageMixin } from './EditPageMixin'
 })
 export default class CreatePage extends Mixins(EditPageMixin) {
   created () {
-    if (!this.$parent.constructor.createRouteConfig) {
+    if (!this.$parent.constructor.getCreateRouteConfig) {
       console.warn('<create-page> owner must provide a static createRouteConfig method.')
     }
 
     this.reset()
-    this.$emit('model', this.modelToEdit)
   }
 
   get editConfig () {
-    return this.$parent.constructor.createRouteConfig
+    return this.$parent.constructor.getCreateRouteConfig(this.$route)
   }
 
   get modelUpateAction () {
