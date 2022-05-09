@@ -78,7 +78,11 @@ export class EditPageMixin extends Vue {
   }
 
   reset () {
-    this.modelToEdit = this.createModelToEdit()
+    const modelToEdit = this.createModelToEdit()
+    if (this.editConfig.createModelToEdit) {
+      this.editConfig.createModelToEdit(modelToEdit)
+    }
+    this.modelToEdit = modelToEdit // this assignment makes modelToEdit recursively reactive
     this.$emit('model', this.modelToEdit)
   }
 
