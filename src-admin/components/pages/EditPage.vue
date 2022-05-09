@@ -61,7 +61,13 @@ import { Component, Mixins, Watch } from '@a-vue'
 import { EditPageMixin } from './EditPageMixin'
 
 @Component({
-  props: ['model', 'icon', 'title', 'listLink', 'getAction']
+  props: [
+    'model',
+    'icon',
+    'title',
+    'listLink',
+    'getAction'
+  ]
 })
 export default class EditPage extends Mixins(EditPageMixin) {
   $hasOptions = ['detail', {list: false}]
