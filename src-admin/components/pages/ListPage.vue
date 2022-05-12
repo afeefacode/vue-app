@@ -37,8 +37,7 @@ export default class ListPage extends Vue {
       return this.title
     }
 
-    const type = this.$apiResources.getType(this.Model.type)
-    return type.t('TITLE_PLURAL')
+    return this.$t('Admin.Types', this.Model.type, null, 'TITLE_PLURAL', 'de')
   }
 
   get _newTitle () {
@@ -46,8 +45,7 @@ export default class ListPage extends Vue {
       return this.newTitle
     }
 
-    const type = this.$apiResources.getType(this.Model.type)
-    return type.t('TITLE_SINGULAR')
+    return this.$t('Admin.Types', this.Model.type, null, 'TITLE_SINGULAR', 'de')
   }
 
   get _newLink () {

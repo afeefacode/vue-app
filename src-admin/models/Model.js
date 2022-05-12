@@ -1,3 +1,4 @@
+import { translationService } from '@a-admin/services/TranslationService'
 import { Model as ApiResourcesModel, apiResources } from '@afeefa/api-resources-client'
 import { mdiAlphaMCircle } from '@mdi/js'
 
@@ -37,6 +38,10 @@ export class Model extends ApiResourcesModel {
   static icon = {
     icon: mdiAlphaMCircle,
     color: 'blue lighten-2'
+  }
+
+  static translate (realm, objectType, objectId, key, lang) {
+    return translationService.translate(realm, objectType, objectId, key, lang)
   }
 
   getLink (action = 'detail') {

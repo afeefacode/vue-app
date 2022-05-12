@@ -85,8 +85,7 @@ export default class CreatePage extends Mixins(EditPageMixin) {
       return this.title
     }
 
-    const type = this.$apiResources.getType(this.ModelClass.type)
-    return type.t('TITLE_NEW')
+    return this.$t('Admin.Types', this.ModelClass.type, null, 'TITLE_NEW', 'de')
   }
 
   get _listLink () {

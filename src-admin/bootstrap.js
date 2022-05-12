@@ -1,6 +1,7 @@
 import './config/event-bus'
 import './config/components'
 
+import { translationPlugin } from '@a-admin/plugins/translation/TranslationPlugin'
 import { apiResourcesPlugin } from '@a-vue/plugins/api-resources/ApiResourcesPlugin'
 import { hasOptionsPlugin } from '@a-vue/plugins/has-options/HasOptionsPlugin'
 import { timeout } from '@a-vue/utils/timeout'
@@ -12,10 +13,11 @@ import vuetify from './config/vuetify'
 
 Vue.use(apiResourcesPlugin)
 Vue.use(hasOptionsPlugin)
+Vue.use(translationPlugin)
 
 Vue.config.productionTip = false
 
-export async function bootstrap ({ apis, models, routing, authService, app, components }) {
+export async function bootstrap ({ apis, models, routing, authService, getTranslations, app, components }) {
   apiResourcesPlugin.register(models, apis)
 
   appConfig.authService = authService
@@ -34,6 +36,11 @@ export async function bootstrap ({ apis, models, routing, authService, app, comp
   routing(routeConfigPlugin)
   const router = await routeConfigPlugin.getRouter()
   await apiResourcesPlugin.schemasLoaded()
+
+  if (getTranslations) {
+    const translations = await getTranslations(apiResourcesPlugin.apiResources)
+    translationPlugin.setTranslations(translations.models)
+  }
 
   if (authService) {
     authService.initApp(router)
