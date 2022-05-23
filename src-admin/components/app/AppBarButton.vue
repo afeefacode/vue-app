@@ -8,12 +8,20 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: ['prepend']
+  props: {
+    prepend: {
+      type: Boolean
+    }
+  }
 })
 export default class AppBarButton extends Vue {
   mounted () {
     const section = this.getButtonBar()
-    section.appendChild(this.$el)
+    if (this.prepend) {
+      section.prepend(this.$el)
+    } else {
+      section.append(this.$el)
+    }
   }
 
   destroyed () {
