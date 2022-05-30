@@ -60,7 +60,7 @@
     </div>
 
     <a-search-select
-      :listViewConfig="selectableConfig.listViewConfig"
+      :listAction="selectableConfig.listAction"
       :loadOnlyIfKeyword="false"
       :selectedItems="selectableSelectedItems"
       :width="selectableWidth"

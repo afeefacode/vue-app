@@ -8,7 +8,7 @@ import { FilterSourceType } from './FilterSourceType'
 @Component({
   props: [
     'models', 'meta', // given, if already loaded
-    'listViewConfig',
+    'listAction',
     'filterHistoryKey',
     'loadOnlyIfKeyword',
     {
@@ -52,7 +52,7 @@ export class ListViewMixin extends Vue {
       this.meta_ = this.meta
     }
 
-    this.listViewModel = new ListViewModel(this.listViewConfig)
+    this.listViewModel = new ListViewModel(this.listAction)
       .filterSource(filterSource, !!filterSource)
       .historyKey(historyKey, this.history)
       .usedFilters(this.meta_.used_filters || null, this.meta_.count_search || 0)

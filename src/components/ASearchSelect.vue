@@ -45,7 +45,7 @@
     <div :class="listCssClass">
       <search-select-list
         v-if="isOpen"
-        :listViewConfig="listViewConfig"
+        :listAction="listAction"
         :q="q"
         :selectedItems="selectedItems"
         :events="false"
@@ -96,7 +96,7 @@ import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
   props: [
-    'listViewConfig',
+    'listAction',
     'q',
     'width',
     'closeOnSelect',
