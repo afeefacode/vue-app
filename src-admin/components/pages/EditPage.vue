@@ -1,151 +1,55 @@
 <template>
-  <div class="editPage">
-    <app-bar-title
-      :icon="_icon"
-      :title="_title"
-    />
+  <edit-form
+    ref="form"
+    :model="model"
+    :createModelToEdit="createModelToEdit"
+  >
+    <template #default="{model, changed, valid}">
+      <slot
+        :model="model"
+        :changed="changed"
+        :valid="valid"
+      />
 
-    <app-bar-button v-if="$has.list">
-      <v-btn
-        :to="_listLink"
-        small
-      >
-        Liste
-      </v-btn>
-    </app-bar-button>
-
-    <app-bar-button v-if="$has.detail">
-      <v-btn
-        :to="model.getLink()"
-        small
-      >
-        Ansehen
-      </v-btn>
-    </app-bar-button>
-
-    <edit-form
-      :model="modelToEdit"
-      :valid.sync="valid"
-      :changed.sync="changed"
-    >
-      <template #fields>
-        <slot
-          name="fields"
-          :model="modelToEdit"
-        />
-      </template>
-    </edit-form>
-
-    <a-row class="mt-8">
-      <v-btn
-        :disabled="!changed || !valid"
-        color="green white--text"
-        @click="save"
-      >
-        Speichern
-      </v-btn>
-
-      <v-btn
-        v-if="changed"
-        text
-        @click="reset"
-      >
-        Zurücksetzen
-      </v-btn>
-    </a-row>
-  </div>
+      <edit-form-buttons
+        :changed="changed"
+        :valid="valid"
+        @save="$emit('save', model)"
+        @reset="$refs.form.reset()"
+      />
+    </template>
+  </edit-form>
 </template>
 
 <script>
-import { Component, Mixins, Watch } from '@a-vue'
-import { EditPageMixin } from './EditPageMixin'
+import { Component, Vue } from '@a-vue'
+import { DialogEvent } from '@a-vue/events'
 
 @Component({
-  props: [
-    'model',
-    'icon',
-    'title',
-    'listLink',
-    'getAction'
-  ]
+  props: ['model', 'createModelToEdit']
 })
-export default class EditPage extends Mixins(EditPageMixin) {
-  $hasOptions = ['detail', {list: false}]
-
-  model_ = null
+export default class EditPage extends Vue {
+  unregisterRouterHook = null
 
   created () {
-    if (!this.$parent.constructor.getEditRouteConfig) {
-      console.warn('<edit-page> owner must provide a static getEditRouteConfig method.')
-    }
-
-    this.model_ = this.model
-    this.reset()
-  }
-
-  @Watch('model')
-  modelChanged () {
-    this.model_ = this.model
-    this.reset()
-  }
-
-  get editConfig () {
-    return this.$parent.constructor.getEditRouteConfig(this.$route)
-  }
-
-  get modelUpateAction () {
-    return this.editConfig.updateAction || this.ModelClass.getAction('save')
-  }
-
-  get _getAction () {
-    if (this.getAction) {
-      return this.getAction
-    }
-    return this.ModelClass.getAction('get')
-  }
-
-  get _icon () {
-    return this.icon || this.model.getIcon()
-  }
-
-  get _title () {
-    const title = this.modelToEdit.getTitle()
-    if (title) {
-      return title
-    }
-
-    if (this.title) {
-      return this.title
-    }
-
-    return this.$t('Admin.Types', this.ModelClass.type, null, 'TITLE_EMPTY', 'de')
-  }
-
-  get _listLink () {
-    if (this.listLink) {
-      if (typeof this.listLink === 'function') {
-        return this.listLink()
-      } else {
-        return this.listLink
+    this.unregisterRouterHook = this.$router.beforeEach(async (to, from, next) => {
+      if (this.$refs.form.changed) {
+        const result = await this.$events.dispatch(new DialogEvent(DialogEvent.SHOW, {
+          title: 'Änderungen verwerfen?',
+          message: 'Im Formular sind nicht gespeicherte Änderungen. Sollen diese verworfen werden?',
+          yesButton: 'Verwerfen'
+        }))
+        if (result === DialogEvent.RESULT_YES) {
+          next()
+        }
+        return
       }
-    }
-    return this.model.getLink('list')
+      next()
+    })
   }
 
-  createModelToEdit () {
-    return this.model_.cloneForEdit(this.fields)
-  }
-
-  get saveParams () {
-    return {
-      id: this.model.id
-    }
-  }
-
-  afterSave (model) {
-    this.model_ = model
-    this.reset()
-    this.$emit('saved', model)
+  destroyed () {
+    this.unregisterRouterHook()
   }
 }
 </script>

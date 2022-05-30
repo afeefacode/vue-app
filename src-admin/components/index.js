@@ -7,7 +7,8 @@ import DetailContent from './detail/DetailContent'
 import DetailMeta from './detail/DetailMeta'
 import DetailProperty from './detail/DetailProperty'
 import DetailTitle from './detail/DetailTitle'
-import Start from './Start.vue'
+import EditFormButtons from './form/EditFormButtons'
+import RemoveButton from './form/RemoveButton'
 import ListCard from './list/ListCard'
 import ListColumnHeader from './list/ListColumnHeader'
 import ListContent from './list/ListContent'
@@ -20,6 +21,7 @@ import CreatePage from './pages/CreatePage'
 import DetailPage from './pages/DetailPage'
 import EditPage from './pages/EditPage'
 import ListPage from './pages/ListPage'
+import Start from './Start.vue'
 
 Vue.component('ListCard', ListCard)
 Vue.component('ListColumnHeader', ListColumnHeader)
@@ -32,6 +34,8 @@ Vue.component('ListPage', ListPage)
 Vue.component('CreatePage', CreatePage)
 
 Vue.component('EditPage', EditPage)
+Vue.component('EditFormButtons', EditFormButtons)
+Vue.component('RemoveButton', RemoveButton)
 
 Vue.component('ModelCount', ModelCount)
 Vue.component('ModelIcon', ModelIcon)
