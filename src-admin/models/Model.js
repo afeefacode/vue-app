@@ -17,11 +17,11 @@ export class Model extends ApiResourcesModel {
     return (new this()).getLink(action)
   }
 
-  static getAction (action) {
+  static getAction (actionName) {
     if (this.resourceType) {
       return apiResources.getAction({
-        resource: this.resourceType,
-        action
+        resourceType: this.resourceType,
+        actionName
       })
     }
     console.warn('You can\'t get an action out of a model without resourceType:', this.type)
