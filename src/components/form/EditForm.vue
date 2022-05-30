@@ -3,12 +3,10 @@
     v-model="valid"
     autocomplete="off"
   >
-    <slot name="fields" />
-
     <slot
       :changed="changed"
       :valid="valid"
-      :model="model"
+      :model="modelToEdit"
     />
   </v-form>
 </template>
@@ -18,13 +16,30 @@
 import { Component, Vue, Watch } from '@a-vue'
 
 @Component({
-  props: ['model']
+  props: [
+    'model',
+    'createModelToEdit'
+  ]
 })
 export default class EditForm extends Vue {
   EDIT_FORM = true
 
+  modelToEdit = null
   valid = false
   lastJson = null
+
+  created () {
+    this.reset()
+  }
+
+  reset () {
+    if (this.createModelToEdit) {
+      this.modelToEdit = this.createModelToEdit(this.model)
+    } else {
+      this.modelToEdit = this.model
+    }
+    this.lastJson = this.json
+  }
 
   /**
    * This will be triggered after the this.model has been set
@@ -33,14 +48,20 @@ export default class EditForm extends Vue {
    * Using the created() method would result in already having set
    * the default date, hence not detecting a valid "change" anymore.
    */
-  @Watch('model', {immediate: true})
+  // @Watch('modelToEdit', {immediate: true})
+  // @Watch('modelToEdit')
+  // modelToEditChanged () {
+  //   this.lastJson = this.json
+  //   this.$emit('update:changed', this.changed)
+  // }
+
+  @Watch('model')
   modelChanged () {
-    this.lastJson = this.json
-    this.$emit('update:changed', this.changed)
+    this.reset()
   }
 
   get json () {
-    return JSON.stringify(this.model)
+    return JSON.stringify(this.modelToEdit)
   }
 
   get changed () {

@@ -9,7 +9,7 @@ export class FormFieldMixin extends Vue {
     let parent = this
     while (parent) {
       if (parent.EDIT_FORM) {
-        return parent.model
+        return parent.modelToEdit
       }
       parent = parent.$parent
     }
