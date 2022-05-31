@@ -21,5 +21,9 @@ export default class NestedEditForm extends Vue {
       console.warn('Nested edit form does not have a model.')
     }
   }
+
+  get modelToEdit () {
+    return this.model
+  }
 }
 </script>
