@@ -14,7 +14,7 @@
       <edit-form-buttons
         :changed="changed"
         :valid="valid"
-        @save="$emit('save', model)"
+        @save="$emit('save', model, ignoreChangesOnRouteChange)"
         @reset="$refs.form.reset()"
       />
     </template>
@@ -30,10 +30,11 @@ import { DialogEvent } from '@a-vue/events'
 })
 export default class EditPage extends Vue {
   unregisterRouterHook = null
+  ignoreChangesOnRouteChange_ = false
 
   created () {
     this.unregisterRouterHook = this.$router.beforeEach(async (to, from, next) => {
-      if (this.$refs.form.changed) {
+      if (this.$refs.form.changed && !this.ignoreChangesOnRouteChange_) {
         const result = await this.$events.dispatch(new DialogEvent(DialogEvent.SHOW, {
           title: 'Änderungen verwerfen?',
           message: 'Im Formular sind nicht gespeicherte Änderungen. Sollen diese verworfen werden?',
@@ -50,6 +51,10 @@ export default class EditPage extends Vue {
 
   destroyed () {
     this.unregisterRouterHook()
+  }
+
+  ignoreChangesOnRouteChange () {
+    this.ignoreChangesOnRouteChange_ = true
   }
 }
 </script>
