@@ -28,7 +28,11 @@
           <a-table-row
             v-for="model in models_"
             :key="model.id"
-            :class="getModelClass(model)"
+            v-flying-context-trigger="hasFlyingContext"
+            :class="{selectable: hasFlyingContext}"
+            v-bind="getRowAttributes(model)"
+            v-on="getRowListeners(model)"
+            @click="$emit('flyingContext', model)"
           >
             <v-icon
               v-if="$has.icon"
@@ -50,7 +54,6 @@
         <div
           v-for="model in models_"
           :key="model.id"
-          :class="getModelClass(model)"
         >
           <slot
             name="model"
@@ -76,7 +79,7 @@ import { ListViewMixin } from '@a-vue/components/list/ListViewMixin'
 import { LoadingEvent } from '@a-vue/events'
 
 @Component({
-  props: ['modelClass']
+  props: ['rowAttributes', 'rowListeners']
 })
 export default class ListView extends Mixins(ListViewMixin) {
   $hasOptions = ['icon']
@@ -93,8 +96,19 @@ export default class ListView extends Mixins(ListViewMixin) {
     this.$emit('update:isLoading', this.isLoading)
   }
 
-  getModelClass (model) {
-    return this.modelClass && this.modelClass(model)
+  getRowAttributes (model) {
+    if (typeof this.rowAttributes === 'function') {
+      return this.rowAttributes(model)
+    }
+    return this.rowAttributes
+  }
+
+  getRowListeners (model) {
+    return (this.rowListeners && this.rowListeners(model)) || {}
+  }
+
+  get hasFlyingContext () {
+    return !!this.$listeners.flyingContext
   }
 
   setFilter (name, value) {

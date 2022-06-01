@@ -1,5 +1,6 @@
 import './config/event-bus'
 import './config/components'
+import './directives'
 
 import { translationPlugin } from '@a-admin/plugins/translation/TranslationPlugin'
 import { apiResourcesPlugin } from '@a-vue/plugins/api-resources/ApiResourcesPlugin'

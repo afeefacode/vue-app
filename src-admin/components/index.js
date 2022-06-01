@@ -7,6 +7,7 @@ import DetailContent from './detail/DetailContent'
 import DetailMeta from './detail/DetailMeta'
 import DetailProperty from './detail/DetailProperty'
 import DetailTitle from './detail/DetailTitle'
+import FlyingContext from './FlyingContext.vue'
 import EditFormButtons from './form/EditFormButtons'
 import RemoveButton from './form/RemoveButton'
 import ListCard from './list/ListCard'
@@ -44,3 +45,4 @@ Vue.component('AppBarButton', AppBarButton)
 Vue.component('AppBarTitle', AppBarTitle)
 
 Vue.component('Start', Start)
+Vue.component('FlyingContext', FlyingContext)

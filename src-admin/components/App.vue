@@ -91,6 +91,8 @@
       </v-list>
     </v-navigation-drawer>
 
+    <flying-context-container />
+
     <v-app-bar
       app
       flat
@@ -142,12 +144,14 @@ import { appConfig } from '@a-admin/config/AppConfig'
 import { sleep } from '@a-vue/utils/timeout'
 import AppBarButtons from './app/AppBarButtons'
 import AppBarTitleContainer from './app/AppBarTitleContainer'
+import FlyingContextContainer from './FlyingContextContainer'
 import '../styles.scss'
 
 @Component({
   components: {
     AppBarButtons,
-    AppBarTitleContainer
+    AppBarTitleContainer,
+    FlyingContextContainer
   }
 })
 export default class App extends Vue {
