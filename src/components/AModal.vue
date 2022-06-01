@@ -7,6 +7,8 @@
     v-bind="$attrs"
     :contentClass="modalId"
     transition="v-fade-transition"
+    :persistent="true"
+    :no-click-animation="true"
     @click:outside="cancel"
     @keydown.esc="cancel"
   >
@@ -41,7 +43,7 @@ import { getZIndex } from 'vuetify/lib/util/helpers'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['show', 'title', 'triggerClass', 'anchorPosition']
+  props: ['show', 'title', 'beforeClose', 'triggerClass', 'anchorPosition']
 })
 export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentWidthMixin) {
   modalId = randomCssClass(10)
@@ -83,7 +85,15 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
    * and emit a visibility event
    */
   @Watch('show')
-  showChanged () {
+  async showChanged () {
+    // check if a modal is allowed to be closed
+    if (this.modal && !this.show && this.beforeClose) {
+      const result = await this.beforeClose()
+      if (!result) {
+        return
+      }
+    }
+
     this.modal = this.show
   }
 
@@ -121,7 +131,15 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
     this.urp_registerPositionWatcher(this.position)
   }
 
-  cancel () {
+  async cancel () {
+    // check if a modal is allowed to be closed
+    if (this.modal && this.beforeClose) {
+      const result = await this.beforeClose()
+      if (!result) {
+        return
+      }
+    }
+
     this.modal = false
   }
 
