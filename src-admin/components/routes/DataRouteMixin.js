@@ -7,6 +7,7 @@ Component.registerHooks([
 
 let onLoadCallback = () => {}
 let routerHookCalled = false
+let lastResult = null // cache last result because of hmr reload
 
 function onLoad (callback) {
   onLoadCallback = callback
@@ -52,24 +53,32 @@ export class DataRouteMixin extends Vue {
 
   /**
    * triggered both, if route name or route params change
+   @Watch('$route.params')
+   async routeParamsChanged () {
+     if (routerHookCalled) {
+       return
+     }
+
+     if (!this.drm_isLoaded) {
+       const result = await load(this.$route)
+
+       if (result !== false) {
+         this.drm_onLoad(result)
+         this.drm_isLoaded = true
+       }
+     }
+   }
    */
-  @Watch('$route.params')
-  async routeParamsChanged () {
-    if (routerHookCalled) {
-      return
-    }
-
-    if (!this.drm_isLoaded) {
-      const result = await load(this.$route)
-
-      if (result !== false) {
-        this.drm_onLoad(result)
-        this.drm_isLoaded = true
-      }
-    }
-  }
 
   drm_onLoad (result) {
     onLoadCallback(this, result)
+    lastResult = result
+  }
+
+  created () {
+    // hmr reload creates vm but not triggers route enter
+    if (!routerHookCalled) {
+      onLoadCallback(this, lastResult)
+    }
   }
 }
