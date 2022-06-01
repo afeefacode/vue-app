@@ -1,6 +1,7 @@
 <template>
   <a-modal
     :title="title"
+    :beforeClose="beforeClose"
     :show.sync="show_"
     v-bind="$attrs"
   >
@@ -10,16 +11,17 @@
 
     <edit-form
       v-if="show_"
+      ref="form"
       :model="model"
+      :createModelToEdit="createModelToEdit"
     >
-      <template #fields>
+      <template #default="{model, changed, valid}">
         <slot
-          name="fields"
           :model="model"
+          :changed="changed"
+          :valid="valid"
         />
-      </template>
 
-      <template #default="{changed, valid}">
         <a-row
           class="mt-8 mb-1 pb-1 gap-4"
           right
@@ -31,25 +33,13 @@
             Schließen
           </v-btn>
 
-          <a-row gap="2">
-            <v-btn
-              small
-              :disabled="!changed || !valid"
-              color="green white--text"
-              @click="save"
-            >
-              Speichern
-            </v-btn>
-
-            <v-icon
-              v-if="changed"
-              small
-              text
-              @click="reset"
-            >
-              {{ undoIcon }}
-            </v-icon>
-          </a-row>
+          <edit-form-buttons
+            :changed="changed"
+            :valid="valid"
+            small
+            @save="$emit('save', model, ignoreChangesOnClose)"
+            @reset="$refs.form.reset()"
+          />
         </a-row>
       </template>
     </edit-form>
@@ -59,21 +49,20 @@
 
 <script>
 import { Component, Vue, Watch } from '@a-vue'
-import { mdiRotateLeft} from '@mdi/js'
+import { DialogEvent } from '@a-vue/events'
 
 @Component({
-  props: ['model', 'title', 'show']
+  props: ['model', 'createModelToEdit', 'title', 'show']
 })
 export default class EditModal extends Vue {
   show_ = false
-
-  undoIcon = mdiRotateLeft
+  ignoreChangesOnClose_ = false
 
   /**
    * visiblility changes from outside
    * this will trigger the show_ watcher,
    * forward the change to the modal and
-   * later emit a open/close event
+   * later emit an open/close event
    */
   @Watch('show')
   showChanged () {
@@ -90,7 +79,6 @@ export default class EditModal extends Vue {
   @Watch('show_')
   show_Changed () {
     if (this.show_) {
-      this.reset()
       this.$emit('open')
     } else {
       this.$emit('close')
@@ -101,16 +89,35 @@ export default class EditModal extends Vue {
     this.show_ = true
   }
 
-  close () {
+  async beforeClose () {
+    // run only if show_ is true to prevent double checks with a-modal
+    if (this.show_ && this.$refs.form.changed && !this.ignoreChangesOnClose_) {
+      const result = await this.$events.dispatch(new DialogEvent(DialogEvent.SHOW, {
+        title: 'Änderungen verwerfen?',
+        message: 'Im Formular sind nicht gespeicherte Änderungen. Sollen diese verworfen werden?',
+        yesButton: 'Verwerfen'
+      }))
+      if (result !== DialogEvent.RESULT_YES) {
+        return false
+      }
+    }
+    return true
+  }
+
+  async close () {
+    const result = await this.beforeClose()
+    if (!result) {
+      return
+    }
+
     this.show_ = false
   }
 
-  reset () {
-    this.$emit('reset')
-  }
-
-  save () {
-    this.$emit('save')
+  /**
+   * hook to allow to leave a just created (saved) model
+   */
+  ignoreChangesOnClose () {
+    this.ignoreChangesOnClose_ = true
   }
 }
 </script>
