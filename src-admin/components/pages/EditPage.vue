@@ -53,6 +53,9 @@ export default class EditPage extends Vue {
     this.unregisterRouterHook()
   }
 
+  /**
+   * hook to allow to leave a just created (saved) model
+   */
   ignoreChangesOnRouteChange () {
     this.ignoreChangesOnRouteChange_ = true
   }
