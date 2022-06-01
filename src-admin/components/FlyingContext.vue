@@ -22,6 +22,12 @@ export default class FlyingContext extends Vue {
     this.$events.on(FlyingContextEvent.HIDE_ALL, this.onHide)
   }
 
+  mounted () {
+    if (this.show) {
+      this.showChanged()
+    }
+  }
+
   @Watch('show')
   showChanged () {
     if (this.isVisible === this.show) {
