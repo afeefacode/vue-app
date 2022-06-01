@@ -62,6 +62,10 @@ export default class ATableRow extends Vue {
     }
   }
 
+  &.selectable {
+    cursor: pointer;
+  }
+
   &:hover, &.selected {
     background: #F4F4F4;
   }
