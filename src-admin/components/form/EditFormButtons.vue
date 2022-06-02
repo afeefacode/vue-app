@@ -2,7 +2,7 @@
   <a-row gap="2">
     <v-btn
       :small="small"
-      :disabled="!changed || !valid"
+      :disabled="($has.reset && !changed) || !valid"
       color="green white--text"
       @click="$emit('save')"
     >
@@ -10,7 +10,7 @@
     </v-btn>
 
     <v-icon
-      v-if="changed"
+      v-if="$has.reset && changed"
       :small="small"
       text
       title="Formular zurücksetzen"
@@ -33,6 +33,8 @@ import { mdiRotateLeft} from '@mdi/js'
   ]
 })
 export default class EditFormButtons extends Vue {
+  $hasOptions = ['reset']
+
   undoIcon = mdiRotateLeft
 }
 </script>

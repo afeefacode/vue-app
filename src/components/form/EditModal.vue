@@ -37,6 +37,7 @@
             :changed="changed"
             :valid="valid"
             small
+            :has="{reset: !!model.id}"
             @save="$emit('save', model, ignoreChangesOnClose)"
             @reset="$refs.form.reset()"
           />
