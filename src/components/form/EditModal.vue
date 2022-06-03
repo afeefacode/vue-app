@@ -60,6 +60,12 @@ export default class EditModal extends Vue {
   show_ = false
   ignoreChangesOnClose_ = false
 
+  created () {
+    if (this.show) { // open on create with v-show
+      this.open()
+    }
+  }
+
   /**
    * visiblility changes from outside
    * this will trigger the show_ watcher,
