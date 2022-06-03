@@ -19,6 +19,8 @@ Vue.directive('flying-context-trigger', {
   },
 
   unbind: function (el) {
-    el.$flyingContextObserver.disconnect()
+    if (el.$flyingContextObserver) {
+      el.$flyingContextObserver.disconnect()
+    }
   }
 })
