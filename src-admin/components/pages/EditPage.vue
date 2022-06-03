@@ -4,9 +4,10 @@
     :model="model"
     :createModelToEdit="createModelToEdit"
   >
-    <template #default="{model, changed, valid}">
+    <template #form="{modelToEdit, changed, valid}">
       <slot
-        :model="model"
+        name="form"
+        :modelToEdit="modelToEdit"
         :changed="changed"
         :valid="valid"
       />
@@ -14,7 +15,7 @@
       <edit-form-buttons
         :changed="changed"
         :valid="valid"
-        @save="$emit('save', model, ignoreChangesOnRouteChange)"
+        @save="$emit('save', modelToEdit, ignoreChangesOnRouteChange)"
         @reset="$refs.form.reset()"
       />
     </template>

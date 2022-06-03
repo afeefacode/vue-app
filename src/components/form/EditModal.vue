@@ -15,9 +15,10 @@
       :model="model"
       :createModelToEdit="createModelToEdit"
     >
-      <template #default="{model, changed, valid}">
+      <template #form="{modelToEdit, changed, valid}">
         <slot
-          :model="model"
+          name="form"
+          :modelToEdit="modelToEdit"
           :changed="changed"
           :valid="valid"
         />
@@ -37,8 +38,8 @@
             :changed="changed"
             :valid="valid"
             small
-            :has="{reset: !!model.id}"
-            @save="$emit('save', model, ignoreChangesOnClose)"
+            :has="{reset: !!modelToEdit.id}"
+            @save="$emit('save', modelToEdit, ignoreChangesOnClose)"
             @reset="$refs.form.reset()"
           />
         </a-row>

@@ -4,9 +4,10 @@
     autocomplete="off"
   >
     <slot
+      name="form"
       :changed="changed"
       :valid="valid"
-      :model="modelToEdit"
+      :modelToEdit="modelToEdit"
     />
   </v-form>
 </template>
