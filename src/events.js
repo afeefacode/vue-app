@@ -1,3 +1,4 @@
+export { BaseEvent } from './plugins/event-bus/BaseEvent'
 export { LoadingEvent } from './components/loading-indicator/LoadingEvent'
 export { SaveEvent } from './components/save-indicator/SaveEvent'
 export { AlertEvent } from './components/alert/AlertEvent'
