@@ -1,8 +1,11 @@
 import {
   mdiAlarmLightOutline,
   mdiCalendar,
+  mdiCheck,
+  mdiCheckBold,
   mdiChevronRight,
   mdiClose,
+  mdiCloseThick,
   mdiDelete,
   mdiDotsHorizontal,
   mdiDotsVertical,
@@ -26,6 +29,7 @@ export default new Vuetify({
       thumbsUpIcon: mdiThumbUpOutline,
       alarmIcon: mdiAlarmLightOutline,
       closeIcon: mdiClose,
+      closeBoldIcon: mdiCloseThick,
       dotsVerticalIcon: mdiDotsVertical,
       dotsHorizontalIcon: mdiDotsHorizontal,
       logoutIcon: mdiLogoutVariant,
@@ -34,7 +38,9 @@ export default new Vuetify({
       trashCanIcon: mdiDelete,
       calendarIcon: mdiCalendar,
       searchIcon: mdiMagnify,
-      lockIcon: mdiLock
+      lockIcon: mdiLock,
+      checkIcon: mdiCheck,
+      checkBoldIcon: mdiCheckBold
     }
   },
   breakpoint: {
