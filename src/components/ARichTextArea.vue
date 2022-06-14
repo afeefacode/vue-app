@@ -4,85 +4,84 @@
       v-if="editor"
       class="menu-bar"
     >
-      <v-btn
-        small
-        :class="['menu-button', {'is-active': focus && editor.isActive('bold')}]"
-        @click="editor.chain().focus().toggleBold().run()"
-      >
-        <v-icon>{{ boldIcon }}</v-icon>
-      </v-btn>
+      <div>
+        <v-btn
+          small
+          :class="['menu-button', {'is-active': focus && editor.isActive('bold')}]"
+          @click="editor.chain().focus().toggleBold().run()"
+        >
+          <v-icon>{{ boldIcon }}</v-icon>
+        </v-btn>
 
-      <v-btn
-        small
-        :class="['menu-button', {'is-active': focus && editor.isActive('italic')}]"
-        @click="editor.chain().focus().toggleItalic().run()"
-      >
-        <v-icon>{{ italicIcon }}</v-icon>
-      </v-btn>
+        <v-btn
+          small
+          :class="['menu-button', {'is-active': focus && editor.isActive('italic')}]"
+          @click="editor.chain().focus().toggleItalic().run()"
+        >
+          <v-icon>{{ italicIcon }}</v-icon>
+        </v-btn>
 
-      <v-btn
-        small
-        :class="['menu-button', 'strike', {'is-active': focus && editor.isActive('strike')}]"
-        @click="editor.chain().focus().toggleStrike().run()"
-      >
-        <v-icon>{{ strikeIcon }}</v-icon>
-      </v-btn>
+        <v-btn
+          small
+          :class="['menu-button', 'strike', {'is-active': focus && editor.isActive('strike')}]"
+          @click="editor.chain().focus().toggleStrike().run()"
+        >
+          <v-icon>{{ strikeIcon }}</v-icon>
+        </v-btn>
 
-      <v-btn
-        small
-        :class="['menu-button', {'is-active': focus && editor.isActive('heading', {level: 1})}]"
-        @click="editor.chain().focus().toggleHeading({level: 1}).run()"
-      >
-        <v-icon>{{ h1Icon }}</v-icon>
-      </v-btn>
+        <v-btn
+          small
+          :class="['menu-button', {'is-active': focus && editor.isActive('heading', {level: 1})}]"
+          @click="editor.chain().focus().toggleHeading({level: 1}).run()"
+        >
+          <v-icon>{{ h1Icon }}</v-icon>
+        </v-btn>
 
-      <v-btn
-        small
-        :class="['menu-button', {'is-active': focus && editor.isActive('heading', {level: 2})}]"
-        @click="editor.chain().focus().toggleHeading({level: 2}).run()"
-      >
-        <v-icon>{{ h2Icon }}</v-icon>
-      </v-btn>
+        <v-btn
+          small
+          :class="['menu-button', {'is-active': focus && editor.isActive('heading', {level: 2})}]"
+          @click="editor.chain().focus().toggleHeading({level: 2}).run()"
+        >
+          <v-icon>{{ h2Icon }}</v-icon>
+        </v-btn>
 
-      <v-btn
-        small
-        :class="['menu-button', {'is-active': focus && editor.isActive('bulletList')}]"
-        @click="editor.chain().focus().toggleBulletList().run()"
-      >
-        <v-icon>{{ ulIcon }}</v-icon>
-      </v-btn>
+        <v-btn
+          small
+          :class="['menu-button', {'is-active': focus && editor.isActive('bulletList')}]"
+          @click="editor.chain().focus().toggleBulletList().run()"
+        >
+          <v-icon>{{ ulIcon }}</v-icon>
+        </v-btn>
 
-      <v-btn
-        small
-        :class="['menu-button', {'is-active': focus && editor.isActive('orderedList')}]"
-        @click="editor.chain().focus().toggleOrderedList().run()"
-      >
-        <v-icon>{{ olIcon }}</v-icon>
-      </v-btn>
+        <v-btn
+          small
+          :class="['menu-button', {'is-active': focus && editor.isActive('orderedList')}]"
+          @click="editor.chain().focus().toggleOrderedList().run()"
+        >
+          <v-icon>{{ olIcon }}</v-icon>
+        </v-btn>
 
-      <v-btn
-        small
-        :class="['menu-button', {'is-active': focus && editor.isActive('blockquote')}]"
-        @click="editor.chain().focus().toggleBlockquote().run()"
-      >
-        <v-icon>{{ commentIcon }}</v-icon>
-      </v-btn>
+        <v-btn
+          small
+          :class="['menu-button', {'is-active': focus && editor.isActive('blockquote')}]"
+          @click="editor.chain().focus().toggleBlockquote().run()"
+        >
+          <v-icon>{{ commentIcon }}</v-icon>
+        </v-btn>
 
-      <v-btn
-        small
-        class="menu-button"
-        @click="editor.chain().focus().undo().run()"
-      >
-        <v-icon>{{ undoIcon }}</v-icon>
-      </v-btn>
+        <v-btn
+          small
+          class="menu-button"
+          :disabled="initialValue === editor.getHTML()"
+          @click="editor.chain().focus().undo().run()"
+        >
+          <v-icon>{{ undoIcon }}</v-icon>
+        </v-btn>
+      </div>
 
-      <v-btn
-        small
-        class="menu-button"
-        @click="editor.chain().focus().redo().run()"
-      >
-        <v-icon>{{ redoIcon }}</v-icon>
-      </v-btn>
+      <div>
+        <slot name="buttons" />
+      </div>
     </div>
 
     <editor-content
@@ -119,6 +118,7 @@ import {
 export default class ARichTextArea extends Vue {
   editor = null
   internalValue = null
+  initialValue = null
   focus = false
 
   boldIcon = mdiFormatBold
@@ -133,6 +133,7 @@ export default class ARichTextArea extends Vue {
   redoIcon = mdiRotateRight
 
   created () {
+    this.initialValue = this.value
     this.internalValue = this.value
   }
 
@@ -158,12 +159,18 @@ export default class ARichTextArea extends Vue {
         this.$emit('blur')
       }
     })
-
-    this.editor.commands.setContent(this.internalValue, false)
   }
 
   beforeDestroy () {
     this.editor.destroy()
+  }
+
+  /**
+   * reset the text area to disable the undo button
+   * e.g. after saving the form while keeping it open
+   */
+  reset () {
+    this.initialValue = this.value
   }
 
   @Watch('value')
@@ -192,10 +199,6 @@ export default class ARichTextArea extends Vue {
 
 
 <style lang="scss" scoped>
-.v-input:not(.v-input--is-focused) ::v-deep .v-counter {
-  display: none;
-}
-
 .a-rich-text-editor {
   ::v-deep .ProseMirror {
     &-focused {
@@ -205,9 +208,12 @@ export default class ARichTextArea extends Vue {
 }
 
 .menu-bar {
+  display: flex;
+  justify-content: space-between;
   margin: -.2rem 0 .5rem -.2rem;
 }
 
+.menu-bar .v-btn,
 .menu-button {
   padding: 0 !important;
   width: 30px !important;
@@ -238,6 +244,10 @@ export default class ARichTextArea extends Vue {
 
   &.is-active {
     background: #ECECEC !important;
+  }
+
+  &[disabled] {
+    background: none !important;
   }
 }
 

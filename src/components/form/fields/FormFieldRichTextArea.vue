@@ -1,7 +1,9 @@
 <template>
-  <a-rich-text-area
-    v-model="model[name]"
-  />
+  <a-rich-text-area v-model="model[name]">
+    <template #buttons>
+      <slot name="buttons" />
+    </template>
+  </a-rich-text-area>
 </template>
 
 <script>
