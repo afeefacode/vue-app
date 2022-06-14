@@ -132,7 +132,7 @@ export class ListViewMixin extends Vue {
 
     if (!models) { // error happened
       this.isLoading = false
-      this.$emit('update:isLoading', this.isLoading)
+      this.$emit('update:isLoading', false)
       return
     }
 
@@ -144,7 +144,7 @@ export class ListViewMixin extends Vue {
     }
 
     this.isLoading = false
-    this.$emit('update:isLoading', this.isLoading)
+    this.$emit('update:isLoading', false)
 
     this.$emit('update:count', this.meta_.count_search)
   }
