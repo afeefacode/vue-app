@@ -28,9 +28,15 @@ export default class EditForm extends Vue {
   modelToEdit = null
   valid = false
   lastJson = null
+  forcedUnchange = false
 
   created () {
     this.reset()
+  }
+
+  forceUnchanged () {
+    this.forcedUnchange = true
+    this.$emit('update:changed', false)
   }
 
   reset () {
@@ -66,6 +72,9 @@ export default class EditForm extends Vue {
   }
 
   get changed () {
+    if (this.forcedUnchange) {
+      return false
+    }
     // console.log(this.json)
     // console.log(this.lastJson)
     return this.json !== this.lastJson

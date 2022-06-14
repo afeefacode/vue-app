@@ -125,6 +125,8 @@ export default class EditModal extends Vue {
    * hook to allow to leave a just created (saved) model
    */
   ignoreChangesOnClose () {
+    // this.$refs.form.forceUnchanged()
+    console.info('TODO switch form to forceUnchanged')
     this.ignoreChangesOnClose_ = true
   }
 }

@@ -59,6 +59,8 @@ export default class EditPage extends Vue {
    * hook to allow to leave a just created (saved) model
    */
   ignoreChangesOnRouteChange () {
+    // this.$refs.form.forceUnchanged()
+    console.info('TODO switch form to forceUnchanged')
     this.ignoreChangesOnRouteChange_ = true
   }
 }
