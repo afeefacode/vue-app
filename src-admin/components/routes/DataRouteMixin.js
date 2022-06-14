@@ -1,4 +1,4 @@
-import { Component, Vue, Watch } from '@a-vue'
+import { Component, Vue } from '@a-vue'
 
 Component.registerHooks([
   'beforeRouteEnter',
