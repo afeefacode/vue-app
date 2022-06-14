@@ -8,6 +8,12 @@
       />
     </div>
 
+    <slot
+      v-if="$scopedSlots.models"
+      name="before-models"
+      :setFilter="setFilter"
+    />
+
     <template v-if="models_.length">
       <template v-if="$scopedSlots.models">
         <slot
