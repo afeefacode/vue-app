@@ -69,6 +69,11 @@ export class ListViewMixin extends Vue {
 
     if (this.models) {
       this.$emit('update:count', this.meta_.count_search)
+
+      this.$emit('onLoad', {
+        models: this.models_,
+        meta: this.meta_
+      })
     } else {
       this.load()
     }
@@ -149,5 +154,10 @@ export class ListViewMixin extends Vue {
     this.$emit('update:isLoading', false)
 
     this.$emit('update:count', this.meta_.count_search)
+
+    this.$emit('onLoad', {
+      models,
+      meta
+    })
   }
 }
