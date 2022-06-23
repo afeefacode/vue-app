@@ -67,7 +67,6 @@ export default class SearchSelectList extends Mixins(ListViewMixin) {
     if (this.q) {
       this.filters.q.value = this.q
     }
-    this.$emit('update:filters', this.filters)
   }
 }
 </script>

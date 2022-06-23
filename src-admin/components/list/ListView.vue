@@ -11,7 +11,6 @@
     <slot
       v-if="$scopedSlots.models"
       name="before-models"
-      :setFilter="setFilter"
     />
 
     <template v-if="models_.length">
@@ -19,7 +18,6 @@
         <slot
           name="models"
           :models="models_"
-          :setFilter="setFilter"
         />
       </template>
 
@@ -50,7 +48,6 @@
             <slot
               name="model-table"
               :model="model"
-              :setFilter="setFilter"
             />
           </a-table-row>
         </a-table>
@@ -115,10 +112,6 @@ export default class ListView extends Mixins(ListViewMixin) {
 
   get hasFlyingContext () {
     return !!this.$listeners.flyingContext
-  }
-
-  setFilter (name, value) {
-    this.filters[name].value = value
   }
 }
 </script>

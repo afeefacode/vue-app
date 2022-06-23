@@ -64,6 +64,8 @@ export class ListViewMixin extends Vue {
       .on('change', this.filtersChanged) // listen to change
 
     this._filtersInitialized()
+    this.$emit('update:filters', this.filters)
+    this.$emit('update:listViewModel', this.listViewModel)
 
     if (this.models) {
       this.$emit('update:count', this.meta_.count_search)
