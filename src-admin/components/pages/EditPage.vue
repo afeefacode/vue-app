@@ -12,13 +12,15 @@
         :valid="valid"
       />
 
-      <edit-form-buttons
-        :changed="changed"
-        :valid="valid"
-        :has="{reset: !!modelToEdit.id}"
-        @save="$emit('save', modelToEdit, ignoreChangesOnRouteChange)"
-        @reset="$refs.form.reset()"
-      />
+      <sticky-footer>
+        <edit-form-buttons
+          :changed="changed"
+          :valid="valid"
+          :has="{reset: !!modelToEdit.id}"
+          @save="$emit('save', modelToEdit, ignoreChangesOnRouteChange)"
+          @reset="$refs.form.reset()"
+        />
+      </sticky-footer>
     </template>
   </edit-form>
 </template>

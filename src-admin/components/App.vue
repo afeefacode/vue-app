@@ -91,8 +91,6 @@
       </v-list>
     </v-navigation-drawer>
 
-    <flying-context-container />
-
     <v-app-bar
       app
       flat
@@ -117,7 +115,7 @@
       />
     </v-app-bar>
 
-    <v-main>
+    <v-main id="v-main">
       <v-container
         fluid
         class="pa-4"
@@ -129,11 +127,15 @@
 
         <router-view :class="{isLoading}" />
       </v-container>
+
+      <sticky-footer-container v-if="true" />
     </v-main>
 
     <a-dialog id="app" />
 
     <a-save-indicator />
+
+    <flying-context-container />
   </div>
 </template>
 
@@ -145,13 +147,15 @@ import { sleep } from '@a-vue/utils/timeout'
 import AppBarButtons from './app/AppBarButtons'
 import AppBarTitleContainer from './app/AppBarTitleContainer'
 import FlyingContextContainer from './FlyingContextContainer'
+import StickyFooterContainer from './StickyFooterContainer'
 import '../styles.scss'
 
 @Component({
   components: {
     AppBarButtons,
     AppBarTitleContainer,
-    FlyingContextContainer
+    FlyingContextContainer,
+    StickyFooterContainer
   }
 })
 export default class App extends Vue {

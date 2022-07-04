@@ -1,5 +1,8 @@
 <template>
-  <a-row gap="2">
+  <a-row
+    gap="2"
+    v-bind="$attrs"
+  >
     <v-btn
       :small="small"
       :disabled="($has.reset && !changed) || !valid"

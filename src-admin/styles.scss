@@ -15,6 +15,7 @@
 .contextButton {
   color: #AAAAAA !important;
   cursor: pointer;
+
   &:hover {
     color: #333333 !important;
   }
@@ -25,10 +26,6 @@
     color: inherit;
     text-decoration: line-through;
   }
-}
-
-.v-main {
-  margin-bottom: 2rem;
 }
 
 .theme--light.v-btn.v-btn--has-bg {
