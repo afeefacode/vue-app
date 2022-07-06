@@ -34,7 +34,7 @@ import { mdiRotateLeft} from '@mdi/js'
   props: [
     'changed',
     'valid',
-    'small'
+    {small: false}
   ]
 })
 export default class EditFormButtons extends Vue {
