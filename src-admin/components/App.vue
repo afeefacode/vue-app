@@ -73,31 +73,6 @@
       </v-container>
     </v-navigation-drawer>
 
-    <v-app-bar
-      v-if="false"
-      app
-      flat
-      dense
-      color="#FAFAFA"
-    >
-      <div class="d-flex align-start mt-n2">
-        <v-app-bar-nav-icon
-          class="sidebarToggleButton mr-2 ml-n1"
-          @click="toggleDrawer"
-        />
-        <a-breadcrumbs class="mt-2" />
-      </div>
-
-      <a-loading-indicator
-        fixed
-        top
-        left
-        class="loadingIndicator"
-        :isLoading="isLoading"
-        :color="loaderColor"
-      />
-    </v-app-bar>
-
     <v-main id="v-main">
       <a-row class="topbar">
         <v-app-bar-nav-icon
@@ -116,7 +91,7 @@
         <router-view :class="{isLoading}" />
       </v-container>
 
-      <sticky-footer-container v-if="true" />
+      <sticky-footer-container />
     </v-main>
 
     <a-dialog id="app" />
