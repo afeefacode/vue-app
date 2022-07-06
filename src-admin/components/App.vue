@@ -131,8 +131,8 @@
         class="pa-4"
       >
         <div class="sticky-app-bar d-flex align-center">
-          <app-bar-title-container class="flex-grow-1 mb-4" />
-          <app-bar-buttons class="mr-2  mb-4" />
+          <app-bar-title-container class="flex-grow-1" />
+          <app-bar-buttons class="mr-2" />
         </div>
 
         <router-view :class="{isLoading}" />
@@ -284,8 +284,8 @@ export default class App extends Vue {
 .sticky-app-bar {
   position: sticky;
   top: -1px;
-  margin: -1rem;
-  padding: 1rem 1rem 0;
+  margin: -1rem -1rem 0;
+  padding: 1rem;
 
   &.is-pinned {
     background: white;
