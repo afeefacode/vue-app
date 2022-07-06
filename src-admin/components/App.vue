@@ -76,7 +76,7 @@
     <v-main id="v-main">
       <a-row class="topbar">
         <v-app-bar-nav-icon
-          class="sidebarToggleButton mr-2 ml-n1"
+          class="sidebarToggleButton mr-2 ml-4"
           @click="toggleDrawer"
         />
         <a-breadcrumbs />
@@ -84,7 +84,7 @@
 
       <v-container
         fluid
-        class="pa-4"
+        class="pa-8"
       >
         <sticky-header />
 
