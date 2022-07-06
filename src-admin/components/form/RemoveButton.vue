@@ -1,11 +1,11 @@
 <template>
   <div>
     <a-icon-button
-      small
       color="red white--text"
       :class="'removeButton-' + dialogId"
       icon="$trashCanIcon"
       text="Löschen"
+      v-bind="$attrs"
       @click="remove"
     />
 
