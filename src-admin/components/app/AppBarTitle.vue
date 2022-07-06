@@ -1,16 +1,21 @@
 <template>
   <div class="d-flex align-center gap-4">
-    <v-icon
-      :color="icon.color"
-      size="1.8rem"
-      v-text="icon.icon"
-    />
+    <v-avatar
+      color="#F4F4F4"
+      size="3rem"
+    >
+      <v-icon
+        :color="icon.color"
+        size="2.2rem"
+        v-text="icon.icon"
+      />
+    </v-avatar>
 
     <div>
       <h3 v-if="subtitle">
         {{ subtitle }}
       </h3>
-    <h2>{{ title }}</h2>
+      <h2>{{ title }}</h2>
     </div>
   </div>
 </template>
@@ -45,11 +50,11 @@ export default class appBarTitle extends Vue {
 
 
 <style lang="scss" scoped>
-
 h3 {
   font-size: .9rem;
   font-weight: normal;
-  margin-bottom: .2rem;
+  margin-top: -.2rem;
+  margin-bottom: .1rem;
   line-height: 1rem;
   color: #999999;
 }
