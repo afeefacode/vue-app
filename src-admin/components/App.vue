@@ -3,8 +3,9 @@
     <v-navigation-drawer
       v-model="drawer"
       app
-      fixeds
       left
+      width="280"
+      class="menubar"
     >
       <v-container
         flex-column
@@ -92,6 +93,7 @@
     </v-navigation-drawer>
 
     <v-app-bar
+      v-if="false"
       app
       flat
       dense
@@ -116,6 +118,14 @@
     </v-app-bar>
 
     <v-main id="v-main">
+      <a-row class="topbar">
+        <v-app-bar-nav-icon
+          class="sidebarToggleButton mr-2 ml-n1"
+          @click="toggleDrawer"
+        />
+        <a-breadcrumbs />
+      </a-row>
+
       <v-container
         fluid
         class="pa-4"
@@ -262,6 +272,14 @@ export default class App extends Vue {
   width: 36px !important;
   height: 36px !important;
   margin-top: 1px;
+}
+
+.topbar {
+  position: relative;
+  width: 100%;
+  left: 0;
+  top: 0;
+  padding: .2rem 1rem;
 }
 .sticky-app-bar {
   position: sticky;
