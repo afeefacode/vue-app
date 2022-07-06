@@ -10,10 +10,3 @@ import { Component, Vue } from '@a-vue'
 export default class AppBarTitleContainer extends Vue {
 }
 </script>
-
-
-<style lang="scss" scoped>
-#appBarTitleContainer:empty {
-  display: none;
-}
-</style>
