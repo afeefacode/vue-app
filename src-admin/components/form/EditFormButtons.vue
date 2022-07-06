@@ -13,8 +13,10 @@
     </v-btn>
 
     <v-icon
-      v-if="$has.reset && changed"
+      v-if="$has.reset"
       :small="small"
+      :class="{disabled: !changed}"
+      :disabled="!changed"
       text
       title="Formular zurücksetzen"
       @click="$emit('reset')"
@@ -41,3 +43,10 @@ export default class EditFormButtons extends Vue {
   undoIcon = mdiRotateLeft
 }
 </script>
+
+
+<style lang="scss" scoped>
+.v-icon--disabled {
+  opacity: .3;
+}
+</style>
