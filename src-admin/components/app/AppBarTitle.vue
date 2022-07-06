@@ -49,8 +49,9 @@ export default class appBarTitle extends Vue {
 h3 {
   font-size: .9rem;
   font-weight: normal;
-  margin-bottom: 0;
-  line-height: 1.2rem;
+  margin-bottom: .2rem;
+  line-height: 1rem;
+  color: #999999;
 }
 
 h2 {
