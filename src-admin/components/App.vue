@@ -73,25 +73,6 @@
       </v-container>
     </v-navigation-drawer>
 
-    <v-navigation-drawer
-      v-if="false"
-      app
-      clipped
-      right
-    >
-      <v-list>
-        <v-list-item
-          v-for="n in 5"
-          :key="n"
-          link
-        >
-          <v-list-item-content>
-            <v-list-item-title>Item {{ n }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-
     <v-app-bar
       v-if="false"
       app
@@ -130,10 +111,7 @@
         fluid
         class="pa-4"
       >
-        <div class="sticky-app-bar d-flex align-center">
-          <app-bar-title-container class="flex-grow-1" />
-          <app-bar-buttons class="mr-2" />
-        </div>
+        <sticky-header />
 
         <router-view :class="{isLoading}" />
       </v-container>
@@ -144,6 +122,8 @@
     <a-dialog id="app" />
 
     <a-save-indicator />
+
+    <sidebar />
 
     <flying-context-container />
   </div>
@@ -158,6 +138,8 @@ import AppBarButtons from './app/AppBarButtons'
 import AppBarTitleContainer from './app/AppBarTitleContainer'
 import FlyingContextContainer from './FlyingContextContainer'
 import StickyFooterContainer from './StickyFooterContainer'
+import Sidebar from './Sidebar'
+import StickyHeader from './StickyHeader'
 import '../styles.scss'
 
 @Component({
@@ -165,12 +147,13 @@ import '../styles.scss'
     AppBarButtons,
     AppBarTitleContainer,
     FlyingContextContainer,
-    StickyFooterContainer
+    StickyFooterContainer,
+    Sidebar,
+    StickyHeader
   }
 })
 export default class App extends Vue {
   drawer = true
-  mainDrawer = false
   isLoading = false
   account = null
 
@@ -183,17 +166,6 @@ export default class App extends Vue {
     }
 
     this.$emit('appLoaded')
-  }
-
-  mounted () {
-    const el = document.querySelector('.sticky-app-bar')
-    const observer = new IntersectionObserver(
-      ([e]) => {
-        e.target.classList.toggle('is-pinned', e.intersectionRatio < 1)
-      },
-      { threshold: [1] }
-    )
-    observer.observe(el)
   }
 
   get SidebarMenu () {
@@ -226,16 +198,6 @@ export default class App extends Vue {
 
   toggleDrawer () {
     this.drawer = !this.drawer
-  }
-
-  @Watch('drawer')
-  async drawerChanged () {
-    if (this.drawer) {
-      this.mainDrawer = false
-    } else {
-      await sleep(0.1)
-      this.mainDrawer = true
-    }
   }
 
   get hasAuthService () {
@@ -281,16 +243,12 @@ export default class App extends Vue {
   top: 0;
   padding: .2rem 1rem;
 }
-.sticky-app-bar {
-  position: sticky;
-  top: -1px;
-  margin: -1rem -1rem 0;
-  padding: 1rem;
 
-  &.is-pinned {
-    background: white;
-    z-index: 2;
-    box-shadow: 0 4px 7px -4px #00000033;
-  }
+.menubar {
+  // background: #666666 !important;
+}
+
+#sidebar {
+  // background: #F4F4F4 !important;
 }
 </style>
