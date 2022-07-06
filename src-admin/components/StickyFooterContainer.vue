@@ -47,7 +47,8 @@ export default class StickyFooterContainer extends Vue {
 
 <style lang="scss" scoped>
 #stickyFooterContainer {
-  padding: 1rem;
+  background: white;
+  padding: 0;
 
   &:not(.visible) {
     display: none;
@@ -56,5 +57,10 @@ export default class StickyFooterContainer extends Vue {
   &__children {
     width: 100%;
   }
+}
+
+#stickyFooterContainer__children {
+  background: #F5F5F5;
+  padding: 1rem;
 }
 </style>
