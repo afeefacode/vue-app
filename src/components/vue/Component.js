@@ -32,9 +32,16 @@ function propsWithDefaults (props) {
         // property: { some object }, should be a normal vue props object
         } else if (value && typeof value === 'object' && value.constructor === Object) {
           normalizedProps[subProp] = value
-        // property: true, null, ...
+        // property: true, false, null, ...
         } else {
-          normalizedProps[subProp] = { default: value }
+          if (typeof value === 'boolean') {
+            normalizedProps[subProp] = {
+              type: Boolean,
+              default: value
+            }
+          } else {
+            normalizedProps[subProp] = { default: value }
+          }
         }
       })
     } else {
