@@ -57,7 +57,7 @@ export default class StickyHeader extends Vue {
 #stickyHeader {
   position: sticky;
   top: -1px;
-  margin: -1rem -1rem 0;
+  margin: -1rem -1rem 2rem;
   padding: 1rem;
 
   &:not(.visible) {
