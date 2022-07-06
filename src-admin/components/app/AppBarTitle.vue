@@ -6,8 +6,12 @@
       v-text="icon.icon"
     />
 
+    <div>
+      <h3 v-if="subtitle">
+        {{ subtitle }}
+      </h3>
     <h2>{{ title }}</h2>
-    <span v-if="subtitle">{{ subtitle }}</span>
+    </div>
   </div>
 </template>
 
@@ -41,8 +45,17 @@ export default class appBarTitle extends Vue {
 
 
 <style lang="scss" scoped>
+
+h3 {
+  font-size: .9rem;
+  font-weight: normal;
+  margin-bottom: 0;
+  line-height: 1.2rem;
+}
+
 h2 {
   // white-space: nowrap;
+  font-size: 1.5rem;
   line-height: 1.5rem;
 }
 </style>
