@@ -1,6 +1,5 @@
 <template>
   <v-btn
-    small
     v-bind="$attrs"
     v-on="$listeners"
   >
