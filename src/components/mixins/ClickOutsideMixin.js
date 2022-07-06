@@ -25,10 +25,14 @@ export class ClickOutsideMixin extends Vue {
     // popup clicked
     const thisIndex = getZIndex(this.$el)
     const targetIndex = getZIndex(e.target)
-    if (targetIndex > thisIndex) {
+    if (targetIndex > 10 && targetIndex > thisIndex) { // sidebar === 6
       return
     }
 
+    this.com_onClickOutside()
     this.$emit('click:outside')
+  }
+
+  com_onClickOutside () {
   }
 }
