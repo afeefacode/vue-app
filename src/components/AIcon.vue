@@ -1,6 +1,6 @@
 <template>
   <v-icon
-    :class="{isButton}"
+    :class="{button}"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -13,17 +13,14 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: ['button']
+  props: [{button: false}]
 })
 export default class AIcon extends Vue {
-  get isButton () {
-    return this.button !== undefined
-  }
 }
 </script>
 
 <style lang="scss" scoped>
-.v-icon:not(.isButton)::after {
+.v-icon:not(.button)::after {
   background: none;
 }
 </style>
