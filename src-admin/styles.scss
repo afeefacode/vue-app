@@ -32,6 +32,12 @@
   background-color: #E9E9E9;
 }
 
+// @for $i from 1 through 10 {
+//   .gap-{$i} {
+//     gap: 0.25rem * $i;
+//   }
+// }
+
 .gap-0 {
   gap: 0;
 }

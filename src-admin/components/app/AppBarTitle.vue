@@ -1,13 +1,13 @@
 <template>
-  <div class="d-flex align-center">
+  <div class="d-flex align-center gap-4">
     <v-icon
-      class="mr-2"
       :color="icon.color"
       size="1.8rem"
       v-text="icon.icon"
     />
 
     <h2>{{ title }}</h2>
+    <span v-if="subtitle">{{ subtitle }}</span>
   </div>
 </template>
 
@@ -15,7 +15,7 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: ['icon', 'title']
+  props: ['icon', 'title', 'subtitle']
 })
 export default class appBarTitle extends Vue {
   mounted () {
