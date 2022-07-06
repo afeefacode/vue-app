@@ -3,14 +3,14 @@
     gap="2"
     v-bind="$attrs"
   >
-    <v-btn
+    <a-icon-button
       :small="small"
       :disabled="($has.reset && !changed) || !valid"
       color="green white--text"
+      icon="$checkIcon"
+      text="Speichern"
       @click="$emit('save')"
-    >
-      Speichern
-    </v-btn>
+    />
 
     <v-icon
       v-if="$has.reset"
