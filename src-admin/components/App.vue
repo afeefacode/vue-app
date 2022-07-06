@@ -120,7 +120,7 @@
         fluid
         class="pa-4"
       >
-        <div class="d-flex align-center">
+        <div class="sticky-app-bar d-flex align-center">
           <app-bar-title-container class="flex-grow-1 mb-4" />
           <app-bar-buttons class="mr-2  mb-4" />
         </div>
@@ -173,6 +173,17 @@ export default class App extends Vue {
     }
 
     this.$emit('appLoaded')
+  }
+
+  mounted () {
+    const el = document.querySelector('.sticky-app-bar')
+    const observer = new IntersectionObserver(
+      ([e]) => {
+        e.target.classList.toggle('is-pinned', e.intersectionRatio < 1)
+      },
+      { threshold: [1] }
+    )
+    observer.observe(el)
   }
 
   get SidebarMenu () {
@@ -251,5 +262,17 @@ export default class App extends Vue {
   width: 36px !important;
   height: 36px !important;
   margin-top: 1px;
+}
+.sticky-app-bar {
+  position: sticky;
+  top: -1px;
+  margin: -1rem;
+  padding: 1rem 1rem 0;
+
+  &.is-pinned {
+    background: white;
+    z-index: 2;
+    box-shadow: 0 4px 7px -4px #00000033;
+  }
 }
 </style>
