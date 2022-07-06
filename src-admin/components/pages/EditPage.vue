@@ -12,7 +12,7 @@
         :valid="valid"
       />
 
-      <sticky-footer>
+      <app-bar-button>
         <edit-form-buttons
           :changed="changed"
           :valid="valid"
@@ -20,7 +20,7 @@
           @save="$emit('save', modelToEdit, ignoreChangesOnRouteChange)"
           @reset="$refs.form.reset()"
         />
-      </sticky-footer>
+      </app-bar-button>
     </template>
   </edit-form>
 </template>
