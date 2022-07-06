@@ -106,9 +106,10 @@ export default class ABreadcrumbs extends Vue {
   getItemTitle (title) {
     // title = title.concat(title).concat(title)
     if (title.length > 20) {
-      title = title.slice(0, 10).trim() + '...' + title.slice(-10).trim()
+      // title = title.slice(0, 10).trim() + '...' + title.slice(-10).trim()
     }
-    return title.toUpperCase()
+    return title
+    // return title.toUpperCase()
   }
 }
 </script>
