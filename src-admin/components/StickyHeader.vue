@@ -3,8 +3,8 @@
     id="stickyHeader"
     :class="['d-flex align-center', {visible}]"
   >
-    <app-bar-title-container class="title flex-grow-1" />
-    <app-bar-buttons class="buttons mr-2" />
+    <app-bar-title-container class="appBarTitle flex-grow-1" />
+    <app-bar-buttons class="appBarButtons mr-2" />
   </div>
 </template>
 
@@ -25,8 +25,8 @@ export default class StickyHeader extends Vue {
   mounted () {
     // watch mutation
     this.mutationWatcher = new MutationObserver(this.domChanged)
-    this.mutationWatcher.observe(this.$el.querySelector(':scope > .title'), { childList: true })
-    this.mutationWatcher.observe(this.$el.querySelector(':scope > .buttons'), { childList: true })
+    this.mutationWatcher.observe(this.$el.querySelector('.appBarTitle'), { childList: true })
+    this.mutationWatcher.observe(this.$el.querySelector('.appBarButtons'), { childList: true })
 
     // watch intersection
     const el = document.querySelector('#stickyHeader')
@@ -46,8 +46,8 @@ export default class StickyHeader extends Vue {
   }
 
   hasItems () {
-    return !!(this.$el.querySelector(':scope > .title').children.length +
-      this.$el.querySelector(':scope > .buttons').children.length)
+    return !!(this.$el.querySelector('.appBarTitle').children.length +
+      this.$el.querySelector('.appBarButtons').children.length)
   }
 }
 </script>
