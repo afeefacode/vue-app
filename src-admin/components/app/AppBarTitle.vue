@@ -11,7 +11,7 @@
       />
     </v-avatar>
 
-    <div>
+    <div class="titleContainer">
       <h3 v-if="subtitle">
         {{ subtitle }}
       </h3>
@@ -50,18 +50,29 @@ export default class appBarTitle extends Vue {
 
 
 <style lang="scss" scoped>
+.titleContainer {
+  overflow-x: hidden;
+  margin-top: -.2rem;
+}
+
 h3 {
   font-size: .9rem;
   font-weight: normal;
-  margin-top: -.2rem;
   margin-bottom: .1rem;
   line-height: 1rem;
   color: #999999;
+
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
 }
 
 h2 {
-  // white-space: nowrap;
   font-size: 1.5rem;
   line-height: 1.5rem;
+
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
 }
 </style>
