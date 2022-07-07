@@ -73,6 +73,15 @@
       </v-container>
     </v-navigation-drawer>
 
+    <a-loading-indicator
+      fixed
+      top
+      left
+      class="loadingIndicator"
+      :isLoading="isLoading"
+      :color="loaderColor"
+    />
+
     <v-main id="v-main">
       <a-row
         start
