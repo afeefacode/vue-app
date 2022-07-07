@@ -5,7 +5,7 @@
         :class="'removeButton-' + dialogId"
         fab
         small
-        :color="(hover ? 'red' : 'gray')"
+        :color="(hover ? 'red' : 'grey lighten-3')"
         title="Löschen"
         @click="remove"
       >
