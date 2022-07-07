@@ -1,6 +1,6 @@
 <template>
   <a-row
-    gap="2"
+    gap="1"
     v-bind="$attrs"
   >
     <a-icon-button
@@ -9,14 +9,16 @@
       color="green white--text"
       icon="$checkIcon"
       text="Speichern"
+      title="Speichern"
       @click="$emit('save')"
     />
 
     <v-icon
-      v-if="$has.reset"
+      v-if="$has.reset && changed"
       :small="small"
       :class="{disabled: !changed}"
       :disabled="!changed"
+      color="#999999"
       text
       title="Formular zurücksetzen"
       @click="$emit('reset')"

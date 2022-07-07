@@ -1,5 +1,19 @@
 <template>
   <div class="d-flex align-center gap-4">
+    <v-btn
+      v-if="back"
+      fab
+      x-small
+      color="#F4F4F4"
+      title="Zurück"
+      class="mr-n2"
+      @click="$router.push(back)"
+    >
+      <v-icon>
+        $arrowLeftIcon
+      </v-icon>
+    </v-btn>
+
     <v-avatar
       color="#F4F4F4"
       size="3rem"
@@ -24,7 +38,7 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: ['icon', 'title', 'subtitle']
+  props: ['back', 'icon', 'title', 'subtitle']
 })
 export default class appBarTitle extends Vue {
   mounted () {
