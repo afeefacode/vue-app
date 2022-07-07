@@ -1,13 +1,17 @@
 <template>
   <div>
-    <a-icon-button
-      color="red white--text"
+    <v-btn
       :class="'removeButton-' + dialogId"
-      icon="$trashCanIcon"
-      text="Löschen"
-      v-bind="$attrs"
+      fab
+      small
+      color="red white--text"
+      title="Löschen"
       @click="remove"
-    />
+    >
+      <v-icon>
+        $trashCanIcon
+      </v-icon>
+    </v-btn>
 
     <a-dialog
       :id="dialogId"

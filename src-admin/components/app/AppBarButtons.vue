@@ -1,7 +1,7 @@
 <template>
   <div
     id="appBarButtons"
-    class="d-flex align-center justify-end gap-2"
+    class="d-flex align-center justify-end gap-3"
   />
 </template>
 
