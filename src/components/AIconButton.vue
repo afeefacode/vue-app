@@ -5,7 +5,7 @@
   >
     <v-icon
       left
-      class="mr-0"
+      class="mr-1"
     >
       {{ icon }}
     </v-icon>
