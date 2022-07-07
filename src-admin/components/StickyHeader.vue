@@ -1,7 +1,7 @@
 <template>
   <div
     id="stickyHeader"
-    :class="['d-flex align-center', {visible}]"
+    :class="['d-flex align-center gap-8', {visible}]"
   >
     <app-bar-title-container class="appBarTitle flex-grow-1" />
     <app-bar-buttons class="appBarButtons mr-2" />
