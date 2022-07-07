@@ -1,5 +1,6 @@
 import {
   mdiAlarmLightOutline,
+  mdiArrowLeft,
   mdiCalendar,
   mdiCheck,
   mdiCheckBold,
@@ -12,6 +13,8 @@ import {
   mdiLock,
   mdiLogoutVariant,
   mdiMagnify,
+  mdiMenuDown,
+  mdiMenuUp,
   mdiPencil,
   mdiPlus,
   mdiThumbUpOutline
@@ -40,7 +43,10 @@ export default new Vuetify({
       searchIcon: mdiMagnify,
       lockIcon: mdiLock,
       checkIcon: mdiCheck,
-      checkBoldIcon: mdiCheckBold
+      checkBoldIcon: mdiCheckBold,
+      arrowLeftIcon: mdiArrowLeft,
+      caretDownIcon: mdiMenuDown,
+      caretUpIcon: mdiMenuUp
     }
   },
   breakpoint: {
