@@ -1,17 +1,22 @@
 <template>
   <div>
-    <v-btn
-      :class="'removeButton-' + dialogId"
-      fab
-      small
-      color="red white--text"
-      title="Löschen"
-      @click="remove"
-    >
-      <v-icon>
-        $trashCanIcon
-      </v-icon>
-    </v-btn>
+    <v-hover v-slot="{ hover }">
+      <v-btn
+        :class="'removeButton-' + dialogId"
+        fab
+        small
+        :color="(hover ? 'red' : 'gray')"
+        title="Löschen"
+        @click="remove"
+      >
+        <v-icon
+          :color="hover ? 'white' : '#999999'"
+          size="1.4rem"
+        >
+          $trashCanIcon
+        </v-icon>
+      </v-btn>
+    </v-hover>
 
     <a-dialog
       :id="dialogId"

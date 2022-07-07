@@ -32,6 +32,10 @@
   background-color: #E9E9E9;
 }
 
+.theme--light.v-btn.v-btn--disabled.v-btn--has-bg {
+  background-color: #F4F4F4 !important;
+}
+
 .v-btn {
   box-shadow: none !important;
 }
