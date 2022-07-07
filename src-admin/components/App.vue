@@ -74,11 +74,15 @@
     </v-navigation-drawer>
 
     <v-main id="v-main">
-      <a-row class="topbar">
+      <a-row
+        start
+        class="topbar"
+      >
         <v-app-bar-nav-icon
           class="sidebarToggleButton mr-2 ml-4"
           @click="toggleDrawer"
         />
+
         <a-breadcrumbs />
       </a-row>
 
@@ -217,6 +221,10 @@ export default class App extends Vue {
   left: 0;
   top: 0;
   padding: .2rem 1rem;
+}
+
+.a-breadcrumbs {
+  margin-top: 7px;
 }
 
 .menubar {

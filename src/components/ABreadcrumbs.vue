@@ -1,19 +1,36 @@
 <template>
-  <div class="d-flex flex-wrap align-center">
-    <div
-      v-for="(breadcrumb, index) in breadcrumbs"
-      :key="index"
-      class="item mr-2 d-flex align-center"
-    >
-      <v-icon>$chevronRightIcon</v-icon>
-
-      <router-link
-        :to="breadcrumb.to"
-        :exact="true"
+  <div class="a-breadcrumbs d-flex align-start gap-2 mr-4">
+    <div :class="['breadcrumbs d-flex align-center', {'flex-wrap': wrapBreadcrumbs_}]">
+      <div
+        v-for="(breadcrumb, index) in breadcrumbs"
+        :key="index"
+        class="item mr-2 d-flex align-center"
       >
-        {{ getItemTitle(breadcrumb.title) }}
-      </router-link>
+        <v-icon>$chevronRightIcon</v-icon>
+
+        <router-link
+          :to="breadcrumb.to"
+          :exact="true"
+        >
+          {{ breadcrumb.title }}
+        </router-link>
+      </div>
     </div>
+
+    <v-avatar
+      v-if="expandVisible"
+      class="expand"
+      color="#EEE"
+      size="1.3rem"
+      @click="wrapBreadcrumbs"
+    >
+      <a-icon>$caret{{ wrapBreadcrumbs_ ? 'Up' : 'Down' }}Icon</a-icon>
+    </v-avatar>
+
+    <div
+      v-else
+      class="expandDummy"
+    />
   </div>
 </template>
 
@@ -28,6 +45,8 @@ export default class ABreadcrumbs extends Vue {
   breadcrumbs = []
   titleCache = {}
   lastRoute = null
+  expandVisible = false
+  wrapBreadcrumbs_ = false
 
   created () {
     this.$events.on(SaveEvent.STOP_SAVING, this.afterSave)
@@ -101,21 +120,46 @@ export default class ABreadcrumbs extends Vue {
     }
 
     this.breadcrumbs = breadcrumbs
+    this.wrapBreadcrumbs_ = false
+
+    this.scrollBreadcrumbs()
   }
 
-  getItemTitle (title) {
-    // title = title.concat(title).concat(title)
-    if (title.length > 20) {
-      // title = title.slice(0, 10).trim() + '...' + title.slice(-10).trim()
+  scrollBreadcrumbs () {
+    this.$nextTick(() => {
+      const objDiv = this.$el.querySelector('.breadcrumbs')
+      if (objDiv.scrollWidth > objDiv.offsetWidth) {
+        objDiv.scrollLeft = objDiv.scrollWidth
+        this.expandVisible = true
+      } else {
+        objDiv.scrollLeft = 0
+        this.expandVisible = false
+      }
+    })
+  }
+
+  wrapBreadcrumbs () {
+    this.wrapBreadcrumbs_ = !this.wrapBreadcrumbs_
+    if (this.wrapBreadcrumbs_) {
+      const objDiv = this.$el.querySelector('.breadcrumbs')
+      objDiv.scrollLeft = 0
+    } else {
+      this.scrollBreadcrumbs()
     }
-    return title
-    // return title.toUpperCase()
   }
 }
 </script>
 
 
 <style lang="scss" scoped>
+.a-breadcrumbs {
+  overflow: hidden;
+}
+
+.breadcrumbs {
+  overflow: hidden;
+}
+
 .item {
   white-space: nowrap;
 
@@ -130,5 +174,15 @@ export default class ABreadcrumbs extends Vue {
       color: rgba(0,0,0,.38);
     }
   }
+}
+
+.expand {
+  cursor: pointer;
+  margin-top: 1px;
+}
+
+.expandDummy {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 </style>
