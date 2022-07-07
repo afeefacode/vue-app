@@ -54,10 +54,6 @@ export default class Sidebar extends Vue {
   }
 }
 
-::v-deep .v-navigation-drawer__border {
-  display: none;
-}
-
 #sidebar__children {
   height: 100%;
   padding: 2rem;
