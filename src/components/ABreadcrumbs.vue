@@ -6,7 +6,9 @@
         :key="index"
         class="item mr-2 d-flex align-center"
       >
-        <v-icon>$chevronRightIcon</v-icon>
+        <v-icon v-if="index > 0">
+          $chevronRightIcon
+        </v-icon>
 
         <router-link
           :to="breadcrumb.to"
