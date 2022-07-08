@@ -1,17 +1,23 @@
 <template>
   <div class="detailProperty">
     <div class="header">
-      <v-icon
+      <v-avatar
         v-if="_icon"
-        :color="_icon.color"
-        size="2rem"
+        color="#EEEEEE"
+        size="2.5rem"
       >
-        {{ _icon.icon }}
-      </v-icon>
-      <label :class="['label', {'label--withIcon': _icon != null}]">{{ label }}</label>
+        <v-icon
+          :color="_icon.color"
+          size="1.5rem"
+        >
+          {{ _icon.icon }}
+        </v-icon>
+      </v-avatar>
+
+      <label :class="['label', {'label--withIcon': !!_icon}]">{{ label }}</label>
     </div>
 
-    <div :class="['content', {'content--withIcon': _icon != null}]">
+    <div :class="['content', {'content--withIcon': !!_icon}]">
       <a-row
         vertical
         gap="6"
@@ -52,27 +58,25 @@ export default class DetailProperty extends Vue {
     flex-wrap: nowrap;
     align-items: center;
     height: 40px;
-    .v-icon {
+
+    .v-avatar {
       flex: 0 0 40px;
       margin-right: 15px;
     }
+
     .label {
       display: block;
       text-transform: uppercase;
       letter-spacing: 2px;
-      @media (max-width: 900px), (orientation : portrait) {
-        padding-left: 55px;
-        &--withIcon {
-          padding-left: 0;
-        }
+      padding-left: 55px;
+      &--withIcon {
+        padding-left: 0;
       }
     }
   }
   .content {
+    padding-left: 55px;
     &--withIcon {
-      padding-left: 55px;
-    }
-    @media (max-width: 900px), (orientation : portrait) {
       padding-left: 55px;
     }
   }
