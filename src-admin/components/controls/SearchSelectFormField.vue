@@ -68,6 +68,7 @@
     >
       <template #activator>
         <a-icon-button
+          small
           icon="$plusIcon"
           :text="selectableConfig.addButtonTitle || 'Hinzufügen'"
           class="mt-4"
