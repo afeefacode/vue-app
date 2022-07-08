@@ -65,7 +65,7 @@ export default class appBarTitle extends Vue {
 
 <style lang="scss" scoped>
 .titleContainer {
-  overflow-x: hidden;
+  overflow: hidden;
   margin-top: -.2rem;
 }
 
@@ -77,7 +77,7 @@ h3 {
   color: #999999;
 
   white-space: nowrap;
-  overflow-x: hidden;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 
@@ -86,7 +86,7 @@ h2 {
   line-height: 1.5rem;
 
   white-space: nowrap;
-  overflow-x: hidden;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 </style>
