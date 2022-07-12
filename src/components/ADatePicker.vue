@@ -13,7 +13,7 @@
         :label="label"
         :style="cwm_widthStyle"
         readonly
-        v-bind="attrs"
+        v-bind="{...$attrs, ...attrs}"
         :rules="validationRules"
         v-on="on"
         @click.native="on.click"
