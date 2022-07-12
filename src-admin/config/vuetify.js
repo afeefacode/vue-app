@@ -20,7 +20,8 @@ import {
   mdiThumbUpOutline,
   mdiAccountGroup,
   mdiShopping,
-  mdiMessage
+  mdiMessage,
+  mdiPencilBoxMultiple
 } from '@mdi/js'
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
@@ -52,7 +53,8 @@ export default new Vuetify({
       caretUpIcon: mdiMenuUp,
       householdMembers: mdiAccountGroup,
       shop: mdiShopping,
-      annotation: mdiMessage
+      annotation: mdiMessage,
+      duplicates: mdiPencilBoxMultiple
     }
   },
   breakpoint: {
