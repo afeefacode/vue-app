@@ -17,7 +17,10 @@ import {
   mdiMenuUp,
   mdiPencil,
   mdiPlus,
-  mdiThumbUpOutline
+  mdiThumbUpOutline,
+  mdiAccountGroup,
+  mdiShopping,
+  mdiMessage
 } from '@mdi/js'
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
@@ -46,7 +49,10 @@ export default new Vuetify({
       checkBoldIcon: mdiCheckBold,
       arrowLeftIcon: mdiArrowLeft,
       caretDownIcon: mdiMenuDown,
-      caretUpIcon: mdiMenuUp
+      caretUpIcon: mdiMenuUp,
+      householdMembers: mdiAccountGroup,
+      shop: mdiShopping,
+      annotation: mdiMessage
     }
   },
   breakpoint: {
