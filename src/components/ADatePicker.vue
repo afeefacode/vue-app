@@ -24,6 +24,7 @@
       v-if="menu"
       :value="date"
       no-title
+      v-bind="$attrs"
       @input="dateChanged"
     />
   </v-menu>
@@ -78,6 +79,7 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
 
   get formattedDate () {
     const date = this.value_
+    if (this.$attrs.type === 'month') return date ? (date.getMonth() + 1) + '/' + date.getFullYear() : null
     return formatDate(date ? new Date(date) : null)
   }
 
