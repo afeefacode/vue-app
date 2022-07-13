@@ -20,7 +20,7 @@ import { debounce } from '@a-vue/utils/debounce'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['focus', 'debounce', 'validator', 'password']
+  props: ['focus', 'debounce', 'validator', {password: false, number: false}]
 })
 export default class ATextField extends Mixins(ComponentWidthMixin) {
   showPassword = false
@@ -58,21 +58,21 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
   }
 
   get type () {
-    if (this.password !== undefined && !this.showPassword) {
+    if (this.password && !this.showPassword) {
       return 'password'
     }
     return 'text'
   }
 
   get appendIcon () {
-    if (this.password !== undefined) {
+    if (this.password) {
       return this.showPassword ? '$eyeIcon' : '$eyeOffIcon'
     }
     return null
   }
 
   get autocomplete () {
-    if (this.password !== undefined) {
+    if (this.password) {
       return 'new-password'
     }
     return null
@@ -87,7 +87,8 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
     if (!this.validator) {
       return false
     }
-    return this.validator.getParams().max || false
+
+    return (!this.number && this.validator.getParams().max) || false
   }
 }
 </script>
