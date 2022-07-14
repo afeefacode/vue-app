@@ -3,15 +3,24 @@
     id="flyingContextContainer"
     :class="{visible}"
   >
-    <a
-      href=""
-      @click.prevent="hide"
-    >close</a>
-
-    <br>
-    <br>
+    <div class="closeButton">
+      <v-btn
+        fab
+        x-small
+        color="gray"
+        target="_blank"
+        title="Schließen"
+        @click.prevent="hide"
+      >
+        <v-icon>
+          $closeIcon
+        </v-icon>
+      </v-btn>
+    </div>
 
     <div id="flyingContextContainer__children" />
+
+    <div class="v-navigation-drawer__border" />
   </div>
 </template>
 
@@ -71,15 +80,24 @@ export default class FlyingContextContainer extends Vue {
   position: fixed;
   z-index: 200;
   right: 0;
-  width: 60vw;
-  height: 80vh;
-  top: 10vh;
-  background: rgba($color: white, $alpha: .6);
-  border: 1px solid black;
+  width: 50vw;
+  height: 100%;
+  top: 0;
+  background: white;
   transition: right .2s;
+  padding: 2rem;
 
   &:not(.visible) {
     right: -80vw;
+  }
+
+  .v-navigation-drawer__border {
+     background-color: rgba(0, 0, 0, .12);
+     left: 0;
+  }
+
+  .closeButton {
+    margin: -1rem 0 2rem -1rem;
   }
 }
 </style>
