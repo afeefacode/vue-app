@@ -88,7 +88,7 @@
         class="topbar"
       >
         <v-app-bar-nav-icon
-          class="sidebarToggleButton mr-2 ml-4"
+          class="sidebarToggleButton mr-2 ml-3"
           @click="toggleDrawer"
         />
 
@@ -97,7 +97,7 @@
 
       <v-container
         fluid
-        class="pa-8 pt-4"
+        class="pa-8 pt-2"
       >
         <sticky-header />
 
@@ -229,7 +229,7 @@ export default class App extends Vue {
   width: 100%;
   left: 0;
   top: 0;
-  padding: .2rem 1rem;
+  padding: .2rem 1.1rem;
 }
 
 .a-breadcrumbs {
