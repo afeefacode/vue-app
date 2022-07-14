@@ -9,9 +9,7 @@
         title="Löschen"
         @click="remove"
       >
-        <v-icon
-          :color="hover ? 'white' : '#999999'"
-        >
+        <v-icon :color="hover ? 'white' : '#999999'">
           $trashCanIcon
         </v-icon>
       </v-btn>
