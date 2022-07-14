@@ -5,9 +5,26 @@
       @click="toggleSort"
     >
       <div
+        v-if="!icon"
         :class="['text', {active}]"
         v-html="text"
       />
+
+      <v-tooltip
+        v-else
+        bottom
+      >
+        <template #activator="{ on, attrs }">
+          <v-icon
+            :class="['mt-n1', {active}]"
+            v-bind="attrs"
+            v-on="on"
+          >
+            {{ icon }}
+          </v-icon>
+        </template>
+        <span>{{ text }}</span>
+      </v-tooltip>
 
       <svg
         v-if="order"
@@ -25,7 +42,7 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: ['text', 'order']
+  props: ['text', 'icon', 'order']
 })
 export default class ListColumnHeader extends Vue {
   get orderValue () {
@@ -89,6 +106,14 @@ export default class ListColumnHeader extends Vue {
   &.order {
     user-select: none;
     cursor: pointer;
+  }
+}
+
+::v-deep .v-icon {
+  color: #AAAAAA !important;
+
+  &.active {
+    color: #666666 !important;
   }
 }
 
