@@ -16,6 +16,7 @@
         v-bind="{...$attrs, ...attrs}"
         :rules="validationRules"
         v-on="on"
+        @click:clear="clearDate"
         @click.native="on.click"
       />
     </template>
@@ -70,6 +71,11 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
 
   get label () {
     return this.$attrs.label
+  }
+
+  clearDate () {
+    this.value_ = null
+    this.$emit('input', this.value_)
   }
 
   dateChanged (date) {
