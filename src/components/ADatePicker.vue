@@ -24,6 +24,7 @@
       v-if="menu"
       :value="date"
       no-title
+      :type="type"
       v-bind="$attrs"
       @input="dateChanged"
     />
@@ -37,7 +38,7 @@ import { formatDate } from '@a-vue/utils/format-date'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['value', 'validator']
+  props: ['value', 'validator', 'type']
 })
 export default class ADatePicker extends Mixins(ComponentWidthMixin) {
   value_ = null
@@ -63,7 +64,7 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
 
   get date () {
     return this.value_
-      ? this.value_.toISOString().substr(0, 10)
+      ? this.value_.toISOString().substr(0, this.type === 'month' ? 7 : 10)
       : null
   }
 
@@ -79,8 +80,14 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
 
   get formattedDate () {
     const date = this.value_
-    if (this.$attrs.type === 'month') return date ? (date.getMonth() + 1) + '/' + date.getFullYear() : null
-    return formatDate(date ? new Date(date) : null)
+    if (!date) {
+      return null
+    }
+    if (this.type === 'month') {
+      const monthName = date.toLocaleString('default', { month: 'long' })
+      return monthName + ' ' + date.getFullYear()
+    }
+    return formatDate(new Date(date))
   }
 
   get validationRules () {
