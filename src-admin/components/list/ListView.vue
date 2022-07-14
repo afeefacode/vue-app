@@ -36,7 +36,7 @@
             :class="{selectable: hasFlyingContext}"
             v-bind="getRowAttributes(model)"
             v-on="getRowListeners(model)"
-            @click="$emit('flyingContext', model)"
+            @click="emitFlyingContext(model)"
           >
             <v-icon
               v-if="$has.icon"
@@ -112,6 +112,14 @@ export default class ListView extends Mixins(ListViewMixin) {
 
   get hasFlyingContext () {
     return !!this.$listeners.flyingContext
+  }
+
+  emitFlyingContext (model) {
+    if (window.getSelection().toString()) { // do not open if text selected
+      console.log(window.getSelection().toString())
+      return
+    }
+    this.$emit('flyingContext', model)
   }
 }
 </script>
