@@ -18,11 +18,7 @@ import {
   mdiPencil,
   mdiPlus,
   mdiPrinter,
-  mdiThumbUpOutline,
-  mdiAccountGroup,
-  mdiShopping,
-  mdiMessage,
-  mdiPencilBoxMultiple
+  mdiThumbUpOutline
 } from '@mdi/js'
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
@@ -52,10 +48,6 @@ export default new Vuetify({
       arrowLeftIcon: mdiArrowLeft,
       caretDownIcon: mdiMenuDown,
       caretUpIcon: mdiMenuUp,
-      householdMembers: mdiAccountGroup,
-      shop: mdiShopping,
-      annotation: mdiMessage,
-      duplicates: mdiPencilBoxMultiple,
       printerIcon: mdiPrinter
     }
   },
