@@ -1,8 +1,9 @@
 <template>
   <v-icon
     class="modelIcon"
-    :color="color"
+    :color="_color"
     v-bind="$attrs"
+    v-on="$listeners"
     v-text="icon"
   />
 </template>
@@ -11,7 +12,7 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: ['model', 'modelClass']
+  props: ['model', 'modelClass', 'color']
 })
 export default class ModelIcon extends Vue {
   get icon () {
@@ -22,7 +23,11 @@ export default class ModelIcon extends Vue {
     }
   }
 
-  get color () {
+  get _color () {
+    if (this.color) {
+      return this.color
+    }
+
     if (this.model) {
       return this.model.getIcon().color
     } else {
