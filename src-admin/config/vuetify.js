@@ -17,6 +17,7 @@ import {
   mdiMenuUp,
   mdiPencil,
   mdiPlus,
+  mdiPrinter,
   mdiThumbUpOutline,
   mdiAccountGroup,
   mdiShopping,
@@ -54,7 +55,8 @@ export default new Vuetify({
       householdMembers: mdiAccountGroup,
       shop: mdiShopping,
       annotation: mdiMessage,
-      duplicates: mdiPencilBoxMultiple
+      duplicates: mdiPencilBoxMultiple,
+      printerIcon: mdiPrinter
     }
   },
   breakpoint: {
