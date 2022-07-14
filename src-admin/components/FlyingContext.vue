@@ -35,12 +35,17 @@ export default class FlyingContext extends Vue {
     }
 
     this.isVisible = this.show
+    const el = this.getContent()
+
+    if (!el) {
+      return // hmr reload removes dom element but keeps this instance
+    }
 
     if (this.isVisible) {
       const container = this.getSidebarContainer()
-      container.appendChild(this.getContent())
+      container.appendChild(el)
     } else {
-      this.$el.appendChild(this.getContent())
+      this.$el.appendChild(el)
     }
   }
 
