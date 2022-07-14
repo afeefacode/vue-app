@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex align-center gap-4">
+  <a-row gap="4">
     <v-btn
       v-if="back"
       fab
@@ -31,7 +31,7 @@
       </h3>
       <h2>{{ title }}</h2>
     </div>
-  </div>
+  </a-row>
 </template>
 
 <script>
