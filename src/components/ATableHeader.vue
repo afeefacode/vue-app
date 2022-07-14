@@ -74,5 +74,9 @@ export default class ATableHeader extends Vue {
       }
     }
   }
+
+  [class*=text-] {
+    color: inherit;
+  }
 }
 </style>

@@ -84,5 +84,9 @@ export default class ATableRow extends Vue {
       }
     }
   }
+
+  [class*=text-] {
+    color: inherit;
+  }
 }
 </style>
