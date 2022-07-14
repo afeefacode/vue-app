@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="project-buttons gap-3">
     <slot />
   </div>
 </template>
@@ -39,3 +39,10 @@ export default class AppBarButton extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.project-buttons {
+  display: flex;
+  align-items: center;
+}
+</style>
