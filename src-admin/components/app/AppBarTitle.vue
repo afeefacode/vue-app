@@ -83,7 +83,7 @@ h3 {
 
 h2 {
   font-size: 1.5rem;
-  line-height: 1.5rem;
+  line-height: 1.7rem;
 
   white-space: nowrap;
   overflow: hidden;
