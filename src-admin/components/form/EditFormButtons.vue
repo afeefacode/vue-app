@@ -16,18 +16,21 @@
       </v-icon>
     </v-btn>
 
-    <v-icon
+    <v-hover
       v-if="$has.reset && changed"
-      :small="small"
-      :class="{disabled: !changed}"
-      :disabled="!changed"
-      color="#999999"
-      text
-      title="Formular zurücksetzen"
-      @click="$emit('reset')"
+      v-slot="{ hover }"
     >
-      {{ undoIcon }}
-    </v-icon>
+      <v-icon
+        :small="small"
+        :class="{disabled: !changed}"
+        :color="hover ? '#666666' : '#999999'"
+        text
+        title="Formular zurücksetzen"
+        @click="$emit('reset')"
+      >
+        {{ undoIcon }}
+      </v-icon>
+    </v-hover>
   </a-row>
 </template>
 
