@@ -1,28 +1,35 @@
 <template>
-  <edit-form
-    ref="form"
-    :model="model"
-    :createModelToEdit="createModelToEdit"
-  >
-    <template #form="{modelToEdit, changed, valid}">
-      <slot
-        name="form"
-        :modelToEdit="modelToEdit"
-        :changed="changed"
-        :valid="valid"
-      />
+  <div>
+    <slot name="before-form" />
 
-      <app-bar-button>
-        <edit-form-buttons
+    <edit-form
+      ref="form"
+      :model="model"
+      :createModelToEdit="createModelToEdit"
+    >
+      <template #form="{modelToEdit, model, changed, valid}">
+        <slot
+          name="form"
+          :modelToEdit="modelToEdit"
+          :model="model"
           :changed="changed"
           :valid="valid"
-          :has="{reset: !!modelToEdit.id}"
-          @save="$emit('save', modelToEdit, ignoreChangesOnRouteChange)"
-          @reset="$refs.form.reset()"
         />
-      </app-bar-button>
-    </template>
-  </edit-form>
+
+        <app-bar-button>
+          <edit-form-buttons
+            :changed="changed"
+            :valid="valid"
+            :has="{reset: !!modelToEdit.id}"
+            @save="$emit('save', modelToEdit, ignoreChangesOnRouteChange)"
+            @reset="$refs.form.reset()"
+          />
+        </app-bar-button>
+      </template>
+    </edit-form>
+
+    <slot name="after-form" />
+  </div>
 </template>
 
 <script>

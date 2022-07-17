@@ -8,6 +8,7 @@
       :changed="changed"
       :valid="valid"
       :modelToEdit="modelToEdit"
+      :model="model"
     />
   </v-form>
 </template>
