@@ -41,6 +41,7 @@ export default class APagination extends Vue {
     margin: 0;
     width: 28px;
     height: 28px;
+    white-space: nowrap;
   }
 }
 </style>
