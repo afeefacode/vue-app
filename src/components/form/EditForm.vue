@@ -47,6 +47,8 @@ export default class EditForm extends Vue {
       this.modelToEdit = this.model.cloneForEdit()
     }
     this.lastJson = this.json
+
+    this.$emit('update:modelToEdit', this.modelToEdit)
   }
 
   /**

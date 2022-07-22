@@ -6,6 +6,7 @@
       ref="form"
       :model="model"
       :createModelToEdit="createModelToEdit"
+      v-on="$listeners"
     >
       <template #form="{modelToEdit, model, changed, valid}">
         <slot
