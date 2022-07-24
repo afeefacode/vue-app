@@ -18,7 +18,8 @@ import {
   mdiPencil,
   mdiPlus,
   mdiPrinter,
-  mdiThumbUpOutline
+  mdiThumbUpOutline,
+  mdiCurrencyEur
 } from '@mdi/js'
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
@@ -48,7 +49,8 @@ export default new Vuetify({
       arrowLeftIcon: mdiArrowLeft,
       caretDownIcon: mdiMenuDown,
       caretUpIcon: mdiMenuUp,
-      printerIcon: mdiPrinter
+      printerIcon: mdiPrinter,
+      euroSymbol: mdiCurrencyEur
     }
   },
   breakpoint: {

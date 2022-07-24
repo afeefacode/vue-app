@@ -2,7 +2,6 @@
   <v-text-field
     ref="input"
     :type="type"
-    :appendIcon="appendIcon"
     :autocomplete="autocomplete"
     :rules="validationRules"
     :counter="counter"
