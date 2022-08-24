@@ -27,6 +27,7 @@
 <script>
 import { Component, Vue } from '@a-vue'
 import { FlyingContextEvent } from '@a-vue/events'
+import { getZIndex } from 'vuetify/lib/util/helpers'
 
 @Component({
   props: []
@@ -64,6 +65,12 @@ export default class FlyingContextContainer extends Vue {
         return
       }
       parent = parent.parentElement
+    }
+
+    // popup clicked
+    const targetIndex = getZIndex(e.target)
+    if (targetIndex > 200) {
+      return
     }
 
     // check if flying context ist clicked
