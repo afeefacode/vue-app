@@ -97,7 +97,7 @@
 
       <v-container
         fluid
-        class="pa-8 pt-2"
+        class="pa-8 pt-0"
       >
         <sticky-header />
 
