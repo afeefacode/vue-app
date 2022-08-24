@@ -33,7 +33,7 @@
             v-for="model in models_"
             :key="model.id"
             v-flying-context-trigger="hasFlyingContext"
-            :class="{selectable: hasFlyingContext}"
+            :class="getRowClasses(model)"
             v-bind="getRowAttributes(model)"
             v-on="getRowListeners(model)"
             @click="emitFlyingContext(model)"
@@ -82,7 +82,7 @@ import { ListViewMixin } from '@a-vue/components/list/ListViewMixin'
 import { LoadingEvent } from '@a-vue/events'
 
 @Component({
-  props: ['rowAttributes', 'rowListeners']
+  props: ['rowAttributes', 'rowClasses', 'rowListeners']
 })
 export default class ListView extends Mixins(ListViewMixin) {
   $hasOptions = ['icon']
@@ -103,7 +103,37 @@ export default class ListView extends Mixins(ListViewMixin) {
     if (typeof this.rowAttributes === 'function') {
       return this.rowAttributes(model)
     }
-    return this.rowAttributes
+    return this.rowAttributes || {}
+  }
+
+  getRowClasses (model) {
+    let classes
+
+    if (typeof this.rowClasses === 'function') {
+      classes = this.rowClasses(model)
+    } else {
+      classes = this.rowClasses || {}
+    }
+
+    if (Array.isArray(classes)) { // ['a', {b: true/false}, 'c']
+      classes = classes.reduce((ac, a) => {
+        if (typeof a === 'object') { // {className: true/false}
+          return {...ac, ...a}
+        }
+        return {...ac, [a]: true} // 'className'
+      }, {})
+    } else if (typeof classes === 'string') { // 'a b c'
+      classes = {
+        [classes]: true
+      }
+    } // else { a: true, b: true, c: true }
+
+    classes = {
+      selectable: this.hasFlyingContext,
+      ...classes
+    }
+
+    return classes
   }
 
   getRowListeners (model) {
@@ -116,7 +146,7 @@ export default class ListView extends Mixins(ListViewMixin) {
 
   emitFlyingContext (model) {
     if (window.getSelection().toString()) { // do not open if text selected
-      console.log(window.getSelection().toString())
+      // console.log(window.getSelection().toString())
       return
     }
     this.$emit('flyingContext', model)
