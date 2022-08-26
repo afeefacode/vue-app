@@ -7,14 +7,15 @@
 </template>
 
 <script>
-import { Component, Watch, Vue } from '@a-vue'
+import { Component, Watch, Mixins } from '@a-vue'
 import { FlyingContextEvent } from '@a-vue/events'
 import { randomCssClass } from '@a-vue/utils/random'
+import { CancelOnEscMixin } from '@a-vue/services/escape/CancelOnEscMixin'
 
 @Component({
   props: [{show: false}]
 })
-export default class FlyingContext extends Vue {
+export default class FlyingContext extends Mixins(CancelOnEscMixin) {
   isVisible = false
   contextId = randomCssClass(10)
 
@@ -44,8 +45,10 @@ export default class FlyingContext extends Vue {
     if (this.isVisible) {
       const container = this.getSidebarContainer()
       container.appendChild(el)
+      this.coe_watchCancel() // show context -> watch esc
     } else {
       this.$el.appendChild(el)
+      this.coe_unwatchCancel() // hide context -> do not watch esc any more
     }
   }
 
@@ -62,9 +65,15 @@ export default class FlyingContext extends Vue {
   onHide () {
     if (this.isVisible) {
       this.$el.appendChild(this.getContent())
+      this.coe_unwatchCancel() // hide context -> do not watch esc any more
       this.isVisible = false
       this.$emit('hide')
     }
+  }
+
+  coe_cancelOnEsc () {
+    this.onHide()
+    return false // stop esc propagation
   }
 
   getContent () {

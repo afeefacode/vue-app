@@ -5,8 +5,9 @@
     :contentClass="_dialogId"
     transition="v-fade-transition"
     v-bind="$attrs"
+    persistent
+    no-click-animation
     @click:outside="cancel"
-    @keydown.esc="cancel"
   >
     <template #activator="{ on }">
       <div v-on="on">
@@ -59,11 +60,12 @@ import { DialogEvent } from './dialog/DialogEvent'
 import { PositionConfig } from '../services/PositionService'
 import { UsesPositionServiceMixin } from '../services/position/UsesPositionServiceMixin'
 import { randomCssClass } from '../utils/random'
+import { CancelOnEscMixin } from '@a-vue/services/escape/CancelOnEscMixin'
 
 @Component({
   props: ['id', 'anchor', 'active', 'payload']
 })
-export default class ADialog extends Mixins(UsesPositionServiceMixin) {
+export default class ADialog extends Mixins(UsesPositionServiceMixin, CancelOnEscMixin) {
   dialogId = randomCssClass(10)
 
   title = null
@@ -88,6 +90,11 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
     this.$events.off(DialogEvent.SHOW, this.show)
   }
 
+  coe_cancelOnEsc () {
+    this.cancel()
+    return false // stop esc propagation
+  }
+
   @Watch('dialog')
   dialogChanged () {
     // called without event from activator
@@ -104,6 +111,13 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin) {
       this.dialogEvent = null
 
       this.calledViaEvent = false
+    }
+
+    // register for esc
+    if (this.dialog) {
+      this.coe_watchCancel()
+    } else {
+      this.coe_unwatchCancel()
     }
   }
 

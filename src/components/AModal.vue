@@ -7,10 +7,9 @@
     v-bind="$attrs"
     :contentClass="modalId"
     transition="v-fade-transition"
-    :persistent="true"
-    :no-click-animation="true"
+    persistent
+    no-click-animation
     @click:outside="cancel"
-    @keydown.esc="cancel"
   >
     <template #activator="{ on }">
       <div
@@ -41,11 +40,12 @@ import { UsesPositionServiceMixin } from '@a-vue/services/position/UsesPositionS
 import { randomCssClass } from '../utils/random'
 import { getZIndex } from 'vuetify/lib/util/helpers'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
+import { CancelOnEscMixin } from '@a-vue/services/escape/CancelOnEscMixin'
 
 @Component({
   props: ['show', 'title', 'beforeClose', 'triggerClass', 'anchorPosition']
 })
-export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentWidthMixin) {
+export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentWidthMixin, CancelOnEscMixin) {
   modalId = randomCssClass(10)
 
   modal = false
@@ -79,6 +79,11 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
     }
   }
 
+  coe_cancelOnEsc () {
+    this.cancel()
+    return false // stop esc propagation
+  }
+
   /**
    * visiblility changes from outside
    * this will trigger the modal watcher
@@ -107,6 +112,14 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
     } else {
       this.removeTransientAnchor()
     }
+
+    // register for esc
+    if (this.modal) {
+      this.coe_watchCancel()
+    } else {
+      this.coe_unwatchCancel()
+    }
+
     this.$emit('update:show', this.modal)
   }
 
