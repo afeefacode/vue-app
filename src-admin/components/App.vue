@@ -230,6 +230,7 @@ export default class App extends Vue {
   left: 0;
   top: 0;
   padding: .2rem 1.1rem;
+  background-color: white;
 }
 
 .a-breadcrumbs {
