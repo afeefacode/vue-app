@@ -19,7 +19,7 @@
       v-if="dialog"
       class="pb-1"
     >
-      <v-card-title>
+      <v-card-title class="pa-3">
         {{ title }}
       </v-card-title>
 
@@ -27,7 +27,7 @@
         <span v-html="message" />
       </v-card-text>
 
-      <v-card-text>
+      <v-card-text v-if="$slots.default">
         <slot :props="props" />
       </v-card-text>
 
@@ -209,11 +209,11 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, CancelOnEs
 <style lang="scss" scoped>
 .v-card__title {
   background: #EEEEEE;
-  padding: .3rem 1rem !important;
+  padding: .6rem 1rem .3rem !important;
 }
 
 .v-card__text {
-  padding: .5rem 1rem !important;
+  padding: .8rem 1rem !important;
 }
 
 ::v-deep .v-dialog {
