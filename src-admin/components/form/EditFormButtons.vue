@@ -3,18 +3,32 @@
     gap="1"
     v-bind="$attrs"
   >
-    <v-btn
-      fab
-      small
-      :disabled="($has.reset && !changed) || !valid"
-      color="green white--text"
-      title="Speichern"
-      @click="$emit('save')"
-    >
-      <v-icon>
-        $checkIcon
-      </v-icon>
-    </v-btn>
+    <v-tooltip bottom>
+      <template #activator="{ on }">
+        <div v-on="disabled ? on : null">
+          <v-btn
+            fab
+            small
+            :disabled="disabled"
+            color="green white--text"
+            title="Speichern"
+            @click="$emit('save')"
+          >
+            <v-icon>
+              $checkIcon
+            </v-icon>
+          </v-btn>
+        </div>
+      </template>
+      <span v-if="disabled">
+        <template v-if="!valid">
+          Daten berichtigen,<br>um zu speichern
+        </template>
+        <template v-else>
+          Daten ändern,<br>um zu speichern
+        </template>
+      </span>
+    </v-tooltip>
 
     <v-hover
       v-if="$has.reset && changed"
@@ -49,12 +63,9 @@ export default class EditFormButtons extends Vue {
   $hasOptions = ['reset']
 
   undoIcon = mdiRotateLeft
+
+  get disabled () {
+    return (this.$has.reset && !this.changed) || !this.valid
+  }
 }
 </script>
-
-
-<style lang="scss" scoped>
-.v-icon--disabled {
-  opacity: .3;
-}
-</style>
