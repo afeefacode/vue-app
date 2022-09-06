@@ -28,11 +28,39 @@
   }
 }
 
+.theme--light.v-btn.a-btn-standard {
+  background-color: #E9E9E9;
+
+  &:not(:hover) {
+    background-color: #EEEEEE !important;
+    border-color: #EEEEEE !important;
+  }
+
+  span,
+  .v-icon {
+    color: grey !important;
+  }
+
+  &:hover {
+    span,
+    .v-icon {
+      &.white--hover {
+        color: white !important;
+      }
+    }
+  }
+}
+
 .theme--light.v-btn.v-btn--has-bg {
   background-color: #E9E9E9;
 }
 
+.theme--light.v-btn:focus::before {
+  opacity: .08;
+}
+
 .theme--light.v-btn.v-btn--disabled,
+.theme--light.v-btn.v-btn--disabled span,
 .theme--light.v-btn.v-btn--disabled .v-icon,
 .theme--light.v-btn.v-btn--disabled .v-btn__loading {
   color: white !important;

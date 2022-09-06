@@ -2,14 +2,14 @@
   <div>
     <v-hover v-slot="{ hover }">
       <v-btn
-        :class="'removeButton-' + dialogId"
+        :class="'a-btn-standard removeButton-' + dialogId"
         fab
         x-small
         :color="(hover ? 'red' : 'grey lighten-3')"
-        title="Löschen"
+        :title="title"
         @click="remove"
       >
-        <v-icon :color="hover ? 'white' : '#999999'">
+        <v-icon class="white--hover">
           $trashCanIcon
         </v-icon>
       </v-btn>
@@ -17,7 +17,7 @@
 
     <a-dialog
       :id="dialogId"
-      :anchor="[document, '.removeButton-' + dialogId]"
+      :anchor="'.removeButton-' + dialogId"
       :active="protect ? removeKey === removeConfirmed : true"
     >
       <template v-if="protect">
@@ -41,11 +41,10 @@ import { DialogEvent } from '@a-vue/events'
 import { randomCssClass } from '@a-vue/utils/random'
 
 @Component({
-  props: ['itemTitle', 'protect']
+  props: ['title', 'itemTitle', 'protect']
 })
 export default class EditPage extends Vue {
   dialogId = randomCssClass(10)
-  document = document
   removeKey = null
   removeConfirmed = null
 
