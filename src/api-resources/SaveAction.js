@@ -18,7 +18,7 @@ export class SaveAction extends ApiAction {
 
   processError (result) {
     eventBus.dispatch(new AlertEvent(AlertEvent.ERROR, {
-      headline: 'Die Daten konntent nicht gespeichert werden.',
+      headline: 'Die Daten konnten nicht gespeichert werden.',
       message: result.message,
       detail: result.detail
     }))
