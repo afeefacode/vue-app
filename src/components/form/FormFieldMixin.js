@@ -2,7 +2,7 @@ import { Component, Vue } from '@a-vue'
 import { ListAction } from '@a-vue/api-resources/ApiActions'
 
 @Component({
-  props: ['name', 'label']
+  props: ['name', 'label', 'additionalRules']
 })
 export class FormFieldMixin extends Vue {
   get model () {
@@ -87,6 +87,12 @@ export class FormFieldMixin extends Vue {
   }
 
   get validator () {
+    const validator = this.field.getValidator()
+    if (this.additionalRules) {
+      this.additionalRules.forEach(validate => {
+        validator.addRule(validate)
+      })
+    }
     return this.field.getValidator()
   }
 
