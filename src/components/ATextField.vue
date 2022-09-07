@@ -22,6 +22,8 @@ import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
   props: ['focus', 'debounce', 'validator', {password: false, number: false}]
 })
 export default class ATextField extends Mixins(ComponentWidthMixin) {
+  $hasOptions = ['counter']
+
   showPassword = false
 
   created () {
@@ -83,6 +85,10 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
   }
 
   get counter () {
+    if (!this.$has.counter) {
+      return false
+    }
+
     if (!this.validator) {
       return false
     }
