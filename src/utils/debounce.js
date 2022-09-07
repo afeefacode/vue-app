@@ -11,6 +11,10 @@ export function debounce (callback, delay = 300, condition = () => true) {
       clearTimeout(timeout)
     }
 
+    /**
+     * fire immediately if condition falsy
+     * e.g. textfield content gets canceled using (x)
+     */
     if (!condition(...args)) {
       callback(...args)
       return
