@@ -17,9 +17,10 @@
       <h3>{{ _headline }}</h3>
 
       <div v-html="message" />
+
       <div
         v-if="detail"
-        class="pt-3"
+        class="pt-1 details"
         v-html="detail"
       />
     </div>
@@ -126,7 +127,12 @@ export default class AAlert extends Vue {
 
       h3 {
         margin-bottom: .5rem;
-        font-size: 1.4rem;
+        font-size: 1.2rem;
+        line-height: 1.2;
+      }
+
+      .details {
+        font-size: .9rem;
       }
 
       .closeButton {
