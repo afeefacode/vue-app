@@ -69,7 +69,18 @@ export class FormFieldMixin extends Vue {
     }
 
     if (field.hasOptions()) {
-      const options = field.getOptions()
+      let options = field.getOptions()
+
+      if (!Array.isArray(options)) {
+        options = Object.entries(options).map(([key, title]) => {
+          return {
+            itemText: title,
+            itemValue: key
+          }
+        })
+        return options
+      }
+
       return options.map((value, index) => {
         if (typeof value === 'object') { // object option
           return {
