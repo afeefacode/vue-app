@@ -181,11 +181,11 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
 <style lang="scss" scoped>
 .v-card__title {
   background: #EEEEEE;
-  padding: .3rem 1rem !important;
+  padding: .6rem 1rem .3rem !important;
 }
 
 .v-card__text {
-  padding: .5rem 1rem !important;
+  padding: .8rem 1rem !important;
   color: inherit !important;
 }
 
