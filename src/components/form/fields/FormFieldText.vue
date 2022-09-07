@@ -55,6 +55,7 @@ export default class FormFieldText extends Mixins(FormFieldMixin) {
     }
 
     this.model[this.name] = value
+    this.$emit('input', value)
   }
 
   setInternalValue (value, reset = false) {
