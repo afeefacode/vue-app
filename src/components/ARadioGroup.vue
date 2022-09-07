@@ -9,9 +9,12 @@
     <template v-for="option in options_">
       <v-radio
         :key="option.itemText"
-        :label="option.itemText"
         :value="option.itemValue"
-      />
+      >
+        <template #label>
+          <div v-html="option.itemText" />
+        </template>
+      </v-radio>
     </template>
   </v-radio-group>
 </template>
@@ -62,6 +65,7 @@ export default class ARadioGroup extends Vue {
 
 <style lang="scss" scoped>
 .v-input {
+  margin: 0;
 
   &:not(.hasLabel) {
     ::v-deep legend {
