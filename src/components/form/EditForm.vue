@@ -9,6 +9,7 @@
       :valid="valid"
       :modelToEdit="modelToEdit"
       :model="model"
+      :getField="getField"
     />
   </v-form>
 </template>
@@ -33,6 +34,15 @@ export default class EditForm extends Vue {
 
   created () {
     this.reset()
+  }
+
+  getField = name => {
+    const modelType = this.$apiResources.getType(this.model.type)
+    const update = !!this.model.id
+    const fields = update
+      ? modelType.getUpdateFields()
+      : modelType.getCreateFields()
+    return fields[name]
   }
 
   forceUnchanged () {

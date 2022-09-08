@@ -8,11 +8,12 @@
       :createModelToEdit="createModelToEdit"
       v-on="$listeners"
     >
-      <template #form="{modelToEdit, model, changed, valid}">
+      <template #form="{modelToEdit, model, getField, changed, valid}">
         <slot
           name="form"
           :modelToEdit="modelToEdit"
           :model="model"
+          :getField="getField"
           :changed="changed"
           :valid="valid"
         />
