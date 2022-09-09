@@ -23,8 +23,22 @@
         {{ title }}
       </v-card-title>
 
-      <v-card-text v-if="message">
+      <v-card-text
+        v-if="message"
+      >
         <span v-html="message" />
+      </v-card-text>
+
+      <v-card-text
+        v-if="info"
+        class="dialogInfo"
+      >
+        <v-alert
+          dense
+          type="info"
+        >
+          {{ info }}
+        </v-alert>
       </v-card-text>
 
       <v-card-text v-if="$slots.default">
@@ -70,6 +84,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, CancelOnEs
 
   title = null
   message = null
+  info = null
   yesButton = null
   yesColor = null
   cancelButton = null
@@ -103,6 +118,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, CancelOnEs
 
       this.title = this.payload.title
       this.message = this.payload.message
+      this.info = this.payload.info
       this.yesButton = this.payload.yesButton
       this.yesColor = this.payload.yesColor
       this.cancelButton = this.payload.cancelButton
@@ -178,6 +194,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, CancelOnEs
 
     this.title = dialogEvent.payload.title
     this.message = dialogEvent.payload.message
+    this.info = dialogEvent.payload.info
     this.yesButton = dialogEvent.payload.yesButton
     this.yesColor = dialogEvent.payload.yesColor
     this.cancelButton = dialogEvent.payload.cancelButton
@@ -233,5 +250,10 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, CancelOnEs
       opacity: 0;
     }
   }
+}
+
+.dialogInfo {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 </style>

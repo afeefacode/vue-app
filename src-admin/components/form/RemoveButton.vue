@@ -41,7 +41,7 @@ import { DialogEvent } from '@a-vue/events'
 import { randomCssClass } from '@a-vue/utils/random'
 
 @Component({
-  props: ['title', 'itemTitle', 'protect']
+  props: ['title', 'message', 'info', 'itemTitle', 'protect']
 })
 export default class EditPage extends Vue {
   dialogId = randomCssClass(10)
@@ -56,7 +56,8 @@ export default class EditPage extends Vue {
     const result = await this.$events.dispatch(new DialogEvent(DialogEvent.SHOW, {
       id: this.dialogId,
       title: this.itemTitle + ' löschen?',
-      message: 'Soll ' + this.itemTitle + ' gelöscht werden?',
+      message: ['Soll ' + this.itemTitle + ' gelöscht werden?', this.message].filter(m => m).join('<br><br>'),
+      info: this.info,
       yesButton: 'Löschen',
       yesColor: 'red white--text'
     }))
