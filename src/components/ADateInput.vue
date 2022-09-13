@@ -38,18 +38,6 @@ import { Component, Mixins, Watch } from '@a-vue'
 import { formatDate } from '@a-vue/utils/format-date'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
-function isEmptyOrDate (value) {
-  if (!value) {
-    return true
-  }
-
-  if (value.match(/^(3[01]|[12][0-9]|0?[1-9]).(1[012]|0?[1-9]).((?:19|20)\d{2})$/)) {
-    return true
-  }
-
-  return false
-}
-
 @Component({
   props: ['value', 'validator', 'type']
 })
@@ -90,12 +78,18 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
     this.$emit('input', this.value_)
   }
 
-  dateInputChanged () {
-    const dateformat = /^(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})$/
-    // Match the date format through regular expression
-    // ToDo: check if this.$refs.input.valid() or something works, because validation is already done in validationRules
-    if (this.$refs.input.lazyValue.match(dateformat)) {
-      const [day, month, year] = this.$refs.input.lazyValue.split('.')
+  isEmptyOrDate (value) {
+    if (!value) { return true }
+    if (value.match(/^(3[01]|[12][0-9]|0?[1-9]).(1[012]|0?[1-9]).((?:19|20)\d{2})$/)) {
+      return true
+    }
+    return false
+  }
+
+  dateInputChanged (value) {
+    this.$refs.input.validate()
+    if (this.$refs.input.valid) {
+      const [day, month, year] = value.split('.')
       this.dateChanged(new Date(year + '-' + month + '-' + day))
     }
   }
@@ -123,7 +117,7 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
     if (this.validator) {
       rules = this.validator.getRules(this.label)
       rules.push(v => {
-        if (!isEmptyOrDate(v)) {
+        if (!this.isEmptyOrDate(v)) {
           return 'Kein gültiges Datum'
         }
         return true
