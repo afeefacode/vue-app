@@ -14,6 +14,7 @@
         :style="cwm_widthStyle"
         v-bind="{...$attrs, ...attrs}"
         :rules="validationRules"
+        :readonly="type === 'month'"
         v-on="on"
         @input="dateInputChanged"
         @click:clear="clearDate"
@@ -56,6 +57,7 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
     if (this.validator) {
       this.$refs.input.validate(true)
     }
+    this.$refs.input.validate(true)
   }
 
   @Watch('value')
@@ -110,16 +112,22 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
   }
 
   get validationRules () {
+    const dateFormat = v => {
+      if (v && !this.isDate(v)) {
+        return 'Das Datum sollte das Format TT.MM.JJJJ haben.'
+      }
+      return true
+    }
+
     let rules = []
     if (this.validator) {
       rules = this.validator.getRules(this.label)
-      rules.push(v => {
-        if (v && !this.isDate(v)) {
-          return 'Das Datum sollte das Format TT.MM.JJJJ haben.'
-        }
-        return true
-      })
     }
+
+    if (this.type !== 'month') {
+      rules.push(dateFormat)
+    }
+
     return rules
   }
 }
