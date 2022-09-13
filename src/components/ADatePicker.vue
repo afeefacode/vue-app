@@ -78,17 +78,14 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
     this.$emit('input', this.value_)
   }
 
-  isEmptyOrDate (value) {
-    if (!value) { return true }
-    if (value.match(/^(3[01]|[12][0-9]|0?[1-9]).(1[012]|0?[1-9]).((?:19|20)\d{2})$/)) {
-      return true
-    }
-    return false
+  isDate (value) {
+    return value && value.match(/^(3[01]|[12][0-9]|0?[1-9]).(1[012]|0?[1-9]).((?:19|20)\d{2})$/)
   }
 
   dateInputChanged (value) {
-    this.$refs.input.validate()
-    if (this.$refs.input.valid) {
+    if (!value) {
+      this.dateChanged(null)
+    } else if (this.isDate(value)) {
       const [day, month, year] = value.split('.')
       this.dateChanged(new Date(year + '-' + month + '-' + day))
     }
@@ -96,7 +93,7 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
 
   dateChanged (date) {
     this.menu = false
-    this.value_ = new Date(date)
+    this.value_ = date ? new Date(date) : null
     this.$emit('input', this.value_)
   }
 
@@ -117,8 +114,8 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
     if (this.validator) {
       rules = this.validator.getRules(this.label)
       rules.push(v => {
-        if (!this.isEmptyOrDate(v)) {
-          return 'Kein gültiges Datum'
+        if (v && !this.isDate(v)) {
+          return 'Das Datum sollte das Format TT.MM.JJJJ haben.'
         }
         return true
       })
