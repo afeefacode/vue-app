@@ -109,11 +109,11 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
   }
 
   get validationRules () {
-    let rules = []
+    let rules = false
     if (this.validator) {
       rules = this.validator.getRules(this.label)
+      rules.push((v) => (!!v && v.match(/^(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})$/)) || 'Kein gültiges Datum')
     }
-    rules.push((v) => (!!v && v.match(/^(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})$/)) || 'Kein gültiges Datum')
     return rules
   }
 }
