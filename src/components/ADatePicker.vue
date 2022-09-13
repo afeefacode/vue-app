@@ -7,15 +7,15 @@
     min-width="auto"
   >
     <template #activator="{ on, attrs }">
-      <v-combobox
+      <v-text-field
         ref="input"
         :value="formattedDate"
         :label="label"
         :style="cwm_widthStyle"
-        readonly
         v-bind="{...$attrs, ...attrs}"
         :rules="validationRules"
         v-on="on"
+        @input="dateInputChanged"
         @click:clear="clearDate"
         @click.native="on.click"
       />
@@ -78,6 +78,22 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
     this.$emit('input', this.value_)
   }
 
+  isEmptyOrDate (value) {
+    if (!value) { return true }
+    if (value.match(/^(3[01]|[12][0-9]|0?[1-9]).(1[012]|0?[1-9]).((?:19|20)\d{2})$/)) {
+      return true
+    }
+    return false
+  }
+
+  dateInputChanged (value) {
+    this.$refs.input.validate()
+    if (this.$refs.input.valid) {
+      const [day, month, year] = value.split('.')
+      this.dateChanged(new Date(year + '-' + month + '-' + day))
+    }
+  }
+
   dateChanged (date) {
     this.menu = false
     this.value_ = new Date(date)
@@ -97,7 +113,17 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
   }
 
   get validationRules () {
-    return (this.validator && this.validator.getRules(this.label)) || []
+    let rules = []
+    if (this.validator) {
+      rules = this.validator.getRules(this.label)
+      rules.push(v => {
+        if (!this.isEmptyOrDate(v)) {
+          return 'Kein gültiges Datum'
+        }
+        return true
+      })
+    }
+    return rules
   }
 }
 </script>
