@@ -51,6 +51,8 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
   created () {
     if (this.value) {
       this.value_ = this.value
+    } else {
+      this.value_Changed() // force validation if date is null
     }
     this.$emit('input', this.value_)
   }
