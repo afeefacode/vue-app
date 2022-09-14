@@ -14,6 +14,7 @@
         :style="cwm_widthStyle"
         v-bind="{...$attrs, ...attrs}"
         :rules="validationRules"
+        :error-messages="errorMessages"
         :readonly="type === 'month'"
         v-on="on"
         @input="dateInputChanged"
@@ -45,6 +46,7 @@ import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 export default class ADatePicker extends Mixins(ComponentWidthMixin) {
   value_ = null
   menu = false
+  errorMessages = []
 
   created () {
     if (this.value) {
@@ -63,6 +65,21 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
   @Watch('value')
   valueChanged () {
     this.value_ = this.value
+  }
+
+  @Watch('value_')
+  value_Changed () { // validate on any change
+    this.errorMessages = []
+    if (this.validator) {
+      const rules = this.validator.getRules(this.label)
+      for (const rule of rules) {
+        const message = rule(this.value_)
+        if (typeof message === 'string') {
+          this.errorMessages.push(message)
+          break
+        }
+      }
+    }
   }
 
   get date () {
@@ -112,23 +129,15 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
   }
 
   get validationRules () {
-    const dateFormat = v => {
-      if (v && !this.isDate(v)) {
-        return 'Das Datum sollte das Format TT.MM.JJJJ haben.'
-      }
-      return true
-    }
-
-    let rules = []
-    if (this.validator) {
-      rules = this.validator.getRules(this.label)
-    }
-
     if (this.type !== 'month') {
-      rules.push(dateFormat)
+      const dateFormat = v => {
+        if (v && !this.isDate(v)) {
+          return 'Das Datum sollte das Format TT.MM.JJJJ haben.'
+        }
+        return true
+      }
+      return [dateFormat]
     }
-
-    return rules
   }
 }
 </script>
