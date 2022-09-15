@@ -7,16 +7,23 @@
       <template #activator="{ on }">
         <div v-on="disabled ? on : null">
           <v-btn
-            fab
+            :fab="!angular"
             small
             :disabled="disabled"
             color="green white--text"
             title="Speichern"
             @click="$emit('save')"
           >
-            <v-icon>
+            <v-icon
+              :left="angular"
+              :class="{['mr-1']: angular}"
+            >
               $checkIcon
             </v-icon>
+
+            <template v-if="angular">
+              Speichern
+            </template>
           </v-btn>
         </div>
       </template>
@@ -56,7 +63,7 @@ import { mdiRotateLeft} from '@mdi/js'
   props: [
     'changed',
     'valid',
-    {small: false}
+    {angular: false, small: false}
   ]
 })
 export default class EditFormButtons extends Vue {
