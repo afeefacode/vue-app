@@ -9,6 +9,8 @@
       <slot name="activator" />
     </template>
 
+    <slot name="before-form" />
+
     <edit-form
       v-if="show_"
       ref="form"
@@ -23,8 +25,10 @@
           :valid="valid"
         />
 
+        <slot name="after-form-fields" />
+
         <a-row
-          class="mt-8 mb-1 pb-1 gap-4"
+          class="mt-8 mb-1 pb-1 gap-2"
           right
         >
           <v-btn
@@ -38,6 +42,7 @@
             :changed="changed"
             :valid="valid"
             small
+            angular
             :has="{reset: !!modelToEdit.id}"
             @save="$emit('save', modelToEdit, ignoreChangesOnClose)"
             @reset="$refs.form.reset()"
@@ -45,6 +50,8 @@
         </a-row>
       </template>
     </edit-form>
+
+    <slot name="after-form" />
   </a-modal>
 </template>
 
@@ -112,12 +119,13 @@ export default class EditModal extends Vue {
     return true
   }
 
-  async close () {
-    const result = await this.beforeClose()
-    if (!result) {
-      return
+  async close (force = false) {
+    if (!force) {
+      const result = await this.beforeClose()
+      if (!result) {
+        return
+      }
     }
-
     this.show_ = false
   }
 
