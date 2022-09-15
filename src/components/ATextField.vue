@@ -19,7 +19,7 @@ import { debounce } from '@a-vue/utils/debounce'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['focus', 'debounce', 'validator', {password: false, number: false}]
+  props: ['debounce', 'validator', {focus: false, password: false, number: false}]
 })
 export default class ATextField extends Mixins(ComponentWidthMixin) {
   $hasOptions = ['counter']
