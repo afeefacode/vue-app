@@ -129,6 +129,7 @@ export default class ListView extends Mixins(ListViewMixin) {
     } // else { a: true, b: true, c: true }
 
     classes = {
+      clickable: this.hasClickListener,
       selectable: this.hasFlyingContext,
       ...classes
     }
@@ -142,6 +143,10 @@ export default class ListView extends Mixins(ListViewMixin) {
 
   get hasFlyingContext () {
     return !!this.$listeners.flyingContext
+  }
+
+  get hasClickListener () {
+    return !!this.getRowListeners().click
   }
 
   emitFlyingContext (model) {
@@ -170,5 +175,9 @@ export default class ListView extends Mixins(ListViewMixin) {
 
 .a-table-row > :last-child {
   width: 100%;
+}
+
+.a-table-row.clickable {
+  cursor: pointer;
 }
 </style>
