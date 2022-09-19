@@ -1,6 +1,7 @@
 import {
   mdiAlarmLightOutline,
   mdiArrowLeft,
+  mdiAlert,
   mdiCalendar,
   mdiCheck,
   mdiCheckBold,
@@ -33,6 +34,7 @@ export default new Vuetify({
       chevronRightIcon: mdiChevronRight,
       thumbsUpIcon: mdiThumbUpOutline,
       alarmIcon: mdiAlarmLightOutline,
+      alertIcon: mdiAlert,
       closeIcon: mdiClose,
       closeBoldIcon: mdiCloseThick,
       dotsVerticalIcon: mdiDotsVertical,
