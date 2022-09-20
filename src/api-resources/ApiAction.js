@@ -85,3 +85,7 @@ export class ApiAction extends ApiResourcesApiAction {
 
 export class BulkAction extends ApiAction {
 }
+
+export class SequentialBulkAction extends ApiAction {
+  _bulkIsSequential = true
+}
