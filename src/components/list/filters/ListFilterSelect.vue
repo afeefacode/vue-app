@@ -55,9 +55,8 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
   }
 
   async loadRequestOptions () {
-    const {models} = await new ListAction()
-      .setRequest(this.filter.createOptionsRequest())
-      .noEvents()
+    const {models} = await ListAction
+      .fromRequest(this.filter.createOptionsRequest())
       .load()
 
     return [

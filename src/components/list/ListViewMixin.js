@@ -143,9 +143,9 @@ export class ListViewMixin extends Vue {
 
     const request = this.listViewModel.getApiRequest()
 
-    const {models, meta} = await new ListAction()
-      .setRequest(request)
-      .noEvents(!this.events)
+    const {models, meta} = await ListAction
+      .fromRequest(request)
+      .dispatchGlobalLoadingEvents(this.events)
       .load()
 
     if (!models) { // error happened

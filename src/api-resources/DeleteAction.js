@@ -4,9 +4,13 @@ export class DeleteAction extends ApiAction {
   _minDuration = 400
 
   delete () {
+    return this.execute()
+  }
+
+  execute () {
     this.data(null)
 
-    return this.execute()
+    return super.execute()
   }
 
   async afterRequest () {

@@ -58,9 +58,8 @@ export class FormFieldMixin extends Vue {
         .addParams(this.optionRequestParams || {})
         .addFilters(filters)
 
-      const {models} = await new ListAction()
-        .setRequest(request)
-        .noEvents()
+      const {models} = await ListAction
+        .fromRequest(request)
         .load()
 
       return models.map(model => ({
