@@ -2,7 +2,7 @@ import { Component, Vue } from '@a-vue'
 import { ListAction } from '@a-vue/api-resources/ApiActions'
 
 @Component({
-  props: ['name', 'label', 'additionalRules']
+  props: ['name', 'label', 'additionalRules', 'optionRequestParams']
 })
 export class FormFieldMixin extends Vue {
   get model () {
@@ -55,6 +55,7 @@ export class FormFieldMixin extends Vue {
     if (field.hasOptionsRequest()) {
       const request = field
         .getOptionsRequest()
+        .addParams(this.optionRequestParams || {})
         .addFilters(filters)
 
       const {models} = await new ListAction()
