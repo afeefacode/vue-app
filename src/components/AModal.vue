@@ -23,6 +23,19 @@
 
     <v-card v-if="modal">
       <v-card-title v-if="title">
+        <v-avatar
+          v-if="icon"
+          color="#F4F4F4"
+          size="2rem"
+          class="mr-2"
+        >
+          <v-icon
+            :color="icon.color"
+            size="1.2rem"
+            v-text="icon.icon"
+          />
+        </v-avatar>
+
         {{ title }}
       </v-card-title>
 
@@ -43,7 +56,7 @@ import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 import { CancelOnEscMixin } from '@a-vue/services/escape/CancelOnEscMixin'
 
 @Component({
-  props: ['show', 'title', 'beforeClose', 'triggerClass', 'anchorPosition']
+  props: ['show', 'icon', 'title', 'beforeClose', 'triggerClass', 'anchorPosition']
 })
 export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentWidthMixin, CancelOnEscMixin) {
   modalId = randomCssClass(10)

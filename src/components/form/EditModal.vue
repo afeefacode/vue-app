@@ -1,6 +1,5 @@
 <template>
   <a-modal
-    :title="title"
     :beforeClose="beforeClose"
     :show.sync="show_"
     v-bind="$attrs"
@@ -61,7 +60,7 @@ import { Component, Vue, Watch } from '@a-vue'
 import { DialogEvent } from '@a-vue/events'
 
 @Component({
-  props: ['model', 'createModelToEdit', 'title', 'show']
+  props: ['model', 'createModelToEdit', 'show']
 })
 export default class EditModal extends Vue {
   show_ = false
