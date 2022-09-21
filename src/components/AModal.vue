@@ -189,7 +189,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
   color: inherit !important;
 }
 
-::v-deep .v-dialog {
+:deep(.v-dialog) {
   position: absolute;
   top: 0;
   left: 0;

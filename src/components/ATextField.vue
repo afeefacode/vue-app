@@ -100,7 +100,7 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
 
 
 <style lang="scss" scoped>
-.v-input:not(.v-input--is-focused) ::v-deep .v-counter {
+.v-input:not(.v-input--is-focused) :deep(.v-counter) {
   display: none;
 }
 </style>

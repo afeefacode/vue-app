@@ -109,7 +109,7 @@ export default class ListColumnHeader extends Vue {
   }
 }
 
-::v-deep .v-icon {
+:deep(.v-icon) {
   color: #AAAAAA !important;
 
   &.active {

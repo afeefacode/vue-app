@@ -206,19 +206,19 @@ export default class SearchSelectFormField extends Vue {
 
 
 <style scoped lang="scss">
-.selectedIcon::v-deep {
+.selectedIcon:deep() {
   padding-right: .3rem !important;
 }
 
-.selectableIcon::v-deep {
+.selectableIcon:deep() {
   padding-right: 2rem !important;
 }
 
-.selectedContent::v-deep {
+.selectedContent:deep() {
   width: 100%;
 }
 
-.selectableContent::v-deep {
+.selectableContent:deep() {
   width: 100%;
 }
 </style>

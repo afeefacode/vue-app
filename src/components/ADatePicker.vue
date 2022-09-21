@@ -146,7 +146,7 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
 
 
 <style lang="scss" scoped>
-::v-deep .v-select__slot {
+:deep(.v-select__slot) {
   cursor: pointer;
   input {
     cursor: pointer;

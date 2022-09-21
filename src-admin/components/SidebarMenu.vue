@@ -47,7 +47,7 @@ export default class SidebarMenu extends Vue {
 
 
 <style lang="scss" scoped>
-::v-deep .v-list-group {
+:deep(.v-list-group) {
   > .v-list-item {
     padding: 0;
     > .v-list-item {

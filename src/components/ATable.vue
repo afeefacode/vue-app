@@ -48,7 +48,7 @@ export default class ATable extends Vue {
   > * {
     display: table-row;
 
-    > ::v-deep * {
+    > :deep(*) {
       display: table-cell;
 
       white-space: nowrap;

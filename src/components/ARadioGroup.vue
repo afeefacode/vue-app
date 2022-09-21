@@ -68,7 +68,7 @@ export default class ARadioGroup extends Vue {
   margin: 0;
 
   &:not(.hasLabel) {
-    ::v-deep legend {
+    :deep(legend) {
       display: none;
     }
   }

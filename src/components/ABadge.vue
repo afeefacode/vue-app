@@ -36,7 +36,7 @@ export default class ABadge extends Vue {
 
 
 <style scoped lang="scss">
-::v-deep .v-badge__badge {
+:deep(.v-badge__badge) {
   color: #666666;
 }
 </style>

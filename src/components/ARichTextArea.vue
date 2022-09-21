@@ -200,10 +200,8 @@ export default class ARichTextArea extends Vue {
 
 <style lang="scss" scoped>
 .a-rich-text-editor {
-  ::v-deep .ProseMirror {
-    &-focused {
+  :deep(.ProseMirror-focused) {
       outline: none;
-    }
   }
 }
 
@@ -226,14 +224,14 @@ export default class ARichTextArea extends Vue {
   box-shadow: none;
   border-radius: 0;
 
-  ::v-deep .v-icon {
+  :deep(.v-icon) {
     font-size: 20px;
     width: 20px;
     height: 20px;
   }
 
   &.strike {
-    ::v-deep .v-icon {
+    :deep(.v-icon) {
       width: 15px;
     }
   }
@@ -251,7 +249,7 @@ export default class ARichTextArea extends Vue {
   }
 }
 
-::v-deep .ProseMirror {
+:deep(.ProseMirror) {
   min-height: 200px;
 
   > :last-child {

@@ -55,7 +55,7 @@ export default class AContextMenuItem extends Vue {
     background-color: #EEEEEE;
   }
 
-  ::v-deep .v-icon {
+  :deep(.v-icon) {
     display: block;
     text-align: center;
     margin-right: 0.5rem;

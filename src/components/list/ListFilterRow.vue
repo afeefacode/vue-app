@@ -20,7 +20,7 @@ export default class ListFilterRow extends Vue {
 
 
 <style scoped lang="scss">
-::v-deep .v-text-field__details {
+:deep(.v-text-field__details) {
   display: none;
 }
 </style>

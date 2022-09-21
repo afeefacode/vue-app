@@ -105,7 +105,7 @@ export default class AAlert extends Vue {
     font-size: 2rem;
   }
 
-  ::v-deep {
+  :deep() {
     .v-snack__wrapper {
       width: 500px;
       // margin-top: 1rem;
