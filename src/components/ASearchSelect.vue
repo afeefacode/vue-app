@@ -5,7 +5,10 @@
       style="width: max-content;"
       @click="open"
     >
-      <slot name="activator">
+      <slot
+        v-if="!autoOpen"
+        name="activator"
+      >
         <a-icon class="contextButton">
           $dotsHorizontalIcon
         </a-icon>
@@ -99,9 +102,10 @@ import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
     'listAction',
     'q',
     'width',
-    'closeOnSelect',
     'loadOnlyIfKeyword',
     {
+      autoOpen: false,
+      closeOnSelect: true,
       selectedItems: []
     }
   ],
@@ -119,6 +123,12 @@ export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPosit
   isLoading = false
   filters = []
   count = 0
+
+  mounted () {
+    if (this.autoOpen) {
+      this.open()
+    }
+  }
 
   destroyed () {
     this.close()
@@ -165,10 +175,6 @@ export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPosit
 
   get _loadOnlyIfKeyword () {
     return this.loadOnlyIfKeyword === undefined || this.loadOnlyIfKeyword
-  }
-
-  get _closeOnSelect () {
-    return this.closeOnSelect === undefined || this.closeOnSelect
   }
 
   positionize () {
@@ -249,7 +255,7 @@ export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPosit
 
   selectHandler (model) {
     return event => {
-      if (this._closeOnSelect) {
+      if (this.closeOnSelect) {
         this.close()
       }
       this.$emit('select', model, {
