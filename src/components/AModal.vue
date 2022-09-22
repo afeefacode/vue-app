@@ -25,9 +25,9 @@
       <v-card-title v-if="title">
         <v-avatar
           v-if="icon"
-          color="#F4F4F4"
+          color="#FFFFFF"
           size="2rem"
-          class="mr-2"
+          class="ml-n1 mr-2"
         >
           <v-icon
             :color="icon.color"
