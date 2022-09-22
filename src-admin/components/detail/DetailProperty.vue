@@ -15,10 +15,9 @@
       </v-avatar>
 
       <label :class="['label', {'label--withIcon': !!_icon}]">{{ label }}</label>
+
       <div class="pl-2">
-        <slot
-          name="actionButton"
-        />
+        <slot name="actionButton" />
       </div>
     </div>
 
