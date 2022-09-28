@@ -1,7 +1,7 @@
 <template>
   <div class="listView">
     <div
-      v-if="filtersActivated"
+      v-if="$has.filters"
       class="filters"
     >
       <slot
@@ -69,16 +69,14 @@
       </template>
     </template>
 
-    <div
-      v-else-if="!isLoading"
-      class="nothing-found"
-    >
-      <div v-if="filtersActivated">
+    <div v-else-if="!isLoading">
+      <div v-if="$has.filters">
         Nichts gefunden. <a
           href=""
           @click.prevent="resetFilters()"
         >Filter zurücksetzen</a>
       </div>
+
       <div v-else>
         Nichts gefunden.
       </div>
@@ -93,18 +91,10 @@ import { ListViewMixin } from '@a-vue/components/list/ListViewMixin'
 import { LoadingEvent } from '@a-vue/events'
 
 @Component({
-  props: {
-    rowAttributes: {},
-    rowClasses: {},
-    rowListeners: {},
-    filtersActivated: {
-      type: Boolean,
-      default: true
-    }
-  }
+  props: ['rowAttributes', 'rowClasses', 'rowListeners']
 })
 export default class ListView extends Mixins(ListViewMixin) {
-  $hasOptions = ['icon']
+  $hasOptions = ['icon', 'filters']
 
   @Watch('isLoading')
   isLoadingChanged () {
