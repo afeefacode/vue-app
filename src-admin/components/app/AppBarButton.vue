@@ -1,5 +1,5 @@
 <template>
-  <div class="project-buttons gap-3">
+  <div>
     <slot />
   </div>
 </template>
@@ -8,11 +8,7 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: {
-    prepend: {
-      type: Boolean
-    }
-  }
+  props: [{ prepend: false }]
 })
 export default class AppBarButton extends Vue {
   mounted () {
@@ -39,10 +35,3 @@ export default class AppBarButton extends Vue {
   }
 }
 </script>
-
-<style scoped>
-.project-buttons {
-  display: flex;
-  align-items: center;
-}
-</style>
