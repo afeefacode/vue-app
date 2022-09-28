@@ -4,12 +4,15 @@
       <v-btn
         :class="'a-btn-standard removeButton-' + dialogId"
         fab
-        x-small
+        small
         :color="(hover ? 'red' : 'grey lighten-3')"
         :title="title"
         @click="remove"
       >
-        <v-icon class="white--hover">
+        <v-icon
+          class="white--hover"
+          size="1.3rem"
+        >
           $trashCanIcon
         </v-icon>
       </v-btn>
