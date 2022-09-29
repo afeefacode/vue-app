@@ -1,23 +1,28 @@
 <template>
-  <div :class="['a-row', widthClass, alignClass, gapClass, directionClass, justifyClass]">
+  <div
+    :class="['a-row', alignClass, gapClass, directionClass, justifyClass]"
+    :style="cwm_widthStyle"
+  >
     <slot />
   </div>
 </template>
 
 
 <script>
-import { Component, Vue } from '@a-vue'
+import { Component, Mixins } from '@a-vue'
+import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['fullWidth', 'gap', 'start', 'stretch', 'center', 'vertical', 'right']
+  props: [
+    'gap',
+    'start',
+    'stretch',
+    'center',
+    'vertical',
+    'right'
+  ]
 })
-export default class ARow extends Vue {
-  get widthClass () {
-    if (this.fullWidth !== undefined) {
-      return 'full'
-    }
-  }
-
+export default class ARow extends Mixins(ComponentWidthMixin) {
   get gapClass () {
     if (this.gap) {
       return 'gap-' + this.gap

@@ -12,7 +12,7 @@
       <a-row
         vertical
         center
-        fullWidth
+        width="100%"
       >
         <v-progress-linear
           :size="45"
