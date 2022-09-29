@@ -6,12 +6,13 @@
 
 
 <script>
-import { Component, Vue } from '@a-vue'
+import { Component, Mixins } from '@a-vue'
+import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['gap', 'hGap', 'vGap', 'cols', 'even', 'breakMobile']
+  props: ['gap', 'hGap', 'vGap', 'cols', {even: false}, 'breakMobile']
 })
-export default class AGrid extends Vue {
+export default class AGrid extends Mixins(ComponentWidthMixin) {
   get breakMobileClass () {
     if (this.breakMobile !== undefined) {
       return 'breakMobile'
@@ -24,7 +25,7 @@ export default class AGrid extends Vue {
   }
 
   get evenClass () {
-    if (this.even !== undefined) {
+    if (this.even) {
       return 'even'
     }
   }
@@ -54,35 +55,12 @@ export default class AGrid extends Vue {
 .a-grid {
   display: grid;
 
-  &.full {
-    width: 100%;
-  }
-
-  &.cols-2 {
-    grid-template-columns: auto auto;
-    &.even {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  &.cols-3 {
-    grid-template-columns: auto auto auto;
-    &.even {
-      grid-template-columns: 1fr 1fr 1fr;
-    }
-  }
-
-  &.cols-4 {
-    grid-template-columns: repeat(4, auto);
-    &.even {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-
-  &.cols-5 {
-    grid-template-columns: repeat(5, auto);
-    &.even {
-      grid-template-columns: repeat(5, 1fr);
+  @for $i from 1 through 8 {
+    &.cols-#{$i} {
+      grid-template-columns: repeat(#{$i}, auto);
+      &.even {
+        grid-template-columns: repeat(#{$i}, 1fr);
+      }
     }
   }
 

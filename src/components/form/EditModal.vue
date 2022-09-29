@@ -27,8 +27,9 @@
         <slot name="after-form-fields" />
 
         <a-row
-          class="mt-8 gap-2"
-          right
+          mt-8
+          gap-2
+          justify-end
         >
           <v-btn
             small

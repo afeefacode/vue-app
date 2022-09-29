@@ -1,9 +1,9 @@
 <template>
   <v-app class="splash">
     <a-row
-      vertical
-      center
       class="content"
+      vertical
+      align-center
     >
       <div class="logo">
         <slot />
@@ -11,7 +11,7 @@
 
       <a-row
         vertical
-        center
+        align-center
         width="100%"
       >
         <v-progress-linear

@@ -84,8 +84,8 @@
 
     <v-main id="v-main">
       <a-row
-        start
         class="topbar"
+        align-start
       >
         <v-app-bar-nav-icon
           class="sidebarToggleButton mr-2 ml-3"

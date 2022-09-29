@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="['a-row', alignClass, gapClass, directionClass, justifyClass]"
+    :class="['a-row', directionClass, gapClass, classes]"
     :style="cwm_widthStyle"
   >
     <slot />
@@ -14,46 +14,28 @@ import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
   props: [
-    'gap',
-    'start',
-    'stretch',
-    'center',
-    'vertical',
-    'right'
+    { vertical: false },
+    'gap'
   ]
 })
 export default class ARow extends Mixins(ComponentWidthMixin) {
+  get classes () {
+    const classes = {}
+    Object.keys(this.$attrs).forEach(cssClass => {
+      classes[cssClass] = true
+    })
+    return classes
+  }
+
   get gapClass () {
     if (this.gap) {
       return 'gap-' + this.gap
     }
   }
 
-  get alignClass () {
-    if (this.start !== undefined) {
-      return 'start'
-    }
-
-    if (this.stretch !== undefined) {
-      return 'stretch'
-    }
-
-    if (this.vertical !== undefined) {
-      return this.center !== undefined ? 'center' : 'start'
-    }
-
-    return 'center'
-  }
-
   get directionClass () {
-    if (this.vertical !== undefined) {
+    if (this.vertical) {
       return 'vertical'
-    }
-  }
-
-  get justifyClass () {
-    if (this.right !== undefined) {
-      return 'right'
     }
   }
 }
@@ -63,29 +45,11 @@ export default class ARow extends Mixins(ComponentWidthMixin) {
 <style scoped lang="scss">
 .a-row {
   display: flex;
-
-  &.full {
-    width: 100%;
-  }
+  align-items: center;
 
   &.vertical {
     flex-direction: column;
-  }
-
-  &.center {
-    align-items: center;
-  }
-
-  &.start {
-    align-items: flex-start;
-  }
-
-  &.stretch {
-    align-items: stretch;
-  }
-
-  &.right {
-    justify-content: flex-end;
+    align-items: start;
   }
 }
 </style>

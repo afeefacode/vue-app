@@ -1,9 +1,9 @@
 <template>
   <div class="notFound">
     <a-row
-      vertical
-      center
       class="content"
+      vertical
+      align-center
     >
       <div class="logo">
         <slot />
@@ -11,7 +11,7 @@
 
       <a-row
         vertical
-        center
+        align-center
       >
         <div class="mt-0">
           {{ title || '404 - Not Found' }}
