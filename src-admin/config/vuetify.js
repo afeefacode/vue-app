@@ -1,13 +1,14 @@
 import {
   mdiAlarmLightOutline,
-  mdiArrowLeft,
   mdiAlert,
+  mdiArrowLeft,
   mdiCalendar,
   mdiCheck,
   mdiCheckBold,
   mdiChevronRight,
   mdiClose,
   mdiCloseThick,
+  mdiCurrencyEur,
   mdiDelete,
   mdiDotsHorizontal,
   mdiDotsVertical,
@@ -16,11 +17,11 @@ import {
   mdiMagnify,
   mdiMenuDown,
   mdiMenuUp,
+  mdiPalette,
   mdiPencil,
   mdiPlus,
   mdiPrinter,
-  mdiThumbUpOutline,
-  mdiCurrencyEur
+  mdiThumbUpOutline
 } from '@mdi/js'
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
@@ -52,7 +53,8 @@ export default new Vuetify({
       caretDownIcon: mdiMenuDown,
       caretUpIcon: mdiMenuUp,
       printerIcon: mdiPrinter,
-      euroSymbol: mdiCurrencyEur
+      euroSymbol: mdiCurrencyEur,
+      paletteIcon: mdiPalette
     }
   },
   breakpoint: {

@@ -8,6 +8,7 @@
         <v-btn
           small
           :class="['menu-button', {'is-active': focus && editor.isActive('bold')}]"
+          title="fett"
           @click="editor.chain().focus().toggleBold().run()"
         >
           <v-icon>{{ boldIcon }}</v-icon>
@@ -16,6 +17,7 @@
         <v-btn
           small
           :class="['menu-button', {'is-active': focus && editor.isActive('italic')}]"
+          title="kursiv"
           @click="editor.chain().focus().toggleItalic().run()"
         >
           <v-icon>{{ italicIcon }}</v-icon>
@@ -24,6 +26,7 @@
         <v-btn
           small
           :class="['menu-button', 'strike', {'is-active': focus && editor.isActive('strike')}]"
+          title="durchgestrichen"
           @click="editor.chain().focus().toggleStrike().run()"
         >
           <v-icon>{{ strikeIcon }}</v-icon>
@@ -32,6 +35,7 @@
         <v-btn
           small
           :class="['menu-button', {'is-active': focus && editor.isActive('heading', {level: 1})}]"
+          title="überschrift 1"
           @click="editor.chain().focus().toggleHeading({level: 1}).run()"
         >
           <v-icon>{{ h1Icon }}</v-icon>
@@ -40,6 +44,7 @@
         <v-btn
           small
           :class="['menu-button', {'is-active': focus && editor.isActive('heading', {level: 2})}]"
+          title="pberschrift 2"
           @click="editor.chain().focus().toggleHeading({level: 2}).run()"
         >
           <v-icon>{{ h2Icon }}</v-icon>
@@ -48,6 +53,7 @@
         <v-btn
           small
           :class="['menu-button', {'is-active': focus && editor.isActive('bulletList')}]"
+          title="punkt-liste"
           @click="editor.chain().focus().toggleBulletList().run()"
         >
           <v-icon>{{ ulIcon }}</v-icon>
@@ -56,6 +62,7 @@
         <v-btn
           small
           :class="['menu-button', {'is-active': focus && editor.isActive('orderedList')}]"
+          title="nummerierte liste"
           @click="editor.chain().focus().toggleOrderedList().run()"
         >
           <v-icon>{{ olIcon }}</v-icon>
@@ -64,6 +71,7 @@
         <v-btn
           small
           :class="['menu-button', {'is-active': focus && editor.isActive('blockquote')}]"
+          title="zitat"
           @click="editor.chain().focus().toggleBlockquote().run()"
         >
           <v-icon>{{ commentIcon }}</v-icon>
@@ -72,12 +80,36 @@
         <v-btn
           small
           class="menu-button"
+          :class="{ 'is-active': editor.isActive('textStyle', { color: '#0000FF' })}"
+          title="rot"
+          color="red--text"
+          @click="editor.chain().focus().setColor('#0000FF').run()"
+        >
+          <v-icon>$paletteIcon</v-icon>
+        </v-btn>
+
+        <v-btn
+          small
+          class="menu-button"
+          :class="{ 'is-active': editor.isActive('textStyle', { color: '#FF0000' })}"
+          title="blau"
+          color="blue--text"
+          @click="editor.chain().focus().setColor('#FF0000').run()"
+        >
+          <v-icon>$paletteIcon</v-icon>
+        </v-btn>
+
+        <v-btn
+          small
+          class="menu-button undo-button"
           :disabled="initialValue === editor.getHTML()"
+          title="rückgängig"
           @click="editor.chain().focus().undo().run()"
         >
           <v-icon>{{ undoIcon }}</v-icon>
         </v-btn>
       </div>
+
 
       <div>
         <slot name="buttons" />
@@ -108,6 +140,8 @@ import {
   mdiRotateLeft,
   mdiRotateRight
 } from '@mdi/js'
+import { Color } from '@tiptap/extension-color'
+import TextStyle from '@tiptap/extension-text-style'
 
 @Component({
   props: ['value', 'validator'],
@@ -145,7 +179,9 @@ export default class ARichTextArea extends Vue {
     this.editor = new Editor({
       content: this.internalValue,
       extensions: [
-        StarterKit
+        StarterKit,
+        TextStyle,
+        Color
       ],
       onUpdate: () => {
         this.$emit('input', this.editor.getHTML())
@@ -240,11 +276,18 @@ export default class ARichTextArea extends Vue {
     width: unset;
   }
 
+  &:disabled {
+    background: none !important;
+    :deep(*) {
+      color: #CCCCCC !important;
+    }
+  }
+
   &.is-active {
     background: #ECECEC !important;
   }
 
-  &[disabled] {
+  &.menu-button:disabled {
     background: none !important;
   }
 }
