@@ -81,8 +81,8 @@
           small
           class="menu-button"
           :class="{ 'is-active': editor.isActive('textStyle', { color: '#0000FF' })}"
-          title="rot"
-          color="red--text"
+          title="blau"
+          color="blue--text"
           @click="editor.chain().focus().setColor('#0000FF').run()"
         >
           <v-icon>$paletteIcon</v-icon>
@@ -92,8 +92,8 @@
           small
           class="menu-button"
           :class="{ 'is-active': editor.isActive('textStyle', { color: '#FF0000' })}"
-          title="blau"
-          color="blue--text"
+          title="rot"
+          color="red--text"
           @click="editor.chain().focus().setColor('#FF0000').run()"
         >
           <v-icon>$paletteIcon</v-icon>
