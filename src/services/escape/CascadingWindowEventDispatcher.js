@@ -10,6 +10,10 @@ class CascadingWindowEventDispatcher {
   addEventListener (event, listener) {
     if (!this.listeners[event]) {
       this.listeners[event] = []
+    }
+
+    if (!this.listeners[event].length) {
+      this.listeners[event] = []
 
       window.addEventListener(event, e => {
         for (const listener of this.listeners[event]) {
