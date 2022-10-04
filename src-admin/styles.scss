@@ -59,6 +59,10 @@
   opacity: .08;
 }
 
+.theme--light.v-input .error--text {
+  color: #616161 !important;
+}
+
 .theme--light.v-btn.v-btn--disabled,
 .theme--light.v-btn.v-btn--disabled span,
 .theme--light.v-btn.v-btn--disabled .v-icon,
