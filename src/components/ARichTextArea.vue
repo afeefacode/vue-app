@@ -80,10 +80,10 @@
         <v-btn
           small
           class="menu-button"
-          :class="{ 'is-active': editor.isActive('textStyle', { color: '#0000FF' })}"
+          :class="{ 'is-active': editorSelectionIs('#0000FF')}"
           title="blau"
           color="blue--text"
-          @click="editor.chain().focus().setColor('#0000FF').run()"
+          @click="editorSelectionIs('#0000FF') ? editor.chain().focus().unsetColor().run() : editor.chain().focus().setColor('#0000FF').run()"
         >
           <v-icon>$paletteIcon</v-icon>
         </v-btn>
@@ -91,10 +91,10 @@
         <v-btn
           small
           class="menu-button"
-          :class="{ 'is-active': editor.isActive('textStyle', { color: '#FF0000' })}"
+          :class="{ 'is-active': editorSelectionIs('#FF0000')}"
           title="rot"
           color="red--text"
-          @click="editor.chain().focus().setColor('#FF0000').run()"
+          @click="editorSelectionIs('#FF0000') ? editor.chain().focus().unsetColor().run() : editor.chain().focus().setColor('#FF0000').run()"
         >
           <v-icon>$paletteIcon</v-icon>
         </v-btn>
@@ -199,6 +199,10 @@ export default class ARichTextArea extends Vue {
 
   beforeDestroy () {
     this.editor.destroy()
+  }
+
+  editorSelectionIs (color) {
+    return this.editor.isActive('textStyle', { color: color })
   }
 
   /**
