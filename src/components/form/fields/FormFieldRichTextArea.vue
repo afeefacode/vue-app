@@ -1,5 +1,9 @@
 <template>
-  <a-rich-text-area v-model="model[name]">
+  <a-rich-text-area
+    v-model="model[name]"
+    v-bind="$attrs"
+    v-on="$listeners"
+  >
     <template #buttons>
       <slot name="buttons" />
     </template>

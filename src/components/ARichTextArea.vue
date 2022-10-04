@@ -1,5 +1,5 @@
 <template>
-  <div :class="['a-rich-text-editor a-text-input', {'a-text-input-focused': focus}]">
+  <div :class="['a-rich-text-editor a-text-input', {'a-text-input-focused': editorFocus}]">
     <div
       v-if="editor"
       class="menu-bar"
@@ -7,7 +7,7 @@
       <div>
         <v-btn
           small
-          :class="['menu-button', {'is-active': focus && editor.isActive('bold')}]"
+          :class="['menu-button', {'is-active': editorFocus && editor.isActive('bold')}]"
           title="fett"
           @click="editor.chain().focus().toggleBold().run()"
         >
@@ -16,7 +16,7 @@
 
         <v-btn
           small
-          :class="['menu-button', {'is-active': focus && editor.isActive('italic')}]"
+          :class="['menu-button', {'is-active': editorFocus && editor.isActive('italic')}]"
           title="kursiv"
           @click="editor.chain().focus().toggleItalic().run()"
         >
@@ -25,7 +25,7 @@
 
         <v-btn
           small
-          :class="['menu-button', 'strike', {'is-active': focus && editor.isActive('strike')}]"
+          :class="['menu-button', 'strike', {'is-active': editorFocus && editor.isActive('strike')}]"
           title="durchgestrichen"
           @click="editor.chain().focus().toggleStrike().run()"
         >
@@ -34,7 +34,7 @@
 
         <v-btn
           small
-          :class="['menu-button', {'is-active': focus && editor.isActive('heading', {level: 1})}]"
+          :class="['menu-button', {'is-active': editorFocus && editor.isActive('heading', {level: 1})}]"
           title="überschrift 1"
           @click="editor.chain().focus().toggleHeading({level: 1}).run()"
         >
@@ -43,7 +43,7 @@
 
         <v-btn
           small
-          :class="['menu-button', {'is-active': focus && editor.isActive('heading', {level: 2})}]"
+          :class="['menu-button', {'is-active': editorFocus && editor.isActive('heading', {level: 2})}]"
           title="pberschrift 2"
           @click="editor.chain().focus().toggleHeading({level: 2}).run()"
         >
@@ -52,7 +52,7 @@
 
         <v-btn
           small
-          :class="['menu-button', {'is-active': focus && editor.isActive('bulletList')}]"
+          :class="['menu-button', {'is-active': editorFocus && editor.isActive('bulletList')}]"
           title="punkt-liste"
           @click="editor.chain().focus().toggleBulletList().run()"
         >
@@ -61,7 +61,7 @@
 
         <v-btn
           small
-          :class="['menu-button', {'is-active': focus && editor.isActive('orderedList')}]"
+          :class="['menu-button', {'is-active': editorFocus && editor.isActive('orderedList')}]"
           title="nummerierte liste"
           @click="editor.chain().focus().toggleOrderedList().run()"
         >
@@ -70,7 +70,7 @@
 
         <v-btn
           small
-          :class="['menu-button', {'is-active': focus && editor.isActive('blockquote')}]"
+          :class="['menu-button', {'is-active': editorFocus && editor.isActive('blockquote')}]"
           title="zitat"
           @click="editor.chain().focus().toggleBlockquote().run()"
         >
@@ -80,7 +80,7 @@
         <v-btn
           small
           class="menu-button"
-          :class="{ 'is-active': editorSelectionIs('#0000FF')}"
+          :class="{ 'is-active': editorFocus && editorSelectionIs('#0000FF')}"
           title="blau"
           color="blue--text"
           @click="editorSelectionIs('#0000FF') ? editor.chain().focus().unsetColor().run() : editor.chain().focus().setColor('#0000FF').run()"
@@ -91,7 +91,7 @@
         <v-btn
           small
           class="menu-button"
-          :class="{ 'is-active': editorSelectionIs('#FF0000')}"
+          :class="{ 'is-active': editorFocus && editorSelectionIs('#FF0000')}"
           title="rot"
           color="red--text"
           @click="editorSelectionIs('#FF0000') ? editor.chain().focus().unsetColor().run() : editor.chain().focus().setColor('#FF0000').run()"
@@ -118,7 +118,7 @@
 
     <editor-content
       :editor="editor"
-      :class="['a-rich-text-editor', {focus}]"
+      :class="['a-rich-text-editor', {editorFocus}]"
     />
   </div>
 </template>
@@ -144,7 +144,7 @@ import { Color } from '@tiptap/extension-color'
 import TextStyle from '@tiptap/extension-text-style'
 
 @Component({
-  props: ['value', 'validator'],
+  props: ['value', 'validator', 'focus'],
   components: {
     EditorContent
   }
@@ -153,7 +153,7 @@ export default class ARichTextArea extends Vue {
   editor = null
   internalValue = null
   initialValue = null
-  focus = false
+  editorFocus = false
 
   boldIcon = mdiFormatBold
   italicIcon = mdiFormatItalic
@@ -171,13 +171,20 @@ export default class ARichTextArea extends Vue {
     this.internalValue = this.value
   }
 
+  changed () {
+    console.log('Changed')
+  }
+
   mounted () {
+    this.editorFocus = !!this.focus
+
     if (this.validator) {
       this.$refs.input.validate(true)
     }
 
     this.editor = new Editor({
       content: this.internalValue,
+      autofocus: this.focus ? 'end' : false,
       extensions: [
         StarterKit,
         TextStyle,
@@ -187,11 +194,11 @@ export default class ARichTextArea extends Vue {
         this.$emit('input', this.editor.getHTML())
       },
       onFocus: ({ editor, event }) => {
-        this.focus = true
+        this.editorFocus = true
         this.$emit('focus')
       },
       onBlur: ({ editor, event }) => {
-        this.focus = false
+        this.editorFocus = false
         this.$emit('blur')
       }
     })
@@ -220,6 +227,10 @@ export default class ARichTextArea extends Vue {
     const isSame = this.editor.getHTML() === this.internalValue
     if (!isSame) {
       this.editor.commands.setContent(this.internalValue, false)
+      // witch reusing the editor component, we need to restore the focus state
+      if (this.focus && this.focus === true) {
+        this.editor.commands.focus('end')
+      }
     }
   }
 
