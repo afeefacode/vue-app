@@ -4,14 +4,14 @@
       <v-btn
         :class="'a-btn-standard removeButton-' + dialogId"
         fab
-        small
         :color="(hover ? 'red' : 'grey lighten-3')"
         :title="title"
+        v-bind="{ small: isSmall, ...$attrs}"
         @click="remove"
       >
         <v-icon
           class="white--hover"
-          size="1.3rem"
+          :size="iconSize || '1.3rem'"
         >
           $trashCanIcon
         </v-icon>
@@ -44,12 +44,16 @@ import { DialogEvent } from '@a-vue/events'
 import { randomCssClass } from '@a-vue/utils/random'
 
 @Component({
-  props: ['title', 'message', 'info', 'itemTitle', 'protect']
+  props: ['iconSize', 'title', 'message', 'info', 'itemTitle', 'protect']
 })
 export default class EditPage extends Vue {
   dialogId = randomCssClass(10)
   removeKey = null
   removeConfirmed = null
+
+  get isSmall () {
+    return Object.keys(this.$attrs).filter(k => k.match(/x-small|default|large|x-large/)).length === 0
+  }
 
   async remove () {
     if (this.protect) {
