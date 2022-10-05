@@ -171,10 +171,6 @@ export default class ARichTextArea extends Vue {
     this.internalValue = this.value
   }
 
-  changed () {
-    console.log('Changed')
-  }
-
   mounted () {
     this.editorFocus = !!this.focus
 
