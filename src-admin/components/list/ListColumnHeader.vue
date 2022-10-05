@@ -57,6 +57,9 @@ export default class ListColumnHeader extends Vue {
     if (this.orderValue) {
       return this.orderValue
     } else {
+      if (!this.filter.options[this.order]) {
+        console.warn(`Order filter ${this.order} not defined.`)
+      }
       const direction = this.filter.options[this.order][0]
       return direction || 'asc'
     }
