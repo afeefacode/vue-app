@@ -16,6 +16,11 @@ export class ApiAction extends ApiResourcesApiAction {
     return this
   }
 
+  minDuration (duration) {
+    this._minDuration = duration
+    return this
+  }
+
   dispatchGlobalLoadingEvents (dispatch = true) {
     this._dispatchGlobalLoadingEvents = dispatch
     return this
