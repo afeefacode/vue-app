@@ -4,6 +4,7 @@
     :label="label || name"
     :validator="validator"
     v-bind="$attrs"
+    v-on="$listeners"
     @input="textFieldValueChanged"
     @blur="onBlur"
   />
