@@ -5,6 +5,7 @@
  */
 
 class CascadingWindowEventDispatcher {
+  windowListeners = {}
   listeners = {}
 
   addEventListener (event, listener) {
@@ -12,9 +13,7 @@ class CascadingWindowEventDispatcher {
       this.listeners[event] = []
     }
 
-    if (!this.listeners[event].length) {
-      this.listeners[event] = []
-
+    if (!this.windowListeners[event]) {
       window.addEventListener(event, e => {
         for (const listener of this.listeners[event]) {
           const result = listener(e)
@@ -23,6 +22,8 @@ class CascadingWindowEventDispatcher {
           }
         }
       })
+
+      this.windowListeners[event] = true
     }
 
     this.listeners[event].unshift(listener)
