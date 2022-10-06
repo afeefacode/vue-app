@@ -100,9 +100,7 @@ export class FormFieldMixin extends Vue {
   get validator () {
     const validator = this.field.getValidator()
     if (this.additionalRules) {
-      this.additionalRules.forEach(validate => {
-        validator.addRule(validate)
-      })
+      validator.setAdditionalRules(this.additionalRules)
     }
     return this.field.getValidator()
   }

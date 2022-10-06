@@ -32,8 +32,13 @@ export default class EditForm extends Vue {
   lastJson = null
   forcedUnchange = false
 
+
   created () {
     this.reset()
+  }
+
+  validate () {
+    this.$refs.form.validate()
   }
 
   getField = name => {

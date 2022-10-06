@@ -58,10 +58,7 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
   }
 
   mounted () {
-    if (this.validator) {
-      this.$refs.input.validate(true)
-    }
-    this.$refs.input.validate(true)
+    this.validate()
   }
 
   @Watch('value')
@@ -71,6 +68,10 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
 
   @Watch('value_')
   value_Changed () { // validate on any change
+    this.validateDateValue()
+  }
+
+  validateDateValue () {
     this.errorMessages = []
     if (this.validator) {
       const rules = this.validator.getRules(this.label)
@@ -128,6 +129,10 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
       return monthName + ' ' + date.getFullYear()
     }
     return formatDate(new Date(date))
+  }
+
+  validate () {
+    this.validateDateValue()
   }
 
   get validationRules () {
