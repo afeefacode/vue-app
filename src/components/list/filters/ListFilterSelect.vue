@@ -44,10 +44,22 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
   createOptions () {
     const options = []
 
-    if (this.showNullOption) {
+    if (this.filter.allIsOption) {
+      options.push({
+        itemTitle: 'Alle',
+        itemValue: 'all'
+      })
+    } else if (this.showNullOption) {
       options.push({
         itemTitle: 'Alle',
         itemValue: null
+      })
+    }
+
+    if (this.filter.noneIsOption) {
+      options.push({
+        itemTitle: 'Keine',
+        itemValue: 'none'
       })
     }
 
