@@ -80,10 +80,10 @@
         <v-btn
           small
           class="menu-button"
-          :class="{ 'is-active': editorFocus && editorSelectionIs('#0000FF')}"
+          :class="{ 'is-active': editorFocus && editor.isActive('highlight', { color: '#6161FF' })}"
           title="blau"
           color="blue--text"
-          @click="editorSelectionIs('#0000FF') ? editor.chain().focus().unsetColor().run() : editor.chain().focus().setColor('#0000FF').run()"
+          @click="editor.chain().focus().toggleHighlight({ color: '#6161FF' }).run()"
         >
           <v-icon>$paletteIcon</v-icon>
         </v-btn>
@@ -91,10 +91,10 @@
         <v-btn
           small
           class="menu-button"
-          :class="{ 'is-active': editorFocus && editorSelectionIs('#FF0000')}"
+          :class="{ 'is-active': editorFocus && editor.isActive('highlight', { color: '#FF0000' })}"
           title="rot"
           color="red--text"
-          @click="editorSelectionIs('#FF0000') ? editor.chain().focus().unsetColor().run() : editor.chain().focus().setColor('#FF0000').run()"
+          @click="editor.chain().focus().toggleHighlight({ color: '#FF0000' }).run()"
         >
           <v-icon>$paletteIcon</v-icon>
         </v-btn>
@@ -141,7 +141,7 @@ import {
   mdiRotateRight
 } from '@mdi/js'
 import { Color } from '@tiptap/extension-color'
-import TextStyle from '@tiptap/extension-text-style'
+import Highlight from '@tiptap/extension-highlight'
 
 @Component({
   props: ['value', 'validator', 'focus'],
@@ -183,7 +183,7 @@ export default class ARichTextArea extends Vue {
       autofocus: this.focus ? 'end' : false,
       extensions: [
         StarterKit,
-        TextStyle,
+        Highlight.configure({ multicolor: true }),
         Color
       ],
       onUpdate: () => {
@@ -202,10 +202,6 @@ export default class ARichTextArea extends Vue {
 
   beforeDestroy () {
     this.editor.destroy()
-  }
-
-  editorSelectionIs (color) {
-    return this.editor.isActive('textStyle', { color: color })
   }
 
   /**
