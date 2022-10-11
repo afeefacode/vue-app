@@ -34,24 +34,6 @@
 
         <v-btn
           small
-          :class="['menu-button', {'is-active': editorFocus && editor.isActive('heading', {level: 1})}]"
-          title="überschrift 1"
-          @click="editor.chain().focus().toggleHeading({level: 1}).run()"
-        >
-          <v-icon>{{ h1Icon }}</v-icon>
-        </v-btn>
-
-        <v-btn
-          small
-          :class="['menu-button', {'is-active': editorFocus && editor.isActive('heading', {level: 2})}]"
-          title="pberschrift 2"
-          @click="editor.chain().focus().toggleHeading({level: 2}).run()"
-        >
-          <v-icon>{{ h2Icon }}</v-icon>
-        </v-btn>
-
-        <v-btn
-          small
           :class="['menu-button', {'is-active': editorFocus && editor.isActive('bulletList')}]"
           title="punkt-liste"
           @click="editor.chain().focus().toggleBulletList().run()"
@@ -80,10 +62,10 @@
         <v-btn
           small
           class="menu-button"
-          :class="{ 'is-active': editorFocus && editor.isActive('highlight', { color: '#6161FF' })}"
-          title="blau"
-          color="blue--text"
-          @click="editor.chain().focus().toggleHighlight({ color: '#6161FF' }).run()"
+          :class="{ 'is-active': editorFocus && editor.isActive('highlight', { color: '#00FF00' })}"
+          title="grün"
+          color="green--text"
+          @click="editor.chain().focus().toggleHighlight({ color: '#00FF00' }).run()"
         >
           <v-icon>$paletteIcon</v-icon>
         </v-btn>
@@ -95,6 +77,17 @@
           title="rot"
           color="red--text"
           @click="editor.chain().focus().toggleHighlight({ color: '#FF0000' }).run()"
+        >
+          <v-icon>$paletteIcon</v-icon>
+        </v-btn>
+
+        <v-btn
+          small
+          class="menu-button"
+          :class="{ 'is-active': editorFocus && editor.isActive('highlight', { color: '#FFFF00' })}"
+          title="gelb"
+          color="yellow--text"
+          @click="editor.chain().focus().toggleHighlight({ color: '#FFFF00' }).run()"
         >
           <v-icon>$paletteIcon</v-icon>
         </v-btn>
