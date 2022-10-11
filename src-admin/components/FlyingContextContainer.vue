@@ -87,7 +87,6 @@ export default class FlyingContextContainer extends Vue {
   position: fixed;
   z-index: 200;
   right: 0;
-  width: 50vw;
   height: 100%;
   top: 0;
   background: white;
