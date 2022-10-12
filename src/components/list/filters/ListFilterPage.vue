@@ -1,10 +1,9 @@
 <template>
   <a-row
-    v-if="numPages > 1"
     gap="8"
   >
     <a-pagination
-      v-if="count"
+      v-if="count && numPages > 1"
       v-model="filter.value"
       :length="numPages"
       :total-visible="_totalVisible"

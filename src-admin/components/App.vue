@@ -60,7 +60,7 @@
               </div>
             </div>
 
-            <a-context-menu triggerIcon="$dotsVerticalIcon">
+            <a-context-menu>
               <a-context-menu-item
                 :to="{name: 'settings', params: {accountId: account.id}}"
               >
