@@ -113,6 +113,15 @@
       :editor="editor"
       :class="['a-rich-text-editor', {editorFocus}]"
     />
+    <v-text-field
+      v-show="false"
+      ref="input"
+      v-model="currentValueStripped"
+      :label="label"
+      :rules="validationRules"
+      v-bind="$attrs"
+      v-on="$listeners"
+    />
   </div>
 </template>
 
@@ -137,7 +146,7 @@ import { Color } from '@tiptap/extension-color'
 import Highlight from '@tiptap/extension-highlight'
 
 @Component({
-  props: ['value', 'validator', 'focus'],
+  props: ['value', 'validator', 'focus', 'label'],
   components: {
     EditorContent
   }
@@ -167,9 +176,6 @@ export default class ARichTextArea extends Vue {
   mounted () {
     this.editorFocus = !!this.focus
 
-    if (this.validator) {
-      this.$refs.input.validate(true)
-    }
 
     this.editor = new Editor({
       content: this.internalValue,
@@ -229,6 +235,12 @@ export default class ARichTextArea extends Vue {
       return false
     }
     return this.validator.getParams().max || false
+  }
+
+  get currentValueStripped () {
+    if (this.editor) {
+      return this.editor.state.doc.textContent
+    }
   }
 }
 </script>

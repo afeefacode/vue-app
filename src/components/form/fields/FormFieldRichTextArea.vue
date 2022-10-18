@@ -2,6 +2,8 @@
   <a-rich-text-area
     v-model="model[name]"
     v-bind="$attrs"
+    :validator="validator"
+    :label="label"
     v-on="$listeners"
   >
     <template #buttons>
