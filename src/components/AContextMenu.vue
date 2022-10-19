@@ -170,4 +170,7 @@ export default class AContextMenu extends Mixins(UsesPositionServiceMixin) {
     margin: .3rem 0;
   }
 }
+.contextButton {
+  cursor: pointer;
+}
 </style>
