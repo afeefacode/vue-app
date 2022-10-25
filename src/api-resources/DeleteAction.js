@@ -1,3 +1,6 @@
+import { AlertEvent } from '@a-vue/events'
+import { eventBus } from '@a-vue/plugins/event-bus/EventBus'
+
 import { ApiAction } from './ApiAction'
 
 export class DeleteAction extends ApiAction {
@@ -21,5 +24,13 @@ export class DeleteAction extends ApiAction {
 
   processResult () {
     return true
+  }
+
+  processError (result) {
+    eventBus.dispatch(new AlertEvent(AlertEvent.ERROR, {
+      headline: 'Die Daten konnten nicht gelöscht werden.',
+      message: result.message,
+      detail: result.detail
+    }))
   }
 }
