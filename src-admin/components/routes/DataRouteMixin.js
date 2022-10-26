@@ -1,4 +1,4 @@
-import { Component, Vue } from '@a-vue'
+import { Component, Watch, Vue } from '@a-vue'
 
 Component.registerHooks([
   'beforeRouteEnter',
@@ -36,39 +36,36 @@ function load (route) {
 
 @Component
 export class DataRouteMixin extends Vue {
-  drm_isLoaded = false
-
   async beforeRouteEnter (to, from, next) {
     routerHookCalled = true
     const result = await load(to)
-
     next(vm => {
       if (result !== false) {
         vm.drm_onLoad(result)
-        vm.drm_isLoaded = true
       }
       routerHookCalled = false
     })
   }
 
-  /**
-   * triggered both, if route name or route params change
-   @Watch('$route.params')
-   async routeParamsChanged () {
-     if (routerHookCalled) {
-       return
-     }
 
-     if (!this.drm_isLoaded) {
-       const result = await load(this.$route)
+  // watches (if defined) route idKey and reloads data if changed
+  @Watch('drm_id')
+  async routeParamsChanged () {
+    if (routerHookCalled) {
+      return
+    }
 
-       if (result !== false) {
-         this.drm_onLoad(result)
-         this.drm_isLoaded = true
-       }
-     }
-   }
-   */
+    const result = await load(this.$route)
+
+    if (result !== false) {
+      this.drm_onLoad(result)
+    }
+  }
+
+  // return route config idKey
+  get drm_id () {
+    return this.$route.params[this.$routeDefinition.idKey]
+  }
 
   drm_onLoad (result) {
     onLoadCallback(this, result)
