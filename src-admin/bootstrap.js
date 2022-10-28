@@ -2,6 +2,7 @@ import './config/event-bus'
 import './config/components'
 import './directives'
 
+import { hasRightsPlugin } from '@a-admin/plugins/translation/HasRightsPlugin'
 import { translationPlugin } from '@a-admin/plugins/translation/TranslationPlugin'
 import { apiResourcesPlugin } from '@a-vue/plugins/api-resources/ApiResourcesPlugin'
 import { hasOptionsPlugin } from '@a-vue/plugins/has-options/HasOptionsPlugin'
@@ -44,6 +45,8 @@ export async function bootstrap ({ apis, models, routing, authService, getTransl
   }
 
   if (authService) {
+    Vue.use(hasRightsPlugin)
+
     authService.initApp(router)
   }
 
