@@ -1,4 +1,4 @@
-#AModal
+# AModal
 
 It's a Modal capsule for vuetifys Modals. Whats the magic about it?
 
