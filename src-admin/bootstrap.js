@@ -70,5 +70,5 @@ export async function bootstrap ({ apis, models, routing, authService, getTransl
         splash
       }
     })
-  }, 500)
+  }, 300)
 }
