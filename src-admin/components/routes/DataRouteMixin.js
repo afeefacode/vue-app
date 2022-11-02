@@ -1,4 +1,4 @@
-import { Component, Watch, Vue } from '@a-vue'
+import { Component, Vue, Watch } from '@a-vue'
 
 Component.registerHooks([
   'beforeRouteEnter',
@@ -50,7 +50,7 @@ export class DataRouteMixin extends Vue {
 
   // watches (if defined) route idKey and reloads data if changed
   @Watch('drm_id')
-  async routeParamsChanged () {
+  async drm_routeParamsChanged () {
     if (routerHookCalled) {
       return
     }
