@@ -56,7 +56,7 @@ import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 import { CancelOnEscMixin } from '@a-vue/services/escape/CancelOnEscMixin'
 
 @Component({
-  props: ['show', 'icon', 'title', 'beforeClose', 'anchorPosition']
+  props: ['show', 'icon', 'title', 'beforeClose', 'anchorPosition', 'screenCentered']
 })
 export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentWidthMixin, CancelOnEscMixin) {
   modalId = randomCssClass(10)
@@ -121,7 +121,9 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
   @Watch('modal')
   modalChanged () {
     if (this.modal) {
-      this.setPosition()
+      if (!this.screenCentered) {
+        this.setPosition()
+      }
     } else {
       this.removeTransientAnchor()
     }
@@ -204,8 +206,6 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
 
 :deep(.v-dialog) {
   position: absolute;
-  top: 0;
-  left: 0;
   margin: 0;
 
   transition: none;
