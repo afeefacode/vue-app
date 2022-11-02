@@ -14,7 +14,7 @@
     <template #activator="{ on }">
       <div
         style="width: max-content;"
-        :class="[activatorClass, triggerClass]"
+        :class="activatorClass"
         v-on="on"
       >
         <slot name="activator" />
@@ -56,7 +56,7 @@ import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 import { CancelOnEscMixin } from '@a-vue/services/escape/CancelOnEscMixin'
 
 @Component({
-  props: ['show', 'icon', 'title', 'beforeClose', 'triggerClass', 'anchorPosition']
+  props: ['show', 'icon', 'title', 'beforeClose', 'anchorPosition']
 })
 export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentWidthMixin, CancelOnEscMixin) {
   modalId = randomCssClass(10)
@@ -211,6 +211,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
   transition: none;
 
   &.v-fade-transition {
+
     &-enter-active, &-leave, &-leave-to {
       transition: opacity .3s ease;
     }
