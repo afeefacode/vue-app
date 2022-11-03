@@ -17,10 +17,12 @@ export class SaveAction extends ApiAction {
   }
 
   processError (result) {
-    eventBus.dispatch(new AlertEvent(AlertEvent.ERROR, {
-      headline: 'Die Daten konnten nicht gespeichert werden.',
-      message: result.message,
-      detail: result.detail
-    }))
+    if (this._showError) {
+      eventBus.dispatch(new AlertEvent(AlertEvent.ERROR, {
+        headline: 'Die Daten konnten nicht gespeichert werden.',
+        message: result.message,
+        detail: result.detail
+      }))
+    }
   }
 }

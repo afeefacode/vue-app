@@ -10,6 +10,7 @@ export class ApiAction extends ApiResourcesApiAction {
   _dispatchGlobalSaveEvents = false
   _minDuration = 100
   _startTime = 0
+  _showError = true
 
   id (id) {
     this.param('id', id)
@@ -18,6 +19,11 @@ export class ApiAction extends ApiResourcesApiAction {
 
   minDuration (duration) {
     this._minDuration = duration
+    return this
+  }
+
+  hideError () {
+    this._showError = false
     return this
   }
 
