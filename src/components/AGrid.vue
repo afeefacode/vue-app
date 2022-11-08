@@ -1,5 +1,8 @@
 <template>
-  <div :class="['a-grid', colsClass, gapClass, evenClass, breakMobileClass]">
+  <div
+    :style="{display: displayStyle}"
+    :class="['a-grid', colsClass, gapClass, evenClass, breakMobileClass]"
+  >
     <slot />
   </div>
 </template>
@@ -10,13 +13,17 @@ import { Component, Mixins } from '@a-vue'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['gap', 'hGap', 'vGap', 'cols', {even: false}, 'breakMobile']
+  props: ['gap', 'hGap', 'vGap', 'cols', {inline: false, even: false}, 'breakMobile']
 })
 export default class AGrid extends Mixins(ComponentWidthMixin) {
   get breakMobileClass () {
     if (this.breakMobile !== undefined) {
       return 'breakMobile'
     }
+  }
+
+  get displayStyle () {
+    return this.inline ? 'inline-grid' : 'grid'
   }
 
   get colsClass () {
@@ -53,11 +60,10 @@ export default class AGrid extends Mixins(ComponentWidthMixin) {
 
 <style scoped lang="scss">
 .a-grid {
-  display: grid;
-
   @for $i from 1 through 8 {
     &.cols-#{$i} {
       grid-template-columns: repeat(#{$i}, auto);
+
       &.even {
         grid-template-columns: repeat(#{$i}, 1fr);
       }
@@ -67,6 +73,7 @@ export default class AGrid extends Mixins(ComponentWidthMixin) {
   &.breakMobile {
     @media (max-width: 900px), (orientation : portrait) {
       grid-template-columns: 1fr;
+
       &.even {
         grid-template-columns: 1fr;
       }
