@@ -1,14 +1,15 @@
 <template>
   <v-text-field
     ref="input"
-    :type="type"
-    :autocomplete="autocomplete"
-    :rules="validationRules"
+    v-model="internalValue"
     :counter="counter"
     :style="cwm_widthStyle"
-    v-bind="$attrs"
-    v-on="$listeners"
-    @click:append="showPassword = !showPassword"
+    :error-messages="errorMessages"
+    v-bind="attrs"
+    @input="inputChanged"
+    @keyup.esc="clear"
+    @click:clear="clear"
+    v-on="listeners"
   />
 </template>
 
@@ -19,27 +20,111 @@ import { debounce } from '@a-vue/utils/debounce'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['debounce', 'validator', {focus: false, password: false, number: false}]
+  props: ['value', 'debounce', 'validator', 'rules', {escClearable: false, focus: false, number: false}]
 })
 export default class ATextField extends Mixins(ComponentWidthMixin) {
   $hasOptions = ['counter']
 
-  showPassword = false
+  internalValue = null
+  errorMessages = []
+  debounceInputFunction = null
 
   created () {
-    if (this.debounce) {
-      this.$listeners.input = debounce(value => {
-        this.$emit('input', value)
-      }, this.debounce, value => value)
-    }
+    this.setInternalValue(this.value)
   }
 
   mounted () {
     this.setFocus()
+    this.validate()
+  }
 
-    if (this.validator) {
-      this.$refs.input.validate(true)
+  setInternalValue (value) {
+    if (typeof value === 'number') {
+      value = value.toString()
     }
+    this.internalValue = value || ''
+  }
+
+  @Watch('value')
+  valueChanged () {
+    this.setInternalValue(this.value)
+  }
+
+  get listeners () {
+    // remove input from nested listening
+    // let clients listend to only THIS component
+    const listeners = {...this.$listeners}
+    delete listeners.input
+    return listeners
+  }
+
+  get attrs () {
+    // remove 'rules' from being passed to v-text-field
+    const attrs = {...this.$attrs}
+    delete attrs.rules
+    return attrs
+  }
+
+  clear () {
+    if (this.$attrs.clearable || this.escClearable) {
+      this.setInternalValue('')
+      this.$emit('input', this.emptyValue)
+    }
+  }
+
+  inputChanged () {
+    const valid = this.validate()
+    if (!valid) {
+      return
+    }
+
+    const value = this.stringToNumber(this.internalValue)
+
+    if (this.debounce) {
+      if (!this.debounceInputFunction) {
+        this.debounceInputFunction = debounce(value => {
+          this.$emit('input', value)
+        }, this.debounce, value => value) // fire immediately if !value (click clearable-x)
+      }
+      this.debounceInputFunction(value)
+    } else {
+      this.$emit('input', value)
+    }
+  }
+
+  stringToNumber (value) {
+    if (this.treatAsNumericValue) {
+      if (!value) {
+        value = null
+      } else {
+        value = this.internalValue.match(/^\d*(.\d+)?$/) ? parseFloat(this.internalValue) : NaN
+      }
+    }
+    return value
+  }
+
+  get type () {
+    return this.$attrs.type || 'text'
+  }
+
+  get treatAsNumericValue () {
+    return this.type === 'number' || this.number
+  }
+
+  validate () {
+    const rules = this.validationRules
+    let errorMessage = null
+    for (const rule of rules) {
+      const value = this.stringToNumber(this.internalValue)
+      const result = rule(value)
+      if (result !== true) {
+        errorMessage = result
+        break
+      }
+    }
+
+    this.errorMessages = [errorMessage].filter(e => e)
+    return !this.errorMessages.length
   }
 
   @Watch('focus')
@@ -58,42 +143,31 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
     }
   }
 
-  get type () {
-    if (this.password && !this.showPassword) {
-      return 'password'
-    }
-    return 'text'
-  }
-
-  get appendIcon () {
-    if (this.password) {
-      return this.showPassword ? '$eyeIcon' : '$eyeOffIcon'
-    }
-    return null
-  }
-
-  get autocomplete () {
-    if (this.password) {
-      return 'new-password'
-    }
-    return null
-  }
-
   get validationRules () {
+    if (this.$attrs.rules) {
+      return this.$attrs.rules
+    }
     const label = this.$attrs.label
     return (this.validator && this.validator.getRules(label)) || []
   }
 
   get counter () {
     if (!this.$has.counter) {
-      return false
+      return null
     }
 
     if (!this.validator) {
-      return false
+      return null
     }
 
-    return (!this.number && this.validator.getParams().max) || false
+    return this.validator.getMaxValueLength()
+  }
+
+  get emptyValue () {
+    if (this.validator) {
+      return this.validator.getEmptyValue()
+    }
+    return null
   }
 }
 </script>
