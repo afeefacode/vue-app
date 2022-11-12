@@ -20,7 +20,7 @@ import { debounce } from '@a-vue/utils/debounce'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['value', 'debounce', 'validator', 'rules', {escClearable: false, focus: false, number: false}]
+  props: ['value', 'debounce', 'validator', 'rules', {outlined: true, dense: true, focus: false, number: false}]
 })
 export default class ATextField extends Mixins(ComponentWidthMixin) {
   $hasOptions = ['counter']
@@ -62,6 +62,9 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
     // remove 'rules' from being passed to v-text-field
     const attrs = {...this.$attrs}
     delete attrs.rules
+
+    attrs.outlined = this.outlined
+    attrs.dense = this.dense
     return attrs
   }
 
@@ -175,7 +178,11 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
 
 
 <style lang="scss" scoped>
-.v-input:not(.v-input--is-focused) :deep(.v-counter) {
+.v-input:not(.v-input--is-focused) :deep(.v-counter) { // hide counter when not focused
   display: none;
+}
+
+.v-text-field :deep(.v-input__icon--clear) { // always show clear icon, https://github.com/vuetifyjs/vuetify/pull/15876
+  opacity: 1;
 }
 </style>
