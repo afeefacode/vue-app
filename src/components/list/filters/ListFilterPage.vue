@@ -54,7 +54,7 @@ export default class ListFilterPage extends Mixins(ListFilterMixin) {
 
 <style lang="scss" scoped>
 .v-select {
-  max-width: 100px;
+  max-width: 150px;
 }
 
 .pageNumber {

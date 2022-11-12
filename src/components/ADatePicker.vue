@@ -12,7 +12,7 @@
         :value="formattedDate"
         :label="label"
         :style="cwm_widthStyle"
-        v-bind="{...$attrs, ...attrs}"
+        v-bind="{...$attrs, ...attrs, dense, outlined}"
         :rules="validationRules"
         :error-messages="errorMessages"
         :readonly="type === 'month'"
@@ -41,7 +41,7 @@ import { formatDate } from '@a-vue/utils/format-date'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['value', 'validator', 'type']
+  props: ['value', 'validator', 'type', {dense: true, outlined: true}]
 })
 export default class ADatePicker extends Mixins(ComponentWidthMixin) {
   value_ = null
@@ -153,6 +153,7 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
 <style lang="scss" scoped>
 :deep(.v-select__slot) {
   cursor: pointer;
+
   input {
     cursor: pointer;
   }

@@ -3,7 +3,7 @@
     ref="input"
     :rules="validationRules"
     :counter="counter"
-    v-bind="$attrs"
+    v-bind="{...$attrs, dense, outlined}"
     v-on="$listeners"
   />
 </template>
@@ -13,7 +13,7 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: ['validator']
+  props: ['validator', {dense: true, outlined: true}]
 })
 export default class ATextArea extends Vue {
   mounted () {

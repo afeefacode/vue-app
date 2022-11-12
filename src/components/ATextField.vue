@@ -20,7 +20,7 @@ import { debounce } from '@a-vue/utils/debounce'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['value', 'debounce', 'validator', 'rules', {outlined: true, dense: true, focus: false, number: false}]
+  props: ['value', 'debounce', 'validator', 'rules', {dense: true, outlined: true, focus: false, number: false}]
 })
 export default class ATextField extends Mixins(ComponentWidthMixin) {
   $hasOptions = ['counter']
@@ -63,8 +63,8 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
     const attrs = {...this.$attrs}
     delete attrs.rules
 
-    attrs.outlined = this.outlined
     attrs.dense = this.dense
+    attrs.outlined = this.outlined
     return attrs
   }
 
