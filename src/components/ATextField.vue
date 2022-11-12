@@ -68,6 +68,7 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
   clear () {
     if (this.$attrs.clearable || this.escClearable) {
       this.setInternalValue('')
+      this.validate()
       this.$emit('input', this.emptyValue)
     }
   }
