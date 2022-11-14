@@ -11,7 +11,7 @@
     no-filter
 
     :rules="validationRules"
-    v-bind="$attrs"
+    v-bind="{...$attrs, dense, outlined}"
     v-on="$listeners"
   />
 </template>
@@ -23,7 +23,7 @@ import { Model } from '@afeefa/api-resources-client'
 import { debounce } from '@a-vue/utils/debounce'
 
 @Component({
-  props: ['items', 'validator', 'defaultValue', 'selectedItemText', 'debounce']
+  props: ['items', 'validator', 'defaultValue', 'selectedItemText', 'debounce', {dense: true, outlined: true}]
 })
 export default class AAutocomplete extends Vue {
   isLoading = false
