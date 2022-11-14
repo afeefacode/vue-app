@@ -6,6 +6,7 @@
     :debounce="500"
     v-bind="$attrs"
     clearable
+    hide-details
     @keyup.esc="clearValue"
   />
 </template>

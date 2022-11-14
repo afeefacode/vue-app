@@ -7,6 +7,7 @@
     itemValue="itemValue"
     :clearable="filter.value !== filter.defaultValue"
     :defaultValue="filter.defaultValue"
+    hide-details
     v-bind="$attrs"
   />
 </template>

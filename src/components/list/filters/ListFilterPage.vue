@@ -1,7 +1,5 @@
 <template>
-  <a-row
-    gap="8"
-  >
+  <a-row gap="8">
     <a-pagination
       v-if="count && numPages > 1"
       v-model="filter.value"
@@ -20,6 +18,7 @@
       :items="pageSizeFilter.options"
       :defaultValue="pageSizeFilter.defaultValue"
       :clearable="!pageSizeFilter.hasDefaultValueSet()"
+      hide-details
     />
   </a-row>
 </template>
