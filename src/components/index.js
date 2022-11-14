@@ -15,7 +15,6 @@ import NestedEditForm from './form/NestedEditForm'
 import ListFilterPage from './list/filters/ListFilterPage'
 import ListFilterSearch from './list/filters/ListFilterSearch'
 import ListFilterSelect from './list/filters/ListFilterSelect'
-import ListFilterRow from './list/ListFilterRow'
 
 Vue.component('EditForm', EditForm)
 Vue.component('NestedEditForm', NestedEditForm)
@@ -31,5 +30,4 @@ Vue.component('FormFieldSelect', FormFieldSelect)
 Vue.component('FormFieldSelect2', FormFieldSelect2)
 Vue.component('ListFilterPage', ListFilterPage)
 Vue.component('ListFilterSearch', ListFilterSearch)
-Vue.component('ListFilterRow', ListFilterRow)
 Vue.component('ListFilterSelect', ListFilterSelect)

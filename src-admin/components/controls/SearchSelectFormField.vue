@@ -76,7 +76,7 @@
       </template>
 
       <template #filters>
-        <list-filter-row>
+        <a-row gap="4">
           <list-filter-search
             :focus="true"
             maxWidth="100%"
@@ -87,7 +87,7 @@
             :has="{page_size: false, page_number: true}"
             :totalVisible="0"
           />
-        </list-filter-row>
+        </a-row>
       </template>
 
       <template #row="{ model, on }">
