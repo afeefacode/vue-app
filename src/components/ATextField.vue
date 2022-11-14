@@ -15,7 +15,7 @@
 
 
 <script>
-import { Component, Watch, Mixins } from '@a-vue'
+import { Component, Watch, Mixins, Inject } from '@a-vue'
 import { debounce } from '@a-vue/utils/debounce'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
@@ -25,16 +25,22 @@ import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 export default class ATextField extends Mixins(ComponentWidthMixin) {
   $hasOptions = ['counter']
 
+  @Inject({ from: 'form', default: null }) form
+
   internalValue = null
   errorMessages = []
   debounceInputFunction = null
 
   created () {
+    this.form && this.form.register(this)
+
     this.setInternalValue(this.value)
   }
 
   mounted () {
     this.setFocus()
+
+    this.$emit('input:internal', this.internalValue)
     this.validate()
   }
 
@@ -77,6 +83,8 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
   }
 
   inputChanged () {
+    this.$emit('input:internal', this.internalValue)
+
     const valid = this.validate()
     if (!valid) {
       return
