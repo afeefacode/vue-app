@@ -94,8 +94,9 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
 
     const value = this.stringToNumber(this.internalValue)
 
-    // NaN means: wrong numerical value but no validator present
-    if (isNaN(value)) {
+    // NaN means: wrong numerical value AND no validator present
+    // otherwise validator would return validate() -> false
+    if (Number.isNaN(value)) {
       return
     }
 
