@@ -158,4 +158,8 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin) {
     cursor: pointer;
   }
 }
+
+.v-text-field :deep(.v-input__icon--clear) { // always show clear icon, https://github.com/vuetifyjs/vuetify/pull/15876
+  opacity: 1;
+}
 </style>
