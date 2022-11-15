@@ -50,6 +50,9 @@
             <div>
               <div class="accountName">
                 {{ account.first_name }}
+                <template v-if="$auth.roles()[0]">
+                  ({{ $auth.roles()[0].title }})
+                </template>
               </div>
 
               <div class="body-2 d-flex align-center">
