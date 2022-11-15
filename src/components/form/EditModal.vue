@@ -44,7 +44,7 @@
             small
             angular
             :has="{reset: !!modelToEdit.id}"
-            @save="$emit('save', modelToEdit, ignoreChangesOnClose)"
+            @save="$emit('save', modelToEdit, ignoreChangesOnClose, close)"
             @reset="$refs.form.reset()"
           />
         </a-row>
@@ -68,6 +68,10 @@ export default class EditModal extends Vue {
   ignoreChangesOnClose_ = false
 
   created () {
+    if (!this.model && !this.createModelToEdit) {
+      console.warn('You need to pass either a model or a model factory to <edit-modal>.')
+    }
+
     if (this.show) { // open on create with v-show
       this.open()
     }
