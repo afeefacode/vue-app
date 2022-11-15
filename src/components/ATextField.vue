@@ -86,11 +86,17 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
     this.$emit('input:internal', this.internalValue)
 
     const valid = this.validate()
+
     if (!valid) {
       return
     }
 
     const value = this.stringToNumber(this.internalValue)
+
+    // NaN means: wrong numerical value but no validator present
+    if (isNaN(value)) {
+      return
+    }
 
     if (this.debounce) {
       if (!this.debounceInputFunction) {
