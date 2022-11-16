@@ -9,7 +9,7 @@
     >
       <v-container
         flex-column
-        align-start
+        align-center
         fill-height
       >
         <router-link
