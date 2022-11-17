@@ -1,4 +1,6 @@
 import { NextRouteFilterSource } from '@a-vue/components/list/NextRouteFilterSource'
+import { AlertEvent } from '@a-vue/events'
+import { eventBus } from '@a-vue/plugins/event-bus/EventBus'
 import { ListViewModel } from '@afeefa/api-resources-client'
 
 import { ApiAction } from './ApiAction'
@@ -23,5 +25,15 @@ export class ListAction extends ApiAction {
       .getApiRequest()
 
     return ListAction.fromRequest(request)
+  }
+
+  processError (result) {
+    if (this._showError) {
+      eventBus.dispatch(new AlertEvent(AlertEvent.ERROR, {
+        headline: 'Die Daten konntent nicht geladen werden.',
+        message: result.message,
+        detail: result.detail
+      }))
+    }
   }
 }
