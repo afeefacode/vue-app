@@ -123,7 +123,7 @@
 <script>
 import { Component, Vue, Watch } from '@a-vue'
 import { LoadingEvent } from '@a-vue/events'
-import { appConfig } from '@a-admin/config/AppConfig'
+import { adminConfig } from '@a-admin/config/AdminConfig'
 import { sleep } from '@a-vue/utils/timeout'
 import AppBarButtons from './app/AppBarButtons'
 import AppBarTitleContainer from './app/AppBarTitleContainer'
@@ -154,11 +154,11 @@ export default class App extends Vue {
   }
 
   get SidebarMenu () {
-    return appConfig.components.SidebarMenu
+    return adminConfig.app.components.SidebarMenu
   }
 
   get logoUrl () {
-    return appConfig.app.logo
+    return adminConfig.app.logo
   }
 
   get account () {
@@ -169,15 +169,15 @@ export default class App extends Vue {
   }
 
   get title () {
-    return appConfig.app.title
+    return adminConfig.app.title
   }
 
   get loaderColor () {
-    return appConfig.app.loaderColor
+    return adminConfig.app.loaderColor
   }
 
   get rootRouteName () {
-    return appConfig.app.rootRouteName || 'root'
+    return adminConfig.app.rootRouteName || 'root'
   }
 
   startLoading () {

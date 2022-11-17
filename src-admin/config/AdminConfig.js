@@ -1,4 +1,4 @@
-class AppConfig {
+class AdminConfig {
   authService = null
 
   app = {
@@ -14,4 +14,4 @@ class AppConfig {
   }
 }
 
-export const appConfig = new AppConfig()
+export const adminConfig = new AdminConfig()

@@ -1,8 +1,8 @@
-import { appConfig } from '../config/AppConfig'
+import { adminConfig } from '../config/AdminConfig'
 
 class AuthPlugin {
   install (Vue) {
-    const authService = appConfig.authService
+    const authService = adminConfig.authService
     const $auth = {
       account: authService.getCurrentAccount(),
 
