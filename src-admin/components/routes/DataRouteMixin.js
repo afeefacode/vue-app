@@ -67,14 +67,18 @@ export class DataRouteMixin extends Vue {
   }
 
   drm_onLoad (result) {
-    onLoadCallback(this, result)
+    const wrapped = this.$children.find(c => c.constructor.drm_getActions)
+    onLoadCallback(wrapped || this, result)
     lastResult = result
   }
 
   created () {
     // hmr reload creates vm but not triggers route enter
     if (!routerHookCalled) {
-      onLoadCallback(this, lastResult)
+      this.$nextTick(() => { // next tick bc c.constructor else not available
+        const wrapped = this.$children.find(c => c.constructor.drm_getActions)
+        onLoadCallback(wrapped || this, lastResult)
+      })
     }
   }
 }
