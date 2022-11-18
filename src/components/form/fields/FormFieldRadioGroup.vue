@@ -18,9 +18,7 @@ export default class FormFieldRadioGroup extends Mixins(FormFieldMixin) {
   options = null
 
   created () {
-    if (this.fieldHasOptionsRequest()) {
-      this.options = this.getSelectOptions()
-    } else if (this.fieldHasOptions()) {
+    if (this.fieldHasOptionsRequest() || this.fieldHasOptions()) {
       this.options = this.getSelectOptions()
     }
   }
