@@ -47,7 +47,6 @@ export class DataRouteMixin extends Vue {
     })
   }
 
-
   // watches (if defined) route idKey and reloads data if changed
   @Watch('drm_id')
   async drm_routeParamsChanged () {
