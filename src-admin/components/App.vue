@@ -50,8 +50,8 @@
             <div>
               <div class="accountName">
                 {{ account.first_name }}
-                <template v-if="$auth.accountRoles[0]">
-                  ({{ $auth.accountRoles[0].title }})
+                <template v-if="$auth.roles[0]">
+                  ({{ $auth.roles[0].title }})
                 </template>
               </div>
 

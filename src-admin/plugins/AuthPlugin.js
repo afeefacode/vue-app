@@ -10,12 +10,8 @@ class AuthPlugin {
 
       hasRole: name => authService.currentAccountHasRole(name),
 
-      get accountRoles () {
-        return authService.getCurrentAccountRoles()
-      },
-
       get roles () {
-        return authService.getRoles()
+        return authService.getCurrentAccountRoles()
       },
 
       logout: () => authService.forwardToLogoutEndpoint()
