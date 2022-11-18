@@ -3,6 +3,7 @@
     ref="radios"
     :rules="validationRules"
     :class="{hasLabel: $has.label}"
+    :valueComparator="compareValues"
     v-bind="$attrs"
     @change="$emit('input', $event)"
   >
@@ -22,6 +23,7 @@
 
 <script>
 import { Component, Vue, Watch } from '@a-vue'
+import { Model } from '@afeefa/api-resources-client'
 
 @Component({
   props: ['options', 'validator']
@@ -54,6 +56,13 @@ export default class ARadioGroup extends Vue {
         this.$refs.radios.validate(true)
       })
     }
+  }
+
+  compareValues (a, b) {
+    if (a instanceof Model && b instanceof Model) {
+      return a.equals(b)
+    }
+    return JSON.stringify(a) === JSON.stringify(b)
   }
 
   get validationRules () {
