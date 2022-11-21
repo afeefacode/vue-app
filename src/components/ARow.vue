@@ -1,7 +1,7 @@
 <template>
   <div
+    :style="cwm_widthStyle + ' ' + displayStyle"
     :class="['a-row', directionClass, gapClass, classes]"
-    :style="cwm_widthStyle"
   >
     <slot />
   </div>
@@ -14,7 +14,7 @@ import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
   props: [
-    { vertical: false },
+    { vertical: false, inline: false },
     'gap'
   ]
 })
@@ -25,6 +25,10 @@ export default class ARow extends Mixins(ComponentWidthMixin) {
       classes[cssClass] = true
     })
     return classes
+  }
+
+  get displayStyle () {
+    return 'display: ' + (this.inline ? 'inline-flex' : 'flex') + ';'
   }
 
   get gapClass () {
@@ -44,7 +48,6 @@ export default class ARow extends Mixins(ComponentWidthMixin) {
 
 <style scoped lang="scss">
 .a-row {
-  display: flex;
   align-items: center;
 
   &.vertical {
