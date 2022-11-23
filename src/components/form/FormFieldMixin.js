@@ -62,10 +62,22 @@ export class FormFieldMixin extends Vue {
         .fromRequest(request)
         .load()
 
-      return models.map(model => ({
-        itemText: model.getTitle(),
-        itemValue: model
-      }))
+      const options = []
+
+      if (!this.validator || !this.validator.getParams().filled) {
+        options.push({
+          itemText: 'Keine Auswahl',
+          itemValue: null
+        })
+      }
+
+      return [
+        ...options,
+        ...models.map(model => ({
+          itemText: model.getTitle(),
+          itemValue: model
+        }))
+      ]
     }
 
     if (field.hasOptions()) {
