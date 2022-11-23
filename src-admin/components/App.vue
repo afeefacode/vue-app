@@ -63,7 +63,7 @@
               </div>
             </div>
 
-            <a-context-menu>
+            <a-context-menu v-if="$has.settings">
               <a-context-menu-item
                 :to="{name: 'settings', params: {accountId: account.id}}"
               >
@@ -144,6 +144,8 @@ import '../styles.scss'
   }
 })
 export default class App extends Vue {
+  $hasOptions = ['settings']
+
   drawer = true
   isLoading = false
 
