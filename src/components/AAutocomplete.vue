@@ -70,7 +70,7 @@ export default class AAutocomplete extends Vue {
     }
 
     if (a instanceof Model && b instanceof Model) {
-      return a.id === b.id && a.type === b.type
+      return a.equals(b)
     }
 
     return JSON.stringify(a) === JSON.stringify(b)
