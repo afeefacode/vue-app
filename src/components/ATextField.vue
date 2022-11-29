@@ -49,6 +49,7 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
       value = value.toString()
     }
     this.internalValue = value || ''
+    this.validate()
   }
 
   @Watch('value')
