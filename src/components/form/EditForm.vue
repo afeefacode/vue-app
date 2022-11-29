@@ -2,6 +2,7 @@
   <v-form
     v-model="valid"
     autocomplete="off"
+    @submit.prevent
   >
     <slot
       name="form"
