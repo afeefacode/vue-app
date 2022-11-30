@@ -153,8 +153,8 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
     this.setFocus()
   }
 
-  setFocus () {
-    const focus = this.focus || false
+  setFocus (force = false) {
+    const focus = this.focus || force // set focus if this.focus or else if forced from outside
     if (focus) {
       // if run in a v-dialog, the dialog background would
       // steal the focus without requestAnimationFrame
