@@ -75,6 +75,8 @@ export class ListViewMixin extends Vue {
         models: this.models_,
         meta: this.meta_
       })
+
+      this._listLoaded()
     } else {
       this.load()
     }
@@ -94,6 +96,9 @@ export class ListViewMixin extends Vue {
   }
 
   _filtersInitialized () {
+  }
+
+  _listLoaded () {
   }
 
   filtersChanged () {
@@ -166,5 +171,7 @@ export class ListViewMixin extends Vue {
       models,
       meta
     })
+
+    this._listLoaded()
   }
 }
