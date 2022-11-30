@@ -8,6 +8,7 @@
     clearable
     hide-details
     @keyup.esc="clearValue"
+    v-on="$listeners"
   />
 </template>
 
