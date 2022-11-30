@@ -165,8 +165,8 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
   }
 
   get validationRules () {
-    if (this.$attrs.rules) {
-      return this.$attrs.rules
+    if (this.rules) {
+      return this.rules
     }
     const label = this.$attrs.label
     return (this.validator && this.validator.getRules(label)) || []
