@@ -1,5 +1,6 @@
 <template>
   <v-form
+    ref="form"
     v-model="valid"
     autocomplete="off"
     @submit.prevent
@@ -32,7 +33,6 @@ export default class EditForm extends Vue {
   valid = false
   lastJson = null
   forcedUnchange = false
-
 
   created () {
     this.reset()
