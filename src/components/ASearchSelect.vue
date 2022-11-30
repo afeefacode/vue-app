@@ -2,7 +2,6 @@
   <div :class="['a-search-select', widthClass]">
     <div
       class="activator"
-      style="width: max-content;"
       @click="open"
     >
       <slot
