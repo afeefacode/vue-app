@@ -52,7 +52,7 @@ export default class SearchSelectList extends Mixins(ListViewMixin) {
 
   get showNotFound () {
     if (!this.models_.length && !this.isLoading) {
-      if (this._loadOnlyIfKeyword && !this.filters.q.value) {
+      if (this.loadOnlyIfKeyword && !this.filters.q.value) {
         return false
       }
       return true

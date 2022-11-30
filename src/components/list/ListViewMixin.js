@@ -10,10 +10,10 @@ import { FilterSourceType } from './FilterSourceType'
     'models', 'meta', // given, if already loaded
     'listAction',
     'filterHistoryKey',
-    'loadOnlyIfKeyword',
     'checkBeforeLoad',
     {
       filterSource: FilterSourceType.QUERY_STRING,
+      loadOnlyIfKeyword: false,
       events: true,
       history: true
     }
@@ -116,10 +116,6 @@ export class ListViewMixin extends Vue {
     return this.meta_.count_search || 0
   }
 
-  get _loadOnlyIfKeyword () {
-    return this.loadOnlyIfKeyword
-  }
-
   async load () {
     if (this.checkBeforeLoad) {
       const canLoad = await this.checkBeforeLoad()
@@ -131,7 +127,7 @@ export class ListViewMixin extends Vue {
       }
     }
 
-    if (this._loadOnlyIfKeyword && !this.filters.q.value) {
+    if (this.loadOnlyIfKeyword && !this.filters.q.value) {
       this.models_ = []
       this.meta_ = {}
       this.$emit('update:count', 0)

@@ -61,7 +61,6 @@
 
     <a-search-select
       :listAction="selectableConfig.listAction"
-      :loadOnlyIfKeyword="false"
       :selectedItems="selectableSelectedItems"
       :width="selectableWidth"
       @select="addItem"

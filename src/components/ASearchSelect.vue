@@ -54,7 +54,7 @@
         :events="false"
         :history="false"
         :filterSource="filterSource"
-        :loadOnlyIfKeyword="_loadOnlyIfKeyword"
+        :loadOnlyIfKeyword="loadOnlyIfKeyword"
         :filters.sync="filters"
         :count.sync="count"
         :isLoading.sync="isLoading"
@@ -102,8 +102,8 @@ import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
     'listAction',
     'q',
     'width',
-    'loadOnlyIfKeyword',
     {
+      loadOnlyIfKeyword: false,
       autoOpen: false,
       closeOnSelect: true,
       selectedItems: []
@@ -171,10 +171,6 @@ export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPosit
   get listPopUp () {
     const container = this.getContainer()
     return container.querySelector('.' + this.listCssClass)
-  }
-
-  get _loadOnlyIfKeyword () {
-    return this.loadOnlyIfKeyword === undefined || this.loadOnlyIfKeyword
   }
 
   positionize () {
