@@ -61,8 +61,6 @@
         :style="cwm_widthStyle"
       >
         <template #header>
-          <div />
-
           <slot name="header" />
         </template>
 
@@ -262,6 +260,7 @@ export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPosit
 
   coe_cancelOnEsc () {
     this.close()
+    return false // stop esc propagation
   }
 
   onClickOutside (e) {
@@ -340,6 +339,7 @@ export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPosit
     &:not(.selected) {
       cursor: pointer;
     }
+
     &.selected {
       pointer-events: none;
     }
