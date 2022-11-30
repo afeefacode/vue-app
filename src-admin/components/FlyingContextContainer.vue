@@ -100,8 +100,8 @@ export default class FlyingContextContainer extends Vue {
   }
 
   .v-navigation-drawer__border {
-     background-color: rgba(0, 0, 0, .12);
-     left: 0;
+    background-color: rgba(0, 0, 0, .12);
+    left: 0;
   }
 
   .closeButton {

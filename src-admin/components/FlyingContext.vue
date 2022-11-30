@@ -13,7 +13,7 @@ import { randomCssClass } from '@a-vue/utils/random'
 import { CancelOnEscMixin } from '@a-vue/services/escape/CancelOnEscMixin'
 
 @Component({
-  props: [{show: false}]
+  props: [{show: false}, 'beforeClose']
 })
 export default class FlyingContext extends Mixins(CancelOnEscMixin) {
   isVisible = false
@@ -62,8 +62,15 @@ export default class FlyingContext extends Mixins(CancelOnEscMixin) {
     this.$events.off(FlyingContextEvent.HIDE_ALL, this.onHide)
   }
 
-  onHide () {
+  async onHide () {
     if (this.isVisible) {
+      if (this.beforeClose) {
+        const result = await this.beforeClose()
+        if (!result) {
+          return
+        }
+      }
+
       this.$el.appendChild(this.getContent())
       this.coe_unwatchCancel() // hide context -> do not watch esc any more
       this.isVisible = false
