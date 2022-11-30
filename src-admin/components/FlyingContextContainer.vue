@@ -45,6 +45,12 @@ export default class FlyingContextContainer extends Vue {
   domChanged () {
     const container = this.getChildrenContainer()
     this.visible = !!container.children.length
+
+    if (this.visible) {
+      document.documentElement.style.overflow = 'hidden'
+    } else {
+      document.documentElement.style.overflow = 'auto'
+    }
   }
 
   hide () {
@@ -58,6 +64,10 @@ export default class FlyingContextContainer extends Vue {
   }
 
   onClickOutside (e) {
+    if (!this.visible) {
+      return
+    }
+
     // check if trigger is clicked
     let parent = e.target
     while (parent) {
