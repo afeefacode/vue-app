@@ -1,5 +1,6 @@
 import { Component, Vue, Watch } from '@a-vue'
 import { ListAction } from '@a-vue/api-resources/ApiActions'
+import { sleep } from '@a-vue/utils/timeout'
 import { ListViewModel } from '@afeefa/api-resources-client'
 
 import { CurrentRouteFilterSource } from './CurrentRouteFilterSource'
@@ -148,6 +149,8 @@ export class ListViewMixin extends Vue {
       .fromRequest(request)
       .dispatchGlobalLoadingEvents(this.events)
       .load()
+
+    // await sleep(1)
 
     if (!models) { // error happened
       this.isLoading = false

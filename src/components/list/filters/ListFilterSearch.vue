@@ -1,5 +1,6 @@
 <template>
   <a-text-field
+    ref="input"
     v-model="filter.value"
     :maxWidth="$attrs.maxWidth || maxWidth_"
     :label="label || 'Suche'"
@@ -27,6 +28,10 @@ export default class ListFilterSearch extends Mixins(ListFilterMixin) {
       e.stopPropagation()
       this.filter.value = null
     }
+  }
+
+  setFocus (force) {
+    this.$refs.input.setFocus(force)
   }
 }
 </script>

@@ -7,12 +7,20 @@
       <slot
         v-if="!autoOpen"
         name="activator"
+        :open="open"
+        :close="close"
       >
         <a-icon class="contextButton">
           $dotsHorizontalIcon
         </a-icon>
       </slot>
     </div>
+
+    <v-overlay
+      :value="isOpen"
+      :z-index="299"
+      :opacity="0"
+    />
 
     <div :class="panelCssClass">
       <div
@@ -23,7 +31,7 @@
         <div class="background elevation-6" />
 
         <search-select-filters
-          v-if="filtersInitialized"
+          v-if="filtersInitialized && showFilters"
           :filters="filters"
           :count="count"
         >
@@ -31,6 +39,9 @@
             name="filters"
             :filters="filters"
             :count="count"
+            :onSearchInputKey="{
+              'keydown': searchFilterKeyDown
+            }"
           />
         </search-select-filters>
 
@@ -38,7 +49,7 @@
           absolute
           top
           left
-          class="loadingIndicator"
+          :class="['loadingIndicator', {showFilters}]"
           :isLoading="isLoading"
         />
       </div>
@@ -47,6 +58,7 @@
     <div :class="listCssClass">
       <search-select-list
         v-if="isOpen"
+        ref="list"
         :listAction="listAction"
         :q="q"
         :selectedItems="selectedItems"
@@ -58,6 +70,9 @@
         :count.sync="count"
         :isLoading.sync="isLoading"
         :style="cwm_widthStyle"
+        @onLoad="onLoad"
+        @enter="selectItem"
+        @backtab="setFocusToSearchInput"
       >
         <template #header>
           <slot name="header" />
@@ -98,8 +113,12 @@ import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
   props: [
     'listAction',
     'q',
-    'width',
     {
+      diffXControls: '-1rem',
+      diffYControls: '-1rem',
+      getSearchInput: {
+        default: () => () => {}
+      },
       loadOnlyIfKeyword: false,
       autoOpen: false,
       closeOnSelect: true,
@@ -120,6 +139,7 @@ export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPosit
   isLoading = false
   filters = []
   count = 0
+  showFilters = false
 
   mounted () {
     if (this.autoOpen) {
@@ -179,7 +199,7 @@ export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPosit
       )
       .anchorTop().targetTop()
       .anchorLeft().targetLeft()
-      .diffX('-1rem').diffY('-1rem')
+      .diffX(this.diffXControls).diffY(this.diffYControls)
       .onPosition(this.onListPositionChanged)
 
     this.urp_registerPositionWatcher(position)
@@ -209,6 +229,10 @@ export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPosit
   }
 
   open () {
+    this.showFilters = false
+
+    this.$emit('beforeOpen')
+
     window.addEventListener('mousedown', this.onClickOutside)
 
     const container = this.getContainer()
@@ -244,6 +268,13 @@ export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPosit
     this.coe_unwatchCancel()
 
     this.$emit('close')
+  }
+
+  selectItem (model) {
+    if (this.closeOnSelect) {
+      this.close()
+    }
+    this.$emit('select', model)
   }
 
   selectHandler (model) {
@@ -294,12 +325,42 @@ export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPosit
     const controls = this.popUp.querySelector('.controls')
     const list = this.listPopUp.querySelector('.searchSelectList')
     const padding = '.5rem'
+    const vPadding = this.showFilters ? '.5rem' : '0px'
 
     const top = Math.min(0, list.offsetTop - controls.offsetTop)
     background.style.left = `calc(0px - ${padding})`
-    background.style.top = `calc(${top}px - ${padding})`
+    background.style.top = `calc(${top}px - ${vPadding})`
     background.style.width = `calc(${list.offsetWidth}px + 2 * ${padding})`
-    background.style.height = `calc(${controls.clientHeight}px + ${list.clientHeight}px + 3 * ${padding})`
+    background.style.height = `calc(${controls.clientHeight}px + ${list.clientHeight}px + 2 * ${padding} + ${vPadding})`
+  }
+
+  onLoad ({models, meta}) {
+    this.showFilters = meta.used_filters.page_size < meta.count_all
+    if (!this.showFilters) {
+      this.setFocusToList()
+    }
+  }
+
+  setFocusToList () {
+    this.$refs.list.setFocus()
+  }
+
+  setFocusToSearchInput () {
+    const searchInput = this.getSearchInput()
+    if (searchInput) {
+      searchInput.setFocus(true)
+    }
+  }
+
+  setWidth (width) {
+    this.cwm_width_ = width
+  }
+
+  searchFilterKeyDown (event) {
+    if (['Tab', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
+      this.setFocusToList()
+      event.preventDefault()
+    }
   }
 }
 </script>
@@ -309,15 +370,22 @@ export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPosit
 .background {
   background: white;
   position: absolute;
-  z-index: -1;
+  z-index: 300;
 }
 
 .controls {
   width: 400px;
   position: absolute;
-  z-index: 300;
+  z-index: 301;
   display: block;
+
   padding: 0 .5rem;
+
+  > .searchSelectFilters {
+    padding: .5rem 0;
+    position: relative;
+    z-index: 302;
+  }
 
   :deep(.a-row) {
     overflow: unset;
@@ -346,7 +414,13 @@ export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPosit
 }
 
 .loadingIndicator {
-  margin: -.5rem;
+  z-index: 303;
+  margin: 0 -.5rem;
   width: calc(100% + 1rem);
+  transition: none;
+
+  &.showFilters {
+    margin-top: -.5rem;
+  }
 }
 </style>
