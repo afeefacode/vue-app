@@ -81,6 +81,16 @@
         Nichts gefunden.
       </div>
     </div>
+    <div
+      v-if="$has.filters"
+      class="filters"
+    >
+      <slot
+        name="filters-below"
+        :filters="filters"
+        :count="count"
+      />
+    </div>
   </div>
 </template>
 
