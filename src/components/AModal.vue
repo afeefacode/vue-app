@@ -27,7 +27,7 @@
           v-if="icon"
           color="#FFFFFF"
           size="2rem"
-          class="ml-n1 mr-2"
+          class="mr-2 ml-n1"
         >
           <v-icon
             :color="icon.color"
@@ -64,7 +64,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
   modal = false
   position = null
 
-  cwm_maxWidth_ = 600
+  cwm_maxWidth_ = 1000
 
   created () {
     this.modal = this.show
