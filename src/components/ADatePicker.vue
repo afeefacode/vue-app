@@ -29,6 +29,7 @@
       no-title
       :type="type"
       v-bind="$attrs"
+      :first-day-of-week="1"
       @input="dateChanged"
     />
   </v-menu>
