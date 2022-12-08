@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="['a-table-row', getFontSizeCssClass, {border: hasBorder, selected}]"
+    :class="['a-table-row', getFontSizeCssClass, {border: hasBorder, selected, disabled}]"
     @click="$emit('click')"
   >
     <slot />
@@ -12,7 +12,7 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: ['small', 'selected']
+  props: ['small', 'selected', 'disabled']
 })
 export default class ATableRow extends Vue {
   $hasOptions = ['border']
@@ -71,6 +71,11 @@ export default class ATableRow extends Vue {
 
   &:hover, &.selected {
     background: #F4F4F4;
+  }
+
+  &.disabled {
+    pointer-events: none;
+    opacity: .5;
   }
 
   &.active {
