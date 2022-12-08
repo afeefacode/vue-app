@@ -62,6 +62,7 @@
         :listAction="listAction"
         :q="q"
         :selectedItems="selectedItems"
+        :isDisabled="isDisabled"
         :events="false"
         :history="false"
         :filterSource="filterSource"
@@ -122,7 +123,10 @@ import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
       loadOnlyIfKeyword: false,
       autoOpen: false,
       closeOnSelect: true,
-      selectedItems: []
+      selectedItems: [],
+      isDisabled: {
+        default: () => () => false
+      }
     }
   ],
   components: {

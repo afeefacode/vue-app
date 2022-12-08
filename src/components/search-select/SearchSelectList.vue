@@ -22,7 +22,7 @@
           v-for="(model, index) in models_"
           :key="model.id"
           small
-          :class="['row-' + index, {selected: isSelected(model), active: activeModelIndex === index}]"
+          :class="['row-' + index, {selected: isSelected(model), disabled: isDisabled(model), active: activeModelIndex === index}]"
         >
           <slot
             name="row"
@@ -52,7 +52,7 @@ import { Component, Mixins } from '@a-vue'
 import { ListViewMixin } from '@a-vue/components/list/ListViewMixin'
 
 @Component({
-  props: ['q', 'selectedItems']
+  props: ['q', 'selectedItems', 'isDisabled']
 })
 export default class SearchSelectList extends Mixins(ListViewMixin) {
   activeModelIndex = -1
