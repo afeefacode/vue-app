@@ -6,6 +6,7 @@
     :getSearchInput="() => $refs.searchInput"
     diffXControls="-.5rem"
     diffYControls="-.5rem"
+    v-bind="$attrs"
     @select="itemSelected"
     @close="focusInput"
     @beforeOpen="calculateSelectorSize"
@@ -13,14 +14,16 @@
     <template #activator="{open}">
       <a-text-field
         ref="input"
-        v-model="inputModel"
+        :value="inputModel"
         readonly
         :label="label"
         :rules="validationRules"
-        placeholder="Mausklick oder Space-Taste zum Auswählen"
+        placeholder="Mausklick oder Space/↓-Taste zum Auswählen"
+        :clearable="!!selectedItems.length"
         @keydown.space.prevent="open"
         @keydown.down.prevent="open"
         @keydown.enter.prevent="open"
+        @clear="clear"
       />
     </template>
 
@@ -101,6 +104,10 @@ export default class FormFieldSearchSelect extends Mixins(FormFieldMixin) {
 
   focusInput () {
     this.$refs.input.setFocus(true)
+  }
+
+  clear () {
+    this.itemSelected(null)
   }
 }
 </script>
