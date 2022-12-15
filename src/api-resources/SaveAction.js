@@ -1,10 +1,11 @@
+import { adminConfig } from '@a-admin/config/AdminConfig'
 import { AlertEvent } from '@a-vue/events'
 import { eventBus } from '@a-vue/plugins/event-bus/EventBus'
 
 import { ApiAction } from './ApiAction'
 
 export class SaveAction extends ApiAction {
-  _minDuration = 400
+  _minDuration = adminConfig.app.saveLoaderMinDuration || 400
 
   save () {
     return this.execute()

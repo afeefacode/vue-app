@@ -109,6 +109,6 @@ export class AfeefaAdmin {
           splash
         }
       })
-    }, 300)
+    }, adminConfig.app.appLoaderMinDuration || 300)
   }
 }

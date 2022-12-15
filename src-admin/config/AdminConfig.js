@@ -5,12 +5,14 @@ class AdminConfig {
     logo: null,
     title: null,
     loaderColor: null,
-    rootRouteName: null
-  }
+    rootRouteName: null,
+    appLoaderMinDuration: null,
+    saveLoaderMinDuration: null,
 
-  components = {
-    Splash: null,
-    SidebarMenu: null
+    components: {
+      Splash: null,
+      SidebarMenu: null
+    }
   }
 }
 
