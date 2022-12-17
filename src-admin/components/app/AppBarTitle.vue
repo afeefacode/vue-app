@@ -30,6 +30,9 @@
         {{ subtitle }}
       </h3>
       <h2>{{ title }}</h2>
+      <h3 v-if="detail">
+        {{ detail }}
+      </h3>
     </div>
   </a-row>
 </template>
@@ -38,7 +41,7 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: ['back', 'icon', 'title', 'subtitle']
+  props: ['back', 'icon', 'title', 'subtitle', 'detail']
 })
 export default class appBarTitle extends Vue {
   mounted () {
@@ -88,5 +91,10 @@ h2 {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+h2 + h3 {
+  color: #666666;
+  font-size: 1rem;
 }
 </style>
