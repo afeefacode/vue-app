@@ -13,7 +13,9 @@ export class ApiAction extends ApiResourcesApiAction {
   _showError = true
 
   id (id) {
-    this.param('id', id)
+    if (id) {
+      this.param('id', id)
+    }
     return this
   }
 
