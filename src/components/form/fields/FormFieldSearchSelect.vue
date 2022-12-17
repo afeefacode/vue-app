@@ -94,7 +94,10 @@ export default class FormFieldSearchSelect extends Mixins(FormFieldMixin) {
   }
 
   get listAction () {
-    return ListAction.fromRequest(this.field.getOptionsRequest())
+    const request = this.field
+      .getOptionsRequest()
+      .addParams(this.optionRequestParams || {})
+    return ListAction.fromRequest(request)
   }
 
   itemSelected (model) {
