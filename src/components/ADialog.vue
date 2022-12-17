@@ -225,12 +225,11 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, CancelOnEs
 
 <style lang="scss" scoped>
 .v-card__title {
-  background: #EEEEEE;
-  padding: .6rem 1rem .3rem !important;
+  padding: .8rem 1rem !important;
 }
 
 .v-card__text {
-  padding: .8rem 1rem !important;
+  padding: .5rem 1.2rem 1rem !important;
 }
 
 :deep(.v-dialog) {
@@ -238,6 +237,7 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, CancelOnEs
   top: 0;
   left: 0;
   margin: 0;
+  border-radius: 5px;
 
   transition: none;
 
