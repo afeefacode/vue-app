@@ -96,6 +96,15 @@ export default class ATableRow extends Vue {
         padding-bottom: .2rem;
       }
     }
+
+    .textblock--small {
+      font-size: .8rem;
+    }
+  }
+
+  .textblock--small {
+    font-size: .9rem;
+    line-height: .9;
   }
 
   [class*=text-] {
