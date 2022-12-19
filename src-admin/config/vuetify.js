@@ -20,6 +20,7 @@ import {
   mdiPalette,
   mdiPencil,
   mdiPlus,
+  mdiPlusCircle,
   mdiPrinter,
   mdiThumbUpOutline
 } from '@mdi/js'
@@ -54,7 +55,8 @@ export default new Vuetify({
       caretUpIcon: mdiMenuUp,
       printerIcon: mdiPrinter,
       euroSymbol: mdiCurrencyEur,
-      paletteIcon: mdiPalette
+      paletteIcon: mdiPalette,
+      addIcon: mdiPlusCircle
     }
   },
   breakpoint: {
