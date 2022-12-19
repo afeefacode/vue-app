@@ -143,8 +143,8 @@ export default class AContextMenu extends Mixins(UsesPositionServiceMixin) {
   z-index: 400;
   display: block;
   background-color: white;
-  padding: 0.5rem;
-  transition: left 0.2s;
+  padding: .5rem;
+  transition: left .2s;
 
   .nose {
     position: absolute;
@@ -156,11 +156,11 @@ export default class AContextMenu extends Mixins(UsesPositionServiceMixin) {
     transform-origin: top left;
     transform: translateY(-70%) rotate(45deg);
     background-color: white;
-    box-shadow: -1px 1px 1px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: -1px 1px 1px 0 rgba(0, 0, 0, .15);
 
     &.right {
       left: 100%;
-      box-shadow: 1px -1px 1px 0 rgba(0, 0, 0, 0.15);
+      box-shadow: 1px -1px 1px 0 rgba(0, 0, 0, .15);
     }
   }
 
@@ -170,6 +170,7 @@ export default class AContextMenu extends Mixins(UsesPositionServiceMixin) {
     margin: .3rem 0;
   }
 }
+
 .contextButton {
   cursor: pointer;
 }
