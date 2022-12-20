@@ -8,6 +8,7 @@
     @keydown.tab.prevent.exact="keyenter"
     @keydown.space.prevent="keyenter"
     @keydown.tab.shift.prevent="$emit('backtab')"
+    @keydown.exact="keyinput"
   >
     <template v-if="models_.length">
       <a-table v-bind="$attrs">
@@ -56,6 +57,7 @@ import { ListViewMixin } from '@a-vue/components/list/ListViewMixin'
 })
 export default class SearchSelectList extends Mixins(ListViewMixin) {
   activeModelIndex = -1
+  localSearchKey = ''
 
   get hasHeader () {
     return this.$slots.header && this.$slots.header.length > 1
@@ -86,6 +88,19 @@ export default class SearchSelectList extends Mixins(ListViewMixin) {
     if (this.models_.length) {
       this.activeModelIndex = Math.max(0, this.findActiveIndexForSelectedModel())
     }
+  }
+
+  keyinput (event) {
+    if (event.key.length !== 1) {
+      return
+    }
+
+    this.localSearchKey = event.key
+    this.activeModelIndex = this.findActiveIndexForLocalSearch()
+
+    setTimeout(() => {
+      this.localSearchKey = ''
+    }, 200)
   }
 
   keydown () {
@@ -130,6 +145,19 @@ export default class SearchSelectList extends Mixins(ListViewMixin) {
       }
     }
     return -1
+  }
+
+  findActiveIndexForLocalSearch () {
+    for (const [index, model] of this.models_.entries()) {
+      const regex = new RegExp(`^${this.localSearchKey}`, 'i')
+      if (model.getTitle().match(regex)) {
+        if (this.activeModelIndex === index) {
+          continue
+        }
+        return index
+      }
+    }
+    return this.activeModelIndex
   }
 }
 </script>
