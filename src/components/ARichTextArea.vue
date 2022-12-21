@@ -1,126 +1,127 @@
 <template>
-  <div :class="['a-rich-text-editor a-text-input', {'a-text-input-focused': editorFocus}]">
-    <div
-      v-if="editor"
-      class="menu-bar"
-    >
-      <div>
-        <v-btn
-          small
-          :class="['menu-button', {'is-active': editorFocus && editor.isActive('bold')}]"
-          title="fett"
-          @click="editor.chain().focus().toggleBold().run()"
-        >
-          <v-icon>{{ boldIcon }}</v-icon>
-        </v-btn>
+  <div>
+    <div :class="['editorWrapper', {hasError: !isValid, focused: editorFocus}]">
+      <div
+        v-if="editor"
+        class="menu-bar"
+      >
+        <div>
+          <v-btn
+            small
+            :class="['menu-button', {'is-active': editorFocus && editor.isActive('bold')}]"
+            title="fett"
+            @click="editor.chain().focus().toggleBold().run()"
+          >
+            <v-icon>{{ boldIcon }}</v-icon>
+          </v-btn>
 
-        <v-btn
-          small
-          :class="['menu-button', {'is-active': editorFocus && editor.isActive('italic')}]"
-          title="kursiv"
-          @click="editor.chain().focus().toggleItalic().run()"
-        >
-          <v-icon>{{ italicIcon }}</v-icon>
-        </v-btn>
+          <v-btn
+            small
+            :class="['menu-button', {'is-active': editorFocus && editor.isActive('italic')}]"
+            title="kursiv"
+            @click="editor.chain().focus().toggleItalic().run()"
+          >
+            <v-icon>{{ italicIcon }}</v-icon>
+          </v-btn>
 
-        <v-btn
-          small
-          :class="['menu-button', 'strike', {'is-active': editorFocus && editor.isActive('strike')}]"
-          title="durchgestrichen"
-          @click="editor.chain().focus().toggleStrike().run()"
-        >
-          <v-icon>{{ strikeIcon }}</v-icon>
-        </v-btn>
+          <v-btn
+            small
+            :class="['menu-button', 'strike', {'is-active': editorFocus && editor.isActive('strike')}]"
+            title="durchgestrichen"
+            @click="editor.chain().focus().toggleStrike().run()"
+          >
+            <v-icon>{{ strikeIcon }}</v-icon>
+          </v-btn>
 
-        <v-btn
-          small
-          :class="['menu-button', {'is-active': editorFocus && editor.isActive('bulletList')}]"
-          title="punkt-liste"
-          @click="editor.chain().focus().toggleBulletList().run()"
-        >
-          <v-icon>{{ ulIcon }}</v-icon>
-        </v-btn>
+          <v-btn
+            small
+            :class="['menu-button', {'is-active': editorFocus && editor.isActive('bulletList')}]"
+            title="punkt-liste"
+            @click="editor.chain().focus().toggleBulletList().run()"
+          >
+            <v-icon>{{ ulIcon }}</v-icon>
+          </v-btn>
 
-        <v-btn
-          small
-          :class="['menu-button', {'is-active': editorFocus && editor.isActive('orderedList')}]"
-          title="nummerierte liste"
-          @click="editor.chain().focus().toggleOrderedList().run()"
-        >
-          <v-icon>{{ olIcon }}</v-icon>
-        </v-btn>
+          <v-btn
+            small
+            :class="['menu-button', {'is-active': editorFocus && editor.isActive('orderedList')}]"
+            title="nummerierte liste"
+            @click="editor.chain().focus().toggleOrderedList().run()"
+          >
+            <v-icon>{{ olIcon }}</v-icon>
+          </v-btn>
 
-        <v-btn
-          small
-          :class="['menu-button', {'is-active': editorFocus && editor.isActive('blockquote')}]"
-          title="zitat"
-          @click="editor.chain().focus().toggleBlockquote().run()"
-        >
-          <v-icon>{{ commentIcon }}</v-icon>
-        </v-btn>
+          <v-btn
+            small
+            :class="['menu-button', {'is-active': editorFocus && editor.isActive('blockquote')}]"
+            title="zitat"
+            @click="editor.chain().focus().toggleBlockquote().run()"
+          >
+            <v-icon>{{ commentIcon }}</v-icon>
+          </v-btn>
 
-        <v-btn
-          small
-          class="menu-button"
-          :class="{ 'is-active': editorFocus && editor.isActive('highlight', { color: '#00FF00' })}"
-          title="grün"
-          color="green--text"
-          @click="editor.chain().focus().toggleHighlight({ color: '#00FF00' }).run()"
-        >
-          <v-icon>$paletteIcon</v-icon>
-        </v-btn>
+          <v-btn
+            small
+            class="menu-button"
+            :class="{ 'is-active': editorFocus && editor.isActive('highlight', { color: '#00FF00' })}"
+            title="grün"
+            color="green--text"
+            @click="editor.chain().focus().toggleHighlight({ color: '#00FF00' }).run()"
+          >
+            <v-icon>$paletteIcon</v-icon>
+          </v-btn>
 
-        <v-btn
-          small
-          class="menu-button"
-          :class="{ 'is-active': editorFocus && editor.isActive('highlight', { color: '#FF0000' })}"
-          title="rot"
-          color="red--text"
-          @click="editor.chain().focus().toggleHighlight({ color: '#FF0000' }).run()"
-        >
-          <v-icon>$paletteIcon</v-icon>
-        </v-btn>
+          <v-btn
+            small
+            class="menu-button"
+            :class="{ 'is-active': editorFocus && editor.isActive('highlight', { color: '#FF0000' })}"
+            title="rot"
+            color="red--text"
+            @click="editor.chain().focus().toggleHighlight({ color: '#FF0000' }).run()"
+          >
+            <v-icon>$paletteIcon</v-icon>
+          </v-btn>
 
-        <v-btn
-          small
-          class="menu-button"
-          :class="{ 'is-active': editorFocus && editor.isActive('highlight', { color: '#FFFF00' })}"
-          title="gelb"
-          color="yellow--text"
-          @click="editor.chain().focus().toggleHighlight({ color: '#FFFF00' }).run()"
-        >
-          <v-icon>$paletteIcon</v-icon>
-        </v-btn>
+          <v-btn
+            small
+            class="menu-button"
+            :class="{ 'is-active': editorFocus && editor.isActive('highlight', { color: '#FFFF00' })}"
+            title="gelb"
+            color="yellow--text"
+            @click="editor.chain().focus().toggleHighlight({ color: '#FFFF00' }).run()"
+          >
+            <v-icon>$paletteIcon</v-icon>
+          </v-btn>
 
-        <v-btn
-          small
-          class="menu-button undo-button"
-          :disabled="initialValue === editor.getHTML()"
-          title="rückgängig"
-          @click="editor.chain().focus().undo().run()"
-        >
-          <v-icon>{{ undoIcon }}</v-icon>
-        </v-btn>
+          <v-btn
+            small
+            class="menu-button undo-button"
+            :disabled="initialValue === editor.getHTML()"
+            title="rückgängig"
+            @click="editor.chain().focus().undo().run()"
+          >
+            <v-icon>{{ undoIcon }}</v-icon>
+          </v-btn>
+        </div>
+
+
+        <div>
+          <slot name="buttons" />
+        </div>
       </div>
 
-
-      <div>
-        <slot name="buttons" />
-      </div>
+      <editor-content
+        :editor="editor"
+        :class="['a-rich-text-editor', {editorFocus}]"
+      />
     </div>
 
-    <editor-content
-      :editor="editor"
-      :class="['a-rich-text-editor', {editorFocus}]"
-    />
-    <v-text-field
-      v-show="false"
-      ref="input"
-      v-model="currentValueStripped"
+    <a-text-field
+      :value="currentValueStripped"
+      class="validationInput"
       :label="label"
       :rules="validationRules"
-      v-bind="$attrs"
-      v-on="$listeners"
+      :valid.sync="isValid"
     />
   </div>
 </template>
@@ -156,6 +157,7 @@ export default class ARichTextArea extends Vue {
   internalValue = null
   initialValue = null
   editorFocus = false
+  isValid = false
 
   boldIcon = mdiFormatBold
   italicIcon = mdiFormatItalic
@@ -226,8 +228,7 @@ export default class ARichTextArea extends Vue {
   }
 
   get validationRules () {
-    const label = this.$attrs.label
-    return (this.validator && this.validator.getRules(label)) || []
+    return (this.validator && this.validator.getRules(this.label)) || []
   }
 
   get counter () {
@@ -247,9 +248,25 @@ export default class ARichTextArea extends Vue {
 
 
 <style lang="scss" scoped>
-.a-rich-text-editor {
+.editorWrapper {
+  padding: .5rem;
+
+  border: 1px solid white;
+  outline: 1px solid rgb(0 0 0 / 38%);
+  border-radius: 4px !important;
+
   :deep(.ProseMirror-focused) {
-      outline: none;
+    outline: none;
+  }
+
+  &.focused {
+    border: 1px solid #1975D2;
+    outline: 1px solid #1975D2;
+  }
+
+  &.hasError {
+    border: 1px solid #FF5252;
+    outline: 1px solid #FF5252;
   }
 }
 
@@ -271,6 +288,7 @@ export default class ARichTextArea extends Vue {
   border: none;
   box-shadow: none;
   border-radius: 0;
+  margin-right: 2px;
 
   :deep(.v-icon) {
     font-size: 20px;
@@ -290,6 +308,7 @@ export default class ARichTextArea extends Vue {
 
   &:disabled {
     background: none !important;
+
     :deep(*) {
       color: #CCCCCC !important;
     }
@@ -317,6 +336,14 @@ export default class ARichTextArea extends Vue {
 
   ul {
     margin: 16px 0;
+  }
+}
+
+.validationInput {
+  margin-top: .3rem;
+
+  :deep(.v-input__slot) {
+    display: none;
   }
 }
 </style>
