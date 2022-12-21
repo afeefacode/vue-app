@@ -146,6 +146,7 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
     }
 
     this.errorMessages = [errorMessage].filter(e => e)
+    this.$emit('update:valid', !this.errorMessages.length)
     return !this.errorMessages.length
   }
 
