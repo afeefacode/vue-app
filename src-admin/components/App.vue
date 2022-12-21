@@ -12,6 +12,19 @@
         align-center
         fill-height
       >
+        <a-row
+          justify-end
+          width="100%"
+        >
+          <v-app-bar-nav-icon
+            class="sidebarToggleButton mt-1 mr-2 ml-3"
+            title="Menu schließen"
+            @click="toggleDrawer"
+          >
+            <v-icon>{{ closeMenuIcon }}</v-icon>
+          </v-app-bar-nav-icon>
+        </a-row>
+
         <router-link
           :to="{name: rootRouteName}"
           class="logoContainer d-flex flex-column align-center pa-6"
@@ -91,7 +104,9 @@
         align-start
       >
         <v-app-bar-nav-icon
+          v-if="!drawer"
           class="sidebarToggleButton mr-2 ml-3"
+          title="Menu öffnen"
           @click="toggleDrawer"
         />
 
@@ -132,6 +147,7 @@ import StickyFooterContainer from './StickyFooterContainer'
 import Sidebar from './Sidebar'
 import StickyHeader from './StickyHeader'
 import '../styles.scss'
+import { mdiBackburger } from '@mdi/js'
 
 @Component({
   components: {
@@ -147,6 +163,7 @@ export default class App extends Vue {
   $hasOptions = ['settings']
 
   drawer = true
+  closeMenuIcon = mdiBackburger
   isLoading = false
 
   created () {
