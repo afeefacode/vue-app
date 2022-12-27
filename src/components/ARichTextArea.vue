@@ -235,7 +235,7 @@ export default class ARichTextArea extends Vue {
     if (!this.validator) {
       return false
     }
-    return this.validator.getParams().max || false
+    return this.validator.getParam('max') || false
   }
 
   get currentValueStripped () {

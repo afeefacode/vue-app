@@ -75,7 +75,7 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
   }
 
   get clearable () {
-    if (this.validator && this.validator.param('null') === false) {
+    if (this.validator && this.validator.getParam('filled')) {
       return false
     }
     return true

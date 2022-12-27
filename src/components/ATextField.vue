@@ -121,6 +121,10 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
       } else {
         value = this.internalValue.match(/^-?\d*(\.\d+)?$/) ? parseFloat(this.internalValue) : NaN
       }
+    } else {
+      if (!value) {
+        value = this.emptyValue
+      }
     }
     return value
   }

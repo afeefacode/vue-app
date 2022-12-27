@@ -64,7 +64,7 @@ export class FormFieldMixin extends Vue {
 
       const options = []
 
-      if (!this.validator || !this.validator.getParams().filled) {
+      if (!this.validator || !this.validator.getParam('filled')) {
         options.push({
           itemText: 'Keine Auswahl',
           itemValue: null

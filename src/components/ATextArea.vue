@@ -31,7 +31,7 @@ export default class ATextArea extends Vue {
     if (!this.validator) {
       return false
     }
-    return this.validator.getParams().max || false
+    return this.validator.getParam('max') || false
   }
 }
 </script>
