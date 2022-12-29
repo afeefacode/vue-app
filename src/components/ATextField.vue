@@ -9,6 +9,7 @@
     @input="inputChanged"
     @keyup.esc="clear"
     @click:clear="clear"
+    @blur="sanitizeInternalValue"
     v-on="listeners"
   />
 </template>
@@ -54,12 +55,17 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
 
   @Watch('value')
   valueChanged () {
+    const value = this.textFieldValueToModelValue()
+    if (value === this.value) {
+      // return if sanitized textfield value === model value
+      return
+    }
     this.setInternalValue(this.value)
   }
 
   get listeners () {
-    // remove input from nested listening
-    // let clients listend to only THIS component
+    // remove @input from nested listening
+    // let clients listen to only THIS component
     const listeners = {...this.$listeners}
     delete listeners.input
     return listeners
@@ -76,11 +82,15 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
     return attrs
   }
 
-  clear () {
+  clear (event) {
     if (this.clearable) {
+      // empty value if value exists
+      if (this.internalValue) {
+        event.stopPropagation()
+      }
       this.setInternalValue('')
-      this.$emit('input', this.emptyValue)
-      this.validate()
+      this.$emit('input:internal', '')
+      this.$emit('input', this.emptyModelValue)
       this.$emit('clear')
     }
   }
@@ -89,12 +99,11 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
     this.$emit('input:internal', this.internalValue)
 
     const valid = this.validate()
-
     if (!valid) {
       return
     }
 
-    const value = this.stringToNumber(this.internalValue)
+    const value = this.textFieldValueToModelValue()
 
     // NaN means: wrong numerical value AND no validator present
     // otherwise validator would return validate() -> false
@@ -114,34 +123,11 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
     }
   }
 
-  stringToNumber (value) {
-    if (this.treatAsNumericValue) {
-      if (!value) {
-        value = null
-      } else {
-        value = this.internalValue.match(/^-?\d*(\.\d+)?$/) ? parseFloat(this.internalValue) : NaN
-      }
-    } else {
-      if (!value) {
-        value = this.emptyValue
-      }
-    }
-    return value
-  }
-
-  get type () {
-    return this.$attrs.type || 'text'
-  }
-
-  get treatAsNumericValue () {
-    return this.type === 'number' || this.number
-  }
-
   validate () {
+    const value = this.textFieldValueToModelValue()
     const rules = this.validationRules
     let errorMessage = null
     for (const rule of rules) {
-      const value = this.stringToNumber(this.internalValue)
       const result = rule(value)
       if (result !== true) {
         errorMessage = result
@@ -157,6 +143,49 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
   @Watch('focus')
   focusChanged () {
     this.setFocus()
+  }
+
+  sanitizeInternalValue () {
+    const sanitizedValue = this.getSanitizedInternalValue()
+    this.setInternalValue(sanitizedValue)
+  }
+
+  getSanitizedInternalValue () {
+    return this.getSanitizedValue(this.internalValue)
+  }
+
+  getSanitizedValue (value) {
+    if (this.validator) {
+      const sanitizers = this.validator.getSanitizers()
+      for (const sanitizer of sanitizers) {
+        value = sanitizer(value)
+      }
+    }
+    return value
+  }
+
+  textFieldValueToModelValue () {
+    const sanitizedValue = this.getSanitizedInternalValue()
+    return this.stringToNumber(sanitizedValue)
+  }
+
+  stringToNumber (value) {
+    const textFieldType = this.$attrs.type || 'text'
+    const treatAsNumericValue = textFieldType === 'number' || this.number
+
+    if (treatAsNumericValue) {
+      if (!value) {
+        value = null
+      } else {
+        value = this.internalValue.match(/^-?\d*(\.\d+)?$/) ? parseFloat(this.internalValue) : NaN
+      }
+    } else {
+      if (!value) {
+        value = this.emptyModelValue
+      }
+    }
+
+    return value
   }
 
   setFocus (force = false) {
@@ -190,9 +219,9 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
     return this.validator.getMaxValueLength()
   }
 
-  get emptyValue () {
+  get emptyModelValue () {
     if (this.validator) {
-      return this.validator.getEmptyValue()
+      return this.getSanitizedValue('')
     }
     return null
   }
