@@ -104,6 +104,7 @@ export default class FlyingContextContainer extends Vue {
   background: white;
   transition: right .2s;
   padding: 2rem;
+  overflow-y: scroll;
 
   &:not(.visible) {
     right: -80vw;
