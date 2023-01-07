@@ -12,6 +12,7 @@ import {
   mdiDelete,
   mdiDotsHorizontal,
   mdiDotsVertical,
+  mdiFilter,
   mdiLock,
   mdiLogoutVariant,
   mdiMagnify,
@@ -58,7 +59,8 @@ export default new Vuetify({
       printerIcon: mdiPrinter,
       euroSymbol: mdiCurrencyEur,
       paletteIcon: mdiPalette,
-      addIcon: mdiPlusCircle
+      addIcon: mdiPlusCircle,
+      filterIcon: mdiFilter
     }
   },
   breakpoint: {
