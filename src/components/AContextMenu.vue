@@ -1,8 +1,9 @@
 <template>
   <div class="contextEditor">
+    <!-- click.stop prevents possible surrounding v-input to focus -->
     <div
       class="activator"
-      @click="open"
+      @click.stop="open"
     >
       <slot name="activator">
         <a-icon class="contextButton">
