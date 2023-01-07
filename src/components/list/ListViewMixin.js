@@ -11,7 +11,6 @@ import { FilterSourceType } from './FilterSourceType'
     'models', 'meta', // given, if already loaded
     'listAction',
     'filterHistoryKey',
-    'checkBeforeLoad',
     {
       filterSource: FilterSourceType.QUERY_STRING,
       loadOnlyIfKeyword: false,
@@ -123,16 +122,6 @@ export class ListViewMixin extends Vue {
   }
 
   async load () {
-    if (this.checkBeforeLoad) {
-      const canLoad = await this.checkBeforeLoad()
-      if (!canLoad) {
-        if (this.meta_.used_filters) {
-          this.listViewModel.initFromUsedFilters(this.meta_.used_filters, this.meta_.count_search)
-        }
-        return
-      }
-    }
-
     if (this.loadOnlyIfKeyword && !this.filters.q.value) {
       this.models_ = []
       this.meta_ = {}
