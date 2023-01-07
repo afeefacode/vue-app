@@ -11,7 +11,11 @@
     @click:clear="clear"
     @blur="sanitizeInternalValue"
     v-on="listeners"
-  />
+  >
+    <template #append>
+      <slot name="append" />
+    </template>
+  </v-text-field>
 </template>
 
 
