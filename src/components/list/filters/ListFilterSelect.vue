@@ -5,7 +5,7 @@
     :items="_items"
     itemText="itemTitle"
     itemValue="itemValue"
-    :clearable="filter.value !== filter.defaultValue"
+    :clearable="filter.hasDefaultValue() && !filter.hasDefaultValueSet()"
     :defaultValue="filter.defaultValue"
     hide-details
     v-bind="$attrs"
@@ -36,44 +36,13 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
     return this.$attrs.items || this.items || []
   }
 
-  get showNullOption () {
-    // either null is a selectable option, than it should be shown in the list
-    // or the default is null, so the list should offer a 'null' option for the unselected state
-    return this.filter.nullIsOption || this.filter.defaultValue === null
-  }
-
-  createOptions () {
-    const options = []
-
-    if (this.filter.allIsOption) {
-      options.push({
-        itemTitle: 'Alle',
-        itemValue: 'all'
-      })
-    } else if (this.showNullOption) {
-      options.push({
-        itemTitle: 'Alle',
-        itemValue: null
-      })
-    }
-
-    if (this.filter.noneIsOption) {
-      options.push({
-        itemTitle: 'Keine',
-        itemValue: 'none'
-      })
-    }
-
-    return options
-  }
-
   async loadRequestOptions () {
     const {models} = await ListAction
       .fromRequest(this.filter.createOptionsRequest())
       .load()
 
     return [
-      ...this.createOptions(),
+      ...this.getOptions(),
       ...models.map(model => {
         let itemValue
         if (this.itemValue) {
@@ -93,13 +62,13 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
 
   getOptions () {
     return [
-      ...this.createOptions(),
       ...this.filter.options
-        .filter(o => o !== null) // null is already set in options (if any)
-        .map(o => ({
-          itemTitle: o ? 'Ja' : 'Nein',
-          itemValue: o
-        }))
+        .map(o => {
+          return {
+            itemTitle: o.title,
+            itemValue: o.value
+          }
+        })
     ]
   }
 }
