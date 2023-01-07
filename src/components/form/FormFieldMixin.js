@@ -54,7 +54,7 @@ export class FormFieldMixin extends Vue {
 
     if (field.hasOptionsRequest()) {
       const request = field
-        .getOptionsRequest()
+        .createOptionsRequest()
         .addParams(this.optionRequestParams || {})
         .addFilters(filters)
 
