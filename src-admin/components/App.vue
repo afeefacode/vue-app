@@ -94,7 +94,7 @@
       top
       left
       class="loadingIndicator"
-      :isLoading="isLoading"
+      :isLoading="!!numLoadingRequests"
       :color="loaderColor"
     />
 
@@ -119,7 +119,7 @@
       >
         <sticky-header />
 
-        <router-view :class="{isLoading}" />
+        <router-view :class="{isLoading: !!numLoadingRequests}" />
       </v-container>
 
       <sticky-footer-container />
@@ -164,7 +164,7 @@ export default class App extends Vue {
 
   drawer = true
   closeMenuIcon = mdiBackburger
-  isLoading = false
+  numLoadingRequests = 0
 
   created () {
     this.$events.on(LoadingEvent.START_LOADING, this.startLoading)
@@ -200,11 +200,11 @@ export default class App extends Vue {
   }
 
   startLoading () {
-    this.isLoading = true
+    this.numLoadingRequests++
   }
 
   stopLoading () {
-    this.isLoading = false
+    this.numLoadingRequests--
   }
 
   toggleDrawer () {
