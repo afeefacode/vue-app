@@ -2,6 +2,7 @@ import { Component, Vue, Watch } from '@a-vue'
 import { ListAction } from '@a-vue/api-resources/ApiActions'
 import { sleep } from '@a-vue/utils/timeout'
 import { ListViewModel } from '@afeefa/api-resources-client'
+import axios from 'axios'
 
 import { CurrentRouteFilterSource } from './CurrentRouteFilterSource'
 import { FilterSourceType } from './FilterSourceType'
@@ -26,6 +27,7 @@ export class ListViewMixin extends Vue {
   models_ = []
   meta_ = {}
   isLoading = false
+  cancelSource = null
 
   created () {
     this.init()
@@ -132,10 +134,16 @@ export class ListViewMixin extends Vue {
     this.isLoading = true
     this.$emit('update:isLoading', this.isLoading)
 
+    if (this.cancelSource) {
+      this.cancelSource.cancel()
+    }
+
+    this.cancelSource = axios.CancelToken.source()
     const request = this.listViewModel.getApiRequest()
 
     const {models, meta} = await ListAction
       .fromRequest(request)
+      .cancelSource(this.cancelSource)
       .dispatchGlobalLoadingEvents(this.events)
       .load()
 
