@@ -90,11 +90,18 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
     if (this.clearable) {
       // empty value if value exists
       if (this.internalValue) {
-        event.stopPropagation()
+        event.stopPropagation() // break propagation chain, do not close popups e.g.
       }
       this.setInternalValue('')
+
       this.$emit('input:internal', '')
-      this.$emit('input', this.emptyModelValue)
+
+      if (this.debounceInputFunction) {
+        this.debounceInputFunction(this.internalValue)
+      } else {
+        this.$emit('input', this.emptyModelValue)
+      }
+
       this.$emit('clear')
     }
   }
@@ -109,7 +116,7 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
 
     const value = this.textFieldValueToModelValue()
 
-    // NaN means: wrong numerical value AND no validator present
+    // value === NaN means: wrong numerical value AND no validator present
     // otherwise validator would return validate() -> false
     if (Number.isNaN(value)) {
       return
