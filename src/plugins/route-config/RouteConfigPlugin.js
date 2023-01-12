@@ -117,10 +117,6 @@ class RouteConfigPlugin {
     return this
   }
 
-  options (obj) {
-    this._routerOptions = obj
-  }
-
   routes (callback) {
     this._promise = this._promise.then(() => {
       callback = callback({
