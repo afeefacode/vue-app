@@ -250,6 +250,7 @@ export default class ARichTextArea extends Vue {
 <style lang="scss" scoped>
 .editorWrapper {
   padding: .5rem;
+  margin-right: 1px;
 
   border: 1px solid white;
   outline: 1px solid rgb(0 0 0 / 38%);
