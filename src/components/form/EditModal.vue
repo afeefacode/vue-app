@@ -64,7 +64,6 @@ import { DialogEvent } from '@a-vue/events'
 })
 export default class EditModal extends Vue {
   show_ = false
-  ignoreChangesOnClose_ = false
 
   created () {
     if (!this.model && !this.createModelToEdit) {
@@ -109,7 +108,7 @@ export default class EditModal extends Vue {
 
   async beforeClose () {
     // run only if show_ is true to prevent double checks with a-modal
-    if (this.show_ && this.$refs.form.changed && !this.ignoreChangesOnClose_) {
+    if (this.show_ && this.$refs.form.changed) {
       const result = await this.$events.dispatch(new DialogEvent(DialogEvent.SHOW, {
         title: 'Änderungen verwerfen?',
         message: 'Im Formular sind nicht gespeicherte Änderungen. Sollen diese verworfen werden?',
@@ -136,9 +135,7 @@ export default class EditModal extends Vue {
    * hook to allow to leave a just created (saved) model
    */
   ignoreChangesOnClose () {
-    // this.$refs.form.forceUnchanged()
-    console.info('TODO switch form to forceUnchanged')
-    this.ignoreChangesOnClose_ = true
+    this.$refs.form.forceUnchanged()
   }
 }
 </script>
