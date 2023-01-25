@@ -192,7 +192,7 @@ export default class ListView extends Mixins(ListViewMixin) {
   margin-bottom: 2rem;
 }
 
-.a-table-row > :last-child {
+:deep(.a-table-row > :last-child) {
   width: 100%;
 }
 
