@@ -19,8 +19,6 @@
     </div>
 
     <div id="flyingContextContainer__children" />
-
-    <div class="v-navigation-drawer__border" />
   </div>
 </template>
 
@@ -99,20 +97,16 @@ export default class FlyingContextContainer extends Vue {
   right: 0;
   height: 100%;
   min-width: 400px;
-  max-width: 50vw;
+  max-width: calc(100vw - 100px);
   top: 0;
   background: white;
   transition: right .2s;
   padding: 2rem;
   overflow-y: auto;
+  border-left: 1px solid rgba(0, 0, 0, .12);
 
   &:not(.visible) {
     right: -80vw;
-  }
-
-  .v-navigation-drawer__border {
-    background-color: rgba(0, 0, 0, .12);
-    left: 0;
   }
 
   .closeButton {
