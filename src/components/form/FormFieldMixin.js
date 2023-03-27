@@ -62,6 +62,8 @@ export class FormFieldMixin extends Vue {
         .fromRequest(request)
         .load()
 
+      this.$emit('optionsLoaded', models, this.model)
+
       const options = []
 
       if (!this.validator || !this.validator.getParam('filled')) {
