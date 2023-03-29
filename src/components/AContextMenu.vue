@@ -172,6 +172,10 @@ export default class AContextMenu extends Mixins(UsesPositionServiceMixin) {
   }
 }
 
+.activator {
+  display: inline-block;
+}
+
 .contextButton {
   cursor: pointer;
 }
