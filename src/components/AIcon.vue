@@ -23,4 +23,8 @@ export default class AIcon extends Vue {
 .v-icon:not(.button)::after {
   background: none;
 }
+
+.v-icon.button {
+  cursor: pointer;
+}
 </style>

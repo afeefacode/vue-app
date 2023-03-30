@@ -4,6 +4,9 @@
   "description": "",
   "author": "Afeefa Kollektiv <kollektiv@afeefa.de>",
   "license": "MIT",
+  "dependencies": {
+    "moment": "^2.29.1"
+  },
   "devDependencies": {
     "core-js": "^3.25.5",
     "vue": "^2.7.10",
