@@ -52,6 +52,8 @@ export class ApiAction extends ApiResourcesApiAction {
   }
 
   async beforeBulkRequest () {
+    this._startTime = Date.now()
+
     if (this._dispatchGlobalLoadingEvents) {
       eventBus.dispatch(new LoadingEvent(LoadingEvent.START_LOADING))
     }
@@ -80,6 +82,14 @@ export class ApiAction extends ApiResourcesApiAction {
   }
 
   async afterBulkRequest () {
+    if (this._minDuration) {
+      const diffTime = Date.now() - this._startTime
+      const restTime = Math.max(0, this._minDuration - diffTime)
+      if (restTime) {
+        await sleep(restTime / 1000)
+      }
+    }
+
     if (this._dispatchGlobalLoadingEvents) {
       eventBus.dispatch(new LoadingEvent(LoadingEvent.STOP_LOADING))
     }
