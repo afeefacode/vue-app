@@ -70,16 +70,18 @@
     </template>
 
     <div v-else-if="!isLoading">
-      <div v-if="$has.filters">
-        Nichts gefunden. <a
-          href=""
-          @click.prevent="resetFilters()"
-        >Filter zurücksetzen</a>
-      </div>
+      <a-info type="warning">
+        <div v-if="$has.filters">
+          Nichts gefunden. <a
+            href=""
+            @click.prevent="resetFilters()"
+          >Filter zurücksetzen</a>
+        </div>
 
-      <div v-else>
-        Nichts gefunden.
-      </div>
+        <div v-else>
+          Nichts gefunden.
+        </div>
+      </a-info>
     </div>
     <div
       v-if="$has.filters"
