@@ -43,7 +43,6 @@ import { DialogEvent } from '@a-vue/events'
 })
 export default class EditPage extends Vue {
   unregisterRouterHook = null
-  ignoreChangesOnRouteChange_ = false
 
   created () {
     this.unregisterRouterHook = this.$router.beforeEach(async (to, from, next) => {
@@ -70,9 +69,7 @@ export default class EditPage extends Vue {
    * hook to allow to leave a just created (saved) model
    */
   ignoreChangesOnRouteChange () {
-    // this.$refs.form.forceUnchanged()
-    console.info('TODO switch form to forceUnchanged')
-    this.ignoreChangesOnRouteChange_ = true
+    this.$refs.form.forceUnchanged()
   }
 }
 </script>
