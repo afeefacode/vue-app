@@ -144,9 +144,11 @@ class RouteConfigPlugin {
 
         const options = {
           mode: 'history',
-          scrollBehavior (_to, _from, savedPosition) {
+          scrollBehavior (to, from, savedPosition) {
             if (savedPosition) {
               return savedPosition
+            } else if (to.path === from.path) { // don't scroll just query changes === probably list navigation
+              return {}
             } else {
               return { x: 0, y: 0 }
             }
