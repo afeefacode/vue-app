@@ -74,7 +74,7 @@ export default class EditForm extends Vue {
    * Using the created() method would result in already having set
    * the default date, hence not detecting a valid "change" anymore.
    *
-   * comment 14.12. -> this should not be necessary if components do not alter models
+   * comment 14.12.22 -> this should not be necessary if components do not alter models
    */
   // @Watch('modelToEdit', {immediate: true})
   // @Watch('modelToEdit')
