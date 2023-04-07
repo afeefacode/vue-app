@@ -42,7 +42,7 @@
             :changed="changed"
             :valid="valid"
             angular
-            :has="{reset: !!modelToEdit.id}"
+            :has="{reset: reset && !!modelToEdit.id}"
             @save="$emit('save', modelToEdit, ignoreChangesOnClose, close)"
             @reset="$refs.form.reset()"
           />
@@ -60,7 +60,7 @@ import { Component, Vue, Watch } from '@a-vue'
 import { DialogEvent } from '@a-vue/events'
 
 @Component({
-  props: ['model', 'createModelToEdit', 'show']
+  props: ['model', 'createModelToEdit', 'show', {reset: true}]
 })
 export default class EditModal extends Vue {
   show_ = false
