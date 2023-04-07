@@ -10,6 +10,7 @@ import DetailTitle from './detail/DetailTitle'
 import FlyingContext from './FlyingContext.vue'
 import EditFormButtons from './form/EditFormButtons'
 import RemoveButton from './form/RemoveButton'
+import RemoveDialog from './form/RemoveDialog'
 import ListCard from './list/ListCard'
 import ListColumnHeader from './list/ListColumnHeader'
 import ListContent from './list/ListContent'
@@ -33,6 +34,7 @@ Vue.component('ListView', ListView)
 Vue.component('EditPage', EditPage)
 Vue.component('EditFormButtons', EditFormButtons)
 Vue.component('RemoveButton', RemoveButton)
+Vue.component('RemoveDialog', RemoveDialog)
 
 Vue.component('ModelCount', ModelCount)
 Vue.component('ModelIcon', ModelIcon)
