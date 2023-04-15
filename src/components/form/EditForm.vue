@@ -67,6 +67,10 @@ export default class EditForm extends Vue {
     this.$emit('update:modelToEdit', this.modelToEdit)
   }
 
+  resetChanged () {
+    this.lastJson = this.json
+  }
+
   /**
    * This will be triggered after the this.model has been set
    * but before sub components may have changed model values

@@ -137,5 +137,9 @@ export default class EditModal extends Vue {
   ignoreChangesOnClose () {
     this.$refs.form.forceUnchanged()
   }
+
+  resetChanged () {
+    this.$refs.form.resetChanged()
+  }
 }
 </script>
