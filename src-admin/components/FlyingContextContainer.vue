@@ -33,6 +33,7 @@ import { getZIndex } from 'vuetify/lib/util/helpers'
 export default class FlyingContextContainer extends Vue {
   visible = false
   oldOverflowY = null
+  isClosing = false
 
   mounted () {
     const mutationWatcher = new MutationObserver(this.domChanged)
@@ -59,9 +60,8 @@ export default class FlyingContextContainer extends Vue {
     return 0
   }
 
-
   sizeChanged () {
-    if (this.visible) {
+    if (this.visible && !this.isClosing) { // do not set size if it is already closing
       this.$nextTick(() => {
         const scrollbarWidth = this.getScrollbarWidth()
         const el = document.documentElement
@@ -91,11 +91,13 @@ export default class FlyingContextContainer extends Vue {
       el.style.overflowY = this.oldOverflowY
       el.style.marginRight = 0
     }
+    this.isClosing = false
   }
 
   hide () {
     if (this.visible) {
       this.$el.style.left = '101vw'
+      this.isClosing = true
       setTimeout(() => { // fade in then hide contents
         this.$events.dispatch(new FlyingContextEvent(FlyingContextEvent.HIDE_ALL))
       }, 200)
