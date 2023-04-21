@@ -32,6 +32,7 @@ import { getZIndex } from 'vuetify/lib/util/helpers'
 })
 export default class FlyingContextContainer extends Vue {
   visible = false
+  oldOverflowY = null
 
   mounted () {
     this.mutationWatcher = new MutationObserver(this.domChanged)
@@ -40,14 +41,39 @@ export default class FlyingContextContainer extends Vue {
     window.addEventListener('mousedown', this.onClickOutside)
   }
 
+  getScrollbarWidth () {
+    const el = document.documentElement
+    const overflowY = getComputedStyle(el)['overflow-y']
+    if (overflowY === 'scroll' || (overflowY === 'auto' && el.scrollHeight > el.clientHeight)) {
+      // measure scrollbar width https://stackoverflow.com/a/55278118
+      const scrollbox = document.createElement('div')
+      scrollbox.style.overflow = 'scroll'
+      document.body.appendChild(scrollbox)
+      const scrollBarWidth = scrollbox.offsetWidth - scrollbox.clientWidth
+      document.body.removeChild(scrollbox)
+      return scrollBarWidth
+    }
+    return 0
+  }
+
+
   domChanged () {
     const container = this.getChildrenContainer()
     this.visible = !!container.children.length
 
+    const el = document.documentElement
+
     if (this.visible) {
-      document.documentElement.style.overflow = 'hidden'
+      const style = getComputedStyle(el)
+      this.oldOverflowY = style.overflowY
+      const scrollbarWidth = this.getScrollbarWidth()
+      setTimeout(() => {
+        el.style.overflowY = 'hidden'
+        el.style.marginRight = scrollbarWidth + 'px'
+      }, 100)
     } else {
-      document.documentElement.style.overflow = 'auto'
+      el.style.overflowY = this.oldOverflowY
+      el.style.marginRight = 0
     }
   }
 
