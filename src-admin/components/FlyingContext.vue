@@ -47,7 +47,7 @@ export default class FlyingContext extends Mixins(CancelOnEscMixin) {
       if (this.width) {
         containerContainer.style.width = this.width
       } else {
-        containerContainer.style.width = '50vw'
+        containerContainer.style.width = 'auto'
       }
 
       const container = this.getChildrenContainer()

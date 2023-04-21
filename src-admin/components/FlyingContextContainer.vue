@@ -35,10 +35,13 @@ export default class FlyingContextContainer extends Vue {
   oldOverflowY = null
 
   mounted () {
-    this.mutationWatcher = new MutationObserver(this.domChanged)
-    this.mutationWatcher.observe(this.getChildrenContainer(), { childList: true })
+    const mutationWatcher = new MutationObserver(this.domChanged)
+    mutationWatcher.observe(this.getChildrenContainer(), { childList: true })
 
     window.addEventListener('mousedown', this.onClickOutside)
+
+    const sizeWatcher = new ResizeObserver(this.sizeChanged)
+    sizeWatcher.observe(this.getChildrenContainer())
   }
 
   getScrollbarWidth () {
@@ -54,6 +57,18 @@ export default class FlyingContextContainer extends Vue {
       return scrollBarWidth
     }
     return 0
+  }
+
+
+  sizeChanged () {
+    if (this.visible) {
+      this.$nextTick(() => {
+        const scrollbarWidth = this.getScrollbarWidth()
+        const el = document.documentElement
+        const newSize = el.offsetWidth - this.$el.offsetWidth + scrollbarWidth
+        this.$el.style.left = newSize + 'px'
+      })
+    }
   }
 
   domChanged () {
@@ -75,14 +90,15 @@ export default class FlyingContextContainer extends Vue {
     } else {
       el.style.overflowY = this.oldOverflowY
       el.style.marginRight = 0
-
-      this.$el.style.left = '101vw'
     }
   }
 
   hide () {
     if (this.visible) {
-      this.$events.dispatch(new FlyingContextEvent(FlyingContextEvent.HIDE_ALL))
+      this.$el.style.left = '101vw'
+      setTimeout(() => { // fade in then hide contents
+        this.$events.dispatch(new FlyingContextEvent(FlyingContextEvent.HIDE_ALL))
+      }, 200)
     }
   }
 
@@ -123,9 +139,8 @@ export default class FlyingContextContainer extends Vue {
 #flyingContextContainer {
   position: fixed;
   z-index: 200;
-  left: 50vw;
   height: 100%;
-  width: 50vw;
+  width: auto;
   min-width: 400px;
   max-width: calc(100vw - 100px);
   top: 0;
