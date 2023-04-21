@@ -90,6 +90,8 @@ export default class FlyingContextContainer extends Vue {
     } else {
       el.style.overflowY = this.oldOverflowY
       el.style.marginRight = 0
+
+      this.$el.style.left = '101vw' // set this if closing from outside e.g. via esc, which does not call this.hide()
     }
     this.isClosing = false
   }
