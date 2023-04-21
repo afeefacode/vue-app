@@ -56,7 +56,6 @@ export default class FlyingContextContainer extends Vue {
     return 0
   }
 
-
   domChanged () {
     const container = this.getChildrenContainer()
     this.visible = !!container.children.length
@@ -71,9 +70,13 @@ export default class FlyingContextContainer extends Vue {
         el.style.overflowY = 'hidden'
         el.style.marginRight = scrollbarWidth + 'px'
       }, 100)
+
+      this.$el.style.left = (el.offsetWidth - this.$el.offsetWidth + scrollbarWidth) + 'px'
     } else {
       el.style.overflowY = this.oldOverflowY
       el.style.marginRight = 0
+
+      this.$el.style.left = '101vw'
     }
   }
 
@@ -120,19 +123,20 @@ export default class FlyingContextContainer extends Vue {
 #flyingContextContainer {
   position: fixed;
   z-index: 200;
-  right: 0;
+  left: 50vw;
   height: 100%;
+  width: 50vw;
   min-width: 400px;
   max-width: calc(100vw - 100px);
   top: 0;
   background: white;
-  transition: right .2s;
+  transition: left .2s;
   padding: 2rem;
   overflow-y: auto;
   border-left: 1px solid rgba(0, 0, 0, .12);
 
   &:not(.visible) {
-    right: -80vw;
+    left: 101vw;
   }
 
   .closeButton {

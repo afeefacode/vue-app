@@ -13,7 +13,7 @@ import { randomCssClass } from '@a-vue/utils/random'
 import { CancelOnEscMixin } from '@a-vue/services/escape/CancelOnEscMixin'
 
 @Component({
-  props: [{show: false}, 'beforeClose']
+  props: [{show: false}, 'beforeClose', 'width']
 })
 export default class FlyingContext extends Mixins(CancelOnEscMixin) {
   isVisible = false
@@ -43,7 +43,14 @@ export default class FlyingContext extends Mixins(CancelOnEscMixin) {
     }
 
     if (this.isVisible) {
-      const container = this.getSidebarContainer()
+      const containerContainer = this.getFlyingContextContainer()
+      if (this.width) {
+        containerContainer.style.width = this.width
+      } else {
+        containerContainer.style.width = '50vw'
+      }
+
+      const container = this.getChildrenContainer()
       container.appendChild(el)
       this.coe_watchCancel() // show context -> watch esc
     } else {
@@ -53,7 +60,7 @@ export default class FlyingContext extends Mixins(CancelOnEscMixin) {
   }
 
   destroyed () {
-    const container = this.getSidebarContainer()
+    const container = this.getChildrenContainer()
     const el = this.getContent()
     if (container.contains(el)) {
       container.removeChild(el)
@@ -87,7 +94,11 @@ export default class FlyingContext extends Mixins(CancelOnEscMixin) {
     return document.querySelector('.' + this.contextId)
   }
 
-  getSidebarContainer () {
+  getFlyingContextContainer () {
+    return document.getElementById('flyingContextContainer')
+  }
+
+  getChildrenContainer () {
     return document.getElementById('flyingContextContainer__children')
   }
 }
