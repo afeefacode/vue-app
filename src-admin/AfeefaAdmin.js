@@ -11,6 +11,7 @@ import { adminConfig } from './config/AdminConfig'
 import routeConfigPlugin from './config/routing'
 import vuetify from './config/vuetify'
 import { authPlugin } from './plugins/AuthPlugin'
+import { configPlugin } from './plugins/ConfigPlugin'
 
 Vue.config.productionTip = false
 
@@ -24,6 +25,11 @@ export class AfeefaAdmin {
 
   app (appConfig) {
     this._appConfig = appConfig
+    return this
+  }
+
+  customConfig (customConfig) {
+    adminConfig.config = customConfig
     return this
   }
 
@@ -50,6 +56,8 @@ export class AfeefaAdmin {
   async run () {
     // set app config
     adminConfig.app = this._appConfig
+
+    Vue.use(configPlugin)
 
     // authenticate current user before doing any gui-voodo
     if (this._authService) {
@@ -88,7 +96,7 @@ export class AfeefaAdmin {
 
     // load initial data
     if (this._initCallback) {
-      await this._initCallback()
+      await this._initCallback(this)
     }
 
     // setup router, routes and breadcrumb

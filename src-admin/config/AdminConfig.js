@@ -14,6 +14,8 @@ class AdminConfig {
       SidebarMenu: null
     }
   }
+
+  config = {}
 }
 
 export const adminConfig = new AdminConfig()
