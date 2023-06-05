@@ -15,7 +15,7 @@ import { modelCountService } from './ModelCountService'
 import { SaveEvent } from '@a-vue/events'
 
 @Component({
-  props: ['action', 'field']
+  props: ['action', 'field', 'count']
 })
 export default class ModelCount extends Vue {
   countRequest = null
@@ -24,8 +24,12 @@ export default class ModelCount extends Vue {
   created () {
     this.$events.on(SaveEvent.STOP_SAVING, this.loadCount)
 
-    this.countRequest = modelCountService.addAction(this.action)
-    this.loadCount()
+    if (this.count) {
+      this.content = this.count
+    } else {
+      this.countRequest = modelCountService.addAction(this.action)
+      this.loadCount()
+    }
   }
 
   loadCount () {
