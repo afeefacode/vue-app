@@ -73,7 +73,12 @@ export default class SearchSelectList extends Mixins(ListViewMixin) {
   }
 
   isSelected (model) {
-    return !!this.selectedItems.find(i => i.equals(model))
+    return !!this.selectedItems.find(i => {
+      if (i.equals) {
+        return i.equals(model)
+      }
+      return i === model // if list item is a string not a model e.g. in filters
+    })
   }
 
   _filtersInitialized () {
