@@ -47,6 +47,7 @@
 
     <template #row="{ model, on }">
       <v-icon
+        v-if="$has.icon"
         :color="model.getIcon().color"
         size="1.5rem"
         class="mr-2"
@@ -70,9 +71,11 @@ import { FormFieldMixin } from '../FormFieldMixin'
 import { ListAction } from '@a-vue/api-resources/ApiActions'
 
 @Component({
-  props: ['value', 'q', 'listConfig']
+  props: ['value', 'q']
 })
 export default class FormFieldSearchSelect extends Mixins(FormFieldMixin) {
+  $hasOptions = ['icon']
+
   mounted () {
     if (this.validator) {
       this.$refs.input.validate()
