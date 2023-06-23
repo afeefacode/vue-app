@@ -34,6 +34,7 @@ export default class FlyingContextContainer extends Vue {
   visible = false
   oldOverflowY = null
   isClosing = false
+  lastScrollbarWidth = 0
 
   mounted () {
     const mutationWatcher = new MutationObserver(this.domChanged)
@@ -63,9 +64,8 @@ export default class FlyingContextContainer extends Vue {
   sizeChanged () {
     if (this.visible && !this.isClosing) { // do not set size if it is already closing
       this.$nextTick(() => {
-        const scrollbarWidth = this.getScrollbarWidth()
         const el = document.documentElement
-        const newSize = el.offsetWidth - this.$el.offsetWidth + scrollbarWidth
+        const newSize = el.offsetWidth - this.$el.offsetWidth + this.lastScrollbarWidth
         this.$el.style.left = newSize + 'px'
       })
     }
@@ -80,13 +80,13 @@ export default class FlyingContextContainer extends Vue {
     if (this.visible) {
       const style = getComputedStyle(el)
       this.oldOverflowY = style.overflowY
-      const scrollbarWidth = this.getScrollbarWidth()
+      this.lastScrollbarWidth = this.getScrollbarWidth()
       setTimeout(() => {
         el.style.overflowY = 'hidden'
-        el.style.marginRight = scrollbarWidth + 'px'
+        el.style.marginRight = this.lastScrollbarWidth + 'px'
       }, 100)
 
-      this.$el.style.left = (el.offsetWidth - this.$el.offsetWidth + scrollbarWidth) + 'px'
+      this.$el.style.left = (el.offsetWidth - this.$el.offsetWidth + this.lastScrollbarWidth) + 'px'
     } else {
       el.style.overflowY = this.oldOverflowY
       el.style.marginRight = 0
