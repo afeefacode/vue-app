@@ -60,7 +60,7 @@ export default class EditForm extends Vue {
     if (this.createModelToEdit) {
       this.modelToEdit = this.createModelToEdit(this.model)
     } else if (this.model) {
-      this.modelToEdit = this.model.cloneForEdit()
+      this.modelToEdit = this.model.clone()
     }
     this.lastJson = this.json
 
