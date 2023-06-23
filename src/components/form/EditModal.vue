@@ -3,6 +3,7 @@
     :beforeClose="beforeClose"
     :show.sync="show_"
     v-bind="$attrs"
+    @destroyed="$emit('destroyed')"
   >
     <template #activator>
       <slot name="activator" />
@@ -99,10 +100,6 @@ export default class EditModal extends Vue {
       this.$emit('open')
     } else {
       this.$emit('close')
-
-      setTimeout(() => { // allow client to conditionally remove <edit-modal> using v-if not before inner dialog has been removed from dom
-        this.$emit('destroyed')
-      }, 100)
     }
   }
 

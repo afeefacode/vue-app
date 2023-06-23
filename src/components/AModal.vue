@@ -136,6 +136,12 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
     }
 
     this.$emit('update:show', this.modal)
+
+    if (!this.modal) {
+      setTimeout(() => { // allow client to conditionally remove <edit-modal> using v-if not before inner dialog has been removed from dom
+        this.$emit('destroyed')
+      }, 100)
+    }
   }
 
   setPosition () {
