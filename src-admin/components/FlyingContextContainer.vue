@@ -71,16 +71,22 @@ export default class FlyingContextContainer extends Vue {
     }
   }
 
-  domChanged () {
+  domChanged ([...mutationRecords]) {
     const container = this.getChildrenContainer()
+
     this.visible = !!container.children.length
+    const isOpening = mutationRecords.length === 1 && mutationRecords[0].addedNodes.length === 1 // only 1 record ... and this one is 'added'
+    console.log(mutationRecords)
 
     const el = document.documentElement
 
-    if (this.visible) {
+    if (isOpening) {
       const style = getComputedStyle(el)
       this.oldOverflowY = style.overflowY
       this.lastScrollbarWidth = this.getScrollbarWidth()
+    }
+
+    if (this.visible) {
       setTimeout(() => {
         el.style.overflowY = 'hidden'
         el.style.marginRight = this.lastScrollbarWidth + 'px'
