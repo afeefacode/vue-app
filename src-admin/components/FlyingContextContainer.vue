@@ -76,7 +76,6 @@ export default class FlyingContextContainer extends Vue {
 
     this.visible = !!container.children.length
     const isOpening = mutationRecords.length === 1 && mutationRecords[0].addedNodes.length === 1 // only 1 record ... and this one is 'added'
-    console.log(mutationRecords)
 
     const el = document.documentElement
 
