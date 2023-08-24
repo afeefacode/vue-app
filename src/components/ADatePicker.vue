@@ -178,9 +178,15 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
   }
 
   get date () {
-    return this.value_
-      ? this.value_.toISOString().substr(0, this.type === 'month' ? 7 : 10)
-      : null
+    if (!this.value_) {
+      return null
+    }
+
+    // format date to v-date-picker compatible string: https://stackoverflow.com/a/29774197
+    const offset = this.value_.getTimezoneOffset()
+    let date = new Date(this.value_.getTime() - (offset * 60 * 1000))
+    date = date.toISOString().substr(0, this.type === 'month' ? 7 : 10)
+    return date
   }
 
   get label () {
@@ -207,7 +213,16 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
   }
 
   dateChanged (date) {
-    this.value_ = date ? new Date(date) : null
+    if (date) {
+    // take given date string an create a local time date object
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
+    // > When the time zone offset is absent, date-only forms are interpreted as a UTC time and date-time forms are interpreted as local time.
+      const dateStringThatGetsConvertedToLocalDate = date + 'T00:00'
+      this.value_ = new Date(dateStringThatGetsConvertedToLocalDate)
+    } else {
+      this.value_ = null
+    }
+
     this.validate()
 
     this.close()
@@ -223,7 +238,7 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
       const monthName = date.toLocaleString('default', { month: 'long' })
       return monthName + ' ' + date.getFullYear()
     }
-    return formatDate(new Date(date))
+    return formatDate(date)
   }
 
   validate () {
