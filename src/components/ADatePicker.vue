@@ -182,11 +182,15 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
       return null
     }
 
+    return this.dateToString(this.value_).substr(0, this.type === 'month' ? 7 : 10)
+  }
+
+  dateToString (date) {
     // format date to v-date-picker compatible string: https://stackoverflow.com/a/29774197
-    const offset = this.value_.getTimezoneOffset()
-    let date = new Date(this.value_.getTime() - (offset * 60 * 1000))
-    date = date.toISOString().substr(0, this.type === 'month' ? 7 : 10)
-    return date
+    // respecting and adding local time zone time shift to the utc iso string
+    const offset = date.getTimezoneOffset()
+    date = new Date(date.getTime() - (offset * 60 * 1000))
+    return date.toISOString()
   }
 
   get label () {
@@ -208,15 +212,16 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
       this.dateChanged(null)
     } else if (this.validateTextInput(value)) {
       const [day, month, year] = value.split('.')
-      this.dateChanged(new Date(year + '-' + month + '-' + day))
+      const date = new Date(year + '-' + month + '-' + day)
+      this.dateChanged(this.dateToString(date).split('T')[0])
     }
   }
 
-  dateChanged (date) {
+  dateChanged (date) { // date is a yyyy-mm or yyyy-mm-dd string
     if (date) {
-    // take given date string an create a local time date object
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
-    // > When the time zone offset is absent, date-only forms are interpreted as a UTC time and date-time forms are interpreted as local time.
+      // take given date string an create a local time date object
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
+      // > When the time zone offset is absent, date-only forms are interpreted as a UTC time and date-time forms are interpreted as local time.
       const dateStringThatGetsConvertedToLocalDate = date + 'T00:00'
       this.value_ = new Date(dateStringThatGetsConvertedToLocalDate)
     } else {
