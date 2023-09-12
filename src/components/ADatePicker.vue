@@ -52,7 +52,7 @@ import { PositionConfig } from '../services/PositionService'
 import { randomCssClass } from '../utils/random'
 
 @Component({
-  props: ['value', 'validator', 'type', {dense: true, outlined: true}]
+  props: ['value', 'validator', 'type', {dense: true, outlined: true, focus: false}]
 })
 export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositionServiceMixin, CancelOnEscMixin) {
   value_ = null
@@ -65,6 +65,8 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
   }
 
   mounted () {
+    this.setFocus()
+
     this.validate()
   }
 
@@ -72,6 +74,11 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
   valueChanged () {
     this.value_ = this.value
     this.validate()
+  }
+
+  @Watch('focus')
+  focusChanged () {
+    this.setFocus()
   }
 
   get clearable () {
@@ -291,6 +298,17 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
       return this.validator.getRules(this.label)
     }
     return []
+  }
+
+  setFocus (force = false) {
+    const focus = this.focus || force // set focus if this.focus or else if forced from outside
+    if (focus) {
+      // if run in a v-dialog, the dialog background would
+      // steal the focus without requestAnimationFrame
+      requestAnimationFrame(() => {
+        this.$el.querySelector('input').focus()
+      })
+    }
   }
 }
 </script>
