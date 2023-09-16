@@ -1,5 +1,6 @@
 <template>
   <a-text-field
+    ref="input"
     v-model="model[name]"
     :label="label || name"
     :validator="validator"
@@ -14,5 +15,8 @@ import { FormFieldMixin } from '../FormFieldMixin'
 
 @Component
 export default class FormFieldText extends Mixins(FormFieldMixin) {
+  setFocus () {
+    this.$refs.input.setFocus(true)
+  }
 }
 </script>
