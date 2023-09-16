@@ -3,7 +3,7 @@
     <div class="header">
       <v-avatar
         v-if="_icon"
-        color="#EEEEEE"
+        color="#F4F4F4"
         size="2.5rem"
       >
         <v-icon
@@ -14,14 +14,19 @@
         </v-icon>
       </v-avatar>
 
-      <label :class="['label', {'label--withIcon': !!_icon}]">{{ label }}</label>
+      <div
+        v-else
+        class="iconPlaceholder"
+      />
+
+      <label class="label">{{ label }}</label>
 
       <div class="pl-2">
         <slot name="actionButton" />
       </div>
     </div>
 
-    <div :class="['content', {'content--withIcon': !!_icon}]">
+    <div class="content">
       <a-row
         vertical
         gap="6"
@@ -57,32 +62,34 @@ export default class DetailProperty extends Vue {
 <style lang="scss" scoped>
 .detailProperty {
   width: 100%;
+
   .header {
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
     height: 40px;
+    margin-bottom: .5rem;
 
     .v-avatar {
       flex: 0 0 40px;
       margin-right: 15px;
     }
 
+    .iconPlaceholder {
+      width: 55px;
+    }
+
     .label {
       display: block;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      padding-left: 55px;
-      &--withIcon {
-        padding-left: 0;
-      }
+      letter-spacing: 3px;
+      border-bottom: 5px solid #CCCCCC;
+      color: #666666;
     }
   }
+
   .content {
     padding-left: 55px;
-    &--withIcon {
-      padding-left: 55px;
-    }
   }
 }
 </style>
