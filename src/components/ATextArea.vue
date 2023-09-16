@@ -10,16 +10,23 @@
 
 
 <script>
-import { Component, Vue } from '@a-vue'
+import { Component, Vue, Watch } from '@a-vue'
 
 @Component({
-  props: ['validator', {dense: true, outlined: true}]
+  props: ['validator', {dense: true, outlined: true, focus: false}]
 })
 export default class ATextArea extends Vue {
   mounted () {
+    this.setFocus()
+
     if (this.validator) {
       this.$refs.input.validate(true)
     }
+  }
+
+  @Watch('focus')
+  focusChanged () {
+    this.setFocus()
   }
 
   get validationRules () {
@@ -32,6 +39,17 @@ export default class ATextArea extends Vue {
       return false
     }
     return this.validator.getParam('max') || false
+  }
+
+  setFocus (force = false) {
+    const focus = this.focus || force // set focus if this.focus or else if forced from outside
+    if (focus) {
+      // if run in a v-dialog, the dialog background would
+      // steal the focus without requestAnimationFrame
+      requestAnimationFrame(() => {
+        this.$el.querySelector('textarea').focus()
+      })
+    }
   }
 }
 </script>
