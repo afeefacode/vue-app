@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="['a-table-row', getFontSizeCssClass, {border: hasBorder, selected, disabled}]"
+    :class="['a-table-row', {border: hasBorder, small, tiny, selected, disabled}]"
     @click="$emit('click')"
   >
     <slot />
@@ -12,7 +12,7 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: ['small', 'selected', 'disabled']
+  props: [{tiny: false, small: false}, 'selected', 'disabled']
 })
 export default class ATableRow extends Vue {
   $hasOptions = ['border']
@@ -30,12 +30,6 @@ export default class ATableRow extends Vue {
 
   get hasBorder () {
     return this.$has.border && this.table.$has.border
-  }
-
-  get getFontSizeCssClass () {
-    if (this.small !== undefined) {
-      return 'small'
-    }
   }
 }
 </script>
@@ -99,6 +93,21 @@ export default class ATableRow extends Vue {
 
     .textblock--small {
       font-size: .8rem;
+    }
+  }
+
+  &.tiny {
+    font-size: .8rem;
+
+    &.border {
+      > * {
+        padding-top: .1rem;
+        padding-bottom: .1rem;
+      }
+    }
+
+    .textblock--tiny {
+      font-size: .7rem;
     }
   }
 
