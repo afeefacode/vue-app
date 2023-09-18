@@ -22,7 +22,7 @@
           name="form"
           :modelToEdit="modelToEdit"
           :changed="changed"
-          :valid="valid"
+          :valid="validFromOutside && valid"
         />
 
         <slot name="after-form-fields" />
@@ -41,7 +41,7 @@
 
           <edit-form-buttons
             :changed="changed"
-            :valid="valid"
+            :valid="validFromOutside && valid"
             angular
             :has="{reset: reset && !!modelToEdit.id}"
             @save="$emit('save', modelToEdit, ignoreChangesOnClose, close)"
@@ -61,7 +61,7 @@ import { Component, Vue, Watch } from '@a-vue'
 import { DialogEvent } from '@a-vue/events'
 
 @Component({
-  props: ['model', 'createModelToEdit', 'show', {reset: true}]
+  props: ['model', 'createModelToEdit', 'show', {reset: true, valid: true}]
 })
 export default class EditModal extends Vue {
   show_ = false
@@ -101,6 +101,10 @@ export default class EditModal extends Vue {
     } else {
       this.$emit('close')
     }
+  }
+
+  get validFromOutside () {
+    return this.valid
   }
 
   open () {
