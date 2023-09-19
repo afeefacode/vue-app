@@ -54,9 +54,8 @@ export default class ATable extends Vue {
       white-space: nowrap;
       vertical-align: middle;
 
-      &.info {
-        background: none !important;
-        color: #888888;
+      &.text--info {
+        color: #888888 !important;
       }
     }
   }
