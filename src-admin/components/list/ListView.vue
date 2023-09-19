@@ -25,35 +25,37 @@
       </template>
 
       <template v-else-if="$scopedSlots['model-table']">
-        <a-table>
-          <a-table-header>
-            <div v-if="$has.icon" />
+        <div class="a-table-wrapper">
+          <a-table>
+            <a-table-header>
+              <div v-if="$has.icon" />
 
-            <slot name="header-table" />
-          </a-table-header>
+              <slot name="header-table" />
+            </a-table-header>
 
-          <a-table-row
-            v-for="model in models_"
-            :key="model.id"
-            v-flying-context-trigger="hasFlyingContext"
-            :class="getRowClasses(model)"
-            v-bind="getRowAttributes(model)"
-            v-on="getRowListeners(model)"
-            @click="emitFlyingContext(model)"
-          >
-            <v-icon
-              v-if="$has.icon"
-              :color="model.getIcon().color"
-              size="1.2rem"
-              v-text="model.getIcon().icon"
-            />
+            <a-table-row
+              v-for="model in models_"
+              :key="model.id"
+              v-flying-context-trigger="hasFlyingContext"
+              :class="getRowClasses(model)"
+              v-bind="getRowAttributes(model)"
+              v-on="getRowListeners(model)"
+              @click="emitFlyingContext(model)"
+            >
+              <v-icon
+                v-if="$has.icon"
+                :color="model.getIcon().color"
+                size="1.2rem"
+                v-text="model.getIcon().icon"
+              />
 
-            <slot
-              name="model-table"
-              :model="model"
-            />
-          </a-table-row>
-        </a-table>
+              <slot
+                name="model-table"
+                :model="model"
+              />
+            </a-table-row>
+          </a-table>
+        </div>
       </template>
 
       <template v-else-if="$scopedSlots.model">
