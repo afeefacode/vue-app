@@ -47,7 +47,7 @@ export default class RemoveDialog extends Vue {
 
     const result = await this.$events.dispatch(new DialogEvent(DialogEvent.SHOW, {
       id: this.dialogId,
-      title: this.itemTitle + ' löschen?',
+      title: this.title || this.itemTitle + ' löschen?',
       message: ['Soll ' + this.itemTitle + ' gelöscht werden?', this.message].filter(m => m).join('<br><br>'),
       info: this.info,
       yesButton: 'Löschen',
