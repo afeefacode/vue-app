@@ -49,9 +49,8 @@ export default class ATableRow extends Vue {
   }
 
   &.border {
-    border-bottom: 1px solid #E5E5E5;
-
     > * {
+      border-bottom: 1px solid #E5E5E5;
       padding: .4rem 1.5rem .4rem .4rem;
 
       &:last-child {
@@ -65,7 +64,9 @@ export default class ATableRow extends Vue {
   }
 
   &:hover, &.selected {
-    background: #F4F4F4;
+    & > * {
+      background: #F4F4F4;
+    }
   }
 
   &.disabled {
@@ -73,11 +74,11 @@ export default class ATableRow extends Vue {
     opacity: .5;
   }
 
-  &.active {
+  &.active > * {
     background: #EEEEFF;
   }
 
-  &:last-child {
+  &:last-child > * {
     border: none;
   }
 

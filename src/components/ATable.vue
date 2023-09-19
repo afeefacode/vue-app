@@ -34,7 +34,7 @@ export default class ATable extends Vue {
 <style scoped lang="scss">
 .a-table {
   display: table;
-  border-collapse: collapse;
+  border-collapse: separate;
   width: 100%;
 
   &.width-auto {
