@@ -117,6 +117,11 @@ export default class ATableRow extends Vue {
     line-height: .9;
   }
 
+  .textblock--tiny {
+    font-size: .8rem;
+    line-height: .8;
+  }
+
   [class*=text-] {
     color: inherit;
   }
