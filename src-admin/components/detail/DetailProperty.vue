@@ -83,7 +83,7 @@ export default class DetailProperty extends Vue {
       display: block;
       text-transform: uppercase;
       letter-spacing: 3px;
-      border-bottom: 5px solid #CCCCCC;
+      border-bottom: 5px solid #DDDDDD;
       color: #666666;
     }
   }
