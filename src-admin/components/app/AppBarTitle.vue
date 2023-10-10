@@ -1,5 +1,5 @@
 <template>
-  <a-row gap="4">
+  <a-row gap="5">
     <v-btn
       v-if="back"
       fab
@@ -15,17 +15,17 @@
     </v-btn>
 
     <v-avatar
-      color="#F4F4F4"
-      size="3rem"
+      color="#EEEEEE"
+      size="4rem"
     >
       <v-icon
         :color="icon.color"
-        size="2.2rem"
+        size="3rem"
         v-text="icon.icon"
       />
     </v-avatar>
 
-    <div class="titleContainer">
+    <div class="titleContainer ml-n2">
       <h3 v-if="subtitle">
         {{ subtitle }}
       </h3>
