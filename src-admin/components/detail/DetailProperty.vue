@@ -1,18 +1,13 @@
 <template>
   <div class="detailProperty">
     <div class="header">
-      <v-avatar
+      <v-icon
         v-if="_icon"
-        color="#F4F4F4"
-        size="2.5rem"
+        :color="_icon.color"
+        size="3rem"
       >
-        <v-icon
-          :color="_icon.color"
-          size="1.5rem"
-        >
-          {{ _icon.icon }}
-        </v-icon>
-      </v-avatar>
+        {{ _icon.icon }}
+      </v-icon>
 
       <div
         v-else
@@ -70,13 +65,13 @@ export default class DetailProperty extends Vue {
     height: 40px;
     margin-bottom: .5rem;
 
-    .v-avatar {
-      flex: 0 0 40px;
-      margin-right: 15px;
+    > .v-icon {
+      flex: 0 0 3rem;
+      margin-right: 1.5rem;
     }
 
     .iconPlaceholder {
-      width: 55px;
+      width: 4.5rem;
     }
 
     .label {
@@ -89,7 +84,7 @@ export default class DetailProperty extends Vue {
   }
 
   .content {
-    padding-left: 55px;
+    padding-left: 4.5rem;
   }
 }
 </style>
