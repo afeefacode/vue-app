@@ -13,11 +13,13 @@ import {
   mdiDotsHorizontal,
   mdiDotsVertical,
   mdiFilter,
+  mdiInformationOutline,
   mdiLock,
   mdiLockOpenVariant,
   mdiLogoutVariant,
   mdiMagnify,
   mdiMenuDown,
+  mdiMenuRight,
   mdiMenuUp,
   mdiPalette,
   mdiPencil,
@@ -58,11 +60,13 @@ export default new Vuetify({
       arrowLeftIcon: mdiArrowLeft,
       caretDownIcon: mdiMenuDown,
       caretUpIcon: mdiMenuUp,
+      caretRightIcon: mdiMenuRight,
       printerIcon: mdiPrinter,
       euroSymbol: mdiCurrencyEur,
       paletteIcon: mdiPalette,
       addIcon: mdiPlusCircle,
-      filterIcon: mdiFilter
+      filterIcon: mdiFilter,
+      infoIcon: mdiInformationOutline
     }
   },
   breakpoint: {
