@@ -68,7 +68,7 @@ export default class StickyHeader extends Vue {
   &.is-pinned {
     background: white;
     z-index: 2;
-    box-shadow: 0 4px 7px -4px #00000033;
+    box-shadow: 0 0 7px #00000033;
   }
 }
 </style>
