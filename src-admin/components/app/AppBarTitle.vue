@@ -14,16 +14,11 @@
       </v-icon>
     </v-btn>
 
-    <v-avatar
-      color="#EEEEEE"
-      size="4rem"
-    >
-      <v-icon
-        :color="icon.color"
-        size="3rem"
-        v-text="icon.icon"
-      />
-    </v-avatar>
+    <v-icon
+      :color="icon.color"
+      size="3.5rem"
+      v-text="icon.icon"
+    />
 
     <div class="titleContainer ml-n2">
       <h3 v-if="subtitle">
