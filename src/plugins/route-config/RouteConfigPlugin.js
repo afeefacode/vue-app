@@ -37,6 +37,7 @@ class RouteConfigPlugin {
 
   _routeDefinitions = []
   _config = {}
+  _scrollContainer = null
 
   _breadcrumbDefinitions = []
   _breadcrumbDefinitionMap = {}
@@ -117,6 +118,11 @@ class RouteConfigPlugin {
     return this
   }
 
+  scrollContainer (scrollContainer) {
+    this._scrollContainer = scrollContainer
+    return this
+  }
+
   routes (callback) {
     this._promise = this._promise.then(() => {
       callback = callback({
@@ -160,6 +166,17 @@ class RouteConfigPlugin {
 
         for (const route of this._routes) {
           this._router.addRoute(route)
+        }
+
+        if (this._scrollContainer) { // scroll to 0 if not window object is used as scoll parent
+          this._router.afterEach((to, from) => {
+            if (to.path !== from.path) {
+              const el = document.querySelector(this._scrollContainer)
+              if (el) {
+                el.scrollTop = 0
+              }
+            }
+          })
         }
       })
     })
