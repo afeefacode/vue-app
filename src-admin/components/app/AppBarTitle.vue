@@ -1,5 +1,5 @@
 <template>
-  <a-row gap="5">
+  <a-row gap="4">
     <v-btn
       v-if="back"
       fab
