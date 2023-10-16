@@ -6,6 +6,10 @@
     :color="color"
     v-bind="$attrs"
   />
+  <div
+    v-else
+    style="height: 4px;"
+  />
 </template>
 
 <script>
