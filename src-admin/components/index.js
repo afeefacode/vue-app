@@ -50,6 +50,9 @@ Vue.component('DetailColumn', DetailColumn)
 
 Vue.component('AppBarButton', AppBarButton)
 Vue.component('AppBarTitle', AppBarTitle)
+
+Vue.component('HSeparator', HSeparator)
+Vue.component('CollapsibleSection', CollapsibleSection)
 Vue.component('CollapseTransition', CollapseTransition)
 
 Vue.component('Start', Start)
