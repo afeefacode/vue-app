@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 import AppBarButton from './app/AppBarButton'
 import AppBarTitle from './app/AppBarTitle'
+import CollapsibleSection from './CollapsibleSection.vue'
 import DetailColumn from './detail/DetailColumn'
 import DetailContent from './detail/DetailContent'
 import DetailMeta from './detail/DetailMeta'
@@ -11,6 +12,7 @@ import FlyingContext from './FlyingContext.vue'
 import EditFormButtons from './form/EditFormButtons'
 import RemoveButton from './form/RemoveButton'
 import RemoveDialog from './form/RemoveDialog'
+import HSeparator from './HSeparator.vue'
 import ListCard from './list/ListCard'
 import ListColumnHeader from './list/ListColumnHeader'
 import ListContent from './list/ListContent'
@@ -23,6 +25,7 @@ import EditPage from './pages/EditPage'
 import SidebarItem from './SidebarItem.vue'
 import Start from './Start.vue'
 import StickyFooter from './StickyFooter.vue'
+import CollapseTransition from './transitions/CollapseTransition.vue'
 
 Vue.component('ListCard', ListCard)
 Vue.component('ListColumnHeader', ListColumnHeader)
@@ -47,6 +50,7 @@ Vue.component('DetailColumn', DetailColumn)
 
 Vue.component('AppBarButton', AppBarButton)
 Vue.component('AppBarTitle', AppBarTitle)
+Vue.component('CollapseTransition', CollapseTransition)
 
 Vue.component('Start', Start)
 Vue.component('FlyingContext', FlyingContext)
