@@ -136,10 +136,10 @@ export default class InformationBar extends Vue {
   transition: all .2s;
 
   background: white;
-  padding: 4rem 1.5rem .5rem;
+  padding: 4rem 1.5rem 1.5rem;
 
   &.rail {
-    padding: 4rem .8rem .5rem;
+    padding: 4rem .8rem .8rem;
   }
 
   &.mobile {

@@ -173,6 +173,6 @@ export default class InformationBarItem extends Vue {
   font-size: .9rem;
 
   margin: .5rem -1.5rem;
-  padding: .5rem 1rem;
+  padding: .5rem 1.5rem;
 }
 </style>
