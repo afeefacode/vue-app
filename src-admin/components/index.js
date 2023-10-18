@@ -22,7 +22,7 @@ import ListView from './list/ListView'
 import ModelCount from './model/ModelCount'
 import ModelIcon from './model/ModelIcon'
 import EditPage from './pages/EditPage'
-import SidebarItem from './SidebarItem.vue'
+import InformationBarItem from './sidebar/InformationBarItem.vue'
 import Start from './Start.vue'
 import StickyFooter from './StickyFooter.vue'
 import CollapseTransition from './transitions/CollapseTransition.vue'
@@ -58,4 +58,4 @@ Vue.component('CollapseTransition', CollapseTransition)
 Vue.component('Start', Start)
 Vue.component('FlyingContext', FlyingContext)
 Vue.component('StickyFooter', StickyFooter)
-Vue.component('SidebarItem', SidebarItem)
+Vue.component('InformationBarItem', InformationBarItem)

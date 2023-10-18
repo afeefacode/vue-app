@@ -1,135 +1,40 @@
 <template>
-  <div>
-    <v-navigation-drawer
-      v-model="drawer"
-      app
-      left
-      width="280"
-      class="menubar"
-    >
-      <v-container
-        flex-column
-        align-center
-        fill-height
-      >
-        <a-row
-          justify-end
-          width="100%"
-        >
-          <v-app-bar-nav-icon
-            class="sidebarToggleButton mt-1 mr-2 ml-3"
-            title="Menu schließen"
-            @click="toggleDrawer"
-          >
-            <v-icon>{{ closeMenuIcon }}</v-icon>
-          </v-app-bar-nav-icon>
-        </a-row>
-
-        <router-link
-          :to="{name: rootRouteName}"
-          class="logoContainer d-flex flex-column align-center pa-6"
-        >
-          <img
-            v-if="logoUrl"
-            class="logo"
-            :src="logoUrl"
-          >
-          <div class="text-button">
-            {{ title }}
-          </div>
-        </router-link>
-
-        <component
-          :is="SidebarMenu"
-          class="px-0 mt-0 flex-grow-1"
-        />
-
-        <v-container
-          v-if="hasAuthService"
-          d-flex
-          align-center
-          gap-4
-          pa-6
-          pb-8
-        >
-          <div class="d-flex align-center gap-3">
-            <v-avatar
-              color="primary white--text"
-              size="40"
-            >
-              {{ account.first_name.charAt(0).toUpperCase() }}{{ account.last_name.charAt(0).toUpperCase() }}
-            </v-avatar>
-
-            <div>
-              <div class="accountName">
-                {{ account.first_name }}
-                <template v-if="$auth.roles[0]">
-                  ({{ $auth.roles[0].title }})
-                </template>
-              </div>
-
-              <div class="body-2 d-flex align-center">
-                <v-icon class="ml-n1 mr-1">
-                  $logoutIcon
-                </v-icon>
-                <a @click="logout()">Logout</a>
-              </div>
-            </div>
-
-            <a-context-menu v-if="$has.settings">
-              <a-context-menu-item
-                :to="{name: 'settings', params: {accountId: account.id}}"
-              >
-                <v-icon>$pencilIcon</v-icon>
-                Einstellungen
-              </a-context-menu-item>
-            </a-context-menu>
-          </div>
-        </v-container>
-      </v-container>
-    </v-navigation-drawer>
-
-    <a-loading-indicator
+  <div class="admin">
+    <v-overlay
       fixed
-      top
-      left
-      class="loadingIndicator"
-      :isLoading="!!numLoadingRequests"
-      :color="loaderColor"
+      :value="sidebarsFloating"
+      @click="closeFloatingSidebars"
     />
 
-    <v-main id="v-main">
-      <a-row
-        class="topbar"
-        align-start
+    <div class="main-layout">
+      <navigation-bar :has="$has" />
+
+      <div
+        id="v-main"
+        :class="{marginRight: hasFloatingInformationBar}"
       >
-        <v-app-bar-nav-icon
-          v-if="!drawer"
-          class="sidebarToggleButton mr-2 ml-3"
-          title="Menu öffnen"
-          @click="toggleDrawer"
+        <a-loading-indicator
+          top
+          class="loadingIndicator"
+          :isLoading="!!numLoadingRequests"
+          :color="loaderColor"
         />
 
-        <a-breadcrumbs />
-      </a-row>
-
-      <v-container
-        fluid
-        class="pa-8 pt-0"
-      >
         <sticky-header />
 
-        <router-view :class="{isLoading: !!numLoadingRequests}" />
-      </v-container>
+        <div class="pa-8 pt-4">
+          <router-view :class="{isLoading: !!numLoadingRequests}" />
+        </div>
 
-      <sticky-footer-container />
-    </v-main>
+        <sticky-footer-container />
+      </div>
+
+      <information-bar />
+    </div>
 
     <a-dialog id="app" />
 
     <a-save-indicator />
-
-    <sidebar />
 
     <flying-context-container />
   </div>
@@ -144,18 +49,22 @@ import AppBarButtons from './app/AppBarButtons'
 import AppBarTitleContainer from './app/AppBarTitleContainer'
 import FlyingContextContainer from './FlyingContextContainer'
 import StickyFooterContainer from './StickyFooterContainer'
-import Sidebar from './Sidebar'
+import NavigationBar from './NavigationBar'
+import InformationBar from './InformationBar'
 import StickyHeader from './StickyHeader'
 import '../styles.scss'
 import { mdiBackburger } from '@mdi/js'
+import { SidebarEvent } from '@a-admin/events'
+import { sidebarService } from './sidebar/SidebarService'
 
 @Component({
   components: {
     AppBarButtons,
     AppBarTitleContainer,
+    NavigationBar,
+    InformationBar,
     FlyingContextContainer,
     StickyFooterContainer,
-    Sidebar,
     StickyHeader
   }
 })
@@ -166,37 +75,30 @@ export default class App extends Vue {
   closeMenuIcon = mdiBackburger
   numLoadingRequests = 0
 
+  sidebarsFloating = false
+  hasFloatingInformationBar = false
+
   created () {
     this.$events.on(LoadingEvent.START_LOADING, this.startLoading)
     this.$events.on(LoadingEvent.STOP_LOADING, this.stopLoading)
+
+    this.$events.on(SidebarEvent.STATUS, ({payload: {hasFloatingOverlay, mobile, information}}) => {
+      this.sidebarsFloating = hasFloatingOverlay
+      this.hasFloatingInformationBar = mobile && information
+    })
+
+    this.sidebarsFloating = sidebarService.hasFloatingOverlay
+    this.hasFloatingInformationBar = sidebarService.mobile && sidebarService.information
+
     this.$emit('appLoaded')
   }
 
-  get SidebarMenu () {
-    return adminConfig.app.components.SidebarMenu
-  }
-
-  get logoUrl () {
-    return adminConfig.app.logo
-  }
-
-  get account () {
-    if (this.hasAuthService) {
-      return this.$auth.account
-    }
-    return null
-  }
-
-  get title () {
-    return adminConfig.app.title
+  closeFloatingSidebars () {
+    sidebarService.closeAllFloating()
   }
 
   get loaderColor () {
     return adminConfig.app.loaderColor
-  }
-
-  get rootRouteName () {
-    return adminConfig.app.rootRouteName || 'root'
   }
 
   startLoading () {
@@ -206,66 +108,26 @@ export default class App extends Vue {
   stopLoading () {
     this.numLoadingRequests--
   }
-
-  toggleDrawer () {
-    this.drawer = !this.drawer
-  }
-
-  get hasAuthService () {
-    return !!this.$auth
-  }
-
-  logout () {
-    this.$auth.logout()
-  }
 }
 </script>
 
 
 <style lang="scss" scoped>
-.accountName {
-  line-height: 1.2;
-  word-break: break-all;
-}
-
-.logoContainer {
-  text-decoration: none;
-}
-
-.logo {
-  max-height: 80px;
-  max-width: 90%;
-}
-
 .isLoading {
   opacity: .6;
 }
 
-.sidebarToggleButton {
-  width: 36px !important;
-  height: 36px !important;
-  margin-top: 1px;
+.main-layout {
+  display: flex;
 }
 
-.topbar {
-  position: relative;
-  width: 100%;
-  left: 0;
+.loadingIndicator {
+  z-index: 3;
+  position: sticky;
   top: 0;
-  height:40px;
-  padding: .2rem 1.1rem;
-  background-color: white;
 }
 
-.a-breadcrumbs {
-  margin-top: 7px;
-}
-
-.menubar {
-  // background: #666666 !important;
-}
-
-#sidebar {
-  // background: #F4F4F4 !important;
+#v-main.marginRight {
+  margin-right: 60px;
 }
 </style>

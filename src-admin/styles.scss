@@ -1,5 +1,13 @@
 html {
-  overflow-y: auto; // ress.css • v2.0.4 sets overflow-y: scroll
+  // overflow-y: auto; // ress.css • v2.0.4 sets overflow-y: scroll
+  overflow: hidden;
+}
+
+#v-main {
+  overflow-y: auto;
+  overflow-x: auto;
+  height: 100vh;
+  flex: 1 1 auto;
 }
 
 .container {

@@ -1,10 +1,23 @@
 <template>
   <div
     id="stickyHeader"
-    :class="['d-flex align-center gap-8', {visible}]"
+    :class="{visible}"
   >
-    <app-bar-title-container class="appBarTitle flex-grow-1" />
-    <app-bar-buttons class="appBarButtons mr-2" />
+    <a-row class="topbar">
+      <v-app-bar-nav-icon
+        v-if="sidebarIconVisible"
+        class="mr-2 ml-3"
+        title="Menu öffnen"
+        @click="openSidebar"
+      />
+
+      <a-breadcrumbs />
+    </a-row>
+
+    <div :class="['d-flex align-center gap-8 mt-2']">
+      <app-bar-title-container class="appBarTitle flex-grow-1" />
+      <app-bar-buttons class="appBarButtons mr-2" />
+    </div>
   </div>
 </template>
 
@@ -12,6 +25,8 @@
 import { Component, Vue } from '@a-vue'
 import AppBarButtons from './app/AppBarButtons'
 import AppBarTitleContainer from './app/AppBarTitleContainer'
+import { SidebarEvent } from '@a-admin/events'
+import { sidebarService } from './sidebar/SidebarService'
 
 @Component({
   components: {
@@ -21,6 +36,12 @@ import AppBarTitleContainer from './app/AppBarTitleContainer'
 })
 export default class StickyHeader extends Vue {
   visible = false
+
+  sidebarIconVisible = false
+
+  created () {
+    this.$events.on(SidebarEvent.STATUS, ({payload: {navigation, mobile}}) => (this.sidebarIconVisible = !navigation || mobile))
+  }
 
   mounted () {
     // watch mutation
@@ -34,7 +55,7 @@ export default class StickyHeader extends Vue {
       ([e]) => {
         e.target.classList.toggle('is-pinned', e.intersectionRatio < 1)
       },
-      { threshold: [1] }
+      { threshold: 1 }
     )
     observer.observe(el)
 
@@ -49,6 +70,10 @@ export default class StickyHeader extends Vue {
     return !!(this.$el.querySelector('.appBarTitle').children.length +
       this.$el.querySelector('.appBarButtons').children.length)
   }
+
+  openSidebar () {
+    sidebarService.setNavigation(true)
+  }
 }
 </script>
 
@@ -56,9 +81,9 @@ export default class StickyHeader extends Vue {
 <style lang="scss" scoped>
 #stickyHeader {
   position: sticky;
-  top: -1px;
-  margin: 0 -2rem 2rem;
-  padding: 1rem 2rem;
+  left: 0;
+  top: -32px;
+  padding: .75rem 2rem;
   background-color: white;
 
   &:not(.visible) {
@@ -69,6 +94,12 @@ export default class StickyHeader extends Vue {
     background: white;
     z-index: 2;
     box-shadow: 0 0 7px #00000033;
+  }
+
+  .topbar {
+    margin-left: -18px;
+    margin-top: -18px;
+    height:40px;
   }
 }
 </style>
