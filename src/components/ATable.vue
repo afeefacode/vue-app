@@ -53,7 +53,7 @@ export default class ATable extends Vue {
 
       white-space: nowrap;
       vertical-align: middle;
-      max-width: 200px;
+      max-width: 300px;
 
       .a-table-cell-truncate {
         overflow: hidden;
