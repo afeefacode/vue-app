@@ -53,6 +53,7 @@ export default class InformationBar extends Vue {
     this.mutationWatcher = new MutationObserver(this.domChanged)
     this.mutationWatcher.observe(this.$el.querySelector('#information-bar__children > .top'), { childList: true })
     this.mutationWatcher.observe(this.$el.querySelector('#information-bar__children > .bottom'), { childList: true })
+
     this.domChanged()
   }
 

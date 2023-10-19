@@ -113,7 +113,7 @@ export default class InformationBarItem extends Vue {
     this.rail = rail
 
     if (!this.rail) {
-      this.expanded = false
+      this.expanded = this.open
     }
   }
 
@@ -158,7 +158,7 @@ export default class InformationBarItem extends Vue {
   }
 
   &.rail {
-    margin-bottom: 0;
+    margin-bottom: .5rem;
   }
 }
 
