@@ -73,7 +73,7 @@
 
     <div v-else-if="!isLoading">
       <a-info type="warning">
-        <div v-if="$has.filters">
+        <div v-if="$has.filters && meta_.count_all">
           Nichts gefunden. <a
             href=""
             @click.prevent="resetFilters()"
