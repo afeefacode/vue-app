@@ -63,7 +63,6 @@ export default class DetailProperty extends Vue {
     flex-wrap: nowrap;
     align-items: center;
     height: 40px;
-    margin-bottom: .5rem;
 
     > .v-icon {
       flex: 0 0 3rem;
@@ -84,6 +83,7 @@ export default class DetailProperty extends Vue {
   }
 
   .content {
+    margin-top: .5rem;
     padding-left: 4.5rem;
   }
 }

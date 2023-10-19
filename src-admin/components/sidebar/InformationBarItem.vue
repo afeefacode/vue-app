@@ -4,25 +4,37 @@
       :class="['item', infoItemId, {expanded, rail}]"
       :style="{width}"
     >
-      <div
-        class="header"
-        @click="derail"
-      >
-        <v-icon
-          :color="icon.color"
-          size="2rem"
+      <a-row justify-space-between>
+        <div
+          class="header"
+          @click="derail"
         >
-          {{ icon.icon }}
-        </v-icon>
-
-        <template v-if="!rail">
-          <label class="label">{{ label }}</label>
-
-          <v-icon class="contextButton mt-n1">
-            {{ expanded ? '$caretDownIcon' : '$caretRightIcon' }}
+          <v-icon
+            v-if="_icon"
+            :color="_icon.color"
+            size="2rem"
+          >
+            {{ _icon.icon }}
           </v-icon>
-        </template>
-      </div>
+
+          <div
+            v-else
+            class="iconPlaceholder"
+          />
+
+          <template v-if="!rail">
+            <label class="label">{{ label }}</label>
+
+            <v-icon class="contextButton mt-n1">
+              {{ expanded ? '$caretDownIcon' : '$caretRightIcon' }}
+            </v-icon>
+          </template>
+        </div>
+
+        <div v-if="expanded">
+          <slot name="actionButton" />
+        </div>
+      </a-row>
 
       <collapse-transition>
         <div
@@ -50,6 +62,7 @@ import { SidebarEvent } from '@a-admin/events'
 @Component({
   props: [
     'icon',
+    'iconModelType',
     'label',
     {
       top: true,
@@ -78,6 +91,17 @@ export default class InformationBarItem extends Vue {
     const el = this.getContent()
     if (container.contains(el)) {
       container.removeChild(el)
+    }
+  }
+
+  get _icon () {
+    if (this.icon) {
+      return this.icon
+    }
+
+    if (this.iconModelType) {
+      const ModelClass = this.$apiResources.getModelClass(this.iconModelType)
+      return ModelClass.icon
     }
   }
 
@@ -134,7 +158,7 @@ export default class InformationBarItem extends Vue {
   }
 
   &.rail {
-    margin-bottom: .5rem;
+    margin-bottom: 0;
   }
 }
 
@@ -172,7 +196,7 @@ export default class InformationBarItem extends Vue {
   border-top: 2px solid #EEEEEE;
   font-size: .9rem;
 
-  margin: .5rem -1.5rem;
-  padding: .5rem 1.5rem;
+  margin: .25rem -1.5rem;
+  padding: 1rem 1.5rem;
 }
 </style>

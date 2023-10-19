@@ -130,6 +130,7 @@ export default class InformationBar extends Vue {
   flex: 0 0 300px;
   width: 300px;
   height: 100vh;
+  overflow-x: hidden;
   overflow-y: auto;
 
   border-left: 1px solid rgba(0, 0, 0, .12);
