@@ -59,8 +59,6 @@ export default class InformationBar extends Vue {
 
   /**
    * park sidebar children and attach - only for use with HMR which would remove all children on destroy 234567890
-   *
-   * s
    */
   destroyed () {
     function moveChildren (from, to) {

@@ -46,6 +46,25 @@ export default class FlyingContextContainer extends Vue {
     sizeWatcher.observe(this.getChildrenContainer())
   }
 
+  /**
+   * park sidebar children and attach - only for use with HMR which would remove all children on destroy 234567890
+   */
+  destroyed () {
+    function moveChildren (from, to) {
+      for (const child of from.children) {
+        to.appendChild(child)
+      }
+    }
+
+    const elTmp = document.createElement('div')
+    document.body.appendChild(elTmp)
+    moveChildren(this.getChildrenContainer(), elTmp)
+
+    this.$nextTick(() => {
+      moveChildren(elTmp, document.querySelector('#flyingContextContainer__children'))
+    })
+  }
+
   getScrollbarWidth () {
     const el = document.documentElement
     const overflowY = getComputedStyle(el)['overflow-y']
