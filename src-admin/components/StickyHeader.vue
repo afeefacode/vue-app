@@ -94,6 +94,7 @@ export default class StickyHeader extends Vue {
     background: white;
     z-index: 2;
     box-shadow: 0 0 7px #00000033;
+    border-bottom: 1px solid #EEEEEE;
   }
 
   .topbar {

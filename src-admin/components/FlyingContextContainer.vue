@@ -157,7 +157,8 @@ export default class FlyingContextContainer extends Vue {
   transition: left .2s;
   padding: 2rem;
   overflow-y: auto;
-  box-shadow: 0 0 7px #00000033;
+  box-shadow: 0 0 17px #00000033;
+  border-left: 1px solid #DDDDDD;
 
   &:not(.visible) {
     left: 101vw;
