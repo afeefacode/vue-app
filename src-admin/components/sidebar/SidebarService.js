@@ -65,8 +65,8 @@ class SidebarService {
 
     this.information = information
 
-    if (information && this.mobile) {
-      this.informationRailed = true
+    if (information) { // rail if mobile, derail if desktop
+      this.informationRailed = this.mobile
     }
 
     eventBus.dispatch(new SidebarEvent(SidebarEvent.STATUS, new SidebarState(this)))
