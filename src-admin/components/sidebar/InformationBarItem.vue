@@ -76,9 +76,10 @@ export default class InformationBarItem extends Vue {
   infoItemId = randomCssClass(10)
   rail = sidebarService.informationRailed
   expanded = !this.rail && this.open
+  isCreated = false
 
   created () {
-    this.$events.on(SidebarEvent.STATUS, ({payload: {informationRailed}}) => this.railChanged(informationRailed))
+    this.$events.on(SidebarEvent.STATUS, this.railChanged)
   }
 
   mounted () {
@@ -92,6 +93,8 @@ export default class InformationBarItem extends Vue {
     if (container.contains(el)) {
       container.removeChild(el)
     }
+
+    this.$events.off(SidebarEvent.STATUS, this.railChanged)
   }
 
   get _icon () {
@@ -105,16 +108,20 @@ export default class InformationBarItem extends Vue {
     }
   }
 
-  railChanged (rail) {
-    if (this.rail === rail) {
+  railChanged ({payload: {informationRailed}}) {
+    if (this.rail === informationRailed) {
       return
     }
 
-    this.rail = rail
+    this.rail = informationRailed
 
-    if (!this.rail) {
-      this.expanded = this.open
+    if (!this.rail) { // derailed
+      if (!this.isCreated) { // open only the first time not after subsequent derailing
+        this.expanded = this.open
+      }
     }
+
+    this.isCreated = true
   }
 
   derail () {
