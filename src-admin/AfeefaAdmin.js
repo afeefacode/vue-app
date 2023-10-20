@@ -12,6 +12,7 @@ import routeConfigPlugin from './config/routing'
 import vuetify from './config/vuetify'
 import { authPlugin } from './plugins/AuthPlugin'
 import { configPlugin } from './plugins/ConfigPlugin'
+import { iconsPlugin } from './plugins/IconsPlugin'
 
 Vue.config.productionTip = false
 
@@ -58,6 +59,7 @@ export class AfeefaAdmin {
     adminConfig.app = this._appConfig
 
     Vue.use(configPlugin)
+    Vue.use(iconsPlugin)
 
     // authenticate current user before doing any gui-voodo
     if (this._authService) {
