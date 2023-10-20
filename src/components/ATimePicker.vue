@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { Component, Watch, Vue } from 'vue-property-decorator'
+import { Component, Watch, Vue } from '@a-vue'
 import moment from 'moment'
 import formatHour from '@a-vue/utils/format-hour'
 import formatMinutes from '@a-vue/utils/format-minutes'
