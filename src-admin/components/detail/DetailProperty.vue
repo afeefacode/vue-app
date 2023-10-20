@@ -2,11 +2,11 @@
   <div class="detailProperty">
     <div class="header">
       <v-icon
-        v-if="_icon"
-        :color="_icon.color"
+        v-if="icon"
+        :color="icon.color"
         size="3rem"
       >
-        {{ _icon.icon }}
+        {{ icon.icon }}
       </v-icon>
 
       <div
@@ -37,19 +37,9 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: ['icon', 'iconModelType', 'label']
+  props: ['icon', 'label']
 })
 export default class DetailProperty extends Vue {
-  get _icon () {
-    if (this.icon) {
-      return this.icon
-    }
-
-    if (this.iconModelType) {
-      const ModelClass = this.$apiResources.getModelClass(this.iconModelType)
-      return ModelClass.icon
-    }
-  }
 }
 </script>
 

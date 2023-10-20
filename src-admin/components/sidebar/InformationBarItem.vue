@@ -10,11 +10,11 @@
           @click="derail"
         >
           <v-icon
-            v-if="_icon"
-            :color="_icon.color"
+            v-if="icon"
+            :color="icon.color"
             size="2rem"
           >
-            {{ _icon.icon }}
+            {{ icon.icon }}
           </v-icon>
 
           <div
@@ -62,7 +62,6 @@ import { SidebarEvent } from '@a-admin/events'
 @Component({
   props: [
     'icon',
-    'iconModelType',
     'label',
     {
       top: true,
@@ -95,17 +94,6 @@ export default class InformationBarItem extends Vue {
     }
 
     this.$events.off(SidebarEvent.STATUS, this.railChanged)
-  }
-
-  get _icon () {
-    if (this.icon) {
-      return this.icon
-    }
-
-    if (this.iconModelType) {
-      const ModelClass = this.$apiResources.getModelClass(this.iconModelType)
-      return ModelClass.icon
-    }
   }
 
   railChanged ({payload: {informationRailed}}) {
