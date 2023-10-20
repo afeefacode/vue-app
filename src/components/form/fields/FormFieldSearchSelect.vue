@@ -46,14 +46,18 @@
     </template>
 
     <template #row="{ model, on }">
-      <v-icon
+      <div
         v-if="$has.icon"
-        :color="model.getIcon().color"
-        size="1.5rem"
-        class="mr-2"
-        v-on="on"
-        v-text="model.getIcon().icon"
-      />
+        class="pr-0"
+      >
+        <v-icon
+          :color="model.getIcon().color"
+          size="1.5rem"
+          class="mr-2"
+          v-on="on"
+          v-text="model.getIcon().icon"
+        />
+      </div>
 
       <div
         style="width:100%;"
