@@ -1,5 +1,5 @@
 import { translationService } from '@a-admin/services/TranslationService'
-import { Model as ApiResourcesModel, apiResources } from '@afeefa/api-resources-client'
+import { Model as ApiResourcesModel } from '@afeefa/api-resources-client'
 import { mdiAlphaMCircle } from '@mdi/js'
 
 import { ModelAdminConfig } from './ModelAdminConfig'
@@ -7,7 +7,6 @@ import { ModelAdminConfig } from './ModelAdminConfig'
 export { ModelAdminConfig }
 
 export class Model extends ApiResourcesModel {
-  static resourceType = null
   static routeName = null
   static routeIdKey = 'id'
 
@@ -15,17 +14,6 @@ export class Model extends ApiResourcesModel {
 
   static getLink (action) {
     return (new this()).getLink(action)
-  }
-
-  static getAction (actionName) {
-    if (this.resourceType) {
-      return apiResources.getAction({
-        resourceType: this.resourceType,
-        actionName
-      })
-    }
-    console.warn('You can\'t get an action out of a model without resourceType:', this.type)
-    return null
   }
 
   static get adminConfig () {
@@ -51,10 +39,6 @@ export class Model extends ApiResourcesModel {
         [this.constructor.routeIdKey]: this.id
       }
     }
-  }
-
-  getAction (action) {
-    return this.constructor.getAction(action)
   }
 
   getIcon () {
