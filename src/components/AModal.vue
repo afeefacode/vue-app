@@ -23,18 +23,12 @@
 
     <v-card v-if="modal">
       <v-card-title v-if="title">
-        <v-avatar
-          v-if="icon"
-          color="#FFFFFF"
-          size="2rem"
-          class="mr-2 ml-n1"
-        >
-          <v-icon
-            :color="icon.color"
-            size="1.2rem"
-            v-text="icon.icon"
-          />
-        </v-avatar>
+        <v-icon
+          :color="icon.color"
+          class="mr-2"
+          size="1.5rem"
+          v-text="icon.icon"
+        />
 
         {{ title }}
       </v-card-title>
