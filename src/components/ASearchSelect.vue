@@ -49,7 +49,7 @@
           absolute
           top
           left
-          :class="['loadingIndicator', {showFilters}]"
+          :class="[{showFilters}]"
           :isLoading="isLoading"
         />
       </div>

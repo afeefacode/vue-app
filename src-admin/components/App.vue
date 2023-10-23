@@ -14,8 +14,6 @@
         :class="{marginRight: hasFloatingInformationBar}"
       >
         <a-loading-indicator
-          top
-          class="loadingIndicator"
           :isLoading="!!numLoadingRequests"
           :color="loaderColor"
         />
