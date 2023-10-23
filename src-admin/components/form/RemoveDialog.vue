@@ -9,6 +9,7 @@
 
       <a-text-field
         v-model="removeConfirmed"
+        class="mt-2"
         label="Key"
         :focus="true"
         width="100"
