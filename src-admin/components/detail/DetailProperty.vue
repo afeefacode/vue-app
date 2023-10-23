@@ -4,7 +4,7 @@
       <v-icon
         v-if="icon"
         :color="icon.color"
-        size="3rem"
+        size="2.75rem"
       >
         {{ icon.icon }}
       </v-icon>
@@ -55,12 +55,12 @@ export default class DetailProperty extends Vue {
     height: 40px;
 
     > .v-icon {
-      flex: 0 0 3rem;
-      margin-right: 1.5rem;
+      flex: 0 0 2.5rem;
+      margin-right: 1rem;
     }
 
     .iconPlaceholder {
-      width: 4.5rem;
+      width: 3.5rem;
     }
 
     .label {
@@ -73,8 +73,8 @@ export default class DetailProperty extends Vue {
   }
 
   .content {
-    margin-top: .5rem;
-    padding-left: 4.5rem;
+    margin-top: .75rem;
+    padding-left: 3.5rem;
   }
 }
 </style>
