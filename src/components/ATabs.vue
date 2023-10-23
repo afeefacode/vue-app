@@ -52,7 +52,7 @@ export default class ATabs extends Vue {
 
 <style lang="scss" scoped>
 .menuContainer {
-  border-bottom: 2px solid #EEEEEE;
+  border-bottom: 3px solid #DDDDDD;
   margin: 2rem 0;
 
   &.first {
@@ -64,29 +64,26 @@ export default class ATabs extends Vue {
   position: relative;
   display: flex;
   justify-content: center;
-  margin-bottom: -2px;
 
   .label {
-    padding: .6rem 1.5rem .5rem;
-    border-bottom: 2px solid #EEEEEE;
-    // border-top-left-radius: 6px;
-    // border-top-right-radius: 6px;
+    padding: .5rem 1rem .7rem;
     background: white;
     cursor: pointer;
 
     text-transform: uppercase;
     letter-spacing: 5px;
-    color: #CCCCCC;
+    color: #BBBBBB;
     font-size: .8rem;
     white-space: nowrap;
 
-    &.selected {
-      padding-top: .3rem;
+    &:hover {
+      background: #F4F4F4;
+      color: #AAAAAA;
+    }
 
-      border-left: 2px solid #EEEEEE;
-      border-top: 2px solid #EEEEEE;
-      border-right: 2px solid #EEEEEE;
-      border-bottom: none;
+    &.selected {
+      background: #DDDDDD;
+      color: #666666;
     }
   }
 }
