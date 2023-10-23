@@ -1,22 +1,23 @@
 <template>
-  <v-progress-linear
-    v-if="isLoading_"
-    class="loadingIndicator"
-    indeterminate
-    :color="color"
-    v-bind="$attrs"
-  />
-  <div
-    v-else
-    style="height: 4px;"
-  />
+  <div :class="['loadingIndicator', {absolute}]">
+    <v-progress-linear
+      v-if="isLoading_"
+      class="loadingIndicator"
+      indeterminate
+      :color="color"
+    />
+    <div
+      v-else
+      style="height: 4px;"
+    />
+  </div>
 </template>
 
 <script>
 import { Component, Vue, Watch } from '@a-vue'
 
 @Component({
-  props: ['isLoading']
+  props: [{isLoading: false, absolute: false}]
 })
 export default class ALoadingIndicator extends Vue {
   isLoading_ = false
@@ -49,3 +50,13 @@ export default class ALoadingIndicator extends Vue {
   }
 }
 </script>
+
+
+<style lang="scss" scoped>
+.absolute {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+</style>
