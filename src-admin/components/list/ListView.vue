@@ -34,7 +34,7 @@
             </a-table-header>
 
             <a-table-row
-              v-for="model in models_"
+              v-for="(model, index) in models_"
               :key="model.id"
               v-flying-context-trigger="hasFlyingContext"
               :class="getRowClasses(model)"
@@ -52,6 +52,7 @@
               <slot
                 name="model-table"
                 :model="model"
+                :index="index"
               />
             </a-table-row>
           </a-table>
