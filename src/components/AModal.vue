@@ -24,6 +24,7 @@
     <v-card v-if="modal">
       <v-card-title v-if="title">
         <v-icon
+          v-if="icon"
           :color="icon.color"
           class="mr-2"
           size="1.5rem"
