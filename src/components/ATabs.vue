@@ -30,8 +30,6 @@ export default class ATabs extends Vue {
   currentIndex = 0
 
   mounted () {
-    console.log(this.$children)
-
     this.titles = this.$children.map(c => c.title)
 
     this.$children[this.currentIndex].show()
