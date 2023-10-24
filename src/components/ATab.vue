@@ -8,7 +8,7 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: ['title']
+  props: ['title', 'icon']
 })
 export default class ATab extends Vue {
   visible = false

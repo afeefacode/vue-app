@@ -8,6 +8,16 @@
           :class="['label', {selected: index === currentIndex}]"
           @click="setTab(index)"
         >
+          <template v-if="icons[index]">
+            <a-icon
+              size="1.5rem"
+              :color="icons[index].color"
+              class="mt-n1 mr-1"
+            >
+              {{ icons[index].icon }}
+            </a-icon>
+          </template>
+
           {{ title }}
         </div>
       </div>
@@ -27,10 +37,12 @@ import { Component, Vue } from '@a-vue'
 })
 export default class ATabs extends Vue {
   titles = []
+  icons = []
   currentIndex = 0
 
   mounted () {
     this.titles = this.$children.map(c => c.title)
+    this.icons = this.$children.map(c => c.icon)
 
     this.$children[this.currentIndex].show()
   }
@@ -64,7 +76,7 @@ export default class ATabs extends Vue {
   justify-content: center;
 
   .label {
-    padding: .5rem 1rem .7rem;
+    padding: .8rem 1.2rem .7rem;
     background: white;
     cursor: pointer;
 
