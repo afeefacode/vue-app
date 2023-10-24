@@ -4,37 +4,43 @@
       :class="['item', infoItemId, {expanded, rail}]"
       :style="{width}"
     >
-      <a-row justify-space-between>
-        <div
-          class="header"
+      <div class="header">
+        <v-icon
+          v-if="icon"
+          :color="icon.color"
+          size="2rem"
           @click="derail"
         >
-          <v-icon
-            v-if="icon"
-            :color="icon.color"
-            size="2rem"
+          {{ icon.icon }}
+        </v-icon>
+
+        <div
+          v-else
+          class="iconPlaceholder"
+        />
+
+        <template v-if="!rail">
+          <div
+            class="labelContainer"
+            @click="derail"
           >
-            {{ icon.icon }}
+            <div class="label">
+              {{ label }}
+            </div>
+          </div>
+
+          <v-icon
+            class="contextButton expand mt-n1"
+            @click="derail"
+          >
+            {{ expanded ? '$caretDownIcon' : '$caretRightIcon' }}
           </v-icon>
 
-          <div
-            v-else
-            class="iconPlaceholder"
-          />
-
-          <template v-if="!rail">
-            <label class="label">{{ label }}</label>
-
-            <v-icon class="contextButton mt-n1">
-              {{ expanded ? '$caretDownIcon' : '$caretRightIcon' }}
-            </v-icon>
-          </template>
-        </div>
-
-        <div v-if="expanded">
-          <slot name="actionButton" />
-        </div>
-      </a-row>
+          <div v-if="expanded">
+            <slot name="actionButton" />
+          </div>
+        </template>
+      </div>
 
       <collapse-transition>
         <div
@@ -159,8 +165,8 @@ export default class InformationBarItem extends Vue {
 
 .header {
   display: flex;
-  flex-wrap: nowrap;
   align-items: center;
+  width: 100%;
   font-size: .8rem;
   cursor: pointer;
 
@@ -168,20 +174,25 @@ export default class InformationBarItem extends Vue {
     margin-right: .75rem;
   }
 
+  .labelContainer {
+    overflow: hidden;
+  }
+
   .label {
     display: block;
     text-transform: uppercase;
     letter-spacing: 3px;
     color: #666666;
-    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &:hover {
-    label {
+    .label {
       color: #333333;
     }
 
-    .v-icon.contextButton {
+    .v-icon.expand {
       color: #333333 !important;
     }
   }
