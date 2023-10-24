@@ -41,7 +41,8 @@ export default class InformationBar extends Vue {
   visible = false
   mobile = false
   rail = false
-  width = 300
+  defaultWidth = 300
+  width = this.defaultWidth
 
   created () {
     this.$events.on(SidebarEvent.STATUS, ({payload: {information, informationRailed, mobile}}) => {
@@ -88,12 +89,20 @@ export default class InformationBar extends Vue {
 
   @Watch('rail')
   railChanged () {
-    const right = `calc(-${this.width}px - 3rem + 60px)`
-    this.$el.style.marginRight = this.rail ? right : 0
+    this.setRailMargin()
   }
 
   toggleRail () {
     sidebarService.setRailInformation(!this.rail)
+  }
+
+  setRailMargin () {
+    if (this.rail) {
+      const right = `calc(-${this.width}px - 3rem + 60px)`
+      this.$el.style.marginRight = right
+    } else {
+      this.$el.style.marginRight = 0
+    }
   }
 
   domChanged () {
@@ -101,7 +110,9 @@ export default class InformationBar extends Vue {
     const visible = this.hasSidebarItems()
 
     if (visible && !old) {
-      this.width = this.getWidthFromItems() || this.width
+      this.width = this.getWidthFromItems() || this.defaultWidth
+      this.setRailMargin()
+
       sidebarService.setInformation(true)
     }
 
