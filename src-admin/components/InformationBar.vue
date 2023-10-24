@@ -146,14 +146,14 @@ export default class InformationBar extends Vue {
     let width = 0
 
     Array.from(this.getTopContainer().children).forEach(c => {
-      if (c.style.width !== 'auto') {
+      if (c.style.width !== '100%') {
         const w = parseInt(c.style.width)
         width = Math.max(width, w)
       }
     })
 
     Array.from(this.getBottomContainer().children).forEach(c => {
-      if (c.style.width !== 'auto') {
+      if (c.style.width !== '100%') {
         const w = parseInt(c.style.width)
         width = Math.max(width, w)
       }

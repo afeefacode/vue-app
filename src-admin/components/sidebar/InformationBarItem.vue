@@ -4,42 +4,44 @@
       :class="['item', infoItemId, {expanded, rail}]"
       :style="{width}"
     >
-      <div class="header">
-        <v-icon
-          v-if="icon"
-          :color="icon.color"
-          size="2rem"
-          @click="derail"
-        >
-          {{ icon.icon }}
-        </v-icon>
-
-        <div
-          v-else
-          class="iconPlaceholder"
-        />
-
-        <template v-if="!rail">
-          <div
-            class="labelContainer"
-            @click="derail"
-          >
-            <div class="label">
-              {{ label }}
-            </div>
-          </div>
-
+      <div class="headerContainer">
+        <div class="header">
           <v-icon
-            class="contextButton expand mt-n1"
+            v-if="icon"
+            :color="icon.color"
+            size="2rem"
             @click="derail"
           >
-            {{ expanded ? '$caretDownIcon' : '$caretRightIcon' }}
+            {{ icon.icon }}
           </v-icon>
 
-          <div v-if="expanded">
-            <slot name="actionButton" />
-          </div>
-        </template>
+          <div
+            v-else
+            class="iconPlaceholder"
+          />
+
+          <template v-if="!rail">
+            <div
+              class="labelContainer"
+              @click="derail"
+            >
+              <div class="label">
+                {{ label }}
+              </div>
+            </div>
+
+            <v-icon
+              class="contextButton expand mt-n1"
+              @click="derail"
+            >
+              {{ expanded ? '$caretDownIcon' : '$caretRightIcon' }}
+            </v-icon>
+
+            <div v-if="expanded">
+              <slot name="actionButton" />
+            </div>
+          </template>
+        </div>
       </div>
 
       <collapse-transition>
@@ -72,7 +74,7 @@ import { SidebarEvent } from '@a-admin/events'
     {
       top: true,
       bottom: false,
-      width: 'auto',
+      width: '100%',
       open: false
     }
   ]
@@ -163,19 +165,26 @@ export default class InformationBarItem extends Vue {
   }
 }
 
-.header {
-  display: flex;
-  align-items: center;
+.headerContainer {
   width: 100%;
+  line-height: 0; // kill inline-flex space
+}
+
+.header {
+  display: inline-flex;
+  align-items: center;
   font-size: .8rem;
-  cursor: pointer;
+  line-height: 1.5; // end kill inline-flex space
+  max-width: 100%;
 
   > .v-icon {
     margin-right: .75rem;
+    cursor: pointer;
   }
 
   .labelContainer {
     overflow: hidden;
+    cursor: pointer;
   }
 
   .label {
