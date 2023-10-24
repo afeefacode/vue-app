@@ -20,7 +20,7 @@
       v-text="icon.icon"
     />
 
-    <div class="titleContainer ml-n2">
+    <div class="titleContainer ml-n1">
       <h3 v-if="subtitle">
         {{ subtitle }}
       </h3>
