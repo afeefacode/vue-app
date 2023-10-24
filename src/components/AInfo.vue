@@ -1,6 +1,7 @@
 <template>
   <v-alert
     v-bind="$attrs"
+    :type="type"
     :style="{display: inline ? 'inline-block' : 'block'}"
     :class="['a-info', {xSmall}]"
     dense
@@ -17,7 +18,7 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: [{inline: true, xSmall: false}]
+  props: [{inline: true, xSmall: false, type: 'info'}]
 })
 export default class AInfo extends Vue {
 }
