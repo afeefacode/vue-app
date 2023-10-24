@@ -49,7 +49,8 @@ export default class ATabs extends Vue {
 
   setTab (index) {
     this.currentIndex = index
-    this.$children.forEach((tab, i) => {
+    const tabs = this.$slots.default.map(s => s.componentInstance)
+    tabs.forEach((tab, i) => {
       if (i === this.currentIndex) {
         tab.show()
       } else {
