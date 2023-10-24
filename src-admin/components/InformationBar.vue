@@ -3,6 +3,7 @@
     v-show="visible"
     id="information-bar"
     :class="{mobile, rail}"
+    :style="widthStyle"
   >
     <div :class="['toggleButton', {rail}]">
       <v-app-bar-nav-icon
@@ -40,6 +41,7 @@ export default class InformationBar extends Vue {
   visible = false
   mobile = false
   rail = false
+  width = 300
 
   created () {
     this.$events.on(SidebarEvent.STATUS, ({payload: {information, informationRailed, mobile}}) => {
@@ -69,15 +71,15 @@ export default class InformationBar extends Vue {
 
     const elTop = document.createElement('div')
     document.body.appendChild(elTop)
-    moveChildren(this.$el.querySelector('#information-bar__children .top'), elTop)
+    moveChildren(this.getTopContainer(), elTop)
 
     const elBottom = document.createElement('div')
     document.body.appendChild(elBottom)
-    moveChildren(this.$el.querySelector('#information-bar__children .bottom'), elBottom)
+    moveChildren(this.getBottomContainer(), elBottom)
 
     this.$nextTick(() => {
-      moveChildren(elTop, document.querySelector('#information-bar__children .top'))
-      moveChildren(elBottom, document.querySelector('#information-bar__children .bottom'))
+      moveChildren(elTop, this.getTopContainer())
+      moveChildren(elBottom, this.getBottomContainer())
       this.$nextTick(() => {
         this.$events.dispatch(new SidebarEvent(SidebarEvent.STATUS, new SidebarState(sidebarService)))
       })
@@ -86,7 +88,8 @@ export default class InformationBar extends Vue {
 
   @Watch('rail')
   railChanged () {
-    this.$el.style.marginRight = this.rail ? '-240px' : 0
+    const right = `calc(-${this.width}px - 3rem + 60px)`
+    this.$el.style.marginRight = this.rail ? right : 0
   }
 
   toggleRail () {
@@ -98,6 +101,7 @@ export default class InformationBar extends Vue {
     const visible = this.hasSidebarItems()
 
     if (visible && !old) {
+      this.width = this.getWidthFromItems()
       sidebarService.setInformation(true)
     }
 
@@ -110,6 +114,14 @@ export default class InformationBar extends Vue {
     return this.$el.querySelector('#information-bar__children')
   }
 
+  getTopContainer () {
+    return document.querySelector('#information-bar__children .top')
+  }
+
+  getBottomContainer () {
+    return document.querySelector('#information-bar__children .bottom')
+  }
+
   hasSidebarItems () {
     return !!(this.$el.querySelector('#information-bar__children .top').children.length +
       this.$el.querySelector('#information-bar__children .bottom').children.length)
@@ -117,6 +129,33 @@ export default class InformationBar extends Vue {
 
   hideSidebar () {
     sidebarService.setInformation(false)
+  }
+
+  getWidthFromItems () {
+    let width = 0
+
+    Array.from(this.getTopContainer().children).forEach(c => {
+      if (c.style.width !== 'auto') {
+        const w = parseInt(c.style.width)
+        width = Math.max(width, w)
+      }
+    })
+
+    Array.from(this.getBottomContainer().children).forEach(c => {
+      if (c.style.width !== 'auto') {
+        const w = parseInt(c.style.width)
+        width = Math.max(width, w)
+      }
+    })
+
+    return width
+  }
+
+  get widthStyle () {
+    return {
+      flex: `0 0 calc(${this.width}px + 3rem)`,
+      width: `calc(${this.width}px + 3rem)`
+    }
   }
 }
 </script>
@@ -126,8 +165,6 @@ export default class InformationBar extends Vue {
 #information-bar {
   position: relative;
 
-  flex: 0 0 300px;
-  width: 300px;
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
