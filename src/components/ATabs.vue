@@ -93,7 +93,7 @@ export default class ATabs extends Vue {
     }
 
     &.selected {
-      background: #DDDDDD;
+      background: #EEEEEE;
       color: #666666;
     }
   }
