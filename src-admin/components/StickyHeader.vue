@@ -45,9 +45,9 @@ export default class StickyHeader extends Vue {
 
   mounted () {
     // watch mutation
-    this.mutationWatcher = new MutationObserver(this.domChanged)
-    this.mutationWatcher.observe(this.$el.querySelector('.appBarTitle'), { childList: true })
-    this.mutationWatcher.observe(this.$el.querySelector('.appBarButtons'), { childList: true })
+    const mutationWatcher = new MutationObserver(this.domChanged)
+    mutationWatcher.observe(this.$el.querySelector('.appBarTitle'), { childList: true })
+    mutationWatcher.observe(this.$el.querySelector('.appBarButtons'), { childList: true })
 
     // watch intersection
     const el = document.querySelector('#stickyHeader')

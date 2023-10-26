@@ -20,8 +20,8 @@ export default class StickyFooterContainer extends Vue {
   visible = false
 
   mounted () {
-    this.mutationWatcher = new MutationObserver(this.domChanged)
-    this.mutationWatcher.observe(this.getChildrenContainer(), { childList: true })
+    const mutationWatcher = new MutationObserver(this.domChanged)
+    mutationWatcher.observe(this.getChildrenContainer(), { childList: true })
   }
 
   domChanged () {
