@@ -192,7 +192,7 @@ export default class InformationBar extends Vue {
 
   &.mobile {
     position: fixed;
-    z-index: 299;
+    z-index: 199;
     right: 0;
 
     &:not(.rail) {

@@ -161,7 +161,7 @@ export default class NavigationBar extends Vue {
   &.mobile {
     position: fixed;
     box-shadow: 0 0 7px #00000066;
-    z-index: 299;
+    z-index: 199;
   }
 }
 
