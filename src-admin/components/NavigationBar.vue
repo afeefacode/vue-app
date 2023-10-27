@@ -136,6 +136,10 @@ export default class NavigationBar extends Vue {
     }
     return null
   }
+
+  logout () {
+    this.$auth.logout()
+  }
 }
 </script>
 
