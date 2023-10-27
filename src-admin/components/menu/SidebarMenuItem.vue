@@ -17,7 +17,10 @@
       v-else-if="item.icon"
       class="ma-0 mr-4 align-self-center"
     >
-      <v-icon :color="item.iconColor">
+      <v-icon
+        :color="item.iconColor"
+        size="1.8rem"
+      >
         {{ item.icon }}
       </v-icon>
     </v-list-item-icon>
