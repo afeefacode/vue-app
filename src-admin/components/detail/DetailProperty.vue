@@ -74,7 +74,7 @@ export default class DetailProperty extends Vue {
 
   .content {
     margin-top: .75rem;
-    padding-left: 3.5rem;
+    padding-left: 3.75rem;
   }
 }
 </style>
