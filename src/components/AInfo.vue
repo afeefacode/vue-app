@@ -25,17 +25,19 @@ export default class AInfo extends Vue {
 </script>
 
 <style lang="scss" scoped>
-:deep(.v-icon) {
-  margin-right: .4rem;
-}
-
-.xSmall {
-  padding: .3rem .6rem;
-  font-size: .9rem;
-
+.v-alert {
   :deep(.v-icon) {
-    margin-left: .2rem;
     margin-right: .4rem;
+  }
+
+  .xSmall {
+    padding: .3rem .6rem;
+    font-size: .9rem;
+
+    :deep(.v-icon) {
+      margin-left: .2rem;
+      margin-right: .4rem;
+    }
   }
 }
 </style>
