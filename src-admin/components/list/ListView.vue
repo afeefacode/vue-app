@@ -86,6 +86,7 @@
         </div>
       </a-info>
     </div>
+
     <div
       v-if="$has.filters"
       class="filters"
