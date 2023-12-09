@@ -8,6 +8,7 @@ import DetailContent from './detail/DetailContent'
 import DetailMeta from './detail/DetailMeta'
 import DetailProperty from './detail/DetailProperty'
 import DetailTitle from './detail/DetailTitle'
+import EditableDetailProperty from './detail/EditableDetailProperty'
 import DetailOrInfo from './DetailOrInfo'
 import FlyingContext from './FlyingContext'
 import EditFormButtons from './form/EditFormButtons'
@@ -47,6 +48,7 @@ Vue.component('DetailContent', DetailContent)
 Vue.component('DetailMeta', DetailMeta)
 Vue.component('DetailTitle', DetailTitle)
 Vue.component('DetailProperty', DetailProperty)
+Vue.component('EditableDetailProperty', EditableDetailProperty)
 Vue.component('DetailColumn', DetailColumn)
 
 Vue.component('AppBarButton', AppBarButton)
