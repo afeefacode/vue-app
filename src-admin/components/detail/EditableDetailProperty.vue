@@ -33,7 +33,7 @@
         :title="label"
         :icon="icon"
         @save="save"
-        @close="showForm = null"
+        @close="close"
       >
         <template #form="{modelToEdit}">
           <slot
@@ -92,6 +92,15 @@ export default class EditableDetailProperty extends Vue {
 
   save (model, ignoreChangesOnClose, closeModal) {
     this.$emit('save', {model, ignoreChangesOnClose, closeModal})
+  }
+
+  openModal () {
+    this.showForm = true
+  }
+
+  close () {
+    this.showForm = false
+    this.$emit('close')
   }
 }
 </script>
