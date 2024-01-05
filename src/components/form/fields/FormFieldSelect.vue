@@ -22,6 +22,10 @@ export default class FormFieldSelect extends Mixins(FormFieldMixin) {
   items = null
 
   created () {
+    this.reloadOptions()
+  }
+
+  reloadOptions () {
     if (this.fieldHasOptionsRequest()) {
       this.items = this.getSelectOptions()
     } else if (this.fieldHasOptions()) {
