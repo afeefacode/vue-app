@@ -20,6 +20,7 @@
         :rules="validationRules"
         placeholder="Mausklick oder Space/↓-Taste zum Auswählen"
         :clearable="!!selectedItems.length"
+        appendIcon="$dropdown"
         @keydown.space.prevent="open"
         @keydown.down.prevent="open"
         @keydown.enter.prevent="open"
