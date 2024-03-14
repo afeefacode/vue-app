@@ -44,6 +44,8 @@ export default class FlyingContextContainer extends Vue {
 
     const sizeWatcher = new ResizeObserver(this.sizeChanged)
     sizeWatcher.observe(this.getChildrenContainer())
+
+    this.$events.on(FlyingContextEvent.START_HIDE_CONTEXT, this.onStartHideContext)
   }
 
   /**
@@ -115,18 +117,25 @@ export default class FlyingContextContainer extends Vue {
       el.style.overflowY = this.oldOverflowY
       el.style.marginRight = 0
 
-      this.$el.style.left = '101vw' // set this if closing from outside e.g. via esc, which does not call this.hide()
+      this.$el.style.left = '101vw' // set this if closing from outside e.g. via context.esc, which does not call this.hide()
     }
+
     this.isClosing = false
+  }
+
+  onStartHideContext () {
+    // context will be removed in 200ms
+    // we start right now and slide out the container
+    // so that all the contents will last until moved out of screen
+    this.$el.style.left = '101vw'
   }
 
   hide () {
     if (this.visible) {
-      this.$el.style.left = '101vw'
+      // ignore resize watcher while closing, prevents flickering
       this.isClosing = true
-      setTimeout(() => { // fade in then hide contents
-        this.$events.dispatch(new FlyingContextEvent(FlyingContextEvent.HIDE_ALL))
-      }, 200)
+      // say the context that it should try to remove
+      this.$events.dispatch(new FlyingContextEvent(FlyingContextEvent.HIDE_ALL))
     }
   }
 
