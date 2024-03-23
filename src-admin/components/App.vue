@@ -35,6 +35,8 @@
     <a-save-indicator />
 
     <flying-context-container />
+
+    <div id="popupContainer" />
   </div>
 </template>
 
@@ -127,5 +129,12 @@ export default class App extends Vue {
 
 #v-main.marginRight {
   margin-right: 60px;
+}
+
+#popupContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 400;
 }
 </style>
