@@ -153,15 +153,33 @@ export default class SearchSelectList extends Mixins(ListViewMixin) {
   }
 
   findActiveIndexForLocalSearch () {
+    let firstMatchingIndex = -1
+
     for (const [index, model] of this.models_.entries()) {
       const regex = new RegExp(`^${this.localSearchKey}`, 'i')
       if (model.getTitle().match(regex)) {
-        if (this.activeModelIndex === index) {
+        if (this.activeModelIndex < 0) { // return first item found if nothing selected before
+          return index
+        }
+
+        if (this.activeModelIndex === index) { // ignore selected item
           continue
         }
-        return index
+
+        if (firstMatchingIndex < 0) { // save first item to later jump to, if no item after selected can be found
+          firstMatchingIndex = index
+        }
+
+        if (index > this.activeModelIndex) { // return first item after selected
+          return index
+        }
       }
     }
+
+    if (firstMatchingIndex >= 0) { // jump to first item of list that matchs
+      return firstMatchingIndex
+    }
+
     return this.activeModelIndex
   }
 }
