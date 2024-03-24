@@ -19,6 +19,7 @@
 
 <script>
 import { Component, Vue, Watch } from '@a-vue'
+// import { getDiff } from 'json-difference'
 
 @Component({
   props: [
@@ -102,6 +103,8 @@ export default class EditForm extends Vue {
     }
     // console.log(this.lastJson)
     // console.log(this.json)
+    // console.log(JSON.stringify(getDiff(this.lastJson, this.json)))
+
     return this.json !== this.lastJson
   }
 
