@@ -26,7 +26,6 @@ export default class APopup extends Mixins(CancelOnEscMixin, UsesPositionService
     this.currentPosition = (this.position || new PositionConfig())
       .setTarget(this)
       .onAnchorEl(anchorEl => {
-        console.log('on anchor el a-popup', anchorEl)
         this.popupTrigger = anchorEl
       })
 

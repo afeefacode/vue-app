@@ -130,7 +130,7 @@ export default class PopupMenuList extends Vue {
   }
 
   getPosition (item) {
-    console.log('getPosition this.' + `.item[data-id="${item.id}"]`)
+    // console.log('getPosition this.' + `.item[data-id="${item.id}"]`)
     const position = new PositionConfig()
       .setAnchor(this, `.item[data-id="${item.id}"]`)
       .targetLeft().anchorRight()
