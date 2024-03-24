@@ -1,5 +1,5 @@
 <template>
-  <div v-if="categories">
+  <div v-if="categories_">
     <v-input
       ref="validationInput"
       :value="model[name]"
@@ -45,7 +45,7 @@
 
         <a-popup-menu
           v-if="!selectedCategories.length"
-          :items="categories"
+          :items="categories_"
           :canSelectParent="false"
           class="mt-2"
           @select="add"
@@ -59,7 +59,7 @@
 
         <a-popup-menu
           v-else-if="isMultiple && selectedCategories.length < maxItems"
-          :items="categories"
+          :items="categories_"
           :canSelectParent="false"
           class="mt-1"
           @select="add"
@@ -90,17 +90,28 @@ import { ListAction } from '@a-vue/api-resources/ApiActions'
       getChildren: {
         default: () => i => i.children || []
       }
-    }
+    },
+    'categories'
   ]
 })
 export default class FormFieldCategory extends Mixins(FormFieldMixin) {
-  categories = null
+  categories_ = null
   errorMessages = []
 
   async created () {
-    await this.loadCategories()
+    if (this.categories) {
+      this.initCategories(this.categories)
+    } else {
+      await this.loadCategories()
+    }
 
-    this.$refs.validationInput.validate(true)
+    this.$nextTick(() => { // wait for root v-if
+      this.$refs.validationInput.validate(true)
+    })
+  }
+
+  mounted () {
+
   }
 
   add (category) {
@@ -139,7 +150,11 @@ export default class FormFieldCategory extends Mixins(FormFieldMixin) {
   async loadCategories () {
     const request = this.field.createOptionsRequest()
     const {models} = await ListAction.fromRequest(request).load()
-    this.categories = models.map(m => {
+    this.initCategories(models)
+  }
+
+  initCategories (models) {
+    this.categories_ = models.map(m => {
       let children = this.getChildren(m).map(c => ({
         ...c,
         color: this.color
