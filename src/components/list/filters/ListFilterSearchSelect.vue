@@ -92,8 +92,16 @@ export default class ListFilterSearchSelect extends Mixins(ListFilterMixin) {
           [this.filter.name]: this.filter.value
         })
         .load()
+
       if (models.length) {
-        this.inputModel = models[0].getTitle()
+        if (this.filter.value) {
+          const selectedModel = models.find(m => m.id === this.filter.value)
+          if (selectedModel) {
+            this.inputModel = selectedModel.getTitle()
+          } else {
+            this.inputModel = models[0].getTitle()
+          }
+        }
       }
     }
   }
