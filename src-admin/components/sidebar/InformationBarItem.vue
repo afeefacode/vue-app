@@ -10,6 +10,7 @@
             v-if="icon"
             :color="icon.color"
             size="2rem"
+            :title="label"
             @click="derail"
           >
             {{ icon.icon }}
