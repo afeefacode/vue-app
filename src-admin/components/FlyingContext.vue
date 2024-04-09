@@ -81,10 +81,12 @@ export default class FlyingContext extends Mixins(CancelOnEscMixin) {
       this.$events.dispatch(new FlyingContextEvent(FlyingContextEvent.START_HIDE_CONTEXT))
 
       setTimeout(() => { // fade in then hide contents
-        this.$el.appendChild(this.getContent())
-        this.coe_unwatchCancel() // hide context -> do not watch esc any more
-        this.isVisible = false
-        this.$emit('hide')
+        if (this.$el && this.getContent()) { // if left current route, this might not be existing any longer
+          this.$el.appendChild(this.getContent())
+          this.coe_unwatchCancel() // hide context -> do not watch esc any more
+          this.isVisible = false
+          this.$emit('hide')
+        }
       }, 200)
     }
   }
