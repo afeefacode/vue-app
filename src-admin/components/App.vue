@@ -37,12 +37,19 @@
     <flying-context-container />
 
     <div id="popupContainer" />
+
+    <a-dialog
+      id="autologout"
+      ref="autologoutDialog"
+    >
+      {{ autoLogoutMessage }}
+    </a-dialog>
   </div>
 </template>
 
 <script>
 import { Component, Vue, Watch } from '@a-vue'
-import { LoadingEvent } from '@a-vue/events'
+import { LoadingEvent, DialogEvent } from '@a-vue/events'
 import { adminConfig } from '@a-admin/config/AdminConfig'
 import { sleep } from '@a-vue/utils/timeout'
 import AppBarButtons from './app/AppBarButtons'
@@ -78,6 +85,12 @@ export default class App extends Vue {
   sidebarsFloating = false
   hasFloatingInformationBar = false
 
+  autoLogoutChannel = new BroadcastChannel('auth.autologout')
+  autoLogoutStartSeconds = 0
+  autoLogoutStartRemainingSeconds = 0
+  autoLogoutRemainingSeconds = 0
+  autoLogoutRemainingInterval = null
+
   created () {
     this.$events.on(LoadingEvent.START_LOADING, this.startLoading)
     this.$events.on(LoadingEvent.STOP_LOADING, this.stopLoading)
@@ -87,10 +100,44 @@ export default class App extends Vue {
       this.hasFloatingInformationBar = mobile && information
     })
 
+    this.autoLogoutChannel.addEventListener('message', e => {
+      if (e.data.type === 'autoLogoutStart') {
+        this.autoLogoutStartSeconds = this.getCurrentSeconds()
+        this.autoLogoutStartRemainingSeconds = e.data.remainingSeconds
+        this.autoLogoutRemainingSeconds = e.data.remainingSeconds
+
+        this.autoLogoutRemainingInterval = setInterval(() => {
+          const secondsSinceStart = this.getCurrentSeconds() - this.autoLogoutStartSeconds
+          this.autoLogoutRemainingSeconds = this.autoLogoutStartRemainingSeconds - secondsSinceStart
+        }, 1000)
+
+        this.$events.dispatch(new DialogEvent(DialogEvent.SHOW, {
+          id: 'autologout',
+          title: 'Inaktivität',
+          yesButton: 'Bitte nicht'
+        }))
+      }
+      if (e.data.type === 'autoLogoutStop') {
+        clearInterval(this.autoLogoutRemainingInterval)
+        const dialog = this.$refs.autologoutDialog
+        if (dialog) {
+          dialog.cancel()
+        }
+      }
+    })
+
     this.sidebarsFloating = sidebarService.hasFloatingOverlay
     this.hasFloatingInformationBar = sidebarService.mobile && sidebarService.information
 
     this.$emit('appLoaded')
+  }
+
+  get autoLogoutMessage () {
+    return `Sie werden in ${this.autoLogoutRemainingSeconds} Sekunden abgemeldet.`
+  }
+
+  getCurrentSeconds () {
+    return Math.round(new Date().getTime() / 1000)
   }
 
   closeFloatingSidebars () {
