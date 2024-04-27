@@ -5,6 +5,7 @@
       v-model="model[name]"
       :label="label || name"
       :validator="validator"
+      :max="max"
       v-bind="$attrs"
       v-on="$listeners"
     />
@@ -32,6 +33,10 @@ import { FormFieldMixin } from '../FormFieldMixin'
 export default class FormFieldDate extends Mixins(FormFieldMixin) {
   validate () {
     this.$refs.datePicker.validate()
+  }
+
+  get max () {
+    return this.validator?.getParam('max_day')
   }
 }
 </script>
