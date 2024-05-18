@@ -5,7 +5,14 @@ import { eventBus } from '@a-vue/plugins/event-bus/EventBus'
 import { ApiAction } from './ApiAction'
 
 export class SaveAction extends ApiAction {
+  _showSuccess = true
+
   _minDuration = adminConfig.app.saveLoaderMinDuration || 400
+
+  hideSuccess () {
+    this._showSuccess = false
+    return this
+  }
 
   save () {
     return this.execute()
@@ -14,7 +21,9 @@ export class SaveAction extends ApiAction {
   async afterRequest () {
     await super.afterRequest()
 
-    this.alert('Die Daten wurden gespeichert.')
+    if (this._showSuccess) {
+      this.alert('Die Daten wurden gespeichert.')
+    }
   }
 
   processError (result) {
