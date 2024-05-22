@@ -85,6 +85,14 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
       }
       onFocusin(e)
     }
+
+    // catch click events if activator's first element is set to be disabled
+    const activator = document.getElementsByClassName(this.activatorClass)[0]
+    activator.addEventListener('click', e => {
+      if (activator.children[0]?.getAttribute('disabled')) {
+        e.stopPropagation()
+      }
+    }, true) // capture phase, stop event before v-dialog receives it
   }
 
   coe_cancelOnEsc () {
