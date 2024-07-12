@@ -20,14 +20,15 @@
       <hr>
     </template>
 
-    <input
-      v-if="items.length > 20"
+    <a-text-field
+      v-if="!nestLevel && numItemsWithChildren > 8"
       v-model="filterTerm"
+      class="mt-1 mb-2"
       type="text"
-      class="inputElement inputElement--filter"
       placeholder="Filtern"
-      autofocus
-    >
+      focus
+      hide-details
+    />
 
     <div
       v-for="item in filteredItems"
@@ -57,6 +58,7 @@
       <popup-menu-list
         v-if="item.children?.length && selectedItem === item"
         :parent="canSelectParent && item"
+        :parentFilterTerm="filterTerm"
         :items="item.children"
         :level="nestLevel + 1"
         :position="getPosition(item)"
@@ -75,7 +77,7 @@
       v-if="filteredItems.length === 0"
       class="noItems"
     >
-      Keine Einträge
+      Keine Einträge gefunden
     </p>
   </a-popup>
 </template>
@@ -86,7 +88,7 @@ import { Component, Vue } from '@a-vue'
 import { PositionConfig } from '../../services/PositionService'
 
 @Component({
-  props: ['items', 'parent', 'level', 'position', {canSelectParent: true}],
+  props: ['items', 'parent', 'level', 'position', {canSelectParent: true}, 'parentFilterTerm'],
   name: 'popup-menu-list'
 })
 export default class PopupMenuList extends Vue {
@@ -98,13 +100,30 @@ export default class PopupMenuList extends Vue {
   }
 
   get filteredItems () {
-    if (!this.filterTerm) {
+    const filterTerm = this.parentFilterTerm || this.filterTerm
+    if (!filterTerm) {
       return this.items
     } else {
       return this.items.filter(item => {
-        return item.title.toLowerCase().includes(this.filterTerm.toLowerCase())
+        // find parent only if it has no children
+        const itemFound = item.title.toLowerCase().includes(filterTerm.toLowerCase())
+        if (itemFound && !item.children?.length) {
+          return true
+        }
+
+        // find a child
+        const childFound = item.children?.some(item => {
+          return item.title.toLowerCase().includes(filterTerm.toLowerCase())
+        })
+        return childFound
       })
     }
+  }
+
+  get numItemsWithChildren () {
+    return this.items.reduce((num, i) => {
+      return num + 1 + (i.children?.length || 0)
+    }, 0)
   }
 
   click (item) {
@@ -150,16 +169,9 @@ export default class PopupMenuList extends Vue {
 }
 
 .noItems {
-  font-size: .8rem;
-  font-weight:bold;
-  margin: .5em 0;
+  font-size: .9rem;
+  margin: .2rem;
   white-space: nowrap;
-}
-
-.inputElement--filter {
-  font-size: .8rem;
-  margin-bottom: .5em;
-  padding: .5em;
 }
 
 .item {
