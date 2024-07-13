@@ -104,19 +104,35 @@ export default class PopupMenuList extends Vue {
     if (!filterTerm) {
       return this.items
     } else {
-      return this.items.filter(item => {
-        // find parent only if it has no children
+      const selectableItems = [] // this list of children is shown instead of the root list in case of max 5 selectable filter results
+
+      const items = this.items.filter(item => {
+        // count parent only if it has no children
         const itemFound = item.title.toLowerCase().includes(filterTerm.toLowerCase())
         if (itemFound && !item.children?.length) {
+          selectableItems.push(item)
           return true
         }
 
-        // find a child
-        const childFound = item.children?.some(item => {
-          return item.title.toLowerCase().includes(filterTerm.toLowerCase())
+        // find all filtered children
+        const filteredChildren = item.children?.filter(item => {
+          if (item.title.toLowerCase().includes(filterTerm.toLowerCase())) {
+            selectableItems.push(item)
+            return true
+          }
+          return false
         })
-        return childFound
+
+        // count parent only if it has min 1 filtered child
+        return filteredChildren?.length || false
       })
+
+      // return the list of children instead the root list
+      if (selectableItems.length <= 5) {
+        return selectableItems
+      }
+
+      return items
     }
   }
 
