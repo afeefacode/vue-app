@@ -4,6 +4,7 @@ import EditForm from './form/EditForm'
 import EditModal from './form/EditModal'
 import FormFieldCategory from './form/fields/FormFieldCategory'
 import FormFieldCheckbox from './form/fields/FormFieldCheckbox'
+import FormFieldCheckboxGroup from './form/fields/FormFieldCheckboxGroup'
 import FormFieldDate from './form/fields/FormFieldDate'
 import FormFieldRadioGroup from './form/fields/FormFieldRadioGroup'
 import FormFieldRichTextArea from './form/fields/FormFieldRichTextArea'
@@ -26,6 +27,7 @@ Vue.component('FormFieldText', FormFieldText)
 Vue.component('FormFieldTextArea', FormFieldTextArea)
 Vue.component('FormFieldRichTextArea', FormFieldRichTextArea)
 Vue.component('FormFieldRadioGroup', FormFieldRadioGroup)
+Vue.component('FormFieldCheckboxGroup', FormFieldCheckboxGroup)
 Vue.component('FormFieldCategory', FormFieldCategory)
 Vue.component('FormFieldCheckbox', FormFieldCheckbox)
 Vue.component('FormFieldDate', FormFieldDate)
