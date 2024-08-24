@@ -52,9 +52,12 @@
     </template>
 
     <div v-else>
-      <div v-if="labelEmpty">
+      <a-row
+        v-if="labelEmpty"
+        gap="1"
+      >
         <x-icon :color="xColorEmpty" /> {{ labelEmpty }}
-      </div>
+      </a-row>
 
       <a-icon-button
         v-if="buttonCreate"
