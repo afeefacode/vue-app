@@ -21,6 +21,7 @@
         <slot
           name="models"
           :models="models_"
+          :filters="filters"
         />
       </template>
 
@@ -53,6 +54,7 @@
                 name="model-table"
                 :model="model"
                 :index="index"
+                :filters="filters"
               />
             </a-table-row>
           </a-table>
@@ -67,6 +69,7 @@
           <slot
             name="model"
             :model="model"
+            :filters="filters"
           />
         </div>
       </template>
