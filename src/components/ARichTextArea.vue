@@ -240,8 +240,19 @@ export default class ARichTextArea extends Vue {
 
   get currentValueStripped () {
     if (this.editor) {
-      return this.editor.state.doc.textContent
+      const value = this.editor.state.doc.textContent
+      return this.getSanitizedValue(value)
     }
+  }
+
+  getSanitizedValue (value) {
+    if (this.validator) {
+      const sanitizers = this.validator.getSanitizers()
+      for (const sanitizer of sanitizers) {
+        value = sanitizer(value)
+      }
+    }
+    return value
   }
 }
 </script>
