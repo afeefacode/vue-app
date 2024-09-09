@@ -40,12 +40,12 @@
           </v-btn>
 
           <edit-form-buttons
-            :changed="changed"
+            :changed="changed || _changed"
             :valid="validFromOutside && valid"
             angular
             :has="{reset: reset && !!modelToEdit.id}"
             @save="$emit('save', modelToEdit, ignoreChangesOnClose, close)"
-            @reset="$refs.form.reset()"
+            @reset="resetForm"
           />
         </a-row>
       </template>
@@ -61,10 +61,14 @@ import { Component, Vue, Watch } from '@a-vue'
 import { DialogEvent } from '@a-vue/events'
 
 @Component({
-  props: ['model', 'createModelToEdit', 'show', {reset: true, valid: true}]
+  props: ['model', 'createModelToEdit', 'show', {reset: true, valid: true, changed: false}]
 })
 export default class EditModal extends Vue {
   show_ = false
+
+  get _changed () {
+    return this.changed
+  }
 
   created () {
     if (!this.model && !this.createModelToEdit) {
@@ -145,6 +149,11 @@ export default class EditModal extends Vue {
 
   resetChanged () {
     this.$refs.form.resetChanged()
+  }
+
+  resetForm () {
+    this.$refs.form.reset()
+    this.$emit('reset')
   }
 }
 </script>
