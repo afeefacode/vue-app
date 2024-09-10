@@ -40,7 +40,8 @@
           </v-btn>
 
           <edit-form-buttons
-            :changed="changed || _changed"
+            :changed="changed"
+            :forceActive="forceActive"
             :valid="validFromOutside && valid"
             angular
             :has="{reset: reset && !!modelToEdit.id}"
@@ -61,14 +62,10 @@ import { Component, Vue, Watch } from '@a-vue'
 import { DialogEvent } from '@a-vue/events'
 
 @Component({
-  props: ['model', 'createModelToEdit', 'show', {reset: true, valid: true, changed: false}]
+  props: ['model', 'createModelToEdit', 'show', {reset: true, valid: true, forceActive: false}]
 })
 export default class EditModal extends Vue {
   show_ = false
-
-  get _changed () {
-    return this.changed
-  }
 
   created () {
     if (!this.model && !this.createModelToEdit) {
@@ -117,7 +114,7 @@ export default class EditModal extends Vue {
 
   async beforeClose () {
     // run only if show_ is true to prevent double checks with a-modal
-    if (this.show_ && (this.$refs.form.changed || this._changed)) {
+    if (this.show_ && (this.$refs.form.changed)) {
       const result = await this.$events.dispatch(new DialogEvent(DialogEvent.SHOW, {
         title: 'Änderungen verwerfen?',
         message: 'Im Formular sind nicht gespeicherte Änderungen. Sollen diese verworfen werden?',

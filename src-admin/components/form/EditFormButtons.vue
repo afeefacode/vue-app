@@ -64,7 +64,7 @@ import { mdiRotateLeft} from '@mdi/js'
   props: [
     'changed',
     'valid',
-    {angular: false, small: false}
+    {angular: false, small: false, forceActive: false}
   ]
 })
 export default class EditFormButtons extends Vue {
@@ -73,7 +73,19 @@ export default class EditFormButtons extends Vue {
   undoIcon = mdiRotateLeft
 
   get disabled () {
-    return (this.$has.reset && !this.changed) || !this.valid
+    if (!this.valid) {
+      return true
+    }
+
+    if (this.forceActive) {
+      return false
+    }
+
+    if (this.$has.reset) {
+      return !this.changed
+    }
+
+    return false
   }
 }
 </script>
