@@ -11,7 +11,7 @@
     />
 
     <a-time-picker
-      v-if="time"
+      v-if="time && model[name]"
       ref="timePicker"
       v-model="model[name]"
       class="timePicker"
