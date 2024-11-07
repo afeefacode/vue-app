@@ -93,14 +93,12 @@ export default class ATimePicker extends Vue {
 
   @Watch('value')
   valueChanged () {
-    let date = new Date(this.value)
-    if (this.currentHour) {
-      date = moment(date).hours(this.currentHour).toDate()
+    // filter out inner changes loop
+    if (this.value.getTime() === this.currentDate.getTime()) {
+      return
     }
-    if (this.currentMinutes) {
-      date = moment(date).minutes(this.currentMinutes).toDate()
-    }
-    this.currentDate = date
+
+    this.currentDate = this.value
 
     this.initHourAndMinutes()
   }
