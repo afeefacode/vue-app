@@ -15,6 +15,7 @@
         dense
         outlined
         hide-details
+        :error-messages="error ? ['error'] : []"
         @wheel.prevent="onWheelHour"
         @focus="focusHour = true"
         @blur="updateHoursAndMinute"
@@ -49,6 +50,7 @@
         dense
         outlined
         hide-details
+        :error-messages="error ? ['error'] : []"
         @wheel.prevent="onWheelMinute"
         @focus="focusMinute = true"
         @blur="updateHoursAndMinute"
@@ -73,7 +75,7 @@ import formatHour from '@a-vue/utils/format-hour'
 import formatMinutes from '@a-vue/utils/format-minutes'
 
 @Component({
-  props: ['value']
+  props: ['value', {error: false}]
 })
 export default class ATimePicker extends Vue {
   currentDate = null
@@ -216,12 +218,17 @@ export default class ATimePicker extends Vue {
     }
   }
 
+  ::v-deep() svg {
+    width: 28px;
+    height: 28px;
+  }
+
   .up {
-    margin-bottom: -1px;
+    margin-bottom: -5px;
   }
 
   .down {
-    margin-top: -3px;
+    margin-top: -7px;
   }
 
   .hourMinutesSeparator {
