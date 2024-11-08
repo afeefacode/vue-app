@@ -76,7 +76,8 @@ import { SidebarEvent } from '@a-admin/events'
       top: true,
       bottom: false,
       width: '100%',
-      open: false
+      open: false,
+      prepend: false
     }
   ]
 })
@@ -92,7 +93,11 @@ export default class InformationBarItem extends Vue {
 
   mounted () {
     const container = this.getSidebarContainer()
-    container.appendChild(this.getContent())
+    if (this.prepend) {
+      container.prepend(this.getContent())
+    } else {
+      container.append(this.getContent())
+    }
   }
 
   destroyed () {
