@@ -5,6 +5,7 @@
     :defaultValue="filter.defaultValue"
     :clearable="filter.hasDefaultValue() && !filter.hasDefaultValueSet()"
     :label="label || name"
+    hide-details
     v-bind="$attrs"
     v-on="$listeners"
   />
