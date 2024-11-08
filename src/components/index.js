@@ -15,6 +15,7 @@ import FormFieldText from './form/fields/FormFieldText'
 import FormFieldTextArea from './form/fields/FormFieldTextArea'
 import FormFieldTime from './form/fields/FormFieldTime'
 import NestedEditForm from './form/NestedEditForm'
+import ListFilterDate from './list/filters/ListFilterDate'
 import ListFilterPage from './list/filters/ListFilterPage'
 import ListFilterSearch from './list/filters/ListFilterSearch'
 import ListFilterSearchSelect from './list/filters/ListFilterSearchSelect'
@@ -39,3 +40,4 @@ Vue.component('ListFilterPage', ListFilterPage)
 Vue.component('ListFilterSearch', ListFilterSearch)
 Vue.component('ListFilterSelect', ListFilterSelect)
 Vue.component('ListFilterSearchSelect', ListFilterSearchSelect)
+Vue.component('ListFilterDate', ListFilterDate)
