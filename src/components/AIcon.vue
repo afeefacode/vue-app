@@ -1,10 +1,15 @@
 <template>
   <v-icon
     :class="{button}"
+    :color="icon && icon.color"
     v-bind="$attrs"
     v-on="$listeners"
   >
-    <slot />
+    <template v-if="icon">
+      {{ icon.icon }}
+    </template>
+
+    <slot v-else />
   </v-icon>
 </template>
 
@@ -13,7 +18,7 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: [{button: false}]
+  props: ['icon', {button: false}]
 })
 export default class AIcon extends Vue {
 }
