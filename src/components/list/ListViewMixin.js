@@ -97,6 +97,11 @@ export class ListViewMixin extends Vue {
     this.meta_ = this.meta
   }
 
+  @Watch('listAction')
+  listActionChanged () {
+    this.init()
+  }
+
   _filtersInitialized () {
   }
 
