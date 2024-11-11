@@ -18,12 +18,14 @@ export class SaveAction extends ApiAction {
     return this.execute()
   }
 
-  async afterRequest () {
-    await super.afterRequest()
+  processResult (result) {
+    const response = super.processResult(result)
 
     if (this._showSuccess) {
       this.alert('Die Daten wurden gespeichert.')
     }
+
+    return response
   }
 
   processError (result) {
