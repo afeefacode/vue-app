@@ -56,13 +56,15 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
           itemTitle: (this.itemTitle && this.itemTitle(model)) || model.name || model.title,
           itemValue
         }
-      })
+      }),
+      ...this.getOptions(true)
     ]
   }
 
-  getOptions () {
+  getOptions (prepend = false) {
     return [
       ...this.filter.options
+        .filter(o => !!o.prepend === prepend)
         .map(o => {
           return {
             itemTitle: o.title,
