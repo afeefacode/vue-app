@@ -99,7 +99,7 @@
 
     <div
       v-if="$has.filters"
-      class="filters"
+      class="filters filters-below"
     >
       <slot
         name="filters-below"
@@ -203,9 +203,14 @@ export default class ListView extends Mixins(ListViewMixin) {
   overflow-y: hidden;
 }
 
-.filters {
+.filters:not(:empty) {
   margin-left: 4px;
   margin-bottom: 2rem;
+}
+
+filters-below:not(:empty) {
+  margin-left: 4px;
+  margin-top: 2rem;
 }
 
 :deep(.a-table-row > :last-child) {
