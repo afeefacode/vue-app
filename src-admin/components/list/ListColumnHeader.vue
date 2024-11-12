@@ -1,7 +1,7 @@
 <template>
   <div class="listColumnHeader">
     <div
-      :class="['content', {order}]"
+      :class="['content', {order, right}]"
       @click="toggleSort"
     >
       <div
@@ -42,7 +42,7 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: ['text', 'icon', 'order']
+  props: ['text', 'icon', 'order', {right: false}]
 })
 export default class ListColumnHeader extends Vue {
   get orderValue () {
@@ -109,6 +109,10 @@ export default class ListColumnHeader extends Vue {
   &.order {
     user-select: none;
     cursor: pointer;
+  }
+
+  &.right {
+    justify-content: end;
   }
 }
 
