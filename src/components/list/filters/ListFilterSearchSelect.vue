@@ -74,10 +74,10 @@
 <script>
 import { Component, Mixins } from '@a-vue'
 import { ListFilterMixin } from '../ListFilterMixin'
-import { ListAction } from '@a-vue/api-resources/ApiActions'
+import { ListAction, GetAction } from '@a-vue/api-resources/ApiActions'
 
 @Component({
-  props: ['itemTitle', 'itemValue']
+  props: ['itemTitle', 'itemValue', {selectedKey: 'id'}]
 })
 export default class ListFilterSearchSelect extends Mixins(ListFilterMixin) {
   $hasOptions = ['icon']
@@ -87,19 +87,17 @@ export default class ListFilterSearchSelect extends Mixins(ListFilterMixin) {
 
   async created () {
     if (this.filter.value) {
-      const {models} = await this.createListAction()
+      const model = await this.createGetAction()
         .params({
-          [this.filter.name]: this.filter.value
+          [this.selectedKey]: this.filter.value
         })
         .load()
 
-      if (models.length) {
+      if (model) {
         if (this.filter.value) {
-          const selectedModel = models.find(m => m.id === this.filter.value)
+          const selectedModel = model
           if (selectedModel) {
             this.inputModel = selectedModel.getTitle()
-          } else {
-            this.inputModel = models[0].getTitle()
           }
         }
       }
@@ -124,6 +122,20 @@ export default class ListFilterSearchSelect extends Mixins(ListFilterMixin) {
     const request = this.filter
       .createOptionsRequest()
     return ListAction.fromRequest(request)
+  }
+
+  createGetAction () {
+    const request = this.filter
+      .createOptionsRequest('get')
+
+    const getAction = this.$apiResources.getAction({
+      resourceType: request.getAction().getResource().getType(),
+      actionName: 'get'
+    })
+
+    request.action(getAction)
+
+    return GetAction.fromRequest(request)
   }
 
   itemSelected (model) {
