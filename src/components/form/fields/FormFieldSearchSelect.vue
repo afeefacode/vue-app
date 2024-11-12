@@ -19,7 +19,7 @@
         :label="label"
         :rules="validationRules"
         placeholder="Mausklick oder Space/↓-Taste zum Auswählen"
-        :clearable="!!selectedItems.length"
+        :clearable="clearable && !!selectedItems.length"
         appendIcon="$dropdown"
         @keydown.space.prevent="open"
         @keydown.down.prevent="open"
@@ -89,6 +89,13 @@ export default class FormFieldSearchSelect extends Mixins(FormFieldMixin) {
 
   get inputModel () {
     return (this.model[this.name] && this.model[this.name].getTitle()) || null
+  }
+
+  get clearable () {
+    if (this.validator && this.validator.getParam('filled')) {
+      return false
+    }
+    return true
   }
 
   calculateSelectorSize () {

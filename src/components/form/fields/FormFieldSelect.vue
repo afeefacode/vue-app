@@ -7,6 +7,8 @@
     item-text="itemText"
     item-value="itemValue"
 
+    :clearable="clearable && !!model[name]"
+
     :validator="validator"
     v-bind="$attrs"
     v-on="$listeners"
@@ -31,6 +33,13 @@ export default class FormFieldSelect extends Mixins(FormFieldMixin) {
     } else if (this.fieldHasOptions()) {
       this.items = this.getSelectOptions()
     }
+  }
+
+  get clearable () {
+    if (this.validator && this.validator.getParam('filled')) {
+      return false
+    }
+    return true
   }
 
   get _items () {
