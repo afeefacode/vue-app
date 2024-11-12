@@ -129,8 +129,10 @@ export default class ListView extends Mixins(ListViewMixin) {
 
   xStart = null
   scrollLeftStart = null
+  scrollContainerX = null
   yStart = null
   scrollTopStart = null
+  scrollContainerY = null
 
   @Watch('isLoading')
   isLoadingChanged () {
@@ -203,6 +205,9 @@ export default class ListView extends Mixins(ListViewMixin) {
   }
 
   startShifting (event) {
+    this.scrollContainerX = this.getScrollParent(this.$el.querySelector('.a-table-wrapper'), 'h')
+    this.scrollContainerY = this.getScrollParent(this.$el.querySelector('.a-table-wrapper'), 'v')
+
     if (this.scrollContainerX || this.scrollContainerY) {
       window.addEventListener('mouseup', this.stopShifting)
       window.addEventListener('mousemove', this.shift)
@@ -251,14 +256,6 @@ export default class ListView extends Mixins(ListViewMixin) {
     if (this.scrollContainerY) {
       this.scrollContainerY.scrollTop = 0
     }
-  }
-
-  get scrollContainerX () {
-    return this.getScrollParent(this.$el.querySelector('.a-table-wrapper'), 'h')
-  }
-
-  get scrollContainerY () {
-    return this.getScrollParent(this.$el.querySelector('.a-table-wrapper'), 'v')
   }
 
   getScrollParent (node, direction) {
