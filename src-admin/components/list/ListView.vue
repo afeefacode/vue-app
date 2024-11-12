@@ -1,5 +1,8 @@
 <template>
-  <div class="listView">
+  <div
+    class="listView"
+    @mousedown="startShifting"
+  >
     <div
       v-if="$has.filters"
       class="filters"
@@ -29,7 +32,9 @@
         <div class="a-table-wrapper">
           <a-table>
             <a-table-header>
-              <div v-if="$has.icon" />
+              <div v-if="$has.icon">
+                <slot name="header-icon" />
+              </div>
 
               <slot name="header-table" />
             </a-table-header>
@@ -122,6 +127,11 @@ import { LoadingEvent } from '@a-vue/events'
 export default class ListView extends Mixins(ListViewMixin) {
   $hasOptions = ['icon', 'filters']
 
+  xStart = null
+  scrollLeftStart = null
+  yStart = null
+  scrollTopStart = null
+
   @Watch('isLoading')
   isLoadingChanged () {
     if (this.events) {
@@ -191,6 +201,81 @@ export default class ListView extends Mixins(ListViewMixin) {
     }
     this.$emit('flyingContext', model)
   }
+
+  startShifting (event) {
+    if (this.scrollContainerX || this.scrollContainerY) {
+      window.addEventListener('mouseup', this.stopShifting)
+      window.addEventListener('mousemove', this.shift)
+
+      this.$el.style.userSelect = 'none'
+
+      if (this.scrollContainerX) {
+        this.xStart = event.clientX
+        this.scrollLeftStart = this.scrollContainerX.scrollLeft
+      }
+
+      if (this.scrollContainerY) {
+        this.yStart = event.clientY
+        this.scrollTopStart = this.scrollContainerY.scrollTop
+      }
+    }
+  }
+
+  stopShifting (event) {
+    window.removeEventListener('mouseup', this.stopShifting)
+    window.removeEventListener('mousemove', this.shift)
+
+    this.$el.style.userSelect = 'auto'
+  }
+
+  shift (event) {
+    if (this.scrollContainerX || this.scrollContainerY) {
+      if (this.scrollContainerX) {
+        const diffX = this.xStart - event.clientX
+        this.scrollContainerX.scrollLeft = this.scrollLeftStart + diffX
+      }
+
+      if (this.scrollContainerY) {
+        const diffY = this.yStart - event.clientY
+        this.scrollContainerY.scrollTop = this.scrollTopStart + diffY
+      }
+    }
+  }
+
+  @Watch('$route.name')
+  routeChanged () {
+    if (this.scrollContainerX) {
+      this.scrollContainerX.scrollLeft = 0
+    }
+
+    if (this.scrollContainerY) {
+      this.scrollContainerY.scrollTop = 0
+    }
+  }
+
+  get scrollContainerX () {
+    return this.getScrollParent(this.$el.querySelector('.a-table-wrapper'), 'h')
+  }
+
+  get scrollContainerY () {
+    return this.getScrollParent(this.$el.querySelector('.a-table-wrapper'), 'v')
+  }
+
+  getScrollParent (node, direction) {
+    if (node == null) {
+      return null
+    }
+
+    if (direction === 'h' && (node.scrollWidth > node.clientWidth)) {
+      return node
+    }
+
+    if (direction === 'v' && (node.scrollHeight > node.clientHeight)) {
+      return node
+    }
+
+    return this.getScrollParent(node.parentNode, direction)
+  }
 }
 </script>
 
@@ -199,8 +284,14 @@ export default class ListView extends Mixins(ListViewMixin) {
 .listView {
   max-width: 100%;
   padding-top: .2rem; // unless, floating input labels might be cut
+}
+
+.a-table-wrapper {
+  max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
+  padding-bottom: 1rem;
+  cursor: grab;
 }
 
 .filters:not(:empty) {
