@@ -5,7 +5,8 @@
     :items="_items"
     itemText="itemTitle"
     itemValue="itemValue"
-    :clearable="filter.hasDefaultValue() && !filter.hasDefaultValueSet()"
+    :multiple="filter.multiple"
+    :clearable="clearable"
     :defaultValue="filter.defaultValue"
     hide-details
     v-bind="$attrs"
@@ -25,11 +26,27 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
   items = null
 
   created () {
+    if (this.filter.multiple && !this.filter.value) {
+      this.filter.value = []
+    }
+
     if (this.filter.hasOptionsRequest()) {
       this.items = this.loadRequestOptions()
     } else if (this.filter.hasOptions()) {
       this.items = this.getOptions()
     }
+  }
+
+  get clearable () {
+    if (this.multiple) {
+      return !!this.filter.value?.length
+    }
+
+    if (this.filter.hasDefaultValue()) {
+      return !this.filter.hasDefaultValueSet()
+    }
+
+    return !!this.filter.value
   }
 
   get _items () {

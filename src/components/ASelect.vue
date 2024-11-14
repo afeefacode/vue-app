@@ -5,6 +5,7 @@
     :items="items_"
     :valueComparator="compareValues"
     :style="cwm_widthStyle"
+    :multiple="multiple"
     v-bind="{...$attrs, dense, outlined}"
     v-on="$listeners"
   />
@@ -17,7 +18,7 @@ import { Model } from '@afeefa/api-resources-client'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['validator', 'defaultValue', 'items', {dense: true, outlined: true}]
+  props: ['validator', 'defaultValue', 'items', {dense: true, outlined: true, multiple: false}]
 })
 export default class ASelect extends Mixins(ComponentWidthMixin) {
   items_ = []
@@ -34,7 +35,11 @@ export default class ASelect extends Mixins(ComponentWidthMixin) {
     const setValue = this.select.setValue
     this.select.setValue = value => {
       if (this.select.isClear) {
-        value = this.defaultValue || null
+        if (this.multiple) {
+          value = this.defaultValue || []
+        } else {
+          value = this.defaultValue || null
+        }
       }
       setValue(value)
     }
@@ -97,6 +102,14 @@ export default class ASelect extends Mixins(ComponentWidthMixin) {
 }
 </script>
 
+
+<style lang="scss">
+.v-application .v-select-list .v-list-item__action {
+  margin: 0;
+  margin-right: .5rem;
+}
+
+</style>
 
 <style lang="scss" scoped>
 .v-text-field :deep(.v-input__icon--clear) { // always show clear icon, https://github.com/vuetifyjs/vuetify/pull/15876
