@@ -17,6 +17,7 @@ import RemoveDialog from './form/RemoveDialog'
 import HSeparator from './HSeparator'
 import ListColumnHeader from './list/ListColumnHeader'
 import ListColumnSelector from './list/ListColumnSelector'
+import ListConfig from './list/ListConfig'
 import ListView from './list/ListView'
 import ModelCount from './model/ModelCount'
 import ModelIcon from './model/ModelIcon'
@@ -27,6 +28,7 @@ import StickyFooter from './StickyFooter'
 import CollapseTransition from './transitions/CollapseTransition'
 
 Vue.component('ListColumnHeader', ListColumnHeader)
+Vue.component('ListConfig', ListConfig)
 Vue.component('ListView', ListView)
 Vue.component('ListColumnSelector', ListColumnSelector)
 

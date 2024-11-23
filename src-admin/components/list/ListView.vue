@@ -29,10 +29,10 @@
       </template>
 
       <template v-else-if="$scopedSlots['model-table']">
-        <div class="a-table-wrapper">
+        <div :class="['a-table-wrapper', _dragMode]">
           <a-table>
             <a-table-header>
-              <div v-if="bulkselection" />
+              <div v-if="_bulkSelection" />
 
               <div v-if="$has.icon">
                 <slot name="header-icon" />
@@ -54,7 +54,7 @@
                 @click="emitFlyingContext(model)"
               >
                 <div
-                  v-if="bulkselection"
+                  v-if="_bulkSelection"
                   class="pr-2"
                 >
                   <a-checkbox
@@ -90,7 +90,7 @@
                   subModel: true
                 }"
               >
-                <div v-if="bulkselection" />
+                <div v-if="_bulkSelection" />
 
                 <div v-if="$has.icon" />
 
@@ -167,7 +167,8 @@ import { LoadingEvent } from '@a-vue/events'
     'rowClasses',
     'rowListeners',
     {
-      bulkselection: false,
+      bulkSelection: false,
+      dragMode: 'grab',
       getSubModels: {
         default: () => model => []
       }
@@ -185,6 +186,25 @@ export default class ListView extends Mixins(ListViewMixin) {
   scrollContainerY = null
 
   selectedModels = []
+
+  dragMode_ = null
+  bulkSelection_ = null
+
+  setDragMode (mode) {
+    this.dragMode_ = mode
+  }
+
+  get _dragMode () {
+    return this.dragMode_ || this.dragMode
+  }
+
+  setBulkSelection (mode) {
+    this.bulkSelection_ = mode
+  }
+
+  get _bulkSelection () {
+    return this.bulkSelection_ || this.bulkSelection
+  }
 
   isSelected (model) {
     return this.selectedModels.includes(model)
@@ -269,6 +289,10 @@ export default class ListView extends Mixins(ListViewMixin) {
   }
 
   startShifting (event) {
+    if (this._dragMode !== 'grab') {
+      return
+    }
+
     this.scrollContainerX = this.getScrollParent(this.$el.querySelector('.a-table-wrapper'), 'h')
     this.scrollContainerY = this.getScrollParent(this.$el.querySelector('.a-table-wrapper'), 'v')
 
@@ -352,7 +376,10 @@ export default class ListView extends Mixins(ListViewMixin) {
   overflow-x: auto;
   overflow-y: hidden;
   padding-bottom: 1rem;
-  cursor: grab;
+
+  &.grab {
+    cursor: grab;
+  }
 }
 
 .filters:not(:empty) {
