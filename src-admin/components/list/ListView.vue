@@ -32,6 +32,8 @@
         <div class="a-table-wrapper">
           <a-table>
             <a-table-header>
+              <div v-if="bulkselection" />
+
               <div v-if="$has.icon">
                 <slot name="header-icon" />
               </div>
@@ -39,29 +41,67 @@
               <slot name="header-table" />
             </a-table-header>
 
-            <a-table-row
-              v-for="(model, index) in models_"
-              :key="model.id"
-              v-flying-context-trigger="hasFlyingContext"
-              :class="getRowClasses(model)"
-              v-bind="getRowAttributes(model)"
-              v-on="getRowListeners(model)"
-              @click="emitFlyingContext(model)"
-            >
-              <v-icon
-                v-if="$has.icon"
-                :color="model.getIcon().color"
-                size="1.2rem"
-                v-text="model.getIcon().icon"
-              />
+            <template v-for="(model, index) in models_">
+              <a-table-row
+                :key="'model' + model.id"
+                v-flying-context-trigger="hasFlyingContext"
+                :class="[
+                  getRowClasses(model),
+                  { hasSubModels: !!getSubModels(model).length }
+                ]"
+                v-bind="getRowAttributes(model)"
+                v-on="getRowListeners(model)"
+                @click="emitFlyingContext(model)"
+              >
+                <div
+                  v-if="bulkselection"
+                  class="pr-2"
+                >
+                  <a-checkbox
+                    :value="isSelected(model)"
+                    hide-details
+                    class="pa-0"
+                    @input="selectClient(model)"
+                  />
+                </div>
 
-              <slot
-                name="model-table"
-                :model="model"
-                :index="index"
-                :filters="filters"
-              />
-            </a-table-row>
+                <v-icon
+                  v-if="$has.icon"
+                  :color="model.getIcon().color"
+                  size="1.2rem"
+                  v-text="model.getIcon().icon"
+                />
+
+                <slot
+                  name="model-table"
+                  :model="model"
+                  :index="index"
+                  :filters="filters"
+                />
+              </a-table-row>
+
+              <a-table-row
+                v-for="(subModel, subIndex) in getSubModels(model)"
+                :key="subModel.id"
+                small
+                :class="{
+                  ...getRowClasses(model),
+                  last: subIndex === getSubModels(model).length - 1,
+                  subModel: true
+                }"
+              >
+                <div v-if="bulkselection" />
+
+                <div v-if="$has.icon" />
+
+                <slot
+                  name="subModel-table"
+                  :model="subModel"
+                  :index="subIndex"
+                  :filters="filters"
+                />
+              </a-table-row>
+            </template>
           </a-table>
         </div>
       </template>
@@ -122,7 +162,17 @@ import { ListViewMixin } from '@a-vue/components/list/ListViewMixin'
 import { LoadingEvent } from '@a-vue/events'
 
 @Component({
-  props: ['rowAttributes', 'rowClasses', 'rowListeners']
+  props: [
+    'rowAttributes',
+    'rowClasses',
+    'rowListeners',
+    {
+      bulkselection: false,
+      getSubModels: {
+        default: () => model => []
+      }
+    }
+  ]
 })
 export default class ListView extends Mixins(ListViewMixin) {
   $hasOptions = ['icon', 'filters']
@@ -133,6 +183,20 @@ export default class ListView extends Mixins(ListViewMixin) {
   yStart = null
   scrollTopStart = null
   scrollContainerY = null
+
+  selectedModels = []
+
+  isSelected (model) {
+    return this.selectedModels.includes(model)
+  }
+
+  selectClient (model) {
+    if (!this.isSelected(model)) {
+      this.selectedModels.push(model)
+    } else {
+      this.selectedModels = this.selectedModels.filter(m => m !== model)
+    }
+  }
 
   @Watch('isLoading')
   isLoadingChanged () {
@@ -307,5 +371,20 @@ filters-below:not(:empty) {
 
 .a-table-row.clickable {
   cursor: pointer;
+}
+
+:deep(.a-table-row.hasSubModels) > * {
+  padding-bottom: 0;
+  border: none;
+}
+
+:deep(.a-table-row.small.subModel) > * {
+  padding-top: 0;
+  color: gray;
+}
+
+:deep(.a-table-row.small.subModel):not(.last) > * {
+  border: none;
+  padding-bottom: 0;
 }
 </style>
