@@ -15,12 +15,8 @@ import EditFormButtons from './form/EditFormButtons'
 import RemoveButton from './form/RemoveButton'
 import RemoveDialog from './form/RemoveDialog'
 import HSeparator from './HSeparator'
-import ListCard from './list/ListCard'
 import ListColumnHeader from './list/ListColumnHeader'
 import ListColumnSelector from './list/ListColumnSelector'
-import ListContent from './list/ListContent'
-import ListMeta from './list/ListMeta'
-import ListTitle from './list/ListTitle'
 import ListView from './list/ListView'
 import ModelCount from './model/ModelCount'
 import ModelIcon from './model/ModelIcon'
@@ -30,11 +26,7 @@ import Start from './Start'
 import StickyFooter from './StickyFooter'
 import CollapseTransition from './transitions/CollapseTransition'
 
-Vue.component('ListCard', ListCard)
 Vue.component('ListColumnHeader', ListColumnHeader)
-Vue.component('ListContent', ListContent)
-Vue.component('ListMeta', ListMeta)
-Vue.component('ListTitle', ListTitle)
 Vue.component('ListView', ListView)
 Vue.component('ListColumnSelector', ListColumnSelector)
 
