@@ -46,8 +46,7 @@ import { mdiTextRecognition, mdiHandBackRight } from '@mdi/js'
 
 @Component({
   props: [{
-    bulkSelection: false,
-    columns: false
+    bulkSelection: false
   }]
 })
 export default class ListConfig extends Vue {
