@@ -7,8 +7,11 @@
     v-bind="$attrs"
     @change="$emit('input', $event)"
   >
-    <template v-for="option in options_">
+    <slot v-if="$slots.default" />
+
+    <template v-else>
       <v-radio
+        v-for="option in options_"
         :key="option.itemText"
         :value="option.itemValue"
       >
