@@ -38,5 +38,6 @@ export default class ACheckbox extends Vue {
 <style lang="scss" scoped>
 .v-input--checkbox {
   margin: 0;
+  padding: 0;
 }
 </style>
