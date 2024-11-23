@@ -210,6 +210,11 @@ export default class ListView extends Mixins(ListViewMixin) {
     return this.selectedModels.includes(model)
   }
 
+  deselectAll () {
+    this.selectedModels = []
+    this.$emit('update:selectedModels', this.selectedModels)
+  }
+
   selectModel (model) {
     if (!this.isSelected(model)) {
       this.selectedModels.push(model)
@@ -220,8 +225,7 @@ export default class ListView extends Mixins(ListViewMixin) {
   }
 
   _listLoaded () {
-    this.selectedModels = []
-    this.$emit('update:selectedModels', this.selectedModels)
+    this.deselectAll()
   }
 
   @Watch('isLoading')
