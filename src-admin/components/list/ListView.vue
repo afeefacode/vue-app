@@ -61,7 +61,7 @@
                     :value="isSelected(model)"
                     hide-details
                     class="pa-0"
-                    @input="selectClient(model)"
+                    @input="selectModel(model)"
                   />
                 </div>
 
@@ -210,12 +210,18 @@ export default class ListView extends Mixins(ListViewMixin) {
     return this.selectedModels.includes(model)
   }
 
-  selectClient (model) {
+  selectModel (model) {
     if (!this.isSelected(model)) {
       this.selectedModels.push(model)
     } else {
       this.selectedModels = this.selectedModels.filter(m => m !== model)
     }
+    this.$emit('update:selectedModels', this.selectedModels)
+  }
+
+  _listLoaded () {
+    this.selectedModels = []
+    this.$emit('update:selectedModels', this.selectedModels)
   }
 
   @Watch('isLoading')
