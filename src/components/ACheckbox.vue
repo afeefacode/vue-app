@@ -1,10 +1,15 @@
 <template>
   <v-checkbox
     ref="checkbox"
+    class="a-checkbox"
     v-bind="$attrs"
     :inputValue="$attrs.value"
     @change="$emit('input', $event || false)"
-  />
+  >
+    <template #label>
+      <slot />
+    </template>
+  </v-checkbox>
 </template>
 
 
@@ -39,5 +44,9 @@ export default class ACheckbox extends Vue {
 .v-input--checkbox {
   margin: 0;
   padding: 0;
+
+  ::v-deep() .v-input__slot {
+    align-items: flex-start;
+  }
 }
 </style>
