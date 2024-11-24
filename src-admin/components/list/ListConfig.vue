@@ -16,6 +16,7 @@
     <label>Auswahlmodus</label>
     <a-radio-group
       v-model="dragMode"
+      hide-details
       @input="updateList"
     >
       <template #default>
