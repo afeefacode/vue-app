@@ -190,12 +190,17 @@ export default class ListView extends Mixins(ListViewMixin) {
   dragMode_ = null
   bulkSelection_ = null
 
+  created () {
+    this.dragMode_ = this.dragMode
+    this.bulkSelection_ = this.bulkSelection
+  }
+
   setDragMode (mode) {
     this.dragMode_ = mode
   }
 
   get _dragMode () {
-    return this.dragMode_ || this.dragMode
+    return this.dragMode_
   }
 
   setBulkSelection (mode) {
@@ -203,7 +208,7 @@ export default class ListView extends Mixins(ListViewMixin) {
   }
 
   get _bulkSelection () {
-    return this.bulkSelection_ || this.bulkSelection
+    return this.bulkSelection_
   }
 
   isSelected (model) {
