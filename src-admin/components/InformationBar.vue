@@ -109,12 +109,16 @@ export default class InformationBar extends Vue {
     const old = this.visible
     const visible = this.hasSidebarItems()
 
-    if (visible && !old) {
+    if (visible) {
       this.width = this.getWidthFromItems() || this.defaultWidth
       this.setRailMargin()
+    }
 
+
+    if (visible && !old) {
       sidebarService.setInformation(true)
     }
+
 
     if (!visible && old) {
       sidebarService.setInformation(false)
