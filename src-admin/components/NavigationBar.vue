@@ -39,7 +39,7 @@
       pa-6
       pb-8
     >
-      <div class="d-flex align-center gap-3">
+      <div class="d-flex align-center gap-4">
         <v-avatar
           color="primary white--text"
           size="40"
@@ -50,9 +50,13 @@
         <div>
           <div class="accountName">
             {{ account.first_name }}
-            <template v-if="$auth.roles[0]">
-              ({{ $auth.roles[0].title }})
-            </template>
+
+            <div
+              v-if="$auth.roles[0]"
+              class="grey--text text-body-2 mb-1"
+            >
+              {{ $auth.roles[0].title }}
+            </div>
           </div>
 
           <div class="body-2 d-flex align-center">
