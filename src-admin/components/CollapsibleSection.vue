@@ -31,10 +31,10 @@
 import { Component, Vue, Watch } from '@a-vue'
 
 @Component({
-  props: [{showHint: true}]
+  props: [{showHint: true, isCollapsed: false}]
 })
 export default class CollapsibleSection extends Vue {
-  collapsed = false
+  collapsed = this.isCollapsed
   hint = false
 
   @Watch('collapsed')
