@@ -1,7 +1,7 @@
 <template>
   <v-icon
     :class="{button}"
-    :color="icon && icon.color"
+    :color="icon && icon.color || $attrs.color"
     v-bind="$attrs"
     v-on="$listeners"
   >
