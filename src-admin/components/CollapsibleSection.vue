@@ -1,5 +1,5 @@
 <template>
-  <div :class="['collapsible-section', {collapsed}]">
+  <div :class="['collapsible-section', {collapsed, dense}]">
     <h-separator
       v-bind="{...$attrs, collapsible: true}"
       :collapsed.sync="collapsed"
@@ -31,7 +31,7 @@
 import { Component, Vue, Watch } from '@a-vue'
 
 @Component({
-  props: [{showHint: true, isCollapsed: false}]
+  props: [{showHint: true, isCollapsed: false, dense: false}]
 })
 export default class CollapsibleSection extends Vue {
   collapsed = this.isCollapsed
@@ -54,6 +54,10 @@ export default class CollapsibleSection extends Vue {
 <style lang="scss" scoped>
 .collapsible-section {
   position: relative;
+
+  &.dense .h-separator {
+    margin-bottom: .5rem;
+  }
 }
 
 .a-info  {
