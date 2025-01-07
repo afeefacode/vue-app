@@ -19,7 +19,7 @@ export class DeleteAction extends ApiAction {
   async afterRequest () {
     await super.afterRequest()
 
-    this.alert('Die Daten wurden gelöscht.')
+    this._showAlert('Die Daten wurden gelöscht.')
   }
 
   processResult () {

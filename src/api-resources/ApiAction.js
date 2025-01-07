@@ -11,6 +11,7 @@ export class ApiAction extends ApiResourcesApiAction {
   _minDuration = 100
   _startTime = 0
   _showError = true
+  _alert = null
 
   id (id) {
     if (id) {
@@ -99,10 +100,14 @@ export class ApiAction extends ApiResourcesApiAction {
     }
   }
 
-  alert (message) {
-    eventBus.dispatch(new AlertEvent(AlertEvent.MESSAGE, {
-      message
-    }))
+  alert (alert) {
+    this._alert = alert
+    return this
+  }
+
+  _showAlert (message) {
+    const alert = this._alert || {message}
+    eventBus.dispatch(new AlertEvent(AlertEvent.MESSAGE, alert))
   }
 }
 

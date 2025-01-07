@@ -22,7 +22,7 @@ export class SaveAction extends ApiAction {
     const response = super.processResult(result)
 
     if (this._showSuccess) {
-      this.alert('Die Daten wurden gespeichert.')
+      this._showAlert('Die Daten wurden gespeichert.')
     }
 
     return response
