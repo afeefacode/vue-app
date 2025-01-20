@@ -64,9 +64,12 @@
         style="width:100%;"
         v-on="on"
       >
-        {{ model.getTitle() }}
-        <div>
-          {{ model.getSubtitle() }}
+        {{ getTitle(model) }}
+        <div
+          v-if="getSubtitle(model)"
+          class="grey--text"
+        >
+          {{ getSubtitle(model) }}
         </div>
       </div>
     </template>
@@ -79,7 +82,10 @@ import { FormFieldMixin } from '../FormFieldMixin'
 import { ListAction } from '@a-vue/api-resources/ApiActions'
 
 @Component({
-  props: ['value', 'q']
+  props: ['value', 'q', {
+    getTitle: {type: Function, default: m => m.getTitle()},
+    getSubtitle: {type: Function, default: m => m.getSubtitle()}
+  }]
 })
 export default class FormFieldSearchSelect extends Mixins(FormFieldMixin) {
   $hasOptions = ['icon']
