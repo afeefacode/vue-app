@@ -48,4 +48,8 @@ export class Model extends ApiResourcesModel {
   getTitle () {
     return null
   }
+
+  getSubtitle () {
+    return null
+  }
 }

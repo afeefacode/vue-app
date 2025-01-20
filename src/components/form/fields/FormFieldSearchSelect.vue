@@ -65,6 +65,9 @@
         v-on="on"
       >
         {{ model.getTitle() }}
+        <div>
+          {{ model.getSubtitle() }}
+        </div>
       </div>
     </template>
   </a-search-select>
