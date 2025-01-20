@@ -67,7 +67,7 @@
         {{ getTitle(model) }}
         <div
           v-if="getSubtitle(model)"
-          class="grey--text"
+          class="grey--text mt-n1"
         >
           {{ getSubtitle(model) }}
         </div>
