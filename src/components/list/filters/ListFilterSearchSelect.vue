@@ -64,7 +64,13 @@
         style="width:100%;"
         v-on="on"
       >
-        {{ model.getTitle() }}
+        {{ getTitle(model) }}
+        <div
+          v-if="getSubtitle(model)"
+          class="grey--text mt-n1"
+        >
+          {{ getSubtitle(model) }}
+        </div>
       </div>
     </template>
   </a-search-select>
@@ -77,7 +83,11 @@ import { ListFilterMixin } from '../ListFilterMixin'
 import { ListAction, GetAction } from '@a-vue/api-resources/ApiActions'
 
 @Component({
-  props: ['itemTitle', 'itemValue', {selectedKey: 'id'}]
+  props: ['itemTitle', 'itemValue', {
+    selectedKey: 'id',
+    getTitle: {type: Function, default: m => m.getTitle()},
+    getSubtitle: {type: Function, default: m => m.getSubtitle()}
+  }]
 })
 export default class ListFilterSearchSelect extends Mixins(ListFilterMixin) {
   $hasOptions = ['icon']
