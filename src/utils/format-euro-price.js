@@ -1,7 +1,13 @@
 export function formatEuroPrice (price) {
   if (!price) {
-    return '0,00 €'
+    return ''
   }
-  return price.toLocaleString() + ' €'
+
+  const formatter = new Intl.NumberFormat('de-DE', {
+    style: 'currency',
+    currency: 'EUR'
+  })
+
+  return formatter.format(price)
 }
 
