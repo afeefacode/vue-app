@@ -61,8 +61,8 @@
 
       <a-icon-button
         v-if="buttonCreate"
-        small
-        class="mt-4"
+        :class="buttonSize === 'small' ? 'mt-4' : 'mt-2'"
+        :x-small="buttonSize === 'x-small'"
         icon="$plusIcon"
         :text="label"
         @click="showForm = true"
@@ -86,7 +86,8 @@ import { Component, Vue } from '@a-vue'
       buttonEdit: false,
       buttonAdd: false,
       buttonCreate: false,
-      modalWidth: 'auto'
+      modalWidth: 'auto',
+      buttonSize: 'small'
     }
   ]
 })
