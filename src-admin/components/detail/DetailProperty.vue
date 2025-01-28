@@ -60,7 +60,7 @@ export default class DetailProperty extends Vue {
     }
 
     .iconPlaceholder {
-      width: 3.5rem;
+      width: 3.75rem;
     }
 
     .label {
