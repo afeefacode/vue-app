@@ -22,14 +22,19 @@
     </template>
 
     <v-card v-if="modal">
-      <v-card-title v-if="title">
+      <v-card-title
+        v-if="title"
+        :style="{ cursor: draggable ? 'move' : 'default' }"
+        @mousedown="startDrag"
+      >
         <v-icon
           v-if="icon"
           :color="icon.color"
           class="mr-2"
           size="1.5rem"
-          v-text="icon.icon"
-        />
+        >
+          {{ icon.icon }}
+        </v-icon>
 
         {{ title }}
       </v-card-title>
@@ -51,13 +56,18 @@ import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 import { CancelOnEscMixin } from '@a-vue/services/escape/CancelOnEscMixin'
 
 @Component({
-  props: ['show', 'icon', 'title', 'beforeClose', 'anchorPosition', 'screenCentered']
+  props: ['show', 'icon', 'title', 'beforeClose', 'anchorPosition', 'screenCentered', {draggable: true}]
 })
 export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentWidthMixin, CancelOnEscMixin) {
   modalId = randomCssClass(10)
 
   modal = false
   position = null
+
+  dragStartX = 0
+  dragStartY = 0
+  initialLeft = 0
+  initialTop = 0
 
   cwm_maxWidth_ = 1000
 
@@ -93,6 +103,42 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
         e.stopPropagation()
       }
     }, true) // capture phase, stop event before v-dialog receives it
+  }
+
+  startDrag (event) {
+    if (!this.draggable) {
+      return
+    }
+
+    this.dragStartX = event.clientX
+    this.dragStartY = event.clientY
+
+    const dialog = document.querySelector('.' + this.modalId)
+    const rect = dialog.getBoundingClientRect()
+    this.initialLeft = rect.left
+    this.initialTop = rect.top
+
+    document.addEventListener('mousemove', this.onDrag)
+    document.addEventListener('mouseup', this.stopDrag)
+  }
+
+  onDrag (event) {
+    const deltaX = event.clientX - this.dragStartX
+    const deltaY = event.clientY - this.dragStartY
+
+    const dialog = document.querySelector('.' + this.modalId)
+    if (dialog) {
+      dialog.style.left = `${this.initialLeft + deltaX}px`
+      dialog.style.top = `${this.initialTop + deltaY}px`
+    }
+  }
+
+  stopDrag () {
+    document.removeEventListener('mousemove', this.onDrag)
+    document.removeEventListener('mouseup', this.stopDrag)
+
+    // remove from position watching if has been dragged once
+    this.urp_unregisterPositionWatchers()
   }
 
   coe_cancelOnEsc () {
@@ -200,7 +246,6 @@ export default class ADialog extends Mixins(UsesPositionServiceMixin, ComponentW
   }
 }
 </script>
-
 
 <style lang="scss" scoped>
 .v-card__title {
