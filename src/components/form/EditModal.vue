@@ -33,6 +33,16 @@
           justify-end
         >
           <v-btn
+            ref="deleteButton"
+            v-if="deleteButton && modelToEdit.id"
+            small
+            color="error"
+            @click="handleDelete"
+          >
+            Löschen
+          </v-btn>
+
+          <v-btn
             small
             @click="close"
           >
@@ -62,7 +72,7 @@ import { Component, Vue, Watch } from '@a-vue'
 import { DialogEvent } from '@a-vue/events'
 
 @Component({
-  props: ['model', 'createModelToEdit', 'show', {reset: true, valid: true, forceChanged: false, forceActive: false}]
+  props: ['model', 'createModelToEdit', 'show', {deleteButton: false, reset: true, valid: true, forceChanged: false, forceActive: false}]
 })
 export default class EditModal extends Vue {
   show_ = false
@@ -135,6 +145,19 @@ export default class EditModal extends Vue {
       }
     }
     this.show_ = false
+  }
+
+  async handleDelete () {
+    const result = await this.$events.dispatch(new DialogEvent(DialogEvent.SHOW, {
+      anchor: this.$refs.form,
+      title: 'Löschen bestätigen',
+      message: 'Soll dieser Eintrag wirklich gelöscht werden?',
+      yesButton: 'Löschen'
+    }))
+    if (result === DialogEvent.RESULT_YES) {
+      this.$emit('delete', this.ignoreChangesOnClose, this.close)
+      this.show_ = false
+    }
   }
 
   /**
