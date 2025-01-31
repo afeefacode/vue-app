@@ -26,13 +26,13 @@ export default class AContextMenuItem extends Vue {
   }
 
   click () {
-    this.contextMenu.close()
     if (this.to) {
       this.$router.push(this.to)
         .catch(() => null) // prevent duplicated navigation warning
     } else {
       this.$emit('click')
     }
+    this.contextMenu.close()
   }
 }
 </script>
@@ -40,13 +40,13 @@ export default class AContextMenuItem extends Vue {
 
 <style lang="scss" scoped>
 .contextMenuItem {
-  padding: 0.2rem .4rem;
+  padding: .2rem .4rem;
   display: flex;
   align-items: center;
   text-align: center;
   white-space: nowrap;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: .9rem;
   color: #666666;
   cursor: pointer;
   user-select: none;
@@ -58,7 +58,7 @@ export default class AContextMenuItem extends Vue {
   :deep(.v-icon) {
     display: block;
     text-align: center;
-    margin-right: 0.5rem;
+    margin-right: .5rem;
 
     svg {
       width: 1.3rem;
