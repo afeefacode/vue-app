@@ -45,6 +45,9 @@ export class Model extends ApiResourcesModel {
     return this.constructor.icon
   }
 
+  getListIconColor () {
+  }
+
   getTitle () {
     return null
   }
