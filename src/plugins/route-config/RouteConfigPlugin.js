@@ -46,6 +46,8 @@ class RouteConfigPlugin {
   _router = null
   _routes = []
 
+  _routeHistory = [];
+
   _promise = Promise.resolve(true)
 
   router (options = {}) {
@@ -178,6 +180,11 @@ class RouteConfigPlugin {
             }
           })
         }
+
+        this._router.beforeEach((to, from, next) => {
+          this._routeHistory.push(to)
+          next()
+        })
       })
     })
 
@@ -352,6 +359,14 @@ class RouteConfigPlugin {
       ...options.config
     }
     return new BreadcrumbSetDefinition(options).getDefinitions()
+  }
+
+  getRouteHistory () {
+    return this._routeHistory
+  }
+
+  removeFromRouteHistoryAfterIndex (index) {
+    this._routeHistory.splice(index + 1)
   }
 }
 
