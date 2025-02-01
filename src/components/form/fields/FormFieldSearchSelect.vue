@@ -52,7 +52,7 @@
         class="pr-0"
       >
         <v-icon
-          :color="model.getListIconColor() || model.getIcon().color"
+          :color="model.getIcon().color"
           size="1.5rem"
           class="mr-2"
           v-on="on"
