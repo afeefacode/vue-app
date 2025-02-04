@@ -67,7 +67,7 @@ export default class appBarTitle extends Vue {
     for (let i = historyStack.length - 2; i >= 0; i--) {
       const route = historyStack[i]
       if (route.name && route.name !== currentRouteName) {
-        this.$router.push({ name: route.name })
+        this.$router.push({ name: route.name, params: route.params })
         routeConfigPlugin.removeFromRouteHistoryAfterIndex(i)
         return
       }
