@@ -1,7 +1,7 @@
 <template>
   <a-row gap="4">
     <v-btn
-      v-if="back"
+      v-if="back && getLastNamedRoute()"
       fab
       x-small
       color="#F4F4F4"
@@ -59,7 +59,7 @@ export default class appBarTitle extends Vue {
     return document.getElementById('appBarTitleContainer')
   }
 
-  goToLastNamedRoute () {
+  getLastNamedRoute () {
     const currentRouteName = this.$route.name
     const historyStack = routeConfigPlugin.getRouteHistory()
 
@@ -67,10 +67,19 @@ export default class appBarTitle extends Vue {
     for (let i = historyStack.length - 2; i >= 0; i--) {
       const route = historyStack[i]
       if (route.name && route.name !== currentRouteName) {
-        this.$router.push({ name: route.name, params: route.params })
-        routeConfigPlugin.removeFromRouteHistoryAfterIndex(i)
-        return
+        return {
+          route,
+          index: i
+        }
       }
+    }
+  }
+
+  goToLastNamedRoute () {
+    const routeInfo = this.getLastNamedRoute()
+    if (routeInfo) {
+      this.$router.push({ name: routeInfo.route.name, params: routeInfo.route.params })
+      routeConfigPlugin.removeFromRouteHistoryAfterIndex(routeInfo.index)
     }
   }
 }
