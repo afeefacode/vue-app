@@ -2,6 +2,7 @@
   <a-search-select
     ref="select"
     :listAction="listAction"
+    :specialItems="specialItems"
     :selectedItems="selectedItems"
     :getSearchInput="() => $refs.searchInput"
     diffXControls="-.5rem"
@@ -52,11 +53,11 @@
         class="pr-0"
       >
         <v-icon
-          :color="model.getIcon().color"
+          :color="getIcon(model).color"
           size="1.5rem"
           class="mr-2"
           v-on="on"
-          v-text="model.getIcon().icon"
+          v-text="getIcon(model).icon"
         />
       </div>
 
@@ -81,12 +82,14 @@
 import { Component, Mixins } from '@a-vue'
 import { ListFilterMixin } from '../ListFilterMixin'
 import { ListAction, GetAction } from '@a-vue/api-resources/ApiActions'
+import { Category } from '@/models'
 
 @Component({
   props: ['itemTitle', 'itemValue', {
     selectedKey: 'id',
     getTitle: {type: Function, default: m => m.getTitle()},
-    getSubtitle: {type: Function, default: m => m.getSubtitle()}
+    getSubtitle: {type: Function, default: m => m.getSubtitle()},
+    getIcon: {type: Function, default: m => m.getIcon()}
   }]
 })
 export default class ListFilterSearchSelect extends Mixins(ListFilterMixin) {
@@ -126,6 +129,17 @@ export default class ListFilterSearchSelect extends Mixins(ListFilterMixin) {
 
   get listAction () {
     return this.createListAction()
+  }
+
+  get specialItems () {
+    // make array-typed options to proper models in order to show them
+    // alongside the other list items
+    return this.filter.options.map(o => {
+      return Category.defaults({
+        id: o.value,
+        title: o.title
+      })
+    })
   }
 
   createListAction () {

@@ -60,6 +60,7 @@
         v-if="isOpen"
         ref="list"
         :listAction="listAction"
+        :specialItems="specialItems"
         :q="q"
         :selectedItems="selectedItems"
         :isDisabled="isDisabled"
@@ -115,6 +116,7 @@ import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
     'listAction',
     'q',
     {
+      specialItems: [],
       diffXControls: '-1rem',
       diffYControls: '-1rem',
       getSearchInput: {

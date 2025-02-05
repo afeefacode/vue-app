@@ -53,7 +53,7 @@ import { Component, Mixins } from '@a-vue'
 import { ListViewMixin } from '@a-vue/components/list/ListViewMixin'
 
 @Component({
-  props: ['q', 'selectedItems', 'isDisabled']
+  props: ['specialItems', 'q', 'selectedItems', 'isDisabled']
 })
 export default class SearchSelectList extends Mixins(ListViewMixin) {
   activeModelIndex = -1
@@ -181,6 +181,17 @@ export default class SearchSelectList extends Mixins(ListViewMixin) {
     }
 
     return this.activeModelIndex
+  }
+
+  lwm_setModels (models) {
+    // put in special items only on first page and only if not searched
+    const specialItems = this.filters.page.value === 1 && !this.filters.q.value ? this.specialItems : []
+
+    models = [
+      ...specialItems,
+      ...models
+    ]
+    this.models_ = models
   }
 }
 </script>

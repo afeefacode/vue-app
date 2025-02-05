@@ -51,7 +51,7 @@ export class ListViewMixin extends Vue {
       : undefined
 
     if (this.models) {
-      this.models_ = this.models
+      this.lwm_setModels(this.models)
       this.meta_ = this.meta
     }
 
@@ -93,7 +93,7 @@ export class ListViewMixin extends Vue {
 
   @Watch('models')
   modelsChanged () {
-    this.models_ = this.models
+    this.lwm_setModels(this.models)
     this.meta_ = this.meta
   }
 
@@ -130,7 +130,7 @@ export class ListViewMixin extends Vue {
 
   async load () {
     if (this.loadOnlyIfKeyword && !this.filters.q.value) {
-      this.models_ = []
+      this.lwm_setModels([])
       this.meta_ = {}
       this.$emit('update:count', 0)
       return
@@ -160,7 +160,7 @@ export class ListViewMixin extends Vue {
       return
     }
 
-    this.models_ = models
+    this.lwm_setModels(models)
     this.meta_ = meta
 
     if (this.meta_.used_filters) {
@@ -178,5 +178,9 @@ export class ListViewMixin extends Vue {
     })
 
     this._listLoaded()
+  }
+
+  lwm_setModels (models) {
+    this.models_ = models
   }
 }
