@@ -101,9 +101,12 @@ export default class EditForm extends Vue {
     if (this.forcedUnchange) {
       return false
     }
-    // console.log(this.lastJson)
-    // console.log(this.json)
-    // console.log(JSON.stringify(getDiff(this.lastJson, this.json)))
+
+    // if (this.lastJson) {
+    //   console.log(this.lastJson)
+    //   console.log(this.json)
+    //   console.log(JSON.stringify(getDiff(this.lastJson, this.json)))
+    // }
 
     return this.json !== this.lastJson
   }
