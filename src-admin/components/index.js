@@ -3,6 +3,7 @@ import Vue from 'vue'
 import AppBarButton from './app/AppBarButton'
 import AppBarTitle from './app/AppBarTitle'
 import CollapsibleSection from './CollapsibleSection'
+import SearchSelectNavigator from './controls/SearchSelectNavigator'
 import DetailColumn from './detail/DetailColumn'
 import DetailContent from './detail/DetailContent'
 import DetailMeta from './detail/DetailMeta'
@@ -49,6 +50,8 @@ Vue.component('DetailColumn', DetailColumn)
 
 Vue.component('AppBarButton', AppBarButton)
 Vue.component('AppBarTitle', AppBarTitle)
+
+Vue.component('SearchSelectNavigator', SearchSelectNavigator)
 
 Vue.component('HSeparator', HSeparator)
 Vue.component('CollapsibleSection', CollapsibleSection)
