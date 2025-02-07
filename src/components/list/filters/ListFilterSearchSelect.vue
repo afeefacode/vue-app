@@ -85,7 +85,7 @@ import { ListAction, GetAction } from '@a-vue/api-resources/ApiActions'
 import { Category } from '@/models'
 
 @Component({
-  props: ['itemTitle', 'itemValue', {
+  props: ['itemTitle', 'itemValue', 'optionRequestFilters', {
     selectedKey: 'id',
     getTitle: {type: Function, default: m => m.getTitle()},
     getSubtitle: {type: Function, default: m => m.getSubtitle()},
@@ -145,6 +145,7 @@ export default class ListFilterSearchSelect extends Mixins(ListFilterMixin) {
   createListAction () {
     const request = this.filter
       .createOptionsRequest()
+      .addFilters(this.optionRequestFilters || {})
     return ListAction.fromRequest(request)
   }
 
