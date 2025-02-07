@@ -60,13 +60,13 @@ export default class appBarTitle extends Vue {
   }
 
   getLastNamedRoute () {
-    const currentRouteName = this.$route.name
+    const currentRoutePath = this.$route.path
     const historyStack = routeConfigPlugin.getRouteHistory()
 
     // Durchlaufe die Historie rückwärts, um die letzte benannte Route zu finden, die sich vom aktuellen Namen unterscheidet
     for (let i = historyStack.length - 2; i >= 0; i--) {
       const route = historyStack[i]
-      if (route.name && route.name !== currentRouteName) {
+      if (route.path && route.path !== currentRoutePath) {
         return {
           route,
           index: i
