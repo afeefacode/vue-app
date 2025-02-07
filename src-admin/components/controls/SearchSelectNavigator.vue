@@ -15,7 +15,6 @@
         ref="input"
         readonly
         :label="label"
-        :rules="validationRules"
         placeholder="Mausklick oder Space/↓-Taste zum Auswählen"
         :clearable="false"
         appendIcon="$dropdown"
@@ -82,8 +81,6 @@ import { ListAction } from '@a-vue/api-resources/ApiActions'
     'modelType',
     'label',
     'fields',
-    'customValidator',
-    'additionalRules',
     {
       getTitle: {type: Function, default: m => m.getTitle()},
       getSubtitle: {type: Function, default: m => m.getSubtitle()}
@@ -91,12 +88,6 @@ import { ListAction } from '@a-vue/api-resources/ApiActions'
 })
 export default class SearchSelectNavigator extends Vue {
   $hasOptions = ['icon']
-
-  mounted () {
-    if (this.validator) {
-      this.$refs.input.validate()
-    }
-  }
 
   calculateSelectorSize () {
     const input = this.$refs.input.$el
@@ -120,19 +111,6 @@ export default class SearchSelectNavigator extends Vue {
 
   focusInput () {
     this.$refs.input.setFocus(true)
-  }
-
-  get validator () {
-    const validator = this.customValidator
-    if (this.additionalRules) {
-      validator.setAdditionalRules(this.additionalRules)
-    }
-    return validator
-  }
-
-  get validationRules () {
-    const label = this.label
-    return (this.validator && this.validator.getRules(label)) || []
   }
 }
 </script>
