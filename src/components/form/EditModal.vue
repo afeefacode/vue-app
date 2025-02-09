@@ -53,6 +53,7 @@
             :changed="changed || forceChanged"
             :forceActive="forceActive"
             :valid="validFromOutside && valid"
+            :saveTitle="saveTitle"
             angular
             :has="{reset: reset && !!modelToEdit.id}"
             @save="$emit('save', modelToEdit, ignoreChangesOnClose, close)"
@@ -72,7 +73,7 @@ import { Component, Vue, Watch } from '@a-vue'
 import { DialogEvent } from '@a-vue/events'
 
 @Component({
-  props: ['model', 'createModelToEdit', 'show', {deleteButton: false, reset: true, valid: true, forceChanged: false, forceActive: false}]
+  props: ['model', 'createModelToEdit', 'show', {deleteButton: false, reset: true, valid: true, forceChanged: false, forceActive: false, saveTitle: 'Speichern'}]
 })
 export default class EditModal extends Vue {
   show_ = false

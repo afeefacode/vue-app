@@ -11,7 +11,7 @@
             small
             :disabled="disabled"
             color="green white--text"
-            title="Speichern"
+            :title="saveTitle"
             @click="$emit('save')"
           >
             <v-icon
@@ -22,7 +22,7 @@
             </v-icon>
 
             <template v-if="angular">
-              Speichern
+              {{ saveTitle }}
             </template>
           </v-btn>
         </div>
@@ -30,10 +30,10 @@
 
       <span v-if="disabled">
         <template v-if="!valid">
-          Daten berichtigen,<br>um zu speichern
+          Daten berichtigen,<br>um zu {{ saveTitle.toLowerCase() }}
         </template>
         <template v-else>
-          Daten ändern,<br>um zu speichern
+          Daten ändern,<br>um zu {{ saveTitle.toLowerCase() }}
         </template>
       </span>
     </v-tooltip>
@@ -64,7 +64,12 @@ import { mdiRotateLeft} from '@mdi/js'
   props: [
     'changed',
     'valid',
-    {angular: false, small: false, forceActive: false}
+    {
+      angular: false,
+      small: false,
+      forceActive: false,
+      saveTitle: 'Speichern'
+    }
   ]
 })
 export default class EditFormButtons extends Vue {
