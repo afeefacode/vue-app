@@ -1,5 +1,5 @@
-export function formatEuroPrice (price) {
-  if (!price) {
+export function formatEuroPrice (price, showZero = false) {
+  if (!price && !showZero) {
     return ''
   }
 
