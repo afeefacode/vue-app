@@ -6,7 +6,11 @@
     :validator="validator"
     v-bind="$attrs"
     v-on="$listeners"
-  />
+  >
+    <template #append>
+      <slot name="append" />
+    </template>
+  </a-text-field>
 </template>
 
 <script>
