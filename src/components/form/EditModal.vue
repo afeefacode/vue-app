@@ -33,11 +33,11 @@
           justify-end
         >
           <v-btn
-            ref="deleteButton"
             v-if="deleteButton && modelToEdit.id"
+            ref="deleteButton"
             small
             color="error"
-            @click="handleDelete"
+            @click="handleDelete(modelToEdit)"
           >
             Löschen
           </v-btn>
@@ -148,7 +148,7 @@ export default class EditModal extends Vue {
     this.show_ = false
   }
 
-  async handleDelete () {
+  async handleDelete (modelToEdit) {
     const result = await this.$events.dispatch(new DialogEvent(DialogEvent.SHOW, {
       anchor: this.$refs.form,
       title: 'Löschen bestätigen',
@@ -156,7 +156,7 @@ export default class EditModal extends Vue {
       yesButton: 'Löschen'
     }))
     if (result === DialogEvent.RESULT_YES) {
-      this.$emit('delete', this.ignoreChangesOnClose, this.close)
+      this.$emit('delete', modelToEdit, this.ignoreChangesOnClose, this.close)
       this.show_ = false
     }
   }

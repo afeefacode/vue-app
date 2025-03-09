@@ -32,6 +32,8 @@
         :createModelToEdit="createModelToEdit"
         :title="label"
         :icon="icon"
+        :deleteButton="deleteButton"
+        @delete="deleteModel"
         @save="save"
         @close="close"
       >
@@ -86,6 +88,7 @@ import { Component, Vue } from '@a-vue'
       buttonEdit: false,
       buttonAdd: false,
       buttonCreate: false,
+      deleteButton: false,
       modalWidth: 'auto',
       buttonSize: 'small'
     }
@@ -96,6 +99,10 @@ export default class EditableDetailProperty extends Vue {
 
   save (model, ignoreChangesOnClose, closeModal) {
     this.$emit('save', {model, ignoreChangesOnClose, closeModal})
+  }
+
+  deleteModel (model, ignoreChangesOnClose, closeModal) {
+    this.$emit('delete', {model, ignoreChangesOnClose, closeModal})
   }
 
   openModal () {
