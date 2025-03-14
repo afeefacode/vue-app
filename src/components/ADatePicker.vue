@@ -229,7 +229,8 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
       // take given date string an create a local time date object
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
       // > When the time zone offset is absent, date-only forms are interpreted as a UTC time and date-time forms are interpreted as local time.
-      const dateStringThatGetsConvertedToLocalDate = date + 'T00:00'
+      const timeString = this.value_ ? this.value_.toTimeString().split(' ')[0] : '00:00:00'
+      const dateStringThatGetsConvertedToLocalDate = date + 'T' + timeString
       this.value_ = new Date(dateStringThatGetsConvertedToLocalDate)
     } else {
       this.value_ = null
