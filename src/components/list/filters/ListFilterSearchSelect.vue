@@ -79,7 +79,7 @@
 
 
 <script>
-import { Component, Mixins } from '@a-vue'
+import { Component, Mixins, Watch } from '@a-vue'
 import { ListFilterMixin } from '../ListFilterMixin'
 import { ListAction, GetAction } from '@a-vue/api-resources/ApiActions'
 import { Category } from '@/models'
@@ -97,8 +97,18 @@ export default class ListFilterSearchSelect extends Mixins(ListFilterMixin) {
 
   items = []
   inputModel = 'Alle'
+  filterChangedFromInside = false
 
   async created () {
+    this.onFilterValueChanged()
+  }
+
+  @Watch('filter.value')
+  async onFilterValueChanged () {
+    if (this.filterChangedFromInside) {
+      return
+    }
+
     if (this.filter.value) {
       const model = await this.createGetAction()
         .params({
@@ -164,12 +174,19 @@ export default class ListFilterSearchSelect extends Mixins(ListFilterMixin) {
   }
 
   itemSelected (model) {
+    this.filterChangedFromInside = true
+
     if (model) {
       this.filter.value = model.id
       this.inputModel = model.getTitle()
     } else {
       this.filter.value = null
     }
+
+    this.$nextTick(() => {
+      this.filterChangedFromInside = false
+    })
+
     this.$emit('select', model)
   }
 
