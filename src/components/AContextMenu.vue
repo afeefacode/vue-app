@@ -2,6 +2,7 @@
   <div class="contextEditor">
     <!-- click.stop prevents possible surrounding v-input to focus -->
     <div
+      v-if="!customAnchor"
       class="activator"
       @click.stop="open"
     >
@@ -32,7 +33,7 @@ import { Positions, PositionConfig } from '../services/PositionService'
 import { randomCssClass } from '../utils/random'
 
 @Component({
-  props: ['contentHeight', 'repositionWatchKey', 'triggerIcon']
+  props: ['contentHeight', 'repositionWatchKey', 'triggerIcon', 'customAnchor']
 })
 export default class AContextMenu extends Mixins(UsesPositionServiceMixin) {
   CONTEXT_MENU = true
@@ -44,9 +45,27 @@ export default class AContextMenu extends Mixins(UsesPositionServiceMixin) {
     return 'popUp-' + this.menuId
   }
 
+  mounted () {
+    if (this.customAnchor) {
+      this.open()
+    }
+  }
+
   positionize () {
+    let anchor = this.customAnchor || [this, '.activator']
+
+    if (!Array.isArray(anchor)) {
+      if (typeof anchor === 'string') {
+        anchor = [document.documentElement, anchor]
+      } else if (typeof anchor === 'object') { // dom element or vue ref
+        anchor = [anchor]
+      } else {
+        anchor = [document.documentElement]
+      }
+    }
+
     const position = new PositionConfig()
-      .setAnchor(this, '.activator')
+      .setAnchor(...anchor)
       .setTarget(
         document.documentElement,
         '.' + this.popUpCssClass + ' .popUpContent'
@@ -102,6 +121,13 @@ export default class AContextMenu extends Mixins(UsesPositionServiceMixin) {
   @Watch('repositionWatchKey')
   repositionWatchKeyChanged () {
     this.urp_update()
+  }
+
+  @Watch('customAnchor')
+  customAnchorChanged () {
+    if (this.customAnchor && !this.isOpen) {
+      this.open()
+    }
   }
 
   getContainer () {
