@@ -17,7 +17,9 @@ class AdminConfig {
     icons: {}
   }
 
-  config = {}
+  config = {
+    has2FA: false
+  }
 }
 
 export const adminConfig = new AdminConfig()

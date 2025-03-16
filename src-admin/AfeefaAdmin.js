@@ -30,7 +30,10 @@ export class AfeefaAdmin {
   }
 
   customConfig (customConfig) {
-    adminConfig.config = customConfig
+    adminConfig.config = {
+      ...adminConfig.config,
+      ...customConfig
+    }
     return this
   }
 
