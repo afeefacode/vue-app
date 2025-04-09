@@ -33,7 +33,7 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: [{first: false}]
+  props: ['beforeChange', {first: false}]
 })
 export default class ATabs extends Vue {
   titles = []
@@ -47,7 +47,14 @@ export default class ATabs extends Vue {
     this.$children[this.currentIndex].show()
   }
 
-  setTab (index) {
+  async setTab (index) {
+    if (this.beforeChange) {
+      const result = await this.beforeChange(index, this.currentIndex)
+      if (!result) {
+        return
+      }
+    }
+
     this.currentIndex = index
     const tabs = this.$slots.default.map(s => s.componentInstance)
     tabs.forEach((tab, i) => {
