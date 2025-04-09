@@ -159,7 +159,6 @@
 <script>
 import { Component, Watch, Mixins } from '@a-vue'
 import { ListViewMixin } from '@a-vue/components/list/ListViewMixin'
-import { LoadingEvent } from '@a-vue/events'
 
 @Component({
   props: [
@@ -235,13 +234,6 @@ export default class ListView extends Mixins(ListViewMixin) {
 
   @Watch('isLoading')
   isLoadingChanged () {
-    if (this.events) {
-      if (this.isLoading) {
-        this.$events.dispatch(new LoadingEvent(LoadingEvent.START_LOADING))
-      } else {
-        this.$events.dispatch(new LoadingEvent(LoadingEvent.STOP_LOADING))
-      }
-    }
     this.$emit('update:isLoading', this.isLoading)
   }
 
