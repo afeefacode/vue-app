@@ -98,7 +98,16 @@ export class ListViewMixin extends Vue {
   }
 
   @Watch('listAction')
-  listActionChanged () {
+  listActionChanged (newAction, oldAction) {
+    // es gibt den fall, dass diese liste in einer detailansicht steckt
+    // und dort der owner nach dem speichern aktualisiert wird, dann ändert sich auch
+    // die listAction, aber die filter sind alle gleich. dann wollen wir nicht
+    // neu laden
+    newAction = JSON.stringify(newAction.getApiRequest().serialize())
+    oldAction = JSON.stringify(oldAction.getApiRequest().serialize())
+    if (newAction === oldAction) {
+      return
+    }
     this.init()
   }
 
