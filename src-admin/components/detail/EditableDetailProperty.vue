@@ -9,7 +9,7 @@
         size="1.3rem"
         class="contextButton mt-n1"
         title="Bearbeiten"
-        @click="showForm = true"
+        @click="openModal"
       >
         $pencilCircleIcon
       </a-icon>
@@ -19,7 +19,7 @@
         size="1.3rem"
         class="contextButton mt-n1"
         title="Bearbeiten"
-        @click="showForm = true"
+        @click="openModal"
       >
         $addIcon
       </a-icon>
@@ -67,7 +67,7 @@
         :x-small="buttonSize === 'x-small'"
         icon="$plusIcon"
         :text="label"
-        @click="showForm = true"
+        @click="openModal"
       />
     </div>
   </detail-property>
@@ -107,6 +107,7 @@ export default class EditableDetailProperty extends Vue {
 
   openModal () {
     this.showForm = true
+    this.$emit('open')
   }
 
   close () {
