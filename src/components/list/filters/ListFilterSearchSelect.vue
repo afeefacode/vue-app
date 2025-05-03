@@ -16,6 +16,7 @@
       <a-text-field
         ref="input"
         :value="inputModel"
+        :title="inputModel"
         readonly
         :label="label"
         placeholder="Mausklick oder Space/↓-Taste zum Auswählen"

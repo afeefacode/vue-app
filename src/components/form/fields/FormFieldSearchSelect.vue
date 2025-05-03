@@ -15,6 +15,7 @@
       <a-text-field
         ref="input"
         :value="inputModel"
+        :title="inputModel"
         readonly
         :label="label"
         :rules="validationRules"
