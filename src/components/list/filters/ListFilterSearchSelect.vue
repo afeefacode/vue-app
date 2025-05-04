@@ -63,7 +63,7 @@
       </div>
 
       <div
-        style="width:100%;"
+        style="width:100%; white-space: normal;"
         v-on="on"
       >
         {{ getTitle(model) }}
