@@ -12,21 +12,23 @@
     @beforeOpen="calculateSelectorSize"
   >
     <template #activator="{open}">
-      <a-text-field
-        ref="input"
-        :value="inputModel"
-        :title="inputModel"
-        readonly
-        :label="label"
-        :rules="validationRules"
-        placeholder="Mausklick oder Space/↓-Taste zum Auswählen"
-        :clearable="clearable && !!selectedItems.length"
-        appendIcon="$dropdown"
-        @keydown.space.prevent="open"
-        @keydown.down.prevent="open"
-        @keydown.enter.prevent="open"
-        @clear="clear"
-      />
+      <slot name="activator">
+        <a-text-field
+          ref="input"
+          :value="inputModel"
+          :title="inputModel"
+          readonly
+          :label="label"
+          :rules="validationRules"
+          placeholder="Mausklick oder Space/↓-Taste zum Auswählen"
+          :clearable="clearable && !!selectedItems.length"
+          appendIcon="$dropdown"
+          @keydown.space.prevent="open"
+          @keydown.down.prevent="open"
+          @keydown.enter.prevent="open"
+          @clear="clear"
+        />
+      </slot>
     </template>
 
     <template #filters="{onSearchInputKey}">
@@ -109,9 +111,12 @@ export default class FormFieldSearchSelect extends Mixins(FormFieldMixin) {
   }
 
   calculateSelectorSize () {
-    const input = this.$refs.input.$el
-    const inputWidth = input.offsetWidth
-    this.$refs.select.setWidth(`calc(${inputWidth}px + 1rem)`)
+    // input not available if custom activator is in use
+    const input = this.$refs.input?.$el
+    if (input) {
+      const inputWidth = input.offsetWidth
+      this.$refs.select.setWidth(`calc(${inputWidth}px + 1rem)`)
+    }
   }
 
   get selectedItems () {
@@ -131,7 +136,8 @@ export default class FormFieldSearchSelect extends Mixins(FormFieldMixin) {
   }
 
   focusInput () {
-    this.$refs.input.setFocus(true)
+    // input not available if custom activator is in use
+    this.$refs.input?.setFocus(true)
   }
 
   clear () {
