@@ -23,6 +23,7 @@
           placeholder="Mausklick oder Space/↓-Taste zum Auswählen"
           :clearable="clearable && !!selectedItems.length"
           appendIcon="$dropdown"
+          hide-details="!!$attrs.hideDetails"
           @keydown.space.prevent="open"
           @keydown.down.prevent="open"
           @keydown.enter.prevent="open"
