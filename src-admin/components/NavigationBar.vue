@@ -16,6 +16,12 @@
       :to="{name: rootRouteName}"
       class="logoContainer d-flex flex-column align-center pa-6"
     >
+      <div
+        v-if="show_dev_skin"
+        class="text-button mt-n6"
+      >
+        DEV
+      </div>
       <img
         v-if="logoUrl"
         class="logo"
@@ -124,6 +130,10 @@ export default class NavigationBar extends Vue {
 
   get title () {
     return adminConfig.app.title
+  }
+
+  get show_dev_skin () {
+    return adminConfig.app.show_dev_skin
   }
 
   get SidebarMenu () {

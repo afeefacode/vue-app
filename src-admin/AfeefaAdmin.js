@@ -29,6 +29,14 @@ export class AfeefaAdmin {
     return this
   }
 
+  appConfig (appConfig) {
+    adminConfig.app = {
+      ...adminConfig.app,
+      ...appConfig
+    }
+    return this
+  }
+
   customConfig (customConfig) {
     adminConfig.config = {
       ...adminConfig.config,

@@ -8,6 +8,7 @@ class AdminConfig {
     rootRouteName: null,
     appLoaderMinDuration: null,
     saveLoaderMinDuration: null,
+    show_dev_skin: false,
 
     components: {
       Splash: null,

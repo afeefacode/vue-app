@@ -6,6 +6,11 @@
       @click="closeFloatingSidebars"
     />
 
+    <div
+      v-if="showDevSkin"
+      class="showDevSkin"
+    />
+
     <div class="main-layout">
       <navigation-bar :has="$has" />
 
@@ -148,6 +153,10 @@ export default class App extends Vue {
     return adminConfig.app.loaderColor
   }
 
+  get showDevSkin () {
+    return adminConfig.app.show_dev_skin
+  }
+
   startLoading () {
     this.numLoadingRequests++
   }
@@ -160,6 +169,11 @@ export default class App extends Vue {
 
 
 <style lang="scss" scoped>
+.showDevSkin {
+  background: orange;
+  height: 1px;
+}
+
 .isLoading {
   opacity: .6;
 }
