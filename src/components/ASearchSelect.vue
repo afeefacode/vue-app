@@ -409,13 +409,7 @@ export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPosit
   overscroll-behavior: contain;
 
   :deep(.a-table-row) {
-    &:not(.selected) {
-      cursor: pointer;
-    }
-
-    &.selected {
-      pointer-events: none;
-    }
+    cursor: pointer;
   }
 }
 
