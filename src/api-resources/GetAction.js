@@ -11,7 +11,7 @@ export class GetAction extends ApiAction {
   processError (result) {
     if (this._showError) {
       eventBus.dispatch(new AlertEvent(AlertEvent.ERROR, {
-        headline: 'Die Daten konntent nicht geladen werden.',
+        headline: 'Die Daten konnten nicht geladen werden.',
         message: result.message,
         detail: result.detail
       }))
