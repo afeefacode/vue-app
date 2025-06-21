@@ -2,7 +2,7 @@
   <v-radio-group
     ref="radios"
     :rules="validationRules"
-    :class="{hasLabel: $has.label}"
+    :class="{hasLabel: $has.label, alignTop}"
     :valueComparator="compareValues"
     v-bind="$attrs"
     @change="$emit('input', $event)"
@@ -16,7 +16,14 @@
         :value="option.itemValue"
       >
         <template #label>
-          <div v-html="option.itemText" />
+          <div>
+            <div v-html="option.itemText" />
+            <div
+              v-if="hints(option.itemValue)"
+              class="hint"
+              v-html="hints(option.itemValue)"
+            />
+          </div>
         </template>
       </v-radio>
     </template>
@@ -29,7 +36,16 @@ import { Component, Vue, Watch } from '@a-vue'
 import { Model } from '@afeefa/api-resources-client'
 
 @Component({
-  props: ['options', 'validator']
+  props: [
+    'options',
+    'validator',
+    {
+      alignTop: false,
+      hints: {
+        default: () => () => {}
+      }
+    }
+  ]
 })
 export default class ARadioGroup extends Vue {
   $hasOptions = ['label']
@@ -79,10 +95,19 @@ export default class ARadioGroup extends Vue {
 .v-input {
   margin: 0;
 
+  &.alignTop .v-radio {
+    align-items: flex-start;
+  }
+
   &:not(.hasLabel) {
     :deep(legend) {
       display: none;
     }
+  }
+
+  .hint {
+    font-size: .9rem;
+    color: #999999;
   }
 }
 </style>
