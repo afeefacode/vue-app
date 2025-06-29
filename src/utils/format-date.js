@@ -1,7 +1,15 @@
-export function formatDate (date, hours = false) {
+export function formatDate (date, options = {}) {
+  if (options === true) {
+    options = {
+      hours: true
+    }
+  }
+
   if (!date) {
     return ''
   }
+
+  const dayName = options.day ? date.toLocaleDateString('en-US', { weekday: 'long' }) + ', ' : ''
 
   const month = addZero(date.getMonth() + 1)
   const day = addZero(date.getDate())
@@ -9,8 +17,8 @@ export function formatDate (date, hours = false) {
   const hour = addZero(date.getHours())
   const minutes = addZero(date.getMinutes())
 
-  let dateString = `${day}.${month}.${year}`
-  if (hours) {
+  let dateString = `${dayName}${day}.${month}.${year}`
+  if (options.hours) {
     dateString += ` um ${hour}:${minutes} Uhr`
   }
   return dateString
