@@ -1,5 +1,11 @@
 class TranslationService {
+  lang = null
+
   translations = {}
+
+  setLang (lang) {
+    this.lang = lang
+  }
 
   setTranslations (translations) {
     translations.forEach(t => {
@@ -14,13 +20,19 @@ class TranslationService {
     })
   }
 
-  translate (realm, objectType, objectId, key, lang) {
+  translate (...args) {
+    let realm, objectType, objectId, key, lang
+
+    if (args.length === 1) {
+      key = args[0]
+    }
+
     const tKey = JSON.stringify([
       realm,
       objectType,
       objectId,
       key,
-      lang
+      lang || this.lang
     ])
 
     if (!this.translations[tKey]) {

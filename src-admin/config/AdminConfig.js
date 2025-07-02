@@ -15,7 +15,9 @@ class AdminConfig {
       SidebarMenu: null
     },
 
-    icons: {}
+    icons: {},
+
+    translations: []
   }
 
   config = {

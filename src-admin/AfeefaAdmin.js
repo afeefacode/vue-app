@@ -1,6 +1,7 @@
 import './config/components'
 import './directives'
 
+import { translationPlugin } from '@a-admin/plugins/translation/TranslationPlugin'
 import { apiResourcesPlugin } from '@a-vue/plugins/api-resources/ApiResourcesPlugin'
 import { eventBusPlugin } from '@a-vue/plugins/event-bus/EventBusPlugin'
 import { hasOptionsPlugin } from '@a-vue/plugins/has-options/HasOptionsPlugin'
@@ -69,8 +70,11 @@ export class AfeefaAdmin {
     // set app config
     adminConfig.app = this._appConfig
 
+    translationPlugin.setTranslations(this._appConfig.translations)
+
     Vue.use(configPlugin)
     Vue.use(iconsPlugin)
+    Vue.use(translationPlugin)
 
     // authenticate current user before doing any gui-voodo
     if (this._authService) {

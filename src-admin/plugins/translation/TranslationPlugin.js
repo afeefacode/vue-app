@@ -9,8 +9,8 @@ class TranslationPlugin {
   install (Vue) {
     Vue.mixin({
       created () {
-        this.$t = (realm, objectId, objectType, key, lang) => {
-          return translationService.translate(realm, objectId, objectType, key, lang)
+        this.$t = (...args) => {
+          return translationService.translate(...args)
         }
       }
     })
