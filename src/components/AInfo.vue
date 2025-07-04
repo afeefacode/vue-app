@@ -30,7 +30,7 @@ export default class AInfo extends Vue {
     margin-right: .4rem;
   }
 
-  .xSmall {
+  &.xSmall {
     padding: .3rem .6rem;
     font-size: .9rem;
 
