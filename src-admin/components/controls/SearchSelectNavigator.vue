@@ -18,6 +18,7 @@
         placeholder="Mausklick oder Space/↓-Taste zum Auswählen"
         :clearable="false"
         appendIcon="$dropdown"
+        hide-details
         @keydown.space.prevent="open"
         @keydown.down.prevent="open"
         @keydown.enter.prevent="open"

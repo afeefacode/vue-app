@@ -6,13 +6,11 @@
       @click="closeFloatingSidebars"
     />
 
-    <div
-      v-if="showDevSkin"
-      class="showDevSkin"
-    />
-
     <div class="main-layout">
-      <navigation-bar :has="$has" />
+      <navigation-bar
+        :has="$has"
+        class="showDevSkin"
+      />
 
       <div
         id="v-main"
@@ -32,7 +30,7 @@
         <sticky-footer-container />
       </div>
 
-      <information-bar />
+      <information-bar class="showDevSkin" />
     </div>
 
     <a-dialog id="app" />
@@ -169,11 +167,6 @@ export default class App extends Vue {
 
 
 <style lang="scss" scoped>
-.showDevSkin {
-  background: orange;
-  height: 1px;
-}
-
 .isLoading {
   opacity: .6;
 }
@@ -198,4 +191,13 @@ export default class App extends Vue {
   left: 0;
   z-index: 400;
 }
+
+.showDevSkin {
+  background: #EEEEEE !important;
+
+  ::v-deep(.v-text-field) {
+    background: red;
+  }
+}
+
 </style>

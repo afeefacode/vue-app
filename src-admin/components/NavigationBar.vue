@@ -18,7 +18,7 @@
     >
       <div
         v-if="show_dev_skin"
-        class="text-button mt-n6"
+        class="dev"
       >
         DEV
       </div>
@@ -201,5 +201,25 @@ export default class NavigationBar extends Vue {
 .logo {
   max-height: 80px;
   max-width: 90%;
+}
+
+.dev {
+  color: red;
+  font-family: monospace;
+  font-weight: bold;
+  line-height: 1;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  margin-top: -1.5rem;
+  margin-bottom: .3rem;
+  background: yellow;
+  padding: .1rem .2rem;
+  animation: blink 2s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
 }
 </style>
