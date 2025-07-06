@@ -9,7 +9,7 @@
     <div class="main-layout">
       <navigation-bar
         :has="$has"
-        class="showDevSkin"
+        :class="{showDevSkin}"
       />
 
       <div
@@ -30,7 +30,7 @@
         <sticky-footer-container />
       </div>
 
-      <information-bar class="showDevSkin" />
+      <information-bar :class="{showDevSkin}" />
     </div>
 
     <a-dialog id="app" />
@@ -196,7 +196,7 @@ export default class App extends Vue {
   background: #EEEEEE !important;
 
   ::v-deep(.v-text-field) {
-    background: red;
+    background: white;
   }
 }
 
