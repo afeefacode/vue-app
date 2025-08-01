@@ -70,7 +70,7 @@ export class AfeefaAdmin {
     // set app config
     adminConfig.app = this._appConfig
 
-    translationPlugin.setTranslations(this._appConfig.translations)
+    translationPlugin.setTranslations(this._appConfig.translations || [])
 
     Vue.use(configPlugin)
     Vue.use(iconsPlugin)
