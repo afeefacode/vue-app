@@ -9,7 +9,7 @@ export function formatDate (date, options = {}) {
     return ''
   }
 
-  const dayName = options.day ? date.toLocaleDateString('en-US', { weekday: 'long' }) + ', ' : ''
+  const dayName = options.day ? date.toLocaleDateString('de-DE', { weekday: 'long' }) + ', ' : ''
 
   const month = addZero(date.getMonth() + 1)
   const day = addZero(date.getDate())
