@@ -82,11 +82,12 @@
 <script>
 import { Component, Mixins, Watch } from '@a-vue'
 import { ListFilterMixin } from '../ListFilterMixin'
-import { ListAction, GetAction } from '@a-vue/api-resources/ApiActions'
+import { ListAction } from '@a-vue/api-resources/ApiActions'
+import { ApiAction } from '@a-vue/api-resources/ApiAction'
 import { Category } from '@/models'
 
 @Component({
-  props: ['itemTitle', 'itemValue', 'optionRequestFilters', {
+  props: ['itemTitle', 'itemValue', 'optionRequestFilters', 'selectedItemRequestParams', {
     selectedKey: 'id',
     getTitle: {type: Function, default: m => m.getTitle()},
     getSubtitle: {type: Function, default: m => m.getSubtitle()},
@@ -111,11 +112,13 @@ export default class ListFilterSearchSelect extends Mixins(ListFilterMixin) {
     }
 
     if (this.filter.value) {
-      const model = await this.createGetAction()
-        .params({
-          [this.selectedKey]: this.filter.value
-        })
-        .load()
+      const request = this.createLoadSelectedItemRequest()
+      const apiAction = ApiAction.fromRequest(request)
+
+      const result = await apiAction.execute()
+
+      // list or single
+      const model = result.models ? result.models[0] : result
 
       if (model) {
         if (this.filter.value) {
@@ -124,7 +127,16 @@ export default class ListFilterSearchSelect extends Mixins(ListFilterMixin) {
             this.inputModel = selectedModel.getTitle()
           }
         }
+      } else {
+        // wrong id tried to load
+        if (request.getParams()?.id) {
+          this.inputModel = 'ID ' + this.filter.value
+        } else { // wrong filter or other param loaded
+          this.inputModel = this.filter.value
+        }
       }
+    } else {
+      this.inputModel = 'Alle'
     }
   }
 
@@ -139,8 +151,12 @@ export default class ListFilterSearchSelect extends Mixins(ListFilterMixin) {
   }
 
   get listAction () {
-    return this.createListAction()
+    const request = this.filter
+      .createOptionsRequest()
+      .addFilters(this.optionRequestFilters || {})
+    return ListAction.fromRequest(request)
   }
+
 
   get specialItems () {
     // make array-typed options to proper models in order to show them
@@ -153,25 +169,24 @@ export default class ListFilterSearchSelect extends Mixins(ListFilterMixin) {
     })
   }
 
-  createListAction () {
-    const request = this.filter
-      .createOptionsRequest()
-      .addFilters(this.optionRequestFilters || {})
-    return ListAction.fromRequest(request)
-  }
-
-  createGetAction () {
-    const request = this.filter
-      .createOptionsRequest('get')
+  createLoadSelectedItemRequest () {
+    const request = this.filter.createOptionsRequest()
 
     const getAction = this.$apiResources.getAction({
       resourceType: request.getAction().getResource().getType(),
-      actionName: 'get'
+      actionName: this.selectedItemRequestParams?.actionName || 'get'
     })
 
     request.action(getAction)
 
-    return GetAction.fromRequest(request)
+    if (this.selectedItemRequestParams) {
+      request.params(this.selectedItemRequestParams.params)
+      request.filters(this.selectedItemRequestParams.filters)
+    } else {
+      request.params({[this.selectedKey]: this.filter.value})
+    }
+
+    return request
   }
 
   itemSelected (model) {
