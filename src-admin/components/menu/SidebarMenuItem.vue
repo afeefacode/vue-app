@@ -2,7 +2,7 @@
   <v-list-item
     :to="item.to"
     :exactPath="item.exact"
-    :target="item.target || _self"
+    :target="item.target || '_self'"
   >
     <v-list-item-icon
       v-if="item.iconModel"
