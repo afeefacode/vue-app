@@ -23,6 +23,7 @@
         :clearable="!!selectedItems.length"
         appendIcon="$dropdown"
         hide-details
+        :maxWidth="$attrs.maxWidth"
         @keydown.space.prevent="open"
         @keydown.down.prevent="open"
         @keydown.enter.prevent="open"
