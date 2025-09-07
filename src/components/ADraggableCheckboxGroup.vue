@@ -23,7 +23,7 @@
           >
             <a-icon
               size="1.5rem"
-              :icon="$icons.dragHandle"
+              :icon="{icon: '$dragIcon', color: '#CCCCCC'}"
             />
           </div>
 

@@ -15,6 +15,7 @@ import {
   mdiDotsHorizontal,
   mdiDotsVertical,
   mdiDownload,
+  mdiDrag,
   mdiFilter,
   mdiInformationOutline,
   mdiLock,
@@ -72,7 +73,8 @@ export default new Vuetify({
       addIcon: mdiPlusCircle,
       filterIcon: mdiFilter,
       infoIcon: mdiInformationOutline,
-      downloadIcon: mdiDownload
+      downloadIcon: mdiDownload,
+      dragIcon: mdiDrag
     }
   },
   breakpoint: {
