@@ -10,6 +10,7 @@
     :defaultValue="filter.defaultValue"
     hide-details
     v-bind="$attrs"
+    v-on="$listeners"
   />
 </template>
 
@@ -57,6 +58,8 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
     const {models} = await ListAction
       .fromRequest(this.filter.createOptionsRequest())
       .load()
+
+    this.$emit('optionsLoaded', models)
 
     return [
       ...this.getOptions(),
