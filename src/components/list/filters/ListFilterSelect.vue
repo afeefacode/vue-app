@@ -78,10 +78,10 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
     ]
   }
 
-  getOptions (prepend = false) {
+  getOptions (append = false) {
     return [
       ...this.filter.options
-        .filter(o => !!o.prepend === prepend)
+        .filter(o => !!o.append === append) // alle entfernen, denen append nicht uebereinstimmt
         .map(o => {
           return {
             itemTitle: o.title,
