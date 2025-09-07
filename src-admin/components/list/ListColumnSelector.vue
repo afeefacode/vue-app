@@ -76,7 +76,24 @@ export default class ListColumnSelector extends Vue {
       try {
         const storageItem = localStorage.getItem(`column-config-${this.storageKey}`)
         if (storageItem) {
-          this.columns_ = JSON.parse(storageItem)
+          const columns = {}
+          const jsonColumns = JSON.parse(storageItem)
+
+          // setzte alle stored columns, die auch in liste definiert sind
+          for (const key in jsonColumns) {
+            if (this.columns[key]) { // liste hat key
+              columns[key] = jsonColumns[key]
+            }
+          }
+
+          // setzte nun noch alle list columns, die nicht im store waren
+          for (const key in this.columns) {
+            if (!columns[key]) { // key noch nicht gesetzt
+              columns[key] = this.columns[key]
+            }
+          }
+
+          this.columns_ = columns
           this.selectedColumns = Object.keys(this.columns_)
             .filter(k => this.columns_[k].visible)
 
