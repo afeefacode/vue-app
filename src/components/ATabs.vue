@@ -1,10 +1,13 @@
 <template>
   <div>
-    <div :class="['menuContainer', {first}]">
+    <div
+      v-if="countTabs > 1 || !hideSingle"
+      :class="['menuContainer', {first}]"
+    >
       <div class="menu">
         <div
           v-for="(title, index) in titles"
-          :key="index"
+          :key="title + '-' + index"
           :class="['label', {selected: index === currentIndex}]"
           @click="setTab(index)"
         >
@@ -30,21 +33,33 @@
 </template>
 
 <script>
-import { Component, Vue } from '@a-vue'
+import { Component, Vue, Watch } from '@a-vue'
 
 @Component({
-  props: ['beforeChange', {first: false}]
+  props: ['beforeChange', {first: false, hideSingle: false}]
 })
 export default class ATabs extends Vue {
   titles = []
   icons = []
   currentIndex = 0
+  countTabs = 0
 
   mounted () {
-    this.titles = this.$children.map(c => c.title)
-    this.icons = this.$children.map(c => c.icon)
+    this.countTabs = this.getCountTabs()
+  }
 
-    this.$children[this.currentIndex].show()
+  updated () {
+    this.countTabs = this.getCountTabs()
+  }
+
+  @Watch('countTabs')
+  countTabsChanged (oldt, newt) {
+    this.$nextTick(() => {
+      this.titles = this.$children.map(c => c.title).filter(t => t)
+      this.icons = this.$children.map(c => c.icon).filter(i => i)
+
+      this.setTab(0)
+    })
   }
 
   async setTab (index) {
@@ -56,7 +71,7 @@ export default class ATabs extends Vue {
     }
 
     this.currentIndex = index
-    const tabs = this.$slots.default.map(s => s.componentInstance)
+    const tabs = this.$slots.default.map(s => s.componentInstance).filter(i => i)
     tabs.forEach((tab, i) => {
       if (i === this.currentIndex) {
         tab.show()
@@ -64,6 +79,10 @@ export default class ATabs extends Vue {
         tab.hide()
       }
     })
+  }
+
+  getCountTabs () {
+    return this.$slots.default.filter(s => !!s.tag).length // removed slot has vm.tag === undefined
   }
 }
 </script>
