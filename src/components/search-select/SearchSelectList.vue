@@ -21,7 +21,7 @@
 
         <a-table-row
           v-for="(model, index) in models_"
-          :key="model.id"
+          :key="model.type + '-' + model.id"
           small
           :class="['row-' + index, {selected: isSelected(model), disabled: isDisabled(model), active: activeModelIndex === index}]"
         >
