@@ -65,6 +65,10 @@ html {
 
 .theme--light.v-btn.v-btn--has-bg {
   background-color: #E9E9E9;
+
+  &.theme--light.v-btn.v-btn--disabled.v-btn--has-bg {
+    background-color: #CCCCCC !important;
+  }
 }
 
 .theme--light.v-btn:focus::before {
