@@ -7,6 +7,7 @@
   >
     <slot
       name="form"
+      :form="this"
       :changed="changed"
       :valid="valid"
       :modelToEdit="modelToEdit"
