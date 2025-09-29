@@ -22,5 +22,13 @@ export default class FormFieldText extends Mixins(FormFieldMixin) {
   setFocus () {
     this.$refs.input.setFocus(true)
   }
+
+  validate () {
+    this.$refs.input.validate()
+  }
+
+  get internalValue () {
+    return this.$refs.input?.internalValue
+  }
 }
 </script>
