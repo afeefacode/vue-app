@@ -1,7 +1,7 @@
 import { Component, Vue } from '@a-vue'
 
 @Component({
-  props: ['name', 'label']
+  props: ['name', 'label', 'optionRequestParams']
 })
 export class ListFilterMixin extends Vue {
   name_ = null

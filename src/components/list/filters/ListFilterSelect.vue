@@ -31,11 +31,7 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
       this.filter.value = []
     }
 
-    if (this.filter.hasOptionsRequest()) {
-      this.items = this.loadRequestOptions()
-    } else if (this.filter.hasOptions()) {
-      this.items = this.getOptions()
-    }
+    this.reloadOptions()
   }
 
   get clearable () {
@@ -56,7 +52,11 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
 
   async loadRequestOptions () {
     const {models} = await ListAction
-      .fromRequest(this.filter.createOptionsRequest())
+      .fromRequest(
+        this.filter
+          .createOptionsRequest()
+          .addParams(this.optionRequestParams || {})
+      )
       .load()
 
     this.$emit('optionsLoaded', models)
@@ -92,6 +92,14 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
           }
         })
     ]
+  }
+
+  reloadOptions () {
+    if (this.filter.hasOptionsRequest()) {
+      this.items = this.loadRequestOptions()
+    } else if (this.filter.hasOptions()) {
+      this.items = this.getOptions()
+    }
   }
 }
 </script>
