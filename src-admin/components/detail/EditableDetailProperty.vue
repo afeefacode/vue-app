@@ -64,6 +64,7 @@
       <a-icon-button
         v-if="buttonCreate"
         :class="buttonSize === 'small' ? 'mt-4' : 'mt-2'"
+        :small="buttonSize === 'small'"
         :x-small="buttonSize === 'x-small'"
         icon="$plusIcon"
         :text="label"
