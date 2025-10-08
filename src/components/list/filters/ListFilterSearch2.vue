@@ -27,7 +27,13 @@
 import { Component, Mixins } from '@a-vue'
 import { ListFilterMixin } from '../ListFilterMixin'
 
-@Component
+@Component({
+  props: [{
+    translateOption: {
+      default: () => title => title
+    }
+  }]
+})
 export default class ListFilterSearch2 extends Mixins(ListFilterMixin) {
   name_ = 'q'
   maxWidth_ = 200
@@ -50,7 +56,7 @@ export default class ListFilterSearch2 extends Mixins(ListFilterMixin) {
   get qFieldOptions () {
     return this.filters.qfield.options.map(o => ({
       ...o,
-      itemText: o.title,
+      itemText: this.translateOption(o.title),
       itemValue: o.value
     }))
   }
@@ -61,7 +67,8 @@ export default class ListFilterSearch2 extends Mixins(ListFilterMixin) {
     if (this.hasQFieldOptions() && !this.filters.qfield.hasDefaultValueSet()) {
       const selected = this.qFieldOptions.filter(o => o.value === this.filters.qfield.value)[0]
       if (selected) {
-        return `${label} (${selected.title})`
+        const qFieldTitle = this.translateOption(selected.title)
+        return `${label} (${qFieldTitle})`
       }
     }
 
@@ -73,6 +80,10 @@ export default class ListFilterSearch2 extends Mixins(ListFilterMixin) {
 
 <style lang="scss" scoped>
 ::v-deep() {
+  .v-text-field .v-label {
+    max-width: unset;
+  }
+
   .v-radio {
     margin-right: 14px !important;
     margin-top: -4px;
