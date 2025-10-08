@@ -125,6 +125,11 @@ export class ListViewMixin extends Vue {
     this.load()
   }
 
+  resetFilter (filterName) {
+    this.filters[filterName].reset()
+    this.listViewModel.filterValueChanged(filterName)
+  }
+
   resetFilters () {
     this.listViewModel.resetFilters()
   }
