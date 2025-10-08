@@ -48,7 +48,8 @@ export default class ASelect extends Mixins(ComponentWidthMixin) {
     this.init()
   }
 
-  selectedItemTitleChanged (value) {
+  @Watch('$attrs.value')
+  selectedItemTitleChanged () {
     this.$nextTick(() => {
       const title = this.$refs.select?.selectedItems[0]?.itemTitle
       this.$emit('selectedItemTitleChanged', title)
