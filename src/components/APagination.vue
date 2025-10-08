@@ -35,6 +35,7 @@ export default class APagination extends Vue {
 <style scoped lang="scss">
 :deep(.v-pagination) {
   gap: .3rem;
+
   .v-pagination__item,
   .v-pagination__more,
   .v-pagination__navigation {
