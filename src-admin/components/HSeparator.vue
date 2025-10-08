@@ -6,13 +6,26 @@
       :class="['label', {collapsible}]"
       @click="collapseClick"
     >
-      {{ label }}
-
-      <template v-if="collapsible">
-        <v-icon class="contextButton mt-n1 ml-n2">
-          {{ collapsed_ ? '$caretRightIcon' : '$caretDownIcon' }}
+      <a-row>
+        <v-icon
+          v-if="icon"
+          class="mr-2"
+          color="#CCCCCC"
+        >
+          {{ icon }}
         </v-icon>
-      </template>
+
+        <div>{{ label }}</div>
+
+        <template v-if="collapsible">
+          <v-icon
+            class="contextButton"
+            size="2rem"
+          >
+            {{ collapsed_ ? '$caretRightIcon' : '$caretDownIcon' }}
+          </v-icon>
+        </template>
+      </a-row>
     </div>
   </div>
 </template>
@@ -22,7 +35,7 @@
 import { Component, Vue, Watch } from '@a-vue'
 
 @Component({
-  props: ['label', {first: false, collapsible: false, collapsed: false}]
+  props: ['label', 'icon', {first: false, collapsible: false, collapsed: false}]
 })
 export default class HSeparator extends Vue {
   collapsed_ = false
@@ -59,7 +72,7 @@ export default class HSeparator extends Vue {
 
 hr {
   border: none;
-  border-top: 2px solid #EEEEEE;
+  border-top: 2px solid #DDDDDD;
 }
 
 .label {
@@ -67,12 +80,12 @@ hr {
   background: white;
   padding: 0 1rem;
   text-transform: uppercase;
-  letter-spacing: 5px;
-  color: #CCCCCC;
-  font-size: .8rem;
+  letter-spacing: 3px;
+  color: #BBBBBB;
+  font-size: .9rem;
   white-space: nowrap;
 
-  left: 45%;
+  left: 50%;
   transform: translateX(-50%);
 
   &.collapsible {
@@ -81,7 +94,7 @@ hr {
     &:hover {
       color: #333333;
 
-      .v-icon {
+      .v-icon.contextButton {
         color: #333333 !important;
       }
     }
