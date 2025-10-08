@@ -1,5 +1,8 @@
 <template>
-  <a-row gap="3">
+  <a-row
+    gap="3"
+    class="aPagination"
+  >
     <v-pagination
       ref="pagination"
       class="pagination-nav"

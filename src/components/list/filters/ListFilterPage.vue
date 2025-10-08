@@ -14,6 +14,7 @@
     <a-select
       v-if="$has.page_size"
       v-model="pageSizeFilter.value"
+      class="pageSizeSelect"
       :label="label || 'Anzahl'"
       :items="pageSizeFilter.options"
       :defaultValue="pageSizeFilter.defaultValue"
