@@ -21,6 +21,7 @@ import ListFilterSearch from './list/filters/ListFilterSearch'
 import ListFilterSearch2 from './list/filters/ListFilterSearch2'
 import ListFilterSearchSelect from './list/filters/ListFilterSearchSelect'
 import ListFilterSelect from './list/filters/ListFilterSelect'
+import ListFilterBar from './list/ListFilterBar'
 
 Vue.component('EditForm', EditForm)
 Vue.component('NestedEditForm', NestedEditForm)
@@ -43,3 +44,4 @@ Vue.component('ListFilterSearch2', ListFilterSearch2)
 Vue.component('ListFilterSelect', ListFilterSelect)
 Vue.component('ListFilterSearchSelect', ListFilterSearchSelect)
 Vue.component('ListFilterDate', ListFilterDate)
+Vue.component('ListFilterBar', ListFilterBar)
