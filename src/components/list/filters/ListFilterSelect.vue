@@ -11,6 +11,7 @@
     hide-details
     v-bind="$attrs"
     v-on="$listeners"
+    @selectedItemTitleChanged="selectedItemTitleChanged"
   />
 </template>
 
@@ -32,6 +33,10 @@ export default class ListFilterSelect extends Mixins(ListFilterMixin) {
     }
 
     this.reloadOptions()
+  }
+
+  selectedItemTitleChanged (title) {
+    this.displayValue = title
   }
 
   get clearable () {

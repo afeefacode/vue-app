@@ -141,6 +141,11 @@ export default class ListFilterSearchSelect extends Mixins(ListFilterMixin) {
     }
   }
 
+  @Watch('inputModel')
+  inputModelChanged () {
+    this.displayValue = this.inputModel
+  }
+
   calculateSelectorSize () {
     const input = this.$refs.input.$el
     const inputWidth = input.offsetWidth
