@@ -1,10 +1,10 @@
 <template>
   <a-row gap="8">
     <a-pagination
-      v-if="count && numPages > 1"
+      v-if="$has.page && count && numPages > 1"
       v-model="filter.value"
       :length="numPages"
-      :total-visible="_totalVisible"
+      :totalVisible="_totalVisible"
     >
       <template v-if="$has.page_number">
         <span class="pageNumber">{{ filter.value }} / {{ numPages }}</span>
@@ -32,7 +32,7 @@ import { ListFilterMixin } from '../ListFilterMixin'
   props: ['totalVisible']
 })
 export default class ListFilterPage extends Mixins(ListFilterMixin) {
-  $hasOptions = ['page_size', {page_number: false}]
+  $hasOptions = ['page', 'page_size', {page_number: false}]
 
   name_ = 'page'
 
@@ -41,7 +41,7 @@ export default class ListFilterPage extends Mixins(ListFilterMixin) {
   }
 
   get _totalVisible () {
-    return this.totalVisible === undefined ? 7 : this.totalVisible // allow 0 for totalVisible
+    return this.totalVisible === undefined ? 11 : this.totalVisible // allow 0 for totalVisible
   }
 
   get numPages () {
