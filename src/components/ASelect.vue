@@ -8,6 +8,7 @@
     :multiple="multiple"
     v-bind="{...$attrs, dense, outlined}"
     v-on="$listeners"
+    @change="selectedItemTitleChanged"
   />
 </template>
 
@@ -45,6 +46,13 @@ export default class ASelect extends Mixins(ComponentWidthMixin) {
     }
 
     this.init()
+  }
+
+  selectedItemTitleChanged (value) {
+    this.$nextTick(() => {
+      const title = this.$refs.select?.selectedItems[0]?.itemTitle
+      this.$emit('selectedItemTitleChanged', title)
+    })
   }
 
   @Watch('items')
@@ -86,6 +94,8 @@ export default class ASelect extends Mixins(ComponentWidthMixin) {
       this.items_ = items
     }
 
+    this.selectedItemTitleChanged()
+
     if (this.validator) {
       this.$nextTick(() => {
         const valid = this.select.validate(true)
@@ -95,6 +105,8 @@ export default class ASelect extends Mixins(ComponentWidthMixin) {
           this.select.selectedItems = [{
             itemTitle: 'Ungültiger Wert'
           }]
+
+          this.selectedItemTitleChanged()
         }
       })
     }
