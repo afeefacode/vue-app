@@ -81,6 +81,11 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
     this.setFocus()
   }
 
+  @Watch('formattedDate')
+  formattedDateChanged () {
+    this.$emit('displayedDateChanged', this.formattedDate)
+  }
+
   get clearable () {
     if (this.validator && this.validator.getParam('filled')) {
       return false
