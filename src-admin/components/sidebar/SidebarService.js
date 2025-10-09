@@ -87,6 +87,19 @@ class SidebarService {
     this.setRailInformation(true)
   }
 
+  toggleAll () {
+    const visible = !this.navigation
+    this.setNavigation(visible)
+
+    if (this.information) {
+      if (this.mobile) {
+        this.setRailInformation(true)
+      } else {
+        this.setRailInformation(!visible)
+      }
+    }
+  }
+
   get hasFloatingOverlay () {
     if (!this.mobile) {
       return false

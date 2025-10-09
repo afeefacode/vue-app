@@ -12,7 +12,8 @@ class AdminConfig {
 
     components: {
       Splash: null,
-      SidebarMenu: null
+      SidebarMenu: null,
+      HelpPage: null
     },
 
     icons: {},

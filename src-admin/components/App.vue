@@ -6,7 +6,29 @@
       @click="closeFloatingSidebars"
     />
 
-    <div class="main-layout">
+    <v-overlay
+      v-if="HelpPage && shortcutInfoVisible"
+      :opacity=".8"
+      fixed
+      @click="shortcutInfoVisible = false"
+    >
+      <component
+        :is="HelpPage"
+        v-if="HelpPage"
+        v-shortkey="['esc']"
+        @shortkey.native="shortcutInfoVisible = false"
+        @close="shortcutInfoVisible = false"
+      />
+    </v-overlay>
+
+    <div
+      v-shortkey="{
+        help: ['ctrl', 'space'],
+        zen: ['ctrl', 'shift', 'z']
+      }"
+      class="main-layout"
+      @shortkey="handleShortkey"
+    >
       <navigation-bar
         :has="$has"
         :class="{showDevSkin}"
@@ -88,6 +110,9 @@ export default class App extends Vue {
   sidebarsFloating = false
   hasFloatingInformationBar = false
 
+  shortcutInfoVisible = false
+  HelpPage = adminConfig.app.components.HelpPage || null
+
   autoLogoutChannel = new BroadcastChannel('auth.autologout')
   autoLogoutStartSeconds = 0
   autoLogoutStartRemainingSeconds = 0
@@ -133,6 +158,14 @@ export default class App extends Vue {
     this.hasFloatingInformationBar = sidebarService.mobile && sidebarService.information
 
     this.$emit('appLoaded')
+  }
+
+  handleShortkey (event) {
+    if (event.srcKey === 'help') {
+      this.shortcutInfoVisible = !this.shortcutInfoVisible
+    } else {
+      sidebarService.toggleAll()
+    }
   }
 
   get autoLogoutMessage () {
