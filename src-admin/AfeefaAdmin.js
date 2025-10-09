@@ -7,6 +7,7 @@ import { eventBusPlugin } from '@a-vue/plugins/event-bus/EventBusPlugin'
 import { hasOptionsPlugin } from '@a-vue/plugins/has-options/HasOptionsPlugin'
 import { timeout } from '@a-vue/utils/timeout'
 import Vue from 'vue'
+import VueShortKey from 'vue-shortkey'
 
 import { adminConfig } from './config/AdminConfig'
 import routeConfigPlugin from './config/routing'
@@ -100,6 +101,7 @@ export class AfeefaAdmin {
     // plugins
     Vue.use(hasOptionsPlugin)
     Vue.use(eventBusPlugin)
+    Vue.use(VueShortKey)
 
     // load auth resources
     if (this._authService) {
