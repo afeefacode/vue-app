@@ -5,7 +5,8 @@
   "author": "Afeefa Kollektiv <kollektiv@afeefa.de>",
   "license": "MIT",
   "dependencies": {
-    "moment": "^2.29.1"
+    "moment": "^2.29.1",
+    "vue-shortkey": "^3.1.7"
   },
   "devDependencies": {
     "core-js": "^3.25.5",
