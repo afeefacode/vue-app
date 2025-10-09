@@ -4,6 +4,7 @@
       <list-filter-search2
         label="Suche"
         maxWidth="220"
+        focus
         :translateOption="title => {
           return title
             .replace('Sprint', $t('SPRINT'))
