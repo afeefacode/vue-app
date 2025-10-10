@@ -115,3 +115,13 @@ html {
     row-gap: 4px * $i;
   }
 }
+
+@media print {
+  #navigation-bar {
+    display: none !important;
+  }
+
+  #information-bar {
+    display: none;
+  }
+}
