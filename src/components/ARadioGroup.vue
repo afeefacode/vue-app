@@ -94,6 +94,7 @@ export default class ARadioGroup extends Vue {
 <style lang="scss" scoped>
 .v-input {
   margin: 0;
+  padding: 0;
 
   &.alignTop .v-radio {
     align-items: flex-start;

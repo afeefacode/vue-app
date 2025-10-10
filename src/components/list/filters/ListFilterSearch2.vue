@@ -84,9 +84,12 @@ export default class ListFilterSearch2 extends Mixins(ListFilterMixin) {
     max-width: unset;
   }
 
+  .v-input--radio-group__input {
+    gap: 8px;
+  }
+
   .v-radio {
-    margin-right: 14px !important;
-    margin-top: -4px;
+    margin-right: 6px !important;
   }
 
   .v-input--selection-controls__input {

@@ -391,7 +391,7 @@ export default class ListView extends Mixins(ListViewMixin) {
 
 .filters:not(:empty) {
   margin-left: 4px;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 filters-below:not(:empty) {

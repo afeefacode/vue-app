@@ -1,6 +1,26 @@
 <template>
   <div class="listFilterBar">
     <a-row>
+      <v-btn
+        class="filterToggle"
+        @click="collapsed = !collapsed"
+      >
+        <a-row>
+          <v-icon color="#BBBBBB">
+            $filterIcon
+          </v-icon>
+
+          <div>{{ countSelectedFilters }}/{{ countFilters }}</div>
+
+          <v-icon
+            class="contextButton ml-n1"
+            size="2rem"
+          >
+            {{ collapsed ? '$caretRightIcon' : '$caretDownIcon' }}
+          </v-icon>
+        </a-row>
+      </v-btn>
+
       <list-filter-search2
         label="Suche"
         maxWidth="220"
@@ -11,46 +31,76 @@
             .replace('Kunde', $t('KUNDE'))
         }"
       />
-
-      <div
-        class="filterToggle"
-        @click="collapsed = !collapsed"
-      >
-        <a-row>
-          <v-icon
-            class="mr-2"
-            color="#CCCCCC"
-          >
-            $filterIcon
-          </v-icon>
-
-          <div>Filter {{ countSelectedFilters }}/{{ countFilters }}</div>
-
-          <v-icon
-            class="contextButton"
-            size="2rem"
-          >
-            {{ collapsed ? '$caretRightIcon' : '$caretDownIcon' }}
-          </v-icon>
-        </a-row>
-      </div>
     </a-row>
 
     <collapse-transition>
       <div
         v-show="!collapsed"
-        class="content"
+        class="mt-4"
       >
-        <a-grid
-          ref="filterGrid"
-          gap="3"
-          cols="3"
-          even
-          class="mt-4 pa-4"
-          style="background: #F4F4F4;"
+        <a-row
+          v-if="hasShortcuts"
+          gap="1"
+          class="shortcuts mb-2"
         >
-          <slot />
-        </a-grid>
+          <slot name="shortcuts" />
+        </a-row>
+
+        <div
+          style="background: #F4F4F4;"
+          class="pa-4"
+        >
+          <a-grid
+            ref="filterGrid"
+            gap="3"
+            cols="3"
+            even
+          >
+            <slot />
+          </a-grid>
+
+          <a-row
+            gap="6"
+            class="mt-3"
+          >
+            <list-filter-page :has="{page: false}" />
+
+            <a-radio-group
+              v-model="dragMode"
+              row
+              hide-details
+              @input="updateList"
+            >
+              <template #default>
+                <v-radio value="grab">
+                  <template #label>
+                    <a-icon
+                      :icon="{icon: grabIcon}"
+                      class="ml-n1 mr-1"
+                    /> Liste verschieben
+                  </template>
+                </v-radio>
+                <v-radio value="select">
+                  <template #label>
+                    <a-icon
+                      :icon="{icon: selectIcon}"
+                      class="ml-n1 mr-1"
+                    /> Text auswählen
+                  </template>
+                </v-radio>
+              </template>
+            </a-radio-group>
+
+            <v-btn
+              v-if="countSelectedFilters"
+              small
+              class="ml-n4"
+              @click="resetFilters"
+            >
+              Alles zurücksetzen
+            </v-btn>
+          </a-row>
+        </div>
       </div>
     </collapse-transition>
 
@@ -70,7 +120,7 @@
       </v-chip>
     </div>
 
-    <list-filter-page />
+    <list-filter-page :has="{page_size: false}" />
   </div>
 </template>
 
@@ -78,11 +128,16 @@
 <script>
 import { Component, Vue } from '@a-vue'
 import { ListFilterEvent } from '@a-vue/events'
+import { mdiTextRecognition, mdiHandBackRight } from '@mdi/js'
 
 @Component
 export default class ListFilterBar extends Vue {
   collapsed = true
   selectedFilters = []
+
+  grabIcon = mdiHandBackRight
+  selectIcon = mdiTextRecognition
+  dragMode = 'grab'
 
   created () {
     this.$events.on(ListFilterEvent.CHANGE, this.listFilterChanged)
@@ -112,7 +167,7 @@ export default class ListFilterBar extends Vue {
   }
 
   get countSelectedFilters () {
-    const coreFilters = ['q', 'qfield', 'page', 'page_size']
+    const coreFilters = ['q', 'qfield', 'page']
     let minus = 0
     for (const name of coreFilters) {
       if (!this.filters[name].hasDefaultValueSet()) {
@@ -145,9 +200,21 @@ export default class ListFilterBar extends Vue {
     }
   }
 
+  resetFilters () {
+    this.listView.resetFilters()
+  }
+
   resetFilter (name) {
     this.listView.resetFilter(name)
     this.setSelectedFilter(name, null, null)
+  }
+
+  get hasShortcuts () {
+    return this.$slots.shortcuts && !!this.$slots.shortcuts.length
+  }
+
+  updateList () {
+    this.listView.setDragMode(this.dragMode)
   }
 }
 </script>
@@ -155,10 +222,14 @@ export default class ListFilterBar extends Vue {
 
 <style lang="scss" scoped>
 .filterToggle {
-  cursor: pointer;
-  background: #F4F4F4;
-  padding: 0 4px;
-  margin-left: .5rem;
+  padding: 0 0 0 5px !important;
+  margin-right: 10px;
+  height: 2.5rem !important;
+
+  div {
+    font-size: .8rem;
+    color: #666666;
+  }
 }
 
 .chip-container {
@@ -170,9 +241,4 @@ export default class ListFilterBar extends Vue {
 ::v-deep(.aPagination) {
   margin-top: 14px;
 }
-
-::v-deep(.pageSizeSelect) {
-  margin-top: 15px;
-}
-
 </style>
