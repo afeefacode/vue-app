@@ -18,7 +18,9 @@ class AdminConfig {
 
     icons: {},
 
-    translations: []
+    translations: [],
+
+    auth: {}
   }
 
   config = {
