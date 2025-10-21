@@ -109,7 +109,12 @@ export class AfeefaAdmin {
     }
 
     // setup api resources
-    apiResourcesPlugin.register(this._apiConfig.models, this._apiConfig.apis)
+    let apis = this._apiConfig.apis
+    if (typeof apis === 'function') {
+      apis = apis()
+    }
+
+    apiResourcesPlugin.register(this._apiConfig.models, apis)
     Vue.use(apiResourcesPlugin)
     await apiResourcesPlugin.schemasLoaded()
 
