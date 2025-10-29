@@ -110,10 +110,6 @@ export default class FormFieldCategory extends Mixins(FormFieldMixin) {
     })
   }
 
-  mounted () {
-
-  }
-
   add (category) {
     if (this.isMultiple) {
       this.remove(category) // add again at end
