@@ -154,23 +154,27 @@ export default class FormFieldCategory extends Mixins(FormFieldMixin) {
   }
 
   initCategories (models) {
-    this.categories_ = models.map(m => {
-      let children = this.getChildren(m).map(c => ({
-        ...c,
-        color: this.color
-      }))
+    this.categories_ = models.map(m => this.initChildren(m))
+  }
 
-      if (children.length === 1) {
-        m = children[0]
-        children = []
-      }
+  initChildren (model) {
+    let children = this.getChildren(model).map(c => ({
+      ...c,
+      color: this.color
+    }))
 
-      return {
-        ...m,
-        color: this.color,
-        children
-      }
-    })
+    if (children.length === 1) {
+      model = children[0]
+      children = []
+    }
+
+    children = children.map(c => this.initChildren(c))
+
+    return {
+      ...model,
+      color: this.color,
+      children
+    }
   }
 
   get maxItems () {
