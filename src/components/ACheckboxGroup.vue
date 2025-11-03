@@ -16,9 +16,15 @@
         hide-details
         @input="checked(option.itemValue, $event)"
       >
-        <template #label>
+        <div>
           <div v-html="option.itemText" />
-        </template>
+
+          <div
+            v-if="option.itemHint"
+            class="hint"
+            v-html="option.itemHint"
+          />
+        </div>
       </a-checkbox>
     </a-row>
 
@@ -110,3 +116,11 @@ export default class ACheckboxGroup extends Vue {
   }
 }
 </script>
+
+
+<style lang="scss" scoped>
+.hint {
+  font-size: .9rem;
+  color: #999999;
+}
+</style>
