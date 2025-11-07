@@ -95,12 +95,17 @@ export default class APopup extends Mixins(CancelOnEscMixin, UsesPositionService
     const popups = this.getContainer().children
     let foundMyself = false
     for (const popup of popups) {
-      if (foundMyself) {
-        if (popup.contains(target)) {
-          return true
-        }
+      if (foundMyself && popup.contains(target)) {
+        return true
       }
-      foundMyself = popup === this.$el
+      if (!foundMyself) {
+        // wenn ich selbst ein popup bin, sind alle weiteren möglichen popus
+        // immer kind-popups von mir, wenn ich dort scrolle/clicke, soll ich
+        // selbst also offen bleiben
+        // wenn ich selbst ein kind-popup bin soll ich bei scroll/click auf ein
+        // parent allerdings wieder selbst zugehen
+        foundMyself = popup === this.$el
+      }
     }
     return false
   }
