@@ -6,8 +6,8 @@
     <template #actionButton>
       <a-icon
         v-if="buttonEdit"
-        size="1.3rem"
-        class="contextButton mt-n1"
+        size="1.6rem"
+        class="contextButton"
         title="Bearbeiten"
         @click="openModal"
       >
@@ -16,8 +16,8 @@
 
       <a-icon
         v-if="buttonAdd"
-        size="1.3rem"
-        class="contextButton mt-n1"
+        size="1.6rem"
+        class="contextButton"
         title="Bearbeiten"
         @click="openModal"
       >
