@@ -16,7 +16,7 @@
 
     <v-icon
       :color="icon.color"
-      size="3.5rem"
+      size="2.2rem"
       v-text="icon.icon"
     />
 
