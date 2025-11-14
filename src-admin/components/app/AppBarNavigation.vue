@@ -57,7 +57,6 @@ export default class AppBarNavigation extends Vue {
 
   initLinks () {
     const sections = document.querySelectorAll('.collapsible-section')
-    console.log(Array.from(sections).map(s => s.getAttribute('label')))
     this.links = Array.from(sections).map(s => {
       const label = s.getAttribute('label')
       const slug = label
