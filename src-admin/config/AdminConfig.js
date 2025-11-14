@@ -24,7 +24,8 @@ class AdminConfig {
   }
 
   config = {
-    has2FA: false
+    has2FA: false,
+    hasAppBarNavigation: false
   }
 }
 

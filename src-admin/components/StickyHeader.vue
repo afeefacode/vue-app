@@ -18,6 +18,8 @@
       <app-bar-title-container class="appBarTitle flex-grow-1" />
       <app-bar-buttons class="appBarButtons mr-2" />
     </div>
+
+    <app-bar-navigation v-if="$config.hasAppBarNavigation" />
   </div>
 </template>
 
@@ -25,13 +27,15 @@
 import { Component, Vue } from '@a-vue'
 import AppBarButtons from './app/AppBarButtons'
 import AppBarTitleContainer from './app/AppBarTitleContainer'
+import AppBarNavigation from './app/AppBarNavigation'
 import { SidebarEvent } from '@a-admin/events'
 import { sidebarService } from './sidebar/SidebarService'
 
 @Component({
   components: {
     AppBarButtons,
-    AppBarTitleContainer
+    AppBarTitleContainer,
+    AppBarNavigation
   }
 })
 export default class StickyHeader extends Vue {
