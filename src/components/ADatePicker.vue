@@ -2,7 +2,7 @@
   <div :class="['a-date-picker', {'type--month': type === 'month'}]">
     <v-text-field
       ref="input"
-      :value="formattedDate"
+      :value="displayedInputValue"
       :label="label"
       :placeholder="type === 'month' ? '' : 'DD.MM.JJJJ'"
       :style="cwm_widthStyle"
@@ -11,7 +11,9 @@
       append-icon="$calendarIcon"
       :readonly="type === 'month'"
       :clearable="clearable"
-      @input="dateInputChanged"
+      @input="onTextInput"
+      @focus="onInputFocus"
+      @blur="onInputBlur"
       @click:clear="clearDate"
       @click:append="open"
       @mouseup="openIfMonth"
@@ -56,6 +58,8 @@ import { randomCssClass } from '../utils/random'
 })
 export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositionServiceMixin, CancelOnEscMixin) {
   value_ = null
+  inputFocused = false
+  actualInputValue = null
   errorMessages = []
   popUpId = randomCssClass(10)
   isOpen = false
@@ -74,16 +78,13 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
   valueChanged () {
     this.value_ = this.value
     this.validate()
+
+    this.$emit('change', this.value)
   }
 
   @Watch('focus')
   focusChanged () {
     this.setFocus()
-  }
-
-  @Watch('formattedDate')
-  formattedDateChanged () {
-    this.$emit('displayedDateChanged', this.formattedDate)
   }
 
   get clearable () {
@@ -106,6 +107,8 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
 
     container.appendChild(this.popUp)
     this.positionize()
+
+    this.$el.querySelector('input').blur() // fokus entfernen, damit sofort formatiertes datum erscheint und nicht erst bei mousedown im popup
 
     this.isOpen = true
 
@@ -211,6 +214,7 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
 
   clearDate () {
     this.value_ = null
+    this.actualInputValue = null // wenn fokussiert dann auf leer setzen
     this.validate()
     this.$emit('input', this.value_)
   }
@@ -219,7 +223,20 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
     return value && value.match(/^(3[01]|[12][0-9]|0?[1-9]).(1[012]|0?[1-9]).((?:19|20)\d{2})$/)
   }
 
-  dateInputChanged (value) {
+  onInputFocus (test) {
+    if (!this.errorMessages.length) { // ersetze content mit DD.MM.YYYY wenn nicht gerade fehlerhaftes Datum drin ist
+      this.actualInputValue = formatDate(this.value_)
+    }
+
+    this.inputFocused = true
+  }
+
+  onTextInput (value) {
+    this.actualInputValue = value
+  }
+
+  onInputBlur () {
+    const value = this.actualInputValue
     if (!value) {
       this.dateChanged(null)
     } else if (this.validateTextInput(value)) {
@@ -227,19 +244,31 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
       const date = new Date(year + '-' + month + '-' + day)
       this.dateChanged(this.dateToString(date).split('T')[0])
     }
+
+    this.inputFocused = false
   }
 
   dateChanged (date) { // date is a yyyy-mm or yyyy-mm-dd string
+    let newValue
     if (date) {
       // take given date string an create a local time date object
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
       // > When the time zone offset is absent, date-only forms are interpreted as a UTC time and date-time forms are interpreted as local time.
       const timeString = this.value_ ? this.value_.toTimeString().split(' ')[0] : '00:00:00'
       const dateStringThatGetsConvertedToLocalDate = date + 'T' + timeString
-      this.value_ = new Date(dateStringThatGetsConvertedToLocalDate)
+      newValue = new Date(dateStringThatGetsConvertedToLocalDate)
     } else {
-      this.value_ = null
+      newValue = null
     }
+
+    // bitte kein date dispatchen, wenn die werte gleich sind,
+    // weil hier ggf. das day-popup nicht oeffnet, da das input
+    // den fokus verliert
+    if (this.value_?.getTime() === newValue?.getTime()) {
+      return
+    }
+
+    this.value_ = newValue
 
     this.validate()
 
@@ -247,16 +276,18 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
     this.$emit('input', this.value_)
   }
 
-  get formattedDate () {
-    const date = this.value_
-    if (!date) {
-      return null
-    }
+  get displayedInputValue () {
     if (this.type === 'month') {
+      const date = this.value_
       const monthName = date.toLocaleString('default', { month: 'long' })
       return monthName + ' ' + date.getFullYear()
     }
-    return formatDate(date)
+
+    if (!this.value_ || this.inputFocused || this.errorMessages.length) {
+      return this.actualInputValue
+    }
+
+    return formatDate(this.value_, {day: true, weekday: 'short'})
   }
 
   validate () {
@@ -297,13 +328,6 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
       }
       return true
     }]
-  }
-
-  get dateValidationRules () {
-    if (this.validator) {
-      return this.validator.getRules(this.label)
-    }
-    return []
   }
 
   setFocus (force = false) {
