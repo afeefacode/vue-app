@@ -54,7 +54,7 @@ import { PositionConfig } from '../services/PositionService'
 import { randomCssClass } from '../utils/random'
 
 @Component({
-  props: ['value', 'validator', 'type', {dense: true, outlined: true, focus: false}]
+  props: ['value', 'validator', 'type', 'day', {dense: true, outlined: true, focus: false}]
 })
 export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositionServiceMixin, CancelOnEscMixin) {
   value_ = null
@@ -310,7 +310,7 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
       return this.actualInputValue
     }
 
-    return formatDate(this.value_, {day: 'short'})
+    return formatDate(this.value_, {day: this.day})
   }
 
   validate () {
