@@ -8,7 +8,7 @@
     hide-details
     v-bind="$attrs"
     v-on="$listeners"
-    @displayedDateChanged="displayedDateChanged"
+    @change="dateChanged"
   />
 </template>
 
@@ -16,11 +16,16 @@
 <script>
 import { Component, Mixins } from '@a-vue'
 import { ListFilterMixin } from '../ListFilterMixin'
+import { formatDate } from '@a-vue/utils/format-date'
 
 @Component
 export default class ListFilterDate extends Mixins(ListFilterMixin) {
-  displayedDateChanged (formattedDate) {
-    this.displayValue = formattedDate
+  created () {
+    this.displayValue = formatDate(this.filter.value)
+  }
+
+  dateChanged (formattedDate) {
+    this.displayValue = formatDate(formattedDate)
   }
 }
 </script>
