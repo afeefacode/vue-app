@@ -236,13 +236,36 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
   }
 
   onInputBlur () {
-    const value = this.actualInputValue
+    let value = this.actualInputValue
     if (!value) {
       this.dateChanged(null)
-    } else if (this.validateTextInput(value)) {
-      const [day, month, year] = value.split('.')
-      const date = new Date(year + '-' + month + '-' + day)
-      this.dateChanged(this.dateToString(date).split('T')[0])
+    } else {
+      // If input is purely 4/6/8 digits, transform directly: 0104 -> 01.04.<thisYear>, 010426 -> 01.04.2026, 02052025 -> 02.05.2025
+      if (/^\d{4}$/.test(value) || /^\d{6}$/.test(value) || /^\d{8}$/.test(value)) {
+        const day = value.substr(0, 2)
+        const month = value.substr(2, 2)
+        const year = value.length === 4
+          ? new Date().getFullYear().toString()
+          : (value.length === 6
+              ? (2000 + parseInt(value.substr(4, 2), 10)).toString()
+              : value.substr(4, 4))
+        value = `${day.padStart(2, '0')}.${month.padStart(2, '0')}.${year}`
+      } else {
+        // also accept DD.MM.YY and expand to YYYY (covers inputs like '1.2.20')
+        const m = value.match(/^(\d{1,2})\.(\d{1,2})\.(\d{2})$/)
+        if (m) {
+          const day = m[1].padStart(2, '0')
+          const month = m[2].padStart(2, '0')
+          const year = (2000 + parseInt(m[3], 10)).toString()
+          value = `${day}.${month}.${year}`
+        }
+      }
+
+      if (this.validateTextInput(value)) {
+        const [day, month, year] = value.split('.')
+        const date = new Date(year + '-' + month + '-' + day)
+        this.dateChanged(this.dateToString(date).split('T')[0])
+      }
     }
 
     this.inputFocused = false
