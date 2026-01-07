@@ -9,7 +9,7 @@
       class="mr-n2"
       @click="goToLastNamedRoute()"
     >
-      <v-icon>
+      <v-icon size="24">
         $arrowLeftIcon
       </v-icon>
     </v-btn>
