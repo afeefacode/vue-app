@@ -310,7 +310,7 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
       return this.actualInputValue
     }
 
-    return formatDate(this.value_, {day: true, weekday: 'short'})
+    return formatDate(this.value_, {day: 'short'})
   }
 
   validate () {
