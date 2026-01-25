@@ -54,5 +54,9 @@ export default class ARow extends Mixins(ComponentWidthMixin) {
     flex-direction: column;
     align-items: start;
   }
+
+  &.even > * {
+    flex: 1;
+  }
 }
 </style>
