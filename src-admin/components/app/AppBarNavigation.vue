@@ -57,22 +57,33 @@ export default class AppBarNavigation extends Vue {
 
   initLinks () {
     const sections = document.querySelectorAll('.collapsible-section')
-    this.links = Array.from(sections).map(s => {
-      const label = s.getAttribute('label')
-      const slug = label
-        .toLowerCase()
-        .replace(/[^\w]+/g, '-') // Sonderzeichen -> Bindestriche
-        .replace(/^-+|-+$/g, '') // führende/trailing -
-        .substring(0, 50) // Sicherheitslimit
+    const seenLabels = new Set()
 
-      s.id = slug
+    this.links = Array.from(sections)
+      .filter(s => { // wenn aus versehen mehrere sections mit gleichem label bestehen, z.b. in popups
+        const label = s.getAttribute('label')
+        if (seenLabels.has(label)) {
+          return false
+        }
+        seenLabels.add(label)
+        return true
+      })
+      .map(s => {
+        const label = s.getAttribute('label')
+        const slug = label
+          .toLowerCase()
+          .replace(/[^\w]+/g, '-') // Sonderzeichen -> Bindestriche
+          .replace(/^-+|-+$/g, '') // führende/trailing -
+          .substring(0, 50) // Sicherheitslimit
 
-      return {
-        id: s.id,
-        label,
-        slug
-      }
-    })
+        s.id = slug
+
+        return {
+          id: s.id,
+          label,
+          slug
+        }
+      })
   }
 
   scrollToSection (id) {
