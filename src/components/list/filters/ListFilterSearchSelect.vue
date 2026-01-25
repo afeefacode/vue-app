@@ -5,8 +5,8 @@
     :specialItems="specialItems"
     :selectedItems="selectedItems"
     :getSearchInput="() => $refs.searchInput"
-    diffXControls="-.5rem"
-    diffYControls="-.5rem"
+    diffXControls="1rem"
+    diffYControls="1rem"
     v-bind="$attrs"
     @select="itemSelected"
     @close="focusInput"
@@ -23,7 +23,6 @@
         :clearable="!!selectedItems.length"
         appendIcon="$dropdown"
         hide-details
-        :maxWidth="$attrs.maxWidth"
         @keydown.space.prevent="open"
         @keydown.down.prevent="open"
         @keydown.enter.prevent="open"
@@ -37,7 +36,6 @@
           ref="searchInput"
           :focus="true"
           tabindex="1"
-          maxWidth="100%"
           :label="'Suche ' + label"
           v-on="onSearchInputKey"
         />
@@ -149,7 +147,7 @@ export default class ListFilterSearchSelect extends Mixins(ListFilterMixin) {
   calculateSelectorSize () {
     const input = this.$refs.input.$el
     const inputWidth = input.offsetWidth
-    this.$refs.select.setWidth(`calc(${inputWidth}px + 1rem)`)
+    this.$refs.select.setPopupWidth(`calc(${inputWidth}px - 2rem)`)
   }
 
   get selectedItems () {

@@ -248,4 +248,9 @@ export default class ATextField extends Mixins(ComponentWidthMixin) {
 .v-text-field :deep(.v-input__icon--clear) { // always show clear icon, https://github.com/vuetifyjs/vuetify/pull/15876
   opacity: 1;
 }
+
+.v-text-field {
+  flex: unset;
+  max-width: unset;
+}
 </style>

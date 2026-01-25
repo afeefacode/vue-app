@@ -4,8 +4,8 @@
     :listAction="listAction"
     :selectedItems="selectedItems"
     :getSearchInput="() => $refs.searchInput"
-    diffXControls="-.5rem"
-    diffYControls="-.5rem"
+    diffXControls="1rem"
+    diffYControls="1rem"
     v-bind="$attrs"
     @select="itemSelected"
     @close="focusInput"
@@ -38,7 +38,6 @@
           ref="searchInput"
           :focus="true"
           tabindex="1"
-          maxWidth="100%"
           :label="'Suche ' + label"
           v-on="onSearchInputKey"
         />
@@ -116,7 +115,7 @@ export default class FormFieldSearchSelect extends Mixins(FormFieldMixin) {
     const input = this.$refs.input?.$el
     if (input) {
       const inputWidth = input.offsetWidth
-      this.$refs.select.setWidth(`calc(${inputWidth}px + 1rem)`)
+      this.$refs.select.setPopupWidth(`calc(${inputWidth}px - 2rem)`)
     }
   }
 

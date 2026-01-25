@@ -3,7 +3,6 @@
     <a-text-field
       ref="input"
       v-model="filter.value"
-      :maxWidth="$attrs.maxWidth || maxWidth_"
       :label="label_"
       :debounce="500"
       v-bind="$attrs"
@@ -52,7 +51,6 @@ import { ListFilterMixin } from '../ListFilterMixin'
 @Component
 export default class ListFilterSearch extends Mixins(ListFilterMixin) {
   name_ = 'q'
-  maxWidth_ = 200
 
   clearValue (e) {
     if (this.filter.value) {

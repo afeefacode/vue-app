@@ -121,10 +121,13 @@ export default class ASelect extends Mixins(ComponentWidthMixin) {
   margin: 0;
   margin-right: .5rem;
 }
-
 </style>
 
 <style lang="scss" scoped>
+.v-select {
+  flex: unset;
+}
+
 .v-text-field :deep(.v-input__icon--clear) { // always show clear icon, https://github.com/vuetifyjs/vuetify/pull/15876
   opacity: 1;
 }

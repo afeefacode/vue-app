@@ -7,7 +7,6 @@ import { ListFilterEvent } from '@a-vue/events'
 export class ListFilterMixin extends Vue {
   displayValue = null
   name_ = null
-  maxWidth_ = null
 
   @Watch('displayValue')
   displayValueChanged () {

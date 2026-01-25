@@ -29,7 +29,7 @@
       <div
         v-if="isOpen"
         class="controls"
-        :style="cwm_widthStyle"
+        :style="cwm_popupWidthStyle"
       >
         <div class="background elevation-6" />
 
@@ -74,7 +74,7 @@
         :filters.sync="filters"
         :count.sync="count"
         :isLoading.sync="isLoading"
-        :style="cwm_widthStyle"
+        :style="cwm_popupWidthStyle"
         @onLoad="onLoad"
         @enter="selectItem"
         @backtab="setFocusToSearchInput"
@@ -361,8 +361,8 @@ export default class ASearchSelect extends Mixins(ComponentWidthMixin, UsesPosit
     }
   }
 
-  setWidth (width) {
-    this.cwm_width_ = width
+  setPopupWidth (width) {
+    this.cwm_popupWidth_ = width
   }
 
   searchFilterKeyDown (event) {
