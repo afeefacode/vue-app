@@ -1,5 +1,8 @@
 <template>
-  <div :class="['a-search-select', widthClass]">
+  <div
+    :class="['a-search-select', widthClass]"
+    :style="cwm_widthStyle"
+  >
     <div
       class="activator"
       @click="open"
