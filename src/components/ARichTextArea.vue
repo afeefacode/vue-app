@@ -321,6 +321,12 @@ export default class ARichTextArea extends Vue {
   &:disabled {
     background: none !important;
 
+    &.theme--light.v-btn.v-btn--disabled.v-btn--has-bg {
+      // give this a lot of specifity bc. disabled button is #cccccc !important
+      // by styles.scss
+      background: none !important;
+    }
+
     :deep(*) {
       color: #CCCCCC !important;
     }
