@@ -42,7 +42,7 @@ export class ComponentWidthMixin extends Vue {
     }
 
     if (maxWidth) {
-      styles.push(`max-width: ${this.cwm_toPixel_(maxWidth)}; background: yellow`)
+      styles.push(`max-width: ${this.cwm_toPixel_(maxWidth)}`)
     }
 
     return styles.join(' ')
