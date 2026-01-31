@@ -99,6 +99,8 @@
             >
               Alles zurücksetzen
             </v-btn>
+
+            <slot name="append" />
           </a-row>
         </div>
       </div>
