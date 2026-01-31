@@ -92,9 +92,12 @@ export default class ListColumnSelector extends Vue {
   }
 
   resetColumnOrder () {
-    this.columns_ = JSON.parse(JSON.stringify(this.defaultColumns))
-    this.selectedColumns = Object.keys(this.columns_)
-      .filter(k => this.columns_[k].visible)
+    const defaultKeys = Object.keys(this.defaultColumns)
+    const columns = {}
+    for (const key of defaultKeys) {
+      columns[key] = this.columns_[key]
+    }
+    this.columns_ = columns
     this.$emit('update:columns', this.columns_)
     this.saveColumnConfiguration()
   }
