@@ -2,9 +2,17 @@
   <div>
     <a-context-menu>
       <template #activator>
-        <div class="contextButton">
-          {{ selectedColumns.length }}/{{ Object.keys(columns_).length }}
-        </div>
+        <v-btn
+          class="columnsButton"
+          title="Spalten wählen"
+        >
+          <v-icon color="#BBBBBB">
+            {{ mdiViewColumn }}
+          </v-icon>
+          <div class="ml-1">
+            {{ selectedColumns.length }}/{{ Object.keys(columns_).length }}
+          </div>
+        </v-btn>
       </template>
 
       <a-draggable-checkbox-group
@@ -30,11 +38,14 @@
 
 <script>
 import { Component, Vue } from '@a-vue'
+import { mdiViewColumn } from '@mdi/js'
 
 @Component({
   props: ['columns', 'storageKey', {drag: false}]
 })
 export default class ListColumnSelector extends Vue {
+  mdiViewColumn = mdiViewColumn
+
   columns_ = {}
   selectedColumns = []
 
@@ -54,9 +65,10 @@ export default class ListColumnSelector extends Vue {
   }
 
   columnSelected () {
-    for (const key in this.columns) {
-      this.columns[key].visible = this.selectedColumns.includes(key)
+    for (const key in this.columns_) {
+      this.columns_[key].visible = this.selectedColumns.includes(key)
     }
+    this.$emit('update:columns', this.columns_)
     this.saveColumnConfiguration()
   }
 
@@ -126,8 +138,13 @@ export default class ListColumnSelector extends Vue {
 
 
 <style lang="scss" scoped>
-.contextButton {
-  font-size: .7rem;
-  cursor: pointer;
+.columnsButton {
+  padding: 0 8px 0 5px !important;
+  height: 2.2rem !important;
+
+  div {
+    font-size: .8rem;
+    color: #666666;
+  }
 }
 </style>
