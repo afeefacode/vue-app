@@ -32,24 +32,43 @@
         v-on="$listeners"
         @input="columnSelected"
       />
+
+      <v-btn
+        v-if="drag"
+        x-small
+        text
+        class="mt-2 reset-button"
+        @click="resetColumnOrder"
+      >
+        <v-icon
+          small
+          class="mr-1"
+        >
+          {{ mdiRestore }}
+        </v-icon>
+        Reihenfolge zurücksetzen
+      </v-btn>
     </a-context-menu>
   </div>
 </template>
 
 <script>
 import { Component, Vue } from '@a-vue'
-import { mdiViewColumn } from '@mdi/js'
+import { mdiRestore, mdiViewColumn } from '@mdi/js'
 
 @Component({
   props: ['columns', 'storageKey', {drag: false}]
 })
 export default class ListColumnSelector extends Vue {
   mdiViewColumn = mdiViewColumn
+  mdiRestore = mdiRestore
 
   columns_ = {}
+  defaultColumns = {}
   selectedColumns = []
 
   created () {
+    this.defaultColumns = JSON.parse(JSON.stringify(this.columns))
     this.loadColumnConfiguration()
     this.saveColumnConfiguration()
   }
@@ -68,6 +87,14 @@ export default class ListColumnSelector extends Vue {
     for (const key in this.columns_) {
       this.columns_[key].visible = this.selectedColumns.includes(key)
     }
+    this.$emit('update:columns', this.columns_)
+    this.saveColumnConfiguration()
+  }
+
+  resetColumnOrder () {
+    this.columns_ = JSON.parse(JSON.stringify(this.defaultColumns))
+    this.selectedColumns = Object.keys(this.columns_)
+      .filter(k => this.columns_[k].visible)
     this.$emit('update:columns', this.columns_)
     this.saveColumnConfiguration()
   }
@@ -146,5 +173,11 @@ export default class ListColumnSelector extends Vue {
     font-size: .8rem;
     color: #666666;
   }
+}
+
+.reset-button {
+  font-size: .75rem;
+  text-transform: none;
+  letter-spacing: normal;
 }
 </style>
