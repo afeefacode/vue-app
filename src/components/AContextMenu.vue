@@ -31,11 +31,12 @@ import { Component, Mixins, Watch } from '@a-vue'
 import { UsesPositionServiceMixin } from '../services/position/UsesPositionServiceMixin'
 import { Positions, PositionConfig } from '../services/PositionService'
 import { randomCssClass } from '../utils/random'
+import { CancelOnEscMixin } from '@a-vue/services/escape/CancelOnEscMixin'
 
 @Component({
   props: ['contentHeight', 'repositionWatchKey', 'triggerIcon', 'customAnchor']
 })
-export default class AContextMenu extends Mixins(UsesPositionServiceMixin) {
+export default class AContextMenu extends Mixins(UsesPositionServiceMixin, CancelOnEscMixin) {
   CONTEXT_MENU = true
   menuId = randomCssClass(10)
   nosePosition = 'left'
@@ -91,7 +92,7 @@ export default class AContextMenu extends Mixins(UsesPositionServiceMixin) {
     window.addEventListener('mousedown', this.onClickOutside)
     window.addEventListener('wheel', this.close)
     window.addEventListener('touchmove', this.close)
-    window.addEventListener('keydown', this.close)
+    window.addEventListener('keydown', this.onKeyDown)
 
     const container = this.getContainer()
     container.appendChild(this.popUp)
@@ -99,6 +100,8 @@ export default class AContextMenu extends Mixins(UsesPositionServiceMixin) {
     this.positionize()
 
     this.isOpen = true
+
+    this.coe_watchCancel()
 
     this.$emit('open')
   }
@@ -109,11 +112,13 @@ export default class AContextMenu extends Mixins(UsesPositionServiceMixin) {
     window.removeEventListener('mousedown', this.onClickOutside)
     window.removeEventListener('wheel', this.close)
     window.removeEventListener('touchmove', this.close)
-    window.removeEventListener('keydown', this.close)
+    window.removeEventListener('keydown', this.onKeyDown)
 
     this.$el.appendChild(this.popUp)
 
     this.isOpen = false
+
+    this.coe_unwatchCancel()
 
     this.$emit('close')
   }
@@ -137,6 +142,17 @@ export default class AContextMenu extends Mixins(UsesPositionServiceMixin) {
   get popUp () {
     const container = this.getContainer()
     return container.querySelector('.' + this.popUpCssClass)
+  }
+
+  coe_cancelOnEsc () {
+    this.close()
+    return false // stop esc propagation
+  }
+
+  onKeyDown (e) {
+    if (e.key !== 'Escape') {
+      this.close()
+    }
   }
 
   onClickOutside (e) {
