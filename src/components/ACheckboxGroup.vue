@@ -10,7 +10,7 @@
     >
       <a-checkbox
         v-for="option in options_"
-        :key="option.itemValue"
+        :key="optionKey(option.itemValue)"
         :label="option.itemText"
         :value="isChecked(option.itemValue)"
         hide-details
@@ -58,20 +58,26 @@ export default class ACheckboxGroup extends Vue {
     this.init()
   }
 
+  optionKey (value) {
+    return value && value.id !== undefined ? value.id : value
+  }
+
   checked (key, value) {
     if (value) {
       if (!this.isChecked(key)) {
         this.value_.push(key)
       }
     } else {
-      this.value_ = this.value_.filter(v => v !== key)
+      const keyId = this.optionKey(key)
+      this.value_ = this.value_.filter(v => this.optionKey(v) !== keyId)
     }
     this.$emit('input', this.value_)
     this.validate()
   }
 
   isChecked (key) {
-    return this.value_.includes(key)
+    const keyId = this.optionKey(key)
+    return this.value_.some(v => this.optionKey(v) === keyId)
   }
 
   @Watch('options')
