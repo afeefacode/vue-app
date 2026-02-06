@@ -1,7 +1,7 @@
 <template>
   <a-checkbox-group
     v-model="model[name]"
-    :label="label || name"
+    :label="label"
     :options="_options"
     :validator="validator"
     v-bind="$attrs"
@@ -21,6 +21,10 @@ export default class FormFieldCheckboxGroup extends Mixins(FormFieldMixin) {
     if (this.fieldHasOptionsRequest() || this.fieldHasOptions()) {
       this.options = this.getSelectOptions()
     }
+  }
+
+  get _addNullOption () {
+    return false
   }
 
   get _options () {

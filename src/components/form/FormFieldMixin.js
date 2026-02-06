@@ -66,13 +66,11 @@ export class FormFieldMixin extends Vue {
 
       const options = []
 
-      if (!this.validator || !this.validator.getParam('filled')) {
-        if (!this.$attrs.hasOwnProperty('multiple')) { // don't offer 'keine auswahl' on multiselects
-          options.push({
-            itemText: 'Keine Auswahl',
-            itemValue: null
-          })
-        }
+      if (this._addNullOption && (!this.validator || !this.validator.getParam('filled'))) {
+        options.push({
+          itemText: 'Keine Auswahl',
+          itemValue: null
+        })
       }
 
       return [
@@ -111,6 +109,10 @@ export class FormFieldMixin extends Vue {
         }
       })
     }
+  }
+
+  get _addNullOption () {
+    return !('multiple' in this.$attrs)
   }
 
   get validator () {
