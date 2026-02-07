@@ -38,6 +38,11 @@ html {
     color: inherit;
     text-decoration: line-through;
   }
+
+  .text-caption {
+    font-family: unset;
+    line-height: unset;
+  }
 }
 
 .theme--light.v-btn.a-btn-standard {
