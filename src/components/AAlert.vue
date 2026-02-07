@@ -14,7 +14,7 @@
     </v-icon>
 
     <div>
-      <h3>{{ _headline }}</h3>
+      <h3>{{ headline }}</h3>
 
       <div v-html="message" />
 
@@ -55,13 +55,6 @@ export default class AAlert extends Vue {
     window.addEventListener('mouseup', this.onMouseDown)
   }
 
-  get _headline () {
-    if (this.headline) {
-      return this.headline
-    }
-    return this.error ? 'Ein Fehler ist aufgetreten.' : 'Alles super!'
-  }
-
   onError (alertEvent) {
     this.success = false
     this.error = true
@@ -75,6 +68,14 @@ export default class AAlert extends Vue {
   }
 
   show (alert) {
+    if (!alert.headline) {
+      const messages = this.error
+        ? ['Ein Fehler ist aufgetreten', 'Da stimmt was nicht', 'Leider nicht geklappt', 'Da hakt es', 'Hoppla', 'Etwas ist schiefgelaufen', 'Das hat nicht funktioniert', 'Da klemmt etwas', 'Unerwartetes Hindernis', 'Kritischer Fehler #983-45§.v2)= ;-)', 'Kann mal passieren', 'Die Technik wieder']
+        : ['Erledigt!', 'Einwandfrei', 'Passt!', 'Wunderbar', 'Alles klar', 'Daten sicher verstaut', 'Tipptopp', 'Reibungslos', 'Bestens', 'Hat geklappt', 'Super', 'Totalgenial']
+      const index = Math.floor(Math.random() * messages.length)
+      alert.headline = messages[index]
+    }
+
     this.headline = alert.headline
     this.message = alert.message
     this.detail = alert.detail
