@@ -39,6 +39,7 @@
 
 <script>
 import { Component, Vue, Watch } from '@a-vue'
+import { adminConfig } from '@a-admin/config/AdminConfig'
 import { SaveEvent } from './save-indicator/SaveEvent'
 import { routeConfigPlugin } from '@a-vue/plugins/route-config/RouteConfigPlugin'
 
@@ -123,6 +124,17 @@ export default class ABreadcrumbs extends Vue {
 
     this.breadcrumbs = breadcrumbs
     this.wrapBreadcrumbs_ = false
+
+    const titles = breadcrumbs
+      .filter(b => b.title && b.title !== '...')
+      .map(b => b.title)
+    const appTitle = adminConfig.app.title
+    if (titles.length) {
+      const pageTitle = titles.reverse().join(' – ')
+      document.title = appTitle ? `${pageTitle} | ${appTitle}` : pageTitle
+    } else if (appTitle) {
+      document.title = appTitle
+    }
 
     this.scrollBreadcrumbs()
   }
