@@ -311,7 +311,7 @@ export default class ADatePicker extends Mixins(ComponentWidthMixin, UsesPositio
   get displayedInputValue () {
     if (this.type === 'month') {
       const date = this.value_
-      const monthName = date.toLocaleString('default', { month: 'long' })
+      const monthName = date.toLocaleString('de-DE', { month: 'long' })
       return monthName + ' ' + date.getFullYear()
     }
 
