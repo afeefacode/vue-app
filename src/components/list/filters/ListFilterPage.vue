@@ -9,7 +9,13 @@
       <template v-if="$has.page_number">
         <span class="pageNumber">{{ filter.value }} / {{ numPages }}</span>
       </template>
+      <span class="countLabel">{{ count }}</span>
     </a-pagination>
+
+    <span
+      v-if="$has.page && count && numPages <= 1"
+      class="countLabel countLabelStandalone"
+    >{{ count }}</span>
 
     <a-select
       v-if="$has.page_size"
@@ -59,5 +65,16 @@ export default class ListFilterPage extends Mixins(ListFilterMixin) {
 
 .pageNumber {
   white-space: nowrap;
+}
+
+.countLabel {
+  white-space: nowrap;
+  color: #999999;
+  font-size: .85rem;
+}
+
+.countLabelStandalone {
+  margin-left: .5rem;
+  margin-top: .5rem;
 }
 </style>
