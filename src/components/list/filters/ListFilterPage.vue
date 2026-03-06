@@ -1,6 +1,7 @@
 <template>
   <a-row gap="8">
-    <a-pagination
+    <component
+      :is="paginationComponent"
       v-if="$has.page && count && numPages > 1"
       v-model="filter.value"
       :length="numPages"
@@ -10,7 +11,7 @@
         <span class="pageNumber">{{ filter.value }} / {{ numPages }}</span>
       </template>
       <span class="countLabel">{{ count }}</span>
-    </a-pagination>
+    </component>
 
     <span
       v-if="$has.page && count && numPages <= 1"
@@ -34,14 +35,21 @@
 <script>
 import { Component, Mixins } from '@a-vue'
 import { ListFilterMixin } from '../ListFilterMixin'
+import APagination from '../../APagination'
+import APagination2 from '../../APagination2'
 
 @Component({
-  props: ['totalVisible']
+  props: ['totalVisible', { v2: false }],
+  components: { APagination, APagination2 }
 })
 export default class ListFilterPage extends Mixins(ListFilterMixin) {
   $hasOptions = ['page', 'page_size', {page_number: false}]
 
   name_ = 'page'
+
+  get paginationComponent () {
+    return this.v2 ? APagination2 : APagination
+  }
 
   get pageSizeFilter () {
     return this.filters.page_size

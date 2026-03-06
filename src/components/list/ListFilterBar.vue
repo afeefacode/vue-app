@@ -122,7 +122,12 @@
       </v-chip>
     </div>
 
-    <list-filter-page :has="{page_size: false}" />
+    <list-filter-page
+      class="mt-4"
+      :has="{page_size: false}"
+      v2
+      :totalVisible="9"
+    />
   </div>
 </template>
 
