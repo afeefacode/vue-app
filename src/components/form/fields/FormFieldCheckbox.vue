@@ -5,7 +5,9 @@
     :validator="validator"
     v-bind="$attrs"
     v-on="$listeners"
-  />
+  >
+    <slot />
+  </a-checkbox>
 </template>
 
 <script>
