@@ -17,8 +17,8 @@
         </li>
 
         <li
-          v-for="page in pageLinks"
-          :key="page"
+          v-for="(page, index) in pageLinks"
+          :key="index"
         >
           <button
             v-if="page === '...'"
