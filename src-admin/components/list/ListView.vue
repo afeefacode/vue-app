@@ -300,6 +300,10 @@ export default class ListView extends Mixins(ListViewMixin) {
       return
     }
 
+    if (event.button !== 0) { // 0 = left button; ignore right-click, middle-click, etc.
+      return
+    }
+
     this.scrollContainerX = this.getScrollParent(this.$el.querySelector('.a-table-wrapper'), 'h')
     this.scrollContainerY = this.getScrollParent(this.$el.querySelector('.a-table-wrapper'), 'v')
 
