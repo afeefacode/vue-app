@@ -20,20 +20,22 @@
             <div class="drag-handle">
               <a-icon
                 size="1.5rem"
-                :icon="{icon: '$dragIcon', color: '#CCCCCC'}"
+                :icon="{ icon: '$dragIcon', color: '#CCCCCC' }"
               />
             </div>
 
-            <a-checkbox
-              :label="option.itemText"
-              :value="isChecked(option.itemValue)"
-              hide-details
-              @input="checked(option.itemValue, $event)"
-            >
-              <template #label>
-                <div v-html="option.itemText" />
-              </template>
-            </a-checkbox>
+            <div class="checkbox">
+              <a-checkbox
+                :label="option.itemText"
+                :value="isChecked(option.itemValue)"
+                hide-details
+                @input="checked(option.itemValue, $event)"
+              >
+                <template #label>
+                  <div v-html="option.itemText" />
+                </template>
+              </a-checkbox>
+            </div>
           </div>
         </div>
       </draggable>
@@ -47,7 +49,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import { Component, Vue, Watch, Inject } from '@a-vue'
@@ -161,6 +162,10 @@ export default class ACheckboxGroup extends Vue {
   cursor: grab;
   transition: all .2s ease;
   height: 20px;
+}
+
+.checkbox {
+  flex-grow: 2;
 }
 
 .drag-handle:active {
