@@ -6,12 +6,11 @@
     :valueComparator="compareValues"
     :style="cwm_widthStyle"
     :multiple="multiple"
-    v-bind="{...$attrs, dense, outlined}"
+    v-bind="{ ...$attrs, dense, outlined }"
     v-on="$listeners"
     @change="selectedItemTitleChanged"
   />
 </template>
-
 
 <script>
 import { Component, Mixins, Watch } from '@a-vue'
@@ -19,7 +18,7 @@ import { Model } from '@afeefa/api-resources-client'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 
 @Component({
-  props: ['validator', 'defaultValue', 'items', {dense: true, outlined: true, multiple: false}]
+  props: ['validator', 'defaultValue', 'items', { dense: true, outlined: true, multiple: false }]
 })
 export default class ASelect extends Mixins(ComponentWidthMixin) {
   items_ = []
@@ -51,7 +50,10 @@ export default class ASelect extends Mixins(ComponentWidthMixin) {
   @Watch('$attrs.value')
   selectedItemTitleChanged () {
     this.$nextTick(() => {
-      const title = this.$refs.select?.selectedItems[0]?.itemTitle
+      const selectedItems = this.$refs.select?.selectedItems ?? []
+      const title = this.multiple
+        ? selectedItems.map(item => item.itemTitle).join(', ')
+        : selectedItems[0]?.itemTitle
       this.$emit('selectedItemTitleChanged', title)
     })
   }
@@ -114,7 +116,6 @@ export default class ASelect extends Mixins(ComponentWidthMixin) {
   }
 }
 </script>
-
 
 <style lang="scss">
 .v-application .v-select-list .v-list-item__action {

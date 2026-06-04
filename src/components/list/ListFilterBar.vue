@@ -63,7 +63,7 @@
             gap="6"
             class="mt-3"
           >
-            <list-filter-page :has="{page: false}" />
+            <list-filter-page :has="{ page: false }" />
 
             <a-radio-group
               v-model="dragMode"
@@ -75,7 +75,7 @@
                 <v-radio value="grab">
                   <template #label>
                     <a-icon
-                      :icon="{icon: grabIcon}"
+                      :icon="{ icon: grabIcon }"
                       class="ml-n1 mr-1"
                     /> Liste verschieben
                   </template>
@@ -83,7 +83,7 @@
                 <v-radio value="select">
                   <template #label>
                     <a-icon
-                      :icon="{icon: selectIcon}"
+                      :icon="{ icon: selectIcon }"
                       class="ml-n1 mr-1"
                     /> Text auswählen
                   </template>
@@ -124,13 +124,12 @@
 
     <list-filter-page
       class="mt-4"
-      :has="{page_size: false}"
+      :has="{ page_size: false }"
       v2
       :totalVisible="9"
     />
   </div>
 </template>
-
 
 <script>
 import { Component, Vue } from '@a-vue'
@@ -184,7 +183,7 @@ export default class ListFilterBar extends Vue {
     return Object.values(this.filters).filter(f => !f.hasDefaultValueSet()).length - minus
   }
 
-  listFilterChanged ({payload: {name, label, value}}) {
+  listFilterChanged ({ payload: { name, label, value } }) {
     this.setSelectedFilter(name, label, value)
   }
 
@@ -226,7 +225,6 @@ export default class ListFilterBar extends Vue {
 }
 </script>
 
-
 <style lang="scss" scoped>
 .filterToggle {
   padding: 0 0 0 5px !important;
@@ -243,6 +241,14 @@ export default class ListFilterBar extends Vue {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
+}
+
+// Filter oben bündig ausrichten, damit eine höher gewachsene Zelle
+// (z.B. Multi-Select mit mehreren Chips) die Nachbarn in derselben
+// Grid-Zeile nicht mitstreckt (Grid-Default align-items: stretch).
+
+::v-deep(.a-grid) {
+  align-items: start;
 }
 
 ::v-deep(.aPagination) {
