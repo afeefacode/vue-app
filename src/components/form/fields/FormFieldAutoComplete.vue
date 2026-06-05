@@ -19,12 +19,12 @@ import { FormFieldMixin } from '../FormFieldMixin'
 import { ComponentWidthMixin } from '../../mixins/ComponentWidthMixin'
 
 @Component
-export default class FormFieldSelect2 extends Mixins(FormFieldMixin, ComponentWidthMixin) {
+export default class FormFieldAutoComplete extends Mixins(FormFieldMixin, ComponentWidthMixin) {
   asyncItems = null
 
   created () {
     if (this.fieldHasOptionsRequest()) {
-      this.asyncItems = q => this.getSelectOptions({q})
+      this.asyncItems = q => this.getSelectOptions({ q })
     }
   }
 
