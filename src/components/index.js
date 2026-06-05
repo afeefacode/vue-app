@@ -10,7 +10,6 @@ import FormFieldRadioGroup from './form/fields/FormFieldRadioGroup'
 import FormFieldRichTextArea from './form/fields/FormFieldRichTextArea'
 import FormFieldSearchSelect from './form/fields/FormFieldSearchSelect'
 import FormFieldSelect from './form/fields/FormFieldSelect'
-import FormFieldAutoComplete from './form/fields/FormFieldAutoComplete'
 import FormFieldText from './form/fields/FormFieldText'
 import FormFieldTextArea from './form/fields/FormFieldTextArea'
 import FormFieldTime from './form/fields/FormFieldTime'
@@ -37,7 +36,6 @@ Vue.component('FormFieldDate', FormFieldDate)
 Vue.component('FormFieldTime', FormFieldTime)
 Vue.component('FormFieldSearchSelect', FormFieldSearchSelect)
 Vue.component('FormFieldSelect', FormFieldSelect)
-Vue.component('FormFieldAutoComplete', FormFieldAutoComplete)
 Vue.component('ListFilterPage', ListFilterPage)
 Vue.component('ListFilterSearch', ListFilterSearch)
 Vue.component('ListFilterSearch2', ListFilterSearch2)
