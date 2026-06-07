@@ -1,5 +1,6 @@
 import Vue from 'vue'
 
+import ASelect2 from './ASelect2'
 import EditForm from './form/EditForm'
 import EditModal from './form/EditModal'
 import FormFieldCategory from './form/fields/FormFieldCategory'
@@ -10,6 +11,7 @@ import FormFieldRadioGroup from './form/fields/FormFieldRadioGroup'
 import FormFieldRichTextArea from './form/fields/FormFieldRichTextArea'
 import FormFieldSearchSelect from './form/fields/FormFieldSearchSelect'
 import FormFieldSelect from './form/fields/FormFieldSelect'
+import FormFieldSelect2 from './form/fields/FormFieldSelect2'
 import FormFieldText from './form/fields/FormFieldText'
 import FormFieldTextArea from './form/fields/FormFieldTextArea'
 import FormFieldTime from './form/fields/FormFieldTime'
@@ -20,8 +22,10 @@ import ListFilterSearch from './list/filters/ListFilterSearch'
 import ListFilterSearch2 from './list/filters/ListFilterSearch2'
 import ListFilterSearchSelect from './list/filters/ListFilterSearchSelect'
 import ListFilterSelect from './list/filters/ListFilterSelect'
+import ListFilterSelect2 from './list/filters/ListFilterSelect2'
 import ListFilterBar from './list/ListFilterBar'
 
+Vue.component('ASelect2', ASelect2)
 Vue.component('EditForm', EditForm)
 Vue.component('NestedEditForm', NestedEditForm)
 Vue.component('EditModal', EditModal)
@@ -36,10 +40,12 @@ Vue.component('FormFieldDate', FormFieldDate)
 Vue.component('FormFieldTime', FormFieldTime)
 Vue.component('FormFieldSearchSelect', FormFieldSearchSelect)
 Vue.component('FormFieldSelect', FormFieldSelect)
+Vue.component('FormFieldSelect2', FormFieldSelect2)
 Vue.component('ListFilterPage', ListFilterPage)
 Vue.component('ListFilterSearch', ListFilterSearch)
 Vue.component('ListFilterSearch2', ListFilterSearch2)
 Vue.component('ListFilterSelect', ListFilterSelect)
+Vue.component('ListFilterSelect2', ListFilterSelect2)
 Vue.component('ListFilterSearchSelect', ListFilterSearchSelect)
 Vue.component('ListFilterDate', ListFilterDate)
 Vue.component('ListFilterBar', ListFilterBar)

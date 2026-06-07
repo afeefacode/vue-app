@@ -110,16 +110,13 @@
       v-if="collapsed"
       :class="['chip-container', selectedFilters.length ? 'mt-4' : '']"
     >
-      <v-chip
+      <select2-chip
         v-for="filter in selectedFilters"
         :key="filter.name"
-        color="#EEEEEE"
-        text-color="#666666"
-        close
-        @click:close="resetFilter(filter.name)"
+        @remove="resetFilter(filter.name)"
       >
-        <div>{{ filter.label }}: <b>{{ filter.value }}</b></div>
-      </v-chip>
+        {{ filter.label }}: <b>{{ filter.value }}</b>
+      </select2-chip>
     </div>
 
     <list-filter-page
@@ -136,7 +133,13 @@ import { Component, Vue } from '@a-vue'
 import { ListFilterEvent } from '@a-vue/events'
 import { mdiTextRecognition, mdiHandBackRight } from '@mdi/js'
 
-@Component
+import Select2Chip from '../select2/Select2Chip'
+
+@Component({
+  components: {
+    Select2Chip
+  }
+})
 export default class ListFilterBar extends Vue {
   collapsed = true
   selectedFilters = []
