@@ -262,6 +262,7 @@ export default class Select2List extends Vue {
 // a-table-row bringt Hover/Selected/Active/disabled + Cursor selbst mit.
 // Eigene Styles nur fürs Nötigste: Scroll, Zell-Overrides, Polaritätsfarben,
 // Zeilen-Flexbox und der nicht-Button.
+
 .select2List {
   display: flex;
   flex-direction: column;
@@ -278,6 +279,7 @@ export default class Select2List extends Vue {
   // rechte Zell-Padding (sonst großer Spalt zur Scrollbar). Die Zelle selbst
   // ist die Zeilen-Flexbox (Icon | Text | nicht-Button); volle Breite + min-width
   // 0, damit lange Titel abschneiden statt die Liste zu verbreitern.
+
   :deep(.a-table-row > *) {
     display: flex;
     align-items: center;
@@ -298,11 +300,13 @@ export default class Select2List extends Vue {
   }
 
   // Durchstreichen nur den Titel (nicht den nicht-Button).
+
   :deep(.a-table-row.excluded) .rowTitle {
     text-decoration: line-through;
   }
 
   // Langer Titel schneidet ab (…) statt die Liste zu verbreitern.
+
   .rowTitle {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -311,6 +315,7 @@ export default class Select2List extends Vue {
 
   // Nicht-Button nur bei Zeilen-Hover sichtbar (auch der aktive). Der
   // Ausschluss-Zustand bleibt an der roten/durchgestrichenen Zeile erkennbar.
+
   .excludeBtn {
     visibility: hidden;
   }
@@ -320,6 +325,7 @@ export default class Select2List extends Vue {
   }
 
   // Endlos-Scroll-Ziel: braucht Höhe, damit der IntersectionObserver feuert.
+
   .sentinel {
     height: 1px;
   }

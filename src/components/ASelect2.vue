@@ -173,6 +173,7 @@
         >
           <v-btn
             x-small
+            text
             class="footerBtn"
             :tabindex="-1"
             @click="discardAndClose"
@@ -384,11 +385,12 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
     this.loadResults()
   }
 
-  // Lädt eine Seite — bei cacheResults und stabiler Liste (keine Suche, 1. Seite)
-  // über den globalen Cache, sonst direkt. So teilen sich mehrere Selects auf
-  // dieselbe stabile Liste einen Request (Etappe 6).
+  // Lädt eine Seite. cacheResults=true → JEDE Anfrage (jede Seite, auch mit
+  // Suchbegriff) läuft über den globalen Cache; gleicher Key (Resource, Action,
+  // Felder, Filter, Suche, Seite) → ein Request, danach aus dem Cache.
+  // cacheResults=false (Default) → immer frisch vom Server, nie Cache.
   fetchPage (page) {
-    if (this.cacheResults && !this.search && page === 1) {
+    if (this.cacheResults) {
       return select2Cache.loadCached(this.cacheKey(page), () => this.requestPage(page))
     }
     return this.requestPage(page)
@@ -398,14 +400,27 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
     return this.buildListAction(page).hideError().load()
   }
 
+  // Cache-Key MUSS alle Parameter einbeziehen, die das Ergebnis verändern —
+  // Felder/Filter aus der Datenquelle plus Suche und Seite (dieselben Filter,
+  // die buildListAction setzt). Sonst lieferte der Cache für eine andere Suche/
+  // Seite fälschlich denselben Eintrag.
   cacheKey (page) {
     const request = this.optionsRequest().getApiRequest()
     const action = request.getAction()
     return buildCacheKey(
       action.getResource().getType(),
       action.getName(),
-      { ...request.getParams(), page_size: this.pageSize, page }
+      {
+        ...request.getParams(),
+        fields: request.getFields(),
+        ...this.pageFilters(page)
+      }
     )
+  }
+
+  // Suche + Seite als Filter (für Request und Cache-Key gleichermaßen).
+  pageFilters (page) {
+    return { q: this.search, page, page_size: this.pageSize }
   }
 
   // Baut die ListAction der Datenquelle und setzt Suche + Seite als Filter.
@@ -413,7 +428,7 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
   // addFilters merged auf die bestehenden Request-Filter, ersetzt sie nicht.
   buildListAction (page) {
     const request = this.optionsRequest()
-      .addFilters({ q: this.search, page, page_size: this.pageSize })
+      .addFilters(this.pageFilters(page))
     return ListAction.fromRequest(request)
   }
 
@@ -935,6 +950,7 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
 
   // Größe zwischen x-small (20px) und small (28px): Vuetify bietet dazwischen
   // nichts, daher per CSS auf 24px Höhe + leicht größere Schrift.
+
   .footerBtn.v-btn {
     height: 24px;
     font-size: .75rem;
