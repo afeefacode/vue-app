@@ -31,14 +31,24 @@
       :tabindex="disabled ? -1 : 0"
       @click:clear="clear"
     >
-      <template #selection="{ item }">
-        <select2-chip
-          :item="item"
-          :polarity="committedPolarityOf(item)"
-          :getTitle="getTitle"
-          :disabled="disabled"
-          @remove="removeModel(item)"
-        />
+      <!-- Reiner Text statt Chips (wie die übrigen Felder): erster Name per
+           Ellipsis auf die Feldbreite gekappt, "+ N" für den Rest. Ausschluss
+           mit "nicht " markiert (im Feld sonst nicht sichtbar). -->
+      <template #selection="{ item, index }">
+        <span
+          v-if="index === 0"
+          class="fieldText"
+        >
+          <span class="fieldFirst">
+            {{ committedPolarityOf(item) === 'exclude' ? 'nicht ' : '' }}{{ getTitle ? getTitle(item) : item.getTitle() }}
+          </span>
+          <span
+            v-if="committedModels.length > 1"
+            class="fieldMore grey--text"
+          >
+            +{{ committedModels.length - 1 }}
+          </span>
+        </span>
       </template>
     </v-select>
 
@@ -57,6 +67,14 @@
         class="popup elevation-6"
         :style="cwm_popupWidthStyle"
       >
+        <!-- Linearer Lade-Spinner am oberen Popup-Rand (wie Select1), während
+             Suche/Daten laden. -->
+        <a-loading-indicator
+          class="topLoader"
+          absolute
+          :isLoading="isLoading"
+        />
+
         <!-- Suchfeld immer sichtbar; rechts ein Auswahl-Chip ("N ausgewählt")
              zum Umschalten auf die Auswahl-Ansicht (blau = aktiv) und (×) löscht
              alle. Klick ins Suchfeld → zurück zur Trefferliste. -->
@@ -67,25 +85,30 @@
           <a-text-field
             ref="search"
             :value="search"
-            :label="searchPlaceholder || 'Suche'"
+            :label="searchLabel"
             clearable
             hide-details
-            @input="search = $event"
+            @input="onSearchInput"
             @focus="activeTab = 'search'"
             @keydown.native.down.prevent="focusList"
             @keydown.native.esc.prevent="onSearchEsc"
             @keydown.native.enter.ctrl.prevent="applyIfMultiple"
-          />
-          <select2-chip
-            v-if="multiple && activeSelection.length"
-            class="countChip"
-            :closable="false"
-            :color="activeTab === 'selection' ? 'primary' : undefined"
-            :text-color="activeTab === 'selection' ? 'white' : undefined"
-            @click.native="toggleSelectionView"
           >
-            {{ activeSelection.length }}
-          </select2-chip>
+            <!-- Anzahl-Chip innen rechts im Suchfeld: schaltet auf die
+                 Auswahl-Ansicht um (blau = aktiv). -->
+            <template #append>
+              <select2-chip
+                v-if="multiple && activeSelection.length"
+                class="countChip"
+                :closable="false"
+                :color="activeTab === 'selection' ? 'primary' : undefined"
+                :text-color="activeTab === 'selection' ? 'white' : undefined"
+                @click.native="toggleSelectionView"
+              >
+                {{ activeSelection.length }}
+              </select2-chip>
+            </template>
+          </a-text-field>
         </div>
 
         <!-- Trefferliste (Default) -->
@@ -149,18 +172,25 @@
           class="footer"
         >
           <v-btn
-            text
-            small
+            x-small
+            class="footerBtn"
+            :tabindex="-1"
             @click="discardAndClose"
           >
             Verwerfen
           </v-btn>
           <v-btn
-            text
-            small
-            color="primary"
+            x-small
+            class="footerBtn"
+            color="green white--text"
             @click="apply"
           >
+            <v-icon
+              left
+              class="mr-1"
+            >
+              $checkIcon
+            </v-icon>
             Übernehmen
           </v-btn>
         </div>
@@ -289,6 +319,15 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
     return typeof this.optionsRequest === 'function'
   }
 
+  // Such-Label wie bei ASearchSelect: "Suche <label>" (z.B. "Suche SpraMi").
+  // Ein explizit gesetztes searchPlaceholder hat Vorrang.
+  get searchLabel () {
+    if (this.searchPlaceholder) {
+      return this.searchPlaceholder
+    }
+    return this.label ? `Suche ${this.label}` : 'Suche'
+  }
+
   // `items`/`options` sind Props (feste Liste). Bewusst NICHT `items` als
   // Getter benennen — das würde den gleichnamigen Prop verdecken.
   get staticItems () {
@@ -307,9 +346,11 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
       return
     }
 
+    // Bei reset (neue Suche) die alte Liste NICHT sofort leeren — sonst ist sie
+    // während des Ladens leer und das Popup springt. Die neuen Treffer ersetzen
+    // sie erst unten, wenn sie da sind.
     if (reset) {
       this.page = 1
-      this.searchResults = []
     }
 
     this.isLoading = true
@@ -524,6 +565,13 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
     if (this.$refs.search) {
       this.$refs.search.setFocus(true)
     }
+  }
+
+  // Tippen im Suchfeld wechselt zurück in die Trefferliste (falls gerade die
+  // Auswahl-Ansicht aktiv ist) — sonst sucht man, sieht aber die Auswahl.
+  onSearchInput (value) {
+    this.search = value
+    this.activeTab = 'search'
   }
 
   // Esc im Suchfeld: mit Text → Suche leeren (offen bleiben); leer → schließen.
@@ -778,16 +826,55 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
 <style scoped lang="scss">
 // Feld = outlined v-select: Rahmen, Label, Chips, Fokus kommen von Vuetify.
 // Eigene Styles nur fürs Positionieren des Popups und den Klick-Cursor.
+
 .a-select2 {
   position: relative;
+  // In Grid-Spalten (a-grid cols-N) bleibt das Feld auf Spaltenbreite, statt mit
+  // langem Auswahl-Text mitzuwachsen — Voraussetzung dafür, dass die Ellipsis greift.
+  width: 100%;
+  min-width: 0;
 
   .field {
     cursor: pointer;
   }
 
   // Clear-× dauerhaft sichtbar (Vuetify zeigt es sonst nur bei Hover) — wie ASelect.
+
   .field :deep(.v-input__icon--clear) {
     opacity: 1;
+  }
+
+  // Auswahl-Text auf die Feldbreite begrenzen. Damit die Ellipsis greift,
+  // braucht jede Stufe der Flex-Kette min-width: 0 (selections → fieldText →
+  // fieldFirst), sonst diktiert der Text die Breite und spreizt das Feld.
+
+  .field :deep(.v-select__selections) {
+    flex-wrap: nowrap;
+    min-width: 0;
+  }
+
+  // max-width statt voller Breite: der Text-Block ist nur so breit wie nötig,
+  // damit "+ N" direkt hinter dem (ggf. gekappten) Namen steht statt am Feldrand.
+
+  .fieldText {
+    display: flex;
+    align-items: baseline;
+    max-width: 100%;
+  }
+
+  .fieldFirst {
+    flex: 0 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .fieldMore {
+    flex: none;
+    margin-left: .25rem;
+    margin-right: 2px;
+    white-space: nowrap;
+    font-size: .8125rem;
   }
 }
 </style>
@@ -809,10 +896,20 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
     padding: .5rem;
   }
 
+  // Linearer Lade-Spinner bündig am oberen Popup-Rand (über das Padding hinweg).
+
+  .topLoader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
   .search {
     display: flex;
     align-items: center;
     gap: .5rem;
+    margin-top: 2px;
     margin-bottom: .5rem;
   }
 
@@ -821,16 +918,26 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
   }
 
   // Auswahl-Umschalt-Chip neben dem Suchfeld.
+
   .countChip {
     cursor: pointer;
   }
 
+  // Button-Reihe wie die Edit-Form-Buttons: rechtsbündig, kleiner Gap, keine
+  // Trennlinie zur Liste.
+
   .footer {
     display: flex;
     justify-content: flex-end;
-    margin: .5rem -.5rem -.5rem;
-    padding: .25rem;
-    border-top: 1px solid rgba(0, 0, 0, .08);
+    gap: .5rem;
+    margin-top: 1.5rem;
+  }
+
+  // Größe zwischen x-small (20px) und small (28px): Vuetify bietet dazwischen
+  // nichts, daher per CSS auf 24px Höhe + leicht größere Schrift.
+  .footerBtn.v-btn {
+    height: 24px;
+    font-size: .75rem;
   }
 }
 </style>

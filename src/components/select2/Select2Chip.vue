@@ -65,7 +65,9 @@ export default class Select2Chip extends Vue {
 .select2Chip {
   max-width: 100%;
 
+  // Ellipsis greift nur, wenn das Label als Flex-Child schrumpfen darf (min-width: 0).
   .label {
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

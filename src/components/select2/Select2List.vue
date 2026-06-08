@@ -68,6 +68,7 @@
                 :class="['excludeBtn', { active: polarityOf(model) === 'exclude' }]"
                 x-small
                 depressed
+                :tabindex="-1"
                 :color="polarityOf(model) === 'exclude' ? 'error' : 'grey lighten-3'"
                 :title="polarityOf(model) === 'exclude' ? 'Einschließen' : 'Ausschließen'"
                 @click.stop="onExcludeClick(model)"
@@ -86,18 +87,10 @@
         class="sentinel"
       />
 
+      <!-- "Nichts gefunden" erst zeigen, wenn nicht (mehr) geladen wird — der
+           Lade-Spinner sitzt oben am Popup-Rand (ASelect2 .topLoader). -->
       <div
-        v-if="isLoading"
-        class="loading"
-      >
-        <a-loading-indicator
-          :isLoading="true"
-          relative
-        />
-      </div>
-
-      <div
-        v-else-if="!items.length"
+        v-if="!items.length && !isLoading"
         class="notFound"
       >
         <slot name="not-found">

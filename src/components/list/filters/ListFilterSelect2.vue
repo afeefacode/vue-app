@@ -124,14 +124,17 @@ export default class ListFilterSelect2 extends Mixins(ListFilterMixin) {
   }
 
   // Lesbare Beschriftung für das Bar-Chip (eingeklappte Filterleiste):
-  // Namen statt IDs, Ausschluss mit "nicht " markiert.
+  // erster Name (lange gekappt) + "+ N" für den Rest, damit der Chip auch bei
+  // vielen/langen Namen kurz bleibt. Ausschluss mit "nicht " markiert.
   toDisplayString (selection) {
     if (!selection || !selection.length) {
       return null
     }
-    return selection
-      .map(e => (e.polarity === 'exclude' ? 'nicht ' : '') + e.model.getTitle())
-      .join(', ')
+    const first = selection[0]
+    const label = (first.polarity === 'exclude' ? 'nicht ' : '') + first.model.getTitle()
+    const truncated = label.length > 25 ? label.slice(0, 25).trimEnd() + '…' : label
+    const rest = selection.length - 1
+    return rest > 0 ? `${truncated} +${rest}` : truncated
   }
 }
 </script>
