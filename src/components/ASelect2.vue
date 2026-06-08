@@ -259,7 +259,9 @@ import Select2List from './select2/Select2List'
       // auf [popupMinWidth, popupMaxWidth] (px) begrenzt. null = keine Grenze.
       // Eigene Namen statt minWidth/maxWidth, weil ComponentWidthMixin maxWidth
       // bereits für die FELD-Breite belegt (Kollision vermeiden).
-      popupMinWidth: null,
+      // Default 200px Mindestbreite, damit schmale Filter-Felder kein Mini-Popup
+      // bekommen.
+      popupMinWidth: 150,
       popupMaxWidth: null
     }
   ],
