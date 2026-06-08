@@ -64,7 +64,7 @@
     <div :class="panelCssClass">
       <div
         v-if="isOpen"
-        class="popup elevation-6"
+        :class="['popup elevation-6', 'open-' + openDirection]"
         :style="cwm_popupWidthStyle"
       >
         <!-- Linearer Lade-Spinner am oberen Popup-Rand (wie Select1), während
@@ -278,6 +278,8 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
   isLoading = false
   loadToken = 0
   searchDebounce = null
+  // Unterdrückt den search-Watcher genau einmal (beim programmatischen Leeren in open()).
+  suppressSearchWatch = false
 
   openDirection = 'down'
 
@@ -296,6 +298,12 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
 
   @Watch('search')
   searchChanged () {
+    // Beim Öffnen wird search programmatisch geleert und direkt geladen (open());
+    // dieser Watcher-Lauf würde sonst einen zweiten, debounced Request anstoßen.
+    if (this.suppressSearchWatch) {
+      this.suppressSearchWatch = false
+      return
+    }
     if (this.searchDebounce) {
       clearTimeout(this.searchDebounce)
     }
@@ -695,8 +703,19 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
 
     this.isOpen = true
 
-    // Lazy-Load: dynamische Liste erst beim Öffnen laden.
-    if (this.isDynamic && !this.searchResults.length) {
+    // Dynamische Quelle: bei JEDEM Öffnen frisch laden — Suchbegriff der vorigen
+    // Sitzung zurücksetzen, damit nicht ein alter Such-Rest wie ein aktiver Filter
+    // wirkt (§4). Die committed-Auswahl bleibt unberührt; nur der flüchtige Such-
+    // String/die Trefferliste werden neu aufgebaut. Der cacheResults-Cache greift
+    // davon unabhängig weiter (gleicher Key → aus dem Cache).
+    // search='' kann den @Watch('search') auslösen; der würde einen zweiten,
+    // debounced Request anstoßen. Daher den Watcher für diesen einen Reset
+    // unterdrücken (nur wenn search sich wirklich ändert) und EINMAL direkt laden.
+    if (this.isDynamic) {
+      if (this.search) {
+        this.suppressSearchWatch = true
+        this.search = ''
+      }
       this.loadResults({ reset: true })
     }
 
@@ -806,9 +825,17 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
       .anchorTop().targetTop()
       .anchorLeft().targetLeft()
       .diffX('.5rem').diffY('.5rem')
-      // Kein Platz nach unten → an der Unterkante ausrichten (nach oben).
+      // Kein Platz nach unten → an der Unterkante ausrichten (Popup wächst nach
+      // oben). Der Callback meldet, welche Variante griff: alternativePositionY
+      // === true ⇒ nach oben geklappt ('up').
+      // diffX MUSS hier erneut gesetzt werden: PositionConfig.clone() (in
+      // alternativeY) kopiert targetDiffX/Y nicht mit, sonst läge das Popup im
+      // Up-Fall 8px weiter links als im Down-Fall.
       .alternativeY(p => {
-        p.anchorBottom().targetBottom().diffY('-.5rem')
+        p.anchorBottom().targetBottom().diffX('.5rem').diffY('-.5rem')
+      })
+      .onPosition(({ alternativePositionY }) => {
+        this.openDirection = alternativePositionY ? 'up' : 'down'
       })
 
     this.urp_registerPositionWatcher(position)
@@ -909,6 +936,31 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
     display: flex;
     flex-direction: column;
     padding: .5rem;
+  }
+
+  // Beim Hochklappen (Popup über dem Feld) klebt das Suchfeld an der dem Feld
+  // zugewandten (unteren) Kante: Liste oben, dann Suchfeld, Footer bleibt unten
+  // (UX: Aktionsbuttons immer am unteren Rand, nicht feldfern nach oben). Per
+  // `order` statt column-reverse. Der topLoader ist position:absolute und bleibt
+  // davon unberührt.
+
+  .popup.open-up {
+    .select2List {
+      order: 1;
+    }
+
+    .search {
+      order: 2;
+      // Mehr Luft zwischen Liste und Suchfeld in der invertierten Lage (§1).
+      margin-top: 1rem;
+      margin-bottom: 2px;
+    }
+
+    .footer {
+      order: 3;
+      // Footer rückt näher ans Suchfeld als im Normalfall (down).
+      margin-top: 1rem;
+    }
   }
 
   // Linearer Lade-Spinner bündig am oberen Popup-Rand (über das Padding hinweg).
