@@ -405,7 +405,7 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
   // die buildListAction setzt). Sonst lieferte der Cache für eine andere Suche/
   // Seite fälschlich denselben Eintrag.
   cacheKey (page) {
-    const request = this.optionsRequest().getApiRequest()
+    const request = this.optionsRequest()
     const action = request.getAction()
     return buildCacheKey(
       action.getResource().getType(),
