@@ -11,10 +11,44 @@
 const DEFAULT_TTL_MS = 30 * 60 * 1000 // 30 Minuten
 
 // Stabiler Cache-Key aus Resource-Typ, Action und normalisierten Params.
-// Dieselbe Funktion nutzen ASelect2-Lookup und ein etwaiges main.js-Prewarming,
+// Dieselbe Funktion nutzen ASelect2-Lookup und main.js-Prewarming,
 // damit beide auf denselben Eintrag zeigen.
+// Die Params werden mit SORTIERTEN Schlüsseln serialisiert (rekursiv), damit
+// die Schlüssel-Reihenfolge im Objekt den Key nicht verändert — sonst ergäben
+// `{title,key}` und `{key,title}` verschiedene Keys (Drift Lookup ↔ Vorwärmung).
 export function buildCacheKey (resourceType, actionName, params = {}) {
-  return [resourceType, actionName, JSON.stringify(params || {})].join('|')
+  return [resourceType, actionName, stableStringify(params || {})].join('|')
+}
+
+function stableStringify (value) {
+  if (Array.isArray(value)) {
+    return '[' + value.map(stableStringify).join(',') + ']'
+  }
+  if (value && typeof value === 'object') {
+    const keys = Object.keys(value).sort()
+    return '{' + keys.map(k => JSON.stringify(k) + ':' + stableStringify(value[k])).join(',') + '}'
+  }
+  return JSON.stringify(value)
+}
+
+// Key aus einem ApiRequest + Seiten-Parametern — die EINE Schlüssel-Quelle für
+// Lookup (ASelect2.cacheKey) UND Vorwärmung (main.js). Beide MÜSSEN diese
+// Funktion nutzen, sonst driften die Keys auseinander und die Vorwärmung trifft
+// den Lookup-Eintrag nie. `q`/`page`/`pageSize` müssen den Werten entsprechen,
+// die der Lookup bei der ersten Seite ohne Suche verwendet (q:'', page:1).
+export function buildRequestCacheKey (request, { q = '', page = 1, pageSize = 30 } = {}) {
+  const action = request.getAction()
+  return buildCacheKey(
+    action.getResource().getType(),
+    action.getName(),
+    {
+      ...request.getParams(),
+      fields: request.getFields(),
+      q,
+      page,
+      page_size: pageSize
+    }
+  )
 }
 
 class Select2Cache {
@@ -23,6 +57,19 @@ class Select2Cache {
 
   setTtl (ms) {
     this.ttlMs = ms
+  }
+
+  // Cache von außen vorwärmen (main.js-Vorladen): ein bereits geladenes Ergebnis
+  // unter `key` ablegen, ohne Request. Beim ersten Öffnen einer ASelect2 mit
+  // demselben Key ist der Eintrag dann schon da (kein Lade-Request).
+  // Läuft für denselben Key schon ein Request (inFlight), NICHT überschreiben —
+  // sonst ginge der wartende Promise verloren; der laufende Request gewinnt.
+  prime (key, result) {
+    const existing = this.entries.get(key)
+    if (existing && existing.inFlight) {
+      return
+    }
+    this.entries.set(key, { result, loadedAt: this.now(), inFlight: null })
   }
 
   getCached (key) {

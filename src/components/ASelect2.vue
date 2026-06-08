@@ -79,7 +79,7 @@
              zum Umschalten auf die Auswahl-Ansicht (blau = aktiv) und (×) löscht
              alle. Klick ins Suchfeld → zurück zur Trefferliste. -->
         <div
-          v-if="isDynamic"
+          v-if="showSearchField"
           class="search"
         >
           <a-text-field
@@ -116,6 +116,7 @@
           v-if="activeTab === 'search'"
           ref="list"
           :items="displayItems"
+          :stickyCount="isDynamic ? topSpecialCount : 0"
           :selection="activeSelection"
           :getTitle="getTitle"
           :getSubtitle="getSubtitle"
@@ -207,7 +208,7 @@ import { PositionConfig } from '../services/PositionService'
 import { CancelOnEscMixin } from '@a-vue/services/escape/CancelOnEscMixin'
 import { DialogEvent } from '@a-vue/events'
 import { ListAction } from '@a-vue/api-resources/ApiActions'
-import { select2Cache, buildCacheKey } from '../services/select-cache/Select2Cache'
+import { select2Cache, buildRequestCacheKey } from '../services/select-cache/Select2Cache'
 import { randomCssClass } from '../utils/random'
 import { ComponentWidthMixin } from './mixins/ComponentWidthMixin'
 import Select2Chip from './select2/Select2Chip'
@@ -246,7 +247,20 @@ import Select2List from './select2/Select2List'
       disabled: false,
       clearable: false,
       cacheResults: false,
-      pageSize: 30
+      // Suchfeld hart abschalten (Default an). Für Scroll-Listen, die bewusst nur
+      // durchgeblättert, nicht durchsucht werden — auch bei mehreren Seiten (§4).
+      hasSearch: true,
+      pageSize: 30,
+      // Sonder-Items (§5): feste Zusatz-Einträge, die keine echten Optionen sind
+      // (z.B. "ohne Rechnungsstelle"). Jedes Item trägt seine Position selbst
+      // (`position: 'top'|'bottom'`). Die Filter-Hülle mappt server `append` → position.
+      specialItems: () => [],
+      // Popup-Breitenklemmung (§1): die aus der Feldbreite berechnete Breite wird
+      // auf [popupMinWidth, popupMaxWidth] (px) begrenzt. null = keine Grenze.
+      // Eigene Namen statt minWidth/maxWidth, weil ComponentWidthMixin maxWidth
+      // bereits für die FELD-Breite belegt (Kollision vermeiden).
+      popupMinWidth: null,
+      popupMaxWidth: null
     }
   ],
   components: {
@@ -275,6 +289,9 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
   page = 1
   hasMore = false
   count = null
+  // Wurde mindestens eine Seite geladen? Erst danach ist `hasMore` aussagekräftig
+  // (steuert, ob das Suchfeld bei einseitigen Listen entfällt — siehe showSearchField).
+  loaded = false
   isLoading = false
   loadToken = 0
   searchDebounce = null
@@ -328,6 +345,24 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
     return typeof this.optionsRequest === 'function'
   }
 
+  // Suchfeld nur zeigen, wenn es etwas zu suchen gibt: dynamische Quelle UND die
+  // Liste passt nicht auf eine Seite (`hasMore`). Bei einer einseitigen Liste
+  // (z.B. 8 Auftragsstatus) ist Suchen sinnlos → kein Suchfeld.
+  //
+  // Zwei Sonderfälle, die das Feld trotzdem sichtbar halten müssen:
+  // - Schon getippt (`search`): nach dem Tippen kann die Liste auf 1 Seite
+  //   schrumpfen (`hasMore` false) — das Feld muss bleiben, sonst lässt sich die
+  //   Suche nicht mehr ändern/leeren.
+  // - Noch nichts geladen (`!loaded`): `hasMore` ist erst nach der ersten Seite
+  //   bekannt. Bis dahin Feld zeigen, statt es kurz zu verstecken und nachträglich
+  //   aufpoppen zu lassen.
+  get showSearchField () {
+    if (!this.isDynamic || !this.hasSearch) {
+      return false
+    }
+    return this.hasMore || !!this.search || !this.loaded
+  }
+
   // Such-Label wie bei ASearchSelect: "Suche <label>" (z.B. "Suche SpraMi").
   // Ein explizit gesetztes searchPlaceholder hat Vorrang.
   get searchLabel () {
@@ -343,9 +378,60 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
     return this.items || this.options || []
   }
 
-  // Was die Liste anzeigt: feste Liste oder dynamische Treffer.
-  get displayItems () {
+  // Reine Treffer/Optionen (ohne Sonder-Items).
+  get baseItems () {
     return this.isDynamic ? this.searchResults : this.staticItems
+  }
+
+  // Sonder-Items nach Position getrennt. Beim Tippen verhalten sie sich wie
+  // normale Einträge — clientseitig nach Titel-Match ein-/ausblenden (§5).
+  matchingSpecialItems (position) {
+    const items = (this.specialItems || []).filter(i => (i.position || 'bottom') === position)
+    if (!this.search) {
+      return items
+    }
+    const q = this.search.toLowerCase()
+    return items.filter(i => this.itemTitle(i).toLowerCase().includes(q))
+  }
+
+  itemTitle (model) {
+    return this.getTitle ? this.getTitle(model) : model.getTitle()
+  }
+
+  // Untere Sonder-Items lassen sich nur dann verlässlich ans Listenende setzen,
+  // wenn die ganze Liste auf einer Seite liegt — sonst (Pagination greift,
+  // `hasMore`) würden sie zwischen den bisher geladenen Treffern und den noch
+  // nachkommenden Seiten hängen, also faktisch mitten in der Liste. In dem Fall
+  // ziehen wir alle Sonder-Items nach oben (sticky), damit sie sichtbar bleiben.
+  get collapseSpecialToTop () {
+    return this.isDynamic && this.hasMore
+  }
+
+  // Was die Liste anzeigt: Sonder-Items oben (vor den Treffern, bei dynamischer
+  // Liste angepinnt), dann die Treffer, dann Sonder-Items unten — Letzteres nur,
+  // solange die Liste auf einer Seite passt (§5, siehe collapseSpecialToTop).
+  get displayItems () {
+    if (this.collapseSpecialToTop) {
+      return [
+        ...this.matchingSpecialItems('top'),
+        ...this.matchingSpecialItems('bottom'),
+        ...this.baseItems
+      ]
+    }
+    return [
+      ...this.matchingSpecialItems('top'),
+      ...this.baseItems,
+      ...this.matchingSpecialItems('bottom')
+    ]
+  }
+
+  // Anzahl der oben angepinnten Sonder-Items (für sticky-Rendering in Select2List).
+  // Bei collapseSpecialToTop sind auch die unteren Sonder-Items mit oben.
+  get topSpecialCount () {
+    const top = this.matchingSpecialItems('top').length
+    return this.collapseSpecialToTop
+      ? top + this.matchingSpecialItems('bottom').length
+      : top
   }
 
   // --- Laden (nur dynamisch) -----------------------------------------------
@@ -381,6 +467,7 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
     this.searchResults = reset ? models : [...this.searchResults, ...models]
     this.count = meta.count_search != null ? meta.count_search : this.searchResults.length
     this.hasMore = this.searchResults.length < this.count
+    this.loaded = true
 
     this.isLoading = false
   }
@@ -408,22 +495,15 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
     return this.buildListAction(page).hideError().load()
   }
 
-  // Cache-Key MUSS alle Parameter einbeziehen, die das Ergebnis verändern —
-  // Felder/Filter aus der Datenquelle plus Suche und Seite (dieselben Filter,
-  // die buildListAction setzt). Sonst lieferte der Cache für eine andere Suche/
-  // Seite fälschlich denselben Eintrag.
+  // Cache-Key über die geteilte Schlüssel-Quelle (buildRequestCacheKey) — dieselbe
+  // Funktion nutzt die main.js-Vorwärmung, damit Lookup und Prime auf denselben
+  // Eintrag zeigen. Bezieht Felder/Filter/Suche/Seite ein.
   cacheKey (page) {
-    const request = this.optionsRequest()
-    const action = request.getAction()
-    return buildCacheKey(
-      action.getResource().getType(),
-      action.getName(),
-      {
-        ...request.getParams(),
-        fields: request.getFields(),
-        ...this.pageFilters(page)
-      }
-    )
+    return buildRequestCacheKey(this.optionsRequest(), {
+      q: this.search,
+      page,
+      pageSize: this.pageSize
+    })
   }
 
   // Suche + Seite als Filter (für Request und Cache-Key gleichermaßen).
@@ -716,15 +796,20 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
         this.suppressSearchWatch = true
         this.search = ''
       }
-      this.loadResults({ reset: true })
+      // Fokus erst NACH dem ersten Laden setzen: vorher ist `showSearchField`
+      // noch unentschieden (loaded=false ⇒ true), und bei einer einseitigen Liste
+      // gäbe es danach gar kein Suchfeld — der Fokus müsste auf die Liste. Erst
+      // wenn geladen ist, steht fest, wohin (Suchfeld vs. erstes Element).
+      this.loadResults({ reset: true }).then(() => this.focusInitial())
     }
 
     this.$nextTick(() => {
-      // Popupbreite = Feldbreite − 2rem (links/rechts je ~1rem eingerückt),
-      // wie bei ASearchSelect (FormFieldSearchSelect.calculateSelectorSize).
+      // Popupbreite = Feldbreite − 1rem (links/rechts eingerückt), wie bei
+      // ASearchSelect (FormFieldSearchSelect.calculateSelectorSize). Optional auf
+      // [popupMinWidth, popupMaxWidth] geklemmt (§1).
       const field = this.$el.querySelector('.field')
       if (field) {
-        this.setPopupWidth(`calc(${field.offsetWidth}px - 1rem)`)
+        this.setPopupWidth(this.clampPopupWidth(field.offsetWidth - this.remToPx(1)))
       }
       this.positionize()
       // Feld-Fokus abgeben, BEVOR das Suchfeld fokussiert wird — sonst behält das
@@ -734,15 +819,33 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
       if (this.$refs.field && this.$refs.field.blur) {
         this.$refs.field.blur()
       }
-      // Fokus ins Suchfeld; ohne Suchfeld (kurze feste Liste) aufs erste Element (§14).
-      if (this.isDynamic && this.$refs.search) {
+      // Feste Liste (kein Laden): Fokus sofort. Bei dynamischer Quelle setzt der
+      // .then() nach loadResults den Fokus, sobald feststeht, ob es ein Suchfeld
+      // gibt — hier nicht doppelt.
+      if (!this.isDynamic) {
+        this.focusInitial()
+      }
+    })
+
+    this.coe_watchCancel()
+  }
+
+  // Fokus beim Öffnen: ins Suchfeld, wenn eines gerendert wird — sonst (einseitige
+  // Liste, hasSearch=false, feste Liste) aufs erste Listenelement, damit Pfeiltasten
+  // und Enter sofort die Liste steuern statt die Seite im Hintergrund zu scrollen
+  // (§14). Wird erst aufgerufen, wenn feststeht, ob ein Suchfeld da ist (bei
+  // dynamischer Quelle nach dem ersten Laden, sonst im open()-nextTick).
+  focusInitial () {
+    if (!this.isOpen) {
+      return
+    }
+    this.$nextTick(() => {
+      if (this.showSearchField && this.$refs.search) {
         this.$refs.search.setFocus(true)
       } else {
         this.focusList()
       }
     })
-
-    this.coe_watchCancel()
   }
 
   // skipDiscardCheck: true, wenn der Aufrufer den Zustand bereits geklärt hat
@@ -843,6 +946,25 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
 
   setPopupWidth (width) {
     this.cwm_popupWidth_ = width
+  }
+
+  // Breite (px) auf [popupMinWidth, popupMaxWidth] klemmen; null = keine Grenze.
+  // Floor bei 0 (ein extrem schmales Feld dürfte keine negative Breite ergeben).
+  // Rückgabe als px-String fürs Style.
+  clampPopupWidth (px) {
+    let width = Math.max(0, px)
+    if (this.popupMinWidth != null) {
+      width = Math.max(width, this.popupMinWidth)
+    }
+    if (this.popupMaxWidth != null) {
+      width = Math.min(width, this.popupMaxWidth)
+    }
+    return `${width}px`
+  }
+
+  remToPx (rem) {
+    const fontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16
+    return rem * fontSize
   }
 
   coe_cancelOnEsc () {

@@ -5,6 +5,7 @@
     :label="label"
     :placeholder="placeholder"
     :getIcon="getIcon"
+    :specialItems="specialItems"
     multiple
     :allowExclude="allowExclude"
     clearable
@@ -72,9 +73,16 @@ export default class ListFilterSelect2 extends Mixins(ListFilterMixin) {
       return []
     }
 
+    const specials = this.specialItems
     const entries = tokens.map(t => this.parseToken(t))
     const loaded = await Promise.all(
       entries.map(async entry => {
+        // Sonder-Items sind Pseudo-Werte (z.B. "none") ohne echte Resource —
+        // lokal aus den Filter-Options auflösen, nicht per get-Action laden.
+        const special = specials.find(s => String(s.id) === String(entry.id))
+        if (special) {
+          return { model: special, polarity: entry.polarity }
+        }
         const model = await this.loadModelById(entry.id)
         return model ? { model, polarity: entry.polarity } : null
       })
@@ -94,6 +102,49 @@ export default class ListFilterSelect2 extends Mixins(ListFilterMixin) {
 
   optionsRequest () {
     return this.filter.createOptionsRequest().addFilters(this.optionRequestParams || {})
+  }
+
+  // Sonder-Items (§5): die Filter-`options` (Server: `{title, value, append}`) in
+  // anzeigbare Pseudo-Models wandeln und `append` → `position` mappen (`append
+  // === true → 'bottom'` (ans Ende), sonst `'top'`). Ab hier kennt die Komponente
+  // nur noch `position`. Bewusst KEIN echtes Model (Model.defaults braucht einen
+  // registrierten Type, den Pseudo-Werte wie "none" nicht haben) — ein leichtes
+  // Objekt mit getTitle/equals/getIcon reicht für Liste, Feld-Text und Bar-Chip.
+  get specialItems () {
+    const options = (this.filter && this.filter.options) || []
+    return options.map(o => this.toSpecialModel(o))
+  }
+
+  // Icon der Filter-Resource (z.B. OrderStatus.icon) — Sonder-Items zeigen
+  // dasselbe Icon wie die echten Einträge der Liste. Models tragen ihr Icon als
+  // `static icon` (Model.getIcon = this.constructor.icon). Der Model-Typ steckt in
+  // der Action-Response (nicht im Resource-Typ — der wäre z.B.
+  // 'SPRINT.OrderStatusResource' und träfe keine registrierte Model-Class).
+  get specialItemIcon () {
+    const response = this.filter.createOptionsRequest().getAction().getResponse()
+    const type = response && response.getType()
+    const ModelClass = type && this.$apiResources.getModelClass(type)
+    return (ModelClass && ModelClass.icon) || null
+  }
+
+  toSpecialModel (option) {
+    const icon = this.specialItemIcon
+    // `type: 'special'` grenzt Sonder-Items von echten Models ab: echte Models
+    // tragen ihren Resource-Typ (z.B. 'Sprint'), nie 'special'. Dadurch ist
+    // equals() in beide Richtungen sauber (special≠echtes Model) und der
+    // Listen-`:key` (`type + '-' + id`) kollidiert nicht mit echten Einträgen,
+    // selbst wenn eine ID-Zeichenkette zufällig gleich ist.
+    return {
+      id: option.value,
+      type: 'special',
+      title: option.title,
+      position: option.append ? 'bottom' : 'top',
+      getTitle: () => option.title,
+      getIcon: () => icon,
+      equals (other) {
+        return other && other.type === 'special' && String(other.id) === String(option.value)
+      }
+    }
   }
 
   // {model, polarity}[] (von ASelect2) → Token-Array (Filterwert).
