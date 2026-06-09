@@ -4,7 +4,8 @@
 // vorkommen, nur einmal laden statt pro Komponente. Singleton im Stil von
 // positionService — kein Vue-Plugin, keine Vue.prototype-Erweiterung.
 //
-// Nur sinnvoll für Listen ohne Suchbegriff (die ASelect2 nur dann cached).
+// Bei cacheResults=true läuft JEDE Anfrage über den Cache — jede Seite, auch mit
+// Suchbegriff (q/page sind Teil des Keys, siehe buildRequestCacheKey).
 // Zeitbasierte Invalidierung (Default 30 Min), keine aktive Invalidierung.
 // inFlight-Dedup verhindert parallele Doppel-Requests auf denselben Key.
 

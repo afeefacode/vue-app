@@ -99,7 +99,6 @@
             @input="onSearchInput"
             @focus="activeTab = 'search'"
             @keydown.native.down.prevent="focusList"
-            @keydown.native.esc.prevent="onSearchEsc"
             @keydown.native.enter.ctrl.prevent="applyIfMultiple"
           >
             <!-- Anzahl-Chip innen rechts im Suchfeld: schaltet auf die
@@ -272,7 +271,7 @@ import Select2List from './select2/Select2List'
       // auf [popupMinWidth, popupMaxWidth] (px) begrenzt. null = keine Grenze.
       // Eigene Namen statt minWidth/maxWidth, weil ComponentWidthMixin maxWidth
       // bereits für die FELD-Breite belegt (Kollision vermeiden).
-      // Default 200px Mindestbreite, damit schmale Filter-Felder kein Mini-Popup
+      // Default 150px Mindestbreite, damit schmale Filter-Felder kein Mini-Popup
       // bekommen.
       popupMinWidth: 150,
       popupMaxWidth: null
@@ -298,13 +297,16 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
   // Mehrfachauswahl-Tabs (Etappe 3)
   activeTab = 'search'
 
-  // Dynamische Suche (Etappe 2)
-  search = ''
+  // Dynamische Suche (Etappe 2). Leer = `null` (nicht ''), siehe onSearchInput.
+  search = null
   searchResults = []
   page = 1
   hasMore = false
   count = null
-  // Wurde mindestens eine Seite geladen? Erst danach ist `hasMore` aussagekräftig
+  // Gesamtzahl der ungefilterten Liste (Trefferzahl ohne Suchbegriff) — steuert
+  // showSearchField stabil, unabhängig vom aktuellen Such-`count`.
+  totalCount = null
+  // Wurde mindestens eine Seite geladen? Erst danach ist `totalCount` bekannt
   // (steuert, ob das Suchfeld bei einseitigen Listen entfällt — siehe showSearchField).
   loaded = false
   isLoading = false
@@ -364,18 +366,22 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
   // Liste passt nicht auf eine Seite (`hasMore`). Bei einer einseitigen Liste
   // (z.B. 8 Auftragsstatus) ist Suchen sinnlos → kein Suchfeld.
   //
-  // Zwei Sonderfälle, die das Feld trotzdem sichtbar halten müssen:
-  // - Schon getippt (`search`): nach dem Tippen kann die Liste auf 1 Seite
-  //   schrumpfen (`hasMore` false) — das Feld muss bleiben, sonst lässt sich die
-  //   Suche nicht mehr ändern/leeren.
-  // - Noch nichts geladen (`!loaded`): `hasMore` ist erst nach der ersten Seite
-  //   bekannt. Bis dahin Feld zeigen, statt es kurz zu verstecken und nachträglich
-  //   aufpoppen zu lassen.
+  // Maßstab ist die GESAMTzahl der ungefilterten Liste (`totalCount`), nicht der
+  // aktuelle Such-`count` und nicht `hasMore`: beide fallen während einer Suche
+  // (0 Treffer → hasMore false) und flackern beim Reload. `totalCount` bleibt
+  // stabil. Zwei Sonderfälle halten das Feld zusätzlich sichtbar:
+  // - Schon getippt (`search`): das Feld muss bleiben, sonst lässt sich die Suche
+  //   nicht mehr ändern/leeren.
+  // - Noch nichts geladen (`!loaded`): `totalCount` ist erst nach der ersten Seite
+  //   bekannt. Bis dahin Feld zeigen, statt es nachträglich aufpoppen zu lassen.
   get showSearchField () {
     if (!this.isDynamic || !this.hasSearch) {
       return false
     }
-    return this.hasMore || !!this.search || !this.loaded
+    if (!this.loaded) {
+      return true
+    }
+    return !!this.search || this.totalCount > this.pageSize
   }
 
   // Such-Label wie bei ASearchSelect: "Suche <label>" (z.B. "Suche SpraMi").
@@ -482,6 +488,13 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
     this.searchResults = reset ? models : [...this.searchResults, ...models]
     this.count = meta.count_search != null ? meta.count_search : this.searchResults.length
     this.hasMore = this.searchResults.length < this.count
+    // Gesamtzahl OHNE Suchbegriff (aber mit aktiven Filtern) — steht in jeder
+    // Antwort als `count_filter`, auch während einer 0-Treffer-Suche. Steuert
+    // stabil, ob die Liste ein Suchfeld braucht (anders als `count`, das bei einer
+    // Suche auf die Trefferzahl fällt). Fallback auf count_all bzw. count.
+    this.totalCount = meta.count_filter != null
+      ? meta.count_filter
+      : (meta.count_all != null ? meta.count_all : this.count)
     this.loaded = true
 
     this.isLoading = false
@@ -515,7 +528,9 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
   // Eintrag zeigen. Bezieht Felder/Filter/Suche/Seite ein.
   cacheKey (page) {
     return buildRequestCacheKey(this.optionsRequest(), {
-      q: this.search,
+      // Leere Suche als '' (nicht null) in den Key — sonst zeigt der Lookup auf
+      // einen anderen Eintrag als die main.js-Vorwärmung (die mit q:'' primt).
+      q: this.search || '',
       page,
       pageSize: this.pageSize
     })
@@ -523,7 +538,7 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
 
   // Suche + Seite als Filter (für Request und Cache-Key gleichermaßen).
   pageFilters (page) {
-    return { q: this.search, page, page_size: this.pageSize }
+    return { q: this.search || '', page, page_size: this.pageSize }
   }
 
   // Baut die ListAction der Datenquelle und setzt Suche + Seite als Filter.
@@ -672,6 +687,8 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
 
   // Schreibt die neue Auswahl: Mehrfach → in den Draft, Popup bleibt offen;
   // Einfach (auch behavesSingle: nur 1 Eintrag) → sofort committen und schließen.
+  // Fokus zurück aufs Feld (wie der apply-Pfad bei Mehrfach), damit nach Klick/Enter/
+  // Space die Komponente fokussiert bleibt und nicht auf body fällt.
   commitSelection (next) {
     if (this.multiple && !this.behavesSingle) {
       this.draft = next
@@ -679,7 +696,7 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
     }
     this.committed = next
     this.emitChange()
-    this.close()
+    this.close({ returnFocus: true })
   }
 
   withItem (selection, model, polarity) {
@@ -718,18 +735,11 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
   // Tippen im Suchfeld wechselt zurück in die Trefferliste (falls gerade die
   // Auswahl-Ansicht aktiv ist) — sonst sucht man, sieht aber die Auswahl.
   onSearchInput (value) {
-    this.search = value
+    // Leere Suche ist intern `null` (a-text-field mit `clearable` emittiert beim
+    // ×-Klick ohnehin `null`). Alle Lese-Stellen nutzen `!this.search` (truthy),
+    // sind also null-fest; `q` im Request fällt damit weg statt leerem String.
+    this.search = value || null
     this.activeTab = 'search'
-  }
-
-  // Esc im Suchfeld: mit Text → Suche leeren (offen bleiben); leer → schließen.
-  onSearchEsc () {
-    if (this.search) {
-      this.search = ''
-      return
-    }
-    // Esc = bewusst abbrechen, aber im Feld bleiben (Fokus zurück).
-    this.close({ returnFocus: true })
   }
 
   applyIfMultiple () {
@@ -833,13 +843,13 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
     // wirkt (§4). Die committed-Auswahl bleibt unberührt; nur der flüchtige Such-
     // String/die Trefferliste werden neu aufgebaut. Der cacheResults-Cache greift
     // davon unabhängig weiter (gleicher Key → aus dem Cache).
-    // search='' kann den @Watch('search') auslösen; der würde einen zweiten,
+    // search=null kann den @Watch('search') auslösen; der würde einen zweiten,
     // debounced Request anstoßen. Daher den Watcher für diesen einen Reset
     // unterdrücken (nur wenn search sich wirklich ändert) und EINMAL direkt laden.
     if (this.isDynamic) {
       if (this.search) {
         this.suppressSearchWatch = true
-        this.search = ''
+        this.search = null
       }
       // Fokus erst NACH dem ersten Laden setzen: vorher ist `showSearchField`
       // noch unentschieden (loaded=false ⇒ true), und bei einer einseitigen Liste
@@ -1015,7 +1025,17 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
   }
 
   coe_cancelOnEsc () {
-    // Esc = bewusst abbrechen, aber im Feld bleiben (Fokus zurück).
+    // EINZIGER Esc-Pfad (window-keyup, kaskadierend). Mit Suchtext: nur leeren,
+    // Popup bleibt offen (§14). Sonst: schließen, Fokus zurück. Früher gab es
+    // zusätzlich einen @keydown.esc am Suchfeld → Esc leerte UND schloss, weil
+    // keydown (Feld) und keyup (dieser Mixin) zwei getrennte Events sind.
+    if (this.search) {
+      // Suche leeren — der @Watch('search') lädt (debounced) neu. Das Suchfeld
+      // bleibt dabei stabil sichtbar, weil showSearchField an `totalCount` hängt
+      // (Gesamtzahl ohne Suchbegriff), nicht am wegfallenden Such-`count`.
+      this.search = null
+      return false // stop esc propagation
+    }
     this.close({ returnFocus: true })
     return false // stop esc propagation
   }
