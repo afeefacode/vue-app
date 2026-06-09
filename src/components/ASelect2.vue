@@ -369,17 +369,16 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
   // Maßstab ist die GESAMTzahl der ungefilterten Liste (`totalCount`), nicht der
   // aktuelle Such-`count` und nicht `hasMore`: beide fallen während einer Suche
   // (0 Treffer → hasMore false) und flackern beim Reload. `totalCount` bleibt
-  // stabil. Zwei Sonderfälle halten das Feld zusätzlich sichtbar:
+  // stabil. Sonderfälle:
+  // - Noch nichts geladen (`!loaded`): KEIN Feld — die Items erscheinen ohnehin
+  //   erst mit der ersten Antwort; das Feld kommt dann (falls nötig) zusammen mit
+  //   der Liste. Vorher kurz eins zu zeigen, das bei kurzen Listen gleich wieder
+  //   verschwindet, wäre Flackern.
   // - Schon getippt (`search`): das Feld muss bleiben, sonst lässt sich die Suche
   //   nicht mehr ändern/leeren.
-  // - Noch nichts geladen (`!loaded`): `totalCount` ist erst nach der ersten Seite
-  //   bekannt. Bis dahin Feld zeigen, statt es nachträglich aufpoppen zu lassen.
   get showSearchField () {
-    if (!this.isDynamic || !this.hasSearch) {
+    if (!this.isDynamic || !this.hasSearch || !this.loaded) {
       return false
-    }
-    if (!this.loaded) {
-      return true
     }
     return !!this.search || this.totalCount > this.pageSize
   }
