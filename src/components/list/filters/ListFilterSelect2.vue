@@ -66,9 +66,8 @@ export default class ListFilterSelect2 extends Mixins(ListFilterMixin) {
   }
 
   // Token-Array (Filterwert, z.B. ['2', 'n-5']) → {model, polarity}[] für ASelect2.
-  // Lädt die Vorauswahl-Models über die `get`-Action je ID (Muster aus
-  // ListFilterSearchSelect.createLoadSelectedItemRequest, auf N IDs erweitert) —
-  // die List-Action der Resource hat i.d.R. keinen id-Filter, daher get statt list.
+  // Echte Models werden GEBÜNDELT in EINEM list-Request geladen (filter[id]=[…],
+  // §4) statt je ID einzeln; Sonder-Items lokal aus den Filter-Options aufgelöst.
   async loadSelectValue (value) {
     const tokens = Array.isArray(value) ? value : []
     if (!tokens.length) {
@@ -77,29 +76,39 @@ export default class ListFilterSelect2 extends Mixins(ListFilterMixin) {
 
     const specials = this.specialItems
     const entries = tokens.map(t => this.parseToken(t))
-    const loaded = await Promise.all(
-      entries.map(async entry => {
-        // Sonder-Items sind Pseudo-Werte (z.B. "none") ohne echte Resource —
-        // lokal aus den Filter-Options auflösen, nicht per get-Action laden.
+
+    // Echte IDs (keine Sonder-Items) gebündelt nachladen, dann je Token zuordnen.
+    const realIds = entries
+      .filter(e => !specials.some(s => String(s.id) === String(e.id)))
+      .map(e => e.id)
+    const modelsById = await this.loadModelsByIds(realIds)
+
+    return entries
+      .map(entry => {
         const special = specials.find(s => String(s.id) === String(entry.id))
         if (special) {
           return { model: special, polarity: entry.polarity }
         }
-        const model = await this.loadModelById(entry.id)
+        const model = modelsById[String(entry.id)]
         return model ? { model, polarity: entry.polarity } : null
       })
-    )
-    return loaded.filter(Boolean)
+      .filter(e => e)
   }
 
-  async loadModelById (id) {
-    const request = this.filter.createOptionsRequest()
-    const getAction = this.$apiResources.getAction({
-      resourceType: request.getAction().getResource().getType(),
-      actionName: 'get'
-    })
-    request.action(getAction).params({ id })
-    return ApiAction.fromRequest(request).hideError().execute()
+  // Lädt mehrere Models in EINEM list-Request über den server-seitigen id-Filter
+  // (whereIn). Rückgabe: Map id→Model. Setzt voraus, dass die Resource den
+  // id-Filter kennt (z.B. AppointmentTypeResource, AssignmentContextResource).
+  async loadModelsByIds (ids) {
+    if (!ids.length) {
+      return {}
+    }
+    const request = this.filter.createOptionsRequest().addFilters({ id: ids })
+    const result = await ApiAction.fromRequest(request).hideError().execute()
+    const models = (result && result.models) || []
+    return models.reduce((map, model) => {
+      map[String(model.id)] = model
+      return map
+    }, {})
   }
 
   optionsRequest () {
