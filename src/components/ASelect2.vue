@@ -1174,7 +1174,7 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
     display: flex;
     justify-content: flex-end;
     gap: .5rem;
-    margin-top: 1.5rem;
+    margin-top: .5rem;
   }
 
   // Größe zwischen x-small (20px) und small (28px): Vuetify bietet dazwischen
