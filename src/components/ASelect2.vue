@@ -52,11 +52,11 @@
       </template>
     </v-select>
 
-    <!-- z-index bewusst unter Vuetify-Dialogen (~200+), damit die
-         Verwerfen-Rückfrage über dem Popup liegt (siehe close()). -->
+    <!-- z-index wie ASearchSelect (Overlay 299, Popup 300): über dem
+         flying-context (200), damit das Popup nicht dahinter verschwindet. -->
     <v-overlay
       :value="isOpen"
-      :z-index="190"
+      :z-index="299"
       :opacity="0"
     />
 
@@ -1053,7 +1053,7 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
 [class*=" select2Panel-"] {
   .popup {
     position: absolute;
-    z-index: 191;
+    z-index: 300;
     background: white;
     max-height: 40vh;
     overflow: hidden;
