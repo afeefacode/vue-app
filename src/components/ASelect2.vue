@@ -167,19 +167,28 @@
           </template>
         </select2-list>
 
-        <!-- Footer (nur Mehrfachauswahl): Übernehmen / Verwerfen -->
+        <!-- Footer (nur echte Mehrfachauswahl): Übernehmen / Verwerfen. Entfällt
+             bei behavesSingle (nur 1 Eintrag) — dann committet der Klick sofort.
+             Erst NACH dem Laden zeigen: vorher steht nicht fest, ob es bei 1 Eintrag
+             bleibt (behavesSingle) — sonst flackerte der Footer beim Öffnen. -->
         <div
-          v-if="multiple"
+          v-if="showFooter"
           class="footer"
         >
+          <!-- Kompakt (passt auch ins schmale Popup, §1): Verwerfen = X-Icon,
+               Übernehmen = "OK". -->
           <v-btn
             x-small
             text
+            icon
             class="footerBtn"
             :tabindex="-1"
+            title="Verwerfen"
             @click="discardAndClose"
           >
-            Verwerfen
+            <v-icon small>
+              $closeIcon
+            </v-icon>
           </v-btn>
           <v-btn
             x-small
@@ -187,13 +196,7 @@
             color="green white--text"
             @click="apply"
           >
-            <v-icon
-              left
-              class="mr-1"
-            >
-              $checkIcon
-            </v-icon>
-            Übernehmen
+            OK
           </v-btn>
         </div>
       </div>
@@ -524,11 +527,28 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
 
   // --- Auswahl-Helfer ------------------------------------------------------
 
-  // Die im Popup aktive Auswahl: Mehrfach → Draft (Arbeitskopie), Einfach →
-  // committed (Klick committet sofort, kein Draft nötig). Liste + Chips lesen
-  // hierüber, damit beide Modi denselben Code teilen.
+  // Mehrfachauswahl, die sich aber wie Single bedient: wenn nur EIN Eintrag
+  // wählbar ist (vollständig geladen, `displayItems.length === 1`), ist eine
+  // Draft-/Übernehmen-Bar sinnlos — ein Klick wählt und schließt sofort, kein
+  // Footer. Das **Wertformat** bleibt am Prop `multiple` hängen (toOuter/fromOuter
+  // unverändert, sonst bräche die Filter-Hülle, die ein Array erwartet) — nur das
+  // Bedien-VERHALTEN kippt.
+  get behavesSingle () {
+    return this.multiple && !this.hasMore && this.displayItems.length === 1
+  }
+
+  // Footer (X/OK) nur bei echter Mehrfachauswahl UND erst, wenn die Items geladen
+  // sind: bei dynamischer Quelle vor dem ersten Laden noch nicht (da ist weder die
+  // Trefferliste noch behavesSingle entschieden) — bei fester Liste sofort.
+  get showFooter () {
+    return this.multiple && !this.behavesSingle && (!this.isDynamic || this.loaded)
+  }
+
+  // Die im Popup aktive Auswahl: Mehrfach → Draft (Arbeitskopie), Einfach (auch
+  // behavesSingle) → committed (Klick committet sofort, kein Draft nötig). Liste +
+  // Chips lesen hierüber, damit beide Modi denselben Code teilen.
   get activeSelection () {
-    return this.multiple ? this.draft : this.committed
+    return this.multiple && !this.behavesSingle ? this.draft : this.committed
   }
 
   get sortedSelection () {
@@ -576,9 +596,10 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
 
   // --- Tabs / Auswahl-Tab --------------------------------------------------
 
-  // Es gibt etwas Auswählbares zum Umschalten (Auswahl-Chip sichtbar).
+  // Es gibt etwas Auswählbares zum Umschalten (Auswahl-Chip sichtbar). Nicht bei
+  // behavesSingle (nur 1 Eintrag, kein Mehrfach-Bedienmodell).
   get showTabs () {
-    return this.multiple && this.activeSelection.length > 0
+    return this.multiple && !this.behavesSingle && this.activeSelection.length > 0
   }
 
   // Models der aktuellen Auswahl (für die Auswahl-Ansicht).
@@ -628,9 +649,9 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
   }
 
   // Schreibt die neue Auswahl: Mehrfach → in den Draft, Popup bleibt offen;
-  // Einfach → sofort committen und schließen.
+  // Einfach (auch behavesSingle: nur 1 Eintrag) → sofort committen und schließen.
   commitSelection (next) {
-    if (this.multiple) {
+    if (this.multiple && !this.behavesSingle) {
       this.draft = next
       return
     }
