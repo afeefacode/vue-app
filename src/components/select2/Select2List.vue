@@ -8,6 +8,7 @@
       @keydown.up.prevent="moveActive(-1)"
       @keydown.enter.ctrl.prevent="$emit('apply')"
       @keydown.enter.exact.prevent="activateEnter"
+      @keydown.space.exact.prevent="activateEnter"
       @keydown.enter.shift.prevent="activateExclude"
       @keydown.tab.shift.prevent="$emit('backtab')"
     >
