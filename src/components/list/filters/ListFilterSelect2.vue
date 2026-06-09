@@ -59,9 +59,10 @@ export default class ListFilterSelect2 extends Mixins(ListFilterMixin) {
     }
     this.selectValue = await this.loadSelectValue(this.filter.value)
     // Bar-Chip (eingeklappte Leiste) auch beim initialen Laden mit lesbaren
-    // Namen befüllen — nicht erst nach einer Änderung.
-    this.displayValue = this.toDisplayString(this.selectValue)
+    // Namen befüllen — nicht erst nach einer Änderung. displayTitle ZUERST, damit
+    // es beim displayValue-Watcher (ListFilterMixin) schon aktuell ist.
     this.displayTitle = this.toDisplayTitle(this.selectValue)
+    this.displayValue = this.toDisplayString(this.selectValue)
   }
 
   // Token-Array (Filterwert, z.B. ['2', 'n-5']) → {model, polarity}[] für ASelect2.
@@ -158,8 +159,8 @@ export default class ListFilterSelect2 extends Mixins(ListFilterMixin) {
     const tokens = selection.map(e => this.toToken(e.model.id, e.polarity))
     this.filter.value = tokens.length ? tokens : null
     this.selectValue = selection
-    this.displayValue = this.toDisplayString(this.selectValue)
     this.displayTitle = this.toDisplayTitle(this.selectValue)
+    this.displayValue = this.toDisplayString(this.selectValue)
 
     this.$nextTick(() => {
       this.filterChangedFromInside = false

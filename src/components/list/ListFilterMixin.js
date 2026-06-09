@@ -12,8 +12,10 @@ export class ListFilterMixin extends Vue {
   displayTitle = null
   name_ = null
 
+  // Nur auf displayValue lauschen — displayTitle wird immer GEMEINSAM mit
+  // displayValue gesetzt (s. ListFilterSelect2), ein eigener Watcher darauf würde
+  // dasselbe Event nur ein zweites Mal feuern. Der title wird hier mitgelesen.
   @Watch('displayValue')
-  @Watch('displayTitle')
   displayValueChanged () {
     this.$events.dispatch(new ListFilterEvent(ListFilterEvent.CHANGE, {
       name: this.name,
