@@ -6,14 +6,20 @@ import { ListFilterEvent } from '@a-vue/events'
 })
 export class ListFilterMixin extends Vue {
   displayValue = null
+  // Optionaler vollständiger Tooltip-Text für den Bar-Chip (Hover) — der Chip
+  // selbst zeigt den gekürzten `displayValue`. Filter, die das nicht setzen,
+  // bekommen keinen Tooltip. Mehrere Einträge bricht man mit \n um.
+  displayTitle = null
   name_ = null
 
   @Watch('displayValue')
+  @Watch('displayTitle')
   displayValueChanged () {
     this.$events.dispatch(new ListFilterEvent(ListFilterEvent.CHANGE, {
       name: this.name,
       label: this.label,
-      value: this.displayValue
+      value: this.displayValue,
+      title: this.displayTitle
     }))
   }
 

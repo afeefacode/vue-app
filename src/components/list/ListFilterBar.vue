@@ -113,6 +113,7 @@
       <select2-chip
         v-for="filter in selectedFilters"
         :key="filter.name"
+        :tooltip="filter.title"
         @remove="resetFilter(filter.name)"
       >
         {{ filter.label }}: <b>{{ filter.value }}</b>
@@ -186,11 +187,11 @@ export default class ListFilterBar extends Vue {
     return Object.values(this.filters).filter(f => !f.hasDefaultValueSet()).length - minus
   }
 
-  listFilterChanged ({ payload: { name, label, value } }) {
-    this.setSelectedFilter(name, label, value)
+  listFilterChanged ({ payload: { name, label, value, title } }) {
+    this.setSelectedFilter(name, label, value, title)
   }
 
-  setSelectedFilter (name, label, value) {
+  setSelectedFilter (name, label, value, title = null) {
     const hasValue = !this.filters[name].hasDefaultValueSet()
 
     if (!hasValue) {
@@ -199,12 +200,12 @@ export default class ListFilterBar extends Vue {
       if (this.selectedFilters.some(f => f.name === name)) {
         this.selectedFilters = this.selectedFilters.map(f => {
           if (f.name === name) {
-            return { name, label, value }
+            return { name, label, value, title }
           }
           return f
         })
       } else {
-        this.selectedFilters.push({ name, label, value })
+        this.selectedFilters.push({ name, label, value, title })
       }
     }
   }

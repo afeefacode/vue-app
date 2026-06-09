@@ -5,7 +5,7 @@
     :close="closable && !disabled"
     :color="chipColor"
     :text-color="chipTextColor"
-    :title="title"
+    :title="tooltip || title"
     @click:close="$emit('remove')"
   >
     <span class="label">
@@ -28,6 +28,9 @@ import { Component, Vue } from '@a-vue'
     'getTitle',
     'color',
     'textColor',
+    // Expliziter Hover-Tooltip (Vorrang vor dem aus `item` abgeleiteten Titel) —
+    // z.B. der Bar-Chip zeigt darin alle gewählten Items, eins pro Zeile.
+    'tooltip',
     {
       polarity: 'include',
       disabled: false,

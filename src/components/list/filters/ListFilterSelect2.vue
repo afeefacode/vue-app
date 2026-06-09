@@ -6,7 +6,7 @@
     :placeholder="placeholder"
     :getIcon="getIcon"
     :specialItems="specialItems"
-    multiple
+    :multiple="filter.multiple"
     :allowExclude="allowExclude"
     clearable
     v-bind="$attrs"
@@ -61,6 +61,7 @@ export default class ListFilterSelect2 extends Mixins(ListFilterMixin) {
     // Bar-Chip (eingeklappte Leiste) auch beim initialen Laden mit lesbaren
     // Namen befüllen — nicht erst nach einer Änderung.
     this.displayValue = this.toDisplayString(this.selectValue)
+    this.displayTitle = this.toDisplayTitle(this.selectValue)
   }
 
   // Token-Array (Filterwert, z.B. ['2', 'n-5']) → {model, polarity}[] für ASelect2.
@@ -147,18 +148,31 @@ export default class ListFilterSelect2 extends Mixins(ListFilterMixin) {
     }
   }
 
-  // {model, polarity}[] (von ASelect2) → Token-Array (Filterwert).
+  // {model, polarity} (Einfach) bzw. {model, polarity}[] (Mehrfach) von ASelect2
+  // → Token-Array (Filterwert). Einfachauswahl emittiert KEIN Array (api §1), daher
+  // hier auf Array normalisieren — die Hülle arbeitet intern einheitlich mit Arrays.
   onChange (value) {
     this.filterChangedFromInside = true
 
-    const tokens = (value || []).map(e => this.toToken(e.model.id, e.polarity))
+    const selection = this.toSelectionArray(value)
+    const tokens = selection.map(e => this.toToken(e.model.id, e.polarity))
     this.filter.value = tokens.length ? tokens : null
-    this.selectValue = value || []
+    this.selectValue = selection
     this.displayValue = this.toDisplayString(this.selectValue)
+    this.displayTitle = this.toDisplayTitle(this.selectValue)
 
     this.$nextTick(() => {
       this.filterChangedFromInside = false
     })
+  }
+
+  // ASelect2-Außenwert → immer Array: Mehrfach ist schon ein Array, Einfach ein
+  // einzelnes {model, polarity} (oder null bei leerer Auswahl).
+  toSelectionArray (value) {
+    if (!value) {
+      return []
+    }
+    return Array.isArray(value) ? value : [value]
   }
 
   // 'n-5' → {id: '5', polarity: 'exclude'}; '2' → {id: '2', polarity: 'include'}.
@@ -186,6 +200,18 @@ export default class ListFilterSelect2 extends Mixins(ListFilterMixin) {
     const truncated = label.length > 25 ? label.slice(0, 25).trimEnd() + '…' : label
     const rest = selection.length - 1
     return rest > 0 ? `${truncated} +${rest}` : truncated
+  }
+
+  // Vollständige Liste für den Bar-Chip-Tooltip (Hover): ALLE Items, eins pro
+  // Zeile, Ausschluss mit "nicht " markiert. Der Chip selbst zeigt nur die kurze
+  // toDisplayString-Form.
+  toDisplayTitle (selection) {
+    if (!selection || !selection.length) {
+      return null
+    }
+    return selection
+      .map(e => (e.polarity === 'exclude' ? 'nicht ' : '') + e.model.getTitle())
+      .join('\n')
   }
 }
 </script>

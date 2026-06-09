@@ -14,6 +14,7 @@
     <v-select
       ref="field"
       class="field"
+      :title="committedTooltip"
       :value="committedModels"
       :items="committedModels"
       multiple
@@ -130,6 +131,7 @@
           :getIcon="getIcon"
           :isItemDisabled="isItemDisabled"
           :allowExclude="allowExclude"
+          :showCheckbox="multiple && !behavesSingle"
           :isLoading="isLoading"
           :hasMore="hasMore"
           @toggle="onRowClick"
@@ -161,6 +163,7 @@
           :getSubtitle="getSubtitle"
           :getIcon="getIcon"
           :allowExclude="allowExclude"
+          :showCheckbox="multiple && !behavesSingle"
           @toggle="onRowClick"
           @exclude="onExcludeClick"
         >
@@ -570,6 +573,18 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
     return this.sortedSelection.map(e => e.model)
   }
 
+  // Hover-Titel (natives title-Attribut) am Feld: ALLE gewählten Items, eins pro
+  // Zeile (das Feld selbst zeigt nur den ersten Namen + "+N"). Ausschluss mit
+  // "nicht " markiert, wie im Feld-Text. Leer → kein Tooltip.
+  get committedTooltip () {
+    if (!this.sortedSelection.length) {
+      return null
+    }
+    return this.sortedSelection
+      .map(e => (e.polarity === 'exclude' ? 'nicht ' : '') + this.itemTitle(e.model))
+      .join('\n')
+  }
+
   // Polarität aus der committed-Auswahl (Feld-Chips zeigen den bestätigten Stand,
   // nicht den Popup-Draft — anders als polarityOf, das den aktiven Draft liest).
   committedPolarityOf (model) {
@@ -887,8 +902,10 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
       return
     }
 
-    // Mehrfachauswahl mit ungespeicherten Draft-Änderungen → rückfragen.
-    if (!skipDiscardCheck && this.multiple && this.isDirty) {
+    // Mehrfachauswahl mit ungespeicherten Draft-Änderungen → rückfragen. Nicht bei
+    // behavesSingle (nur 1 Item): der Klick committet dort sofort, es gibt keinen
+    // Draft zu verwerfen.
+    if (!skipDiscardCheck && this.multiple && !this.behavesSingle && this.isDirty) {
       const result = await this.$events.dispatch(new DialogEvent(DialogEvent.SHOW, {
         title: 'Änderungen verwerfen?',
         message: 'Die Auswahl wurde geändert. Sollen die Änderungen verworfen werden?',

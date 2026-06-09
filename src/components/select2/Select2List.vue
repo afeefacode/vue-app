@@ -40,6 +40,18 @@
               :selected="isSelected(model)"
               :polarity="polarityOf(model)"
             >
+              <!-- Checkbox vorn (nur Mehrfachauswahl): zeigt den gewählt-Zustand.
+                   Reine Anzeige — der Klick auf die ganze Zeile toggelt. -->
+              <v-simple-checkbox
+                v-if="showCheckbox"
+                class="rowCheckbox"
+                :value="isSelected(model)"
+                :disabled="rowDisabled(model)"
+                dense
+                hide-details
+                @input="onRowClick(model)"
+              />
+
               <a-icon
                 v-if="getIcon"
                 :icon="getIcon(model)"
@@ -126,6 +138,10 @@ import { Component, Vue, Watch } from '@a-vue'
     'isItemDisabled',
     {
       allowExclude: false,
+      // Checkbox vorn pro Zeile: macht den Auswahl-Zustand bei Mehrfachauswahl
+      // klar sichtbar (besonders bei nur 1 Eintrag). Nur Anzeige des „gewählt"-
+      // Zustands — die Polarität (include/exclude) zeigt weiter der Nicht-Button.
+      showCheckbox: false,
       isLoading: false,
       hasMore: false,
       // Anzahl der oben angepinnten Sonder-Items (§5): die ersten N Zeilen
@@ -326,6 +342,21 @@ export default class Select2List extends Vue {
 
   :deep(.a-table-row:hover) .excludeBtn {
     visibility: visible;
+  }
+
+  // Checkbox vorn (Mehrfachauswahl): kompakt, kein Eigen-Margin (die Zeile bringt
+  // den gap mit). flex-shrink 0, damit sie bei langen Titeln nicht gequetscht wird.
+
+  .rowCheckbox {
+    flex: 0 0 auto;
+    margin: 0;
+
+    // Vuetify setzt margin-right: 8px aufs Selection-Control — die Zeile bringt
+    // den gap schon mit, daher hier weg.
+
+    :deep(.v-input--selection-controls__input) {
+      margin-right: 0;
+    }
   }
 
   // Oben angepinnte Sonder-Items (§5): bleiben beim Scrollen sichtbar. Weißer
