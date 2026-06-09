@@ -62,9 +62,16 @@
 
     <!-- Ein-Popup: ein Panel mit (optionalem) Tabs + Suchfeld + Trefferliste -->
     <div :class="panelCssClass">
+      <!-- v-menu__content--active markiert das Popup als Stack-Teilnehmer für
+           Vuetify: dessen getMaxZIndex() (mixins/stackable) scannt nur Elemente
+           mit dieser bzw. der v-dialog-Klasse und liest deren z-index. Da das
+           Popup ein eigenes div (kein echtes v-menu) ist, „faken" wir die Klasse
+           hier — sie hat in Vuetify keine weitere Wirkung außer dem Stack-Scan.
+           Folge: ein aus dem Popup geöffneter Dialog bekommt max(200, 300)+2 =
+           302 und liegt korrekt ÜBER dem Popup (wie ein Dialog aus EditModal). -->
       <div
         v-if="isOpen"
-        :class="['popup elevation-6', 'open-' + openDirection]"
+        :class="['popup elevation-6 v-menu__content--active', 'open-' + openDirection]"
         :style="cwm_popupWidthStyle"
       >
         <!-- Linearer Lade-Spinner am oberen Popup-Rand (wie Select1), während
@@ -1075,6 +1082,14 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
   .popup {
     position: absolute;
     z-index: 300;
+
+    // Das Popup trägt die Fake-Klasse v-menu__content--active (Template), damit
+    // Vuetify es im z-index-Stack mitzählt. Diese Klasse bringt aus Vuetify
+    // jedoch `pointer-events: none` mit (VMenu.sass) — hier zurücksetzen, sonst
+    // wäre das Popup unklickbar. Höhere Spezifität (.select2Panel .popup)
+    // schlägt Vuetifys Single-Class-Regel.
+    pointer-events: auto;
+
     background: white;
     max-height: 40vh;
     overflow: hidden;
