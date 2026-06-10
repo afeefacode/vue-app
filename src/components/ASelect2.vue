@@ -123,7 +123,6 @@
           v-if="activeTab === 'search'"
           ref="list"
           :items="displayItems"
-          :stickyCount="isDynamic ? topSpecialCount : 0"
           :selection="activeSelection"
           :getTitle="getTitle"
           :getSubtitle="getSubtitle"
@@ -422,14 +421,14 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
   // wenn die ganze Liste auf einer Seite liegt — sonst (Pagination greift,
   // `hasMore`) würden sie zwischen den bisher geladenen Treffern und den noch
   // nachkommenden Seiten hängen, also faktisch mitten in der Liste. In dem Fall
-  // ziehen wir alle Sonder-Items nach oben (sticky), damit sie sichtbar bleiben.
+  // ziehen wir alle Sonder-Items nach oben.
   get collapseSpecialToTop () {
     return this.isDynamic && this.hasMore
   }
 
-  // Was die Liste anzeigt: Sonder-Items oben (vor den Treffern, bei dynamischer
-  // Liste angepinnt), dann die Treffer, dann Sonder-Items unten — Letzteres nur,
-  // solange die Liste auf einer Seite passt (§5, siehe collapseSpecialToTop).
+  // Was die Liste anzeigt: Sonder-Items oben (vor den Treffern), dann die
+  // Treffer, dann Sonder-Items unten — Letzteres nur, solange die Liste auf
+  // eine Seite passt (§5, siehe collapseSpecialToTop).
   get displayItems () {
     if (this.collapseSpecialToTop) {
       return [
@@ -443,15 +442,6 @@ export default class ASelect2 extends Mixins(ComponentWidthMixin, UsesPositionSe
       ...this.baseItems,
       ...this.matchingSpecialItems('bottom')
     ]
-  }
-
-  // Anzahl der oben angepinnten Sonder-Items (für sticky-Rendering in Select2List).
-  // Bei collapseSpecialToTop sind auch die unteren Sonder-Items mit oben.
-  get topSpecialCount () {
-    const top = this.matchingSpecialItems('top').length
-    return this.collapseSpecialToTop
-      ? top + this.matchingSpecialItems('bottom').length
-      : top
   }
 
   // --- Laden (nur dynamisch) -----------------------------------------------

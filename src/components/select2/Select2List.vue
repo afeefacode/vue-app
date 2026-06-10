@@ -29,8 +29,7 @@
           :class="['row', 'row-' + index, {
             included: polarityOf(model) === 'include',
             excluded: polarityOf(model) === 'exclude',
-            active: activeIndex === index,
-            sticky: index < stickyCount
+            active: activeIndex === index
           }]"
           @click="onRowClick(model)"
         >
@@ -144,10 +143,7 @@ import { Component, Vue, Watch } from '@a-vue'
       // Zustands — die Polarität (include/exclude) zeigt weiter der Nicht-Button.
       showCheckbox: false,
       isLoading: false,
-      hasMore: false,
-      // Anzahl der oben angepinnten Sonder-Items (§5): die ersten N Zeilen
-      // bleiben beim Scrollen sichtbar (position: sticky).
-      stickyCount: 0
+      hasMore: false
     }
   ]
 })
@@ -358,16 +354,6 @@ export default class Select2List extends Vue {
     :deep(.v-input--selection-controls__input) {
       margin-right: 0;
     }
-  }
-
-  // Oben angepinnte Sonder-Items (§5): bleiben beim Scrollen sichtbar. Weißer
-  // Hintergrund, damit durchscrollende Treffer nicht durchscheinen.
-
-  :deep(.a-table-row.sticky) {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    background: white;
   }
 
   // Endlos-Scroll-Ziel: braucht Höhe, damit der IntersectionObserver feuert.
