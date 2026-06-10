@@ -61,7 +61,12 @@
                 class="flex-grow-1"
                 style="min-width: 0;"
               >
-                <div class="rowTitle">
+                <!-- Nativer Tooltip immer mit vollem Titel — lange Titel werden
+                     per Ellipsis gekappt (und beim Hover vom nicht-Button überdeckt). -->
+                <div
+                  class="rowTitle"
+                  :title="title(model)"
+                >
                   {{ title(model) }}
                 </div>
                 <div
@@ -306,6 +311,9 @@ export default class Select2List extends Vue {
     min-width: 0;
     padding-right: 0;
     cursor: pointer;
+
+    // Anker für den absolut gelegten nicht-Button.
+    position: relative;
   }
 
   :deep(.a-table-row.included) {
@@ -332,9 +340,46 @@ export default class Select2List extends Vue {
 
   // Nicht-Button nur bei Zeilen-Hover sichtbar (auch der aktive). Der
   // Ausschluss-Zustand bleibt an der roten/durchgestrichenen Zeile erkennbar.
+  // Absolut über dem Textende statt als eigene Flex-Spalte: reserviert keine
+  // Breite (auch unsichtbar belegte er sonst Platz und kappte den Titel),
+  // sondern überdeckt den Titel nur während des Hovers.
 
   .excludeBtn {
     visibility: hidden;
+    position: absolute;
+    right: .5rem;
+    top: 50%;
+    transform: translateY(-50%);
+
+    // Liegt über dem Text — zwei Ränder heben ihn ab: innen eine dezente Linie
+    // (gegen den Zeilen-Hover-Hintergrund), außen ein 5px-Ring in der
+    // Hover-Hintergrundfarbe (#F4F4F4, ATableRow), der Luft zum überdeckten
+    // Text schafft (Button wirkt „freigestellt"). Ring als outline, NICHT als
+    // box-shadow — das globale `.v-btn { box-shadow: none !important }` würde
+    // einen Shadow-Ring schlucken. Die Border braucht !important, weil Vuetifys
+    // Farbklasse (.grey.lighten-3 bzw. .error) border-color per !important
+    // plattzieht.
+    border: 1px solid rgba(0, 0, 0, .1) !important;
+    outline: 5px solid #F4F4F4;
+
+    &.active {
+      border-color: transparent !important;
+    }
+
+    // Vuetifys x-small-Button bringt min-width 36px + breites Padding mit —
+    // über dem Text soll er so schmal wie möglich sein.
+
+    &.v-btn {
+      min-width: 0;
+      padding: 0 .25rem;
+    }
+  }
+
+  // Tastatur-aktive Zeile hat einen anderen Hintergrund (#EEEEFF, ATableRow) —
+  // der Freisteller-Ring zieht mit.
+
+  :deep(.a-table-row.active) .excludeBtn {
+    outline-color: #EEEEFF;
   }
 
   :deep(.a-table-row:hover) .excludeBtn {
