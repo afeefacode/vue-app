@@ -1,6 +1,7 @@
 import { NextRouteFilterSource } from '@a-vue/components/list/NextRouteFilterSource'
 import { AlertEvent } from '@a-vue/events'
 import { eventBus } from '@a-vue/plugins/event-bus/EventBus'
+import { StartFilterStorage } from '@a-vue/services/start-filter/StartFilterStorage'
 import { ListViewModel } from '@afeefa/api-resources-client'
 
 import { ApiAction } from './ApiAction'
@@ -10,7 +11,18 @@ export class ListAction extends ApiAction {
     return this.execute()
   }
 
-  initFiltersForRoute (route) {
+  initFiltersForRoute (route, { startFilterKey } = {}) {
+    // Startfilter anwenden, wenn die URL keine Filter vorgibt: synthetisches
+    // Route-Objekt mit der gespeicherten Query (kein Router-Eingriff — die
+    // Liste pusht die Filter anschließend selbst in die URL). Bei vorhandener
+    // Session-History bleibt die injizierte Query wirkungslos (History gewinnt).
+    if (startFilterKey && !Object.keys(route.query).length) {
+      const startFilterQuery = StartFilterStorage.load(startFilterKey)
+      if (startFilterQuery) {
+        route = { ...route, query: startFilterQuery }
+      }
+    }
+
     const request = new ListViewModel(this)
       // read from next route query string, but do not push
       // list component will be init with used_filters
