@@ -89,6 +89,11 @@ export default class AContextMenu extends Mixins(UsesPositionServiceMixin, Cance
   }
 
   open () {
+    if (this.isOpen) {
+      this.close()
+      return
+    }
+
     window.addEventListener('mousedown', this.onClickOutside)
     window.addEventListener('wheel', this.close)
     window.addEventListener('touchmove', this.close)
