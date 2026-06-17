@@ -1,4 +1,4 @@
-export function formatEuroPrice (price, showZero = false) {
+export function formatEuroPrice (price, showZero = true) {
   if (!price && !showZero) {
     return ''
   }
@@ -8,6 +8,5 @@ export function formatEuroPrice (price, showZero = false) {
     currency: 'EUR'
   })
 
-  return formatter.format(price)
+  return formatter.format(price ?? 0)
 }
-
