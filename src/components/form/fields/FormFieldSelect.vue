@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { Component, Mixins } from '@a-vue'
+import { Component, Mixins, Watch } from '@a-vue'
 import { FormFieldMixin } from '../FormFieldMixin'
 
 @Component
@@ -27,10 +27,19 @@ export default class FormFieldSelect extends Mixins(FormFieldMixin) {
     this.reloadOptions()
   }
 
+  // Beim Recycling der Komponente (z.B. ein v-if-Block mit Select wird durch
+  // einen anderen v-if-Block mit Select an gleicher Position ersetzt) läuft
+  // created() nicht erneut. Ändert sich dabei das angebundene Feld (name) oder
+  // dessen optionRequestParams, müssen die Options neu geladen werden – sonst
+  // zeigt das Select die Optionen des vorherigen Felds.
+  @Watch('name')
+  @Watch('optionRequestParams')
+  onFieldChanged () {
+    this.reloadOptions()
+  }
+
   reloadOptions () {
-    if (this.fieldHasOptionsRequest()) {
-      this.items = this.getSelectOptions()
-    } else if (this.fieldHasOptions()) {
+    if (this.fieldHasOptionsRequest() || this.fieldHasOptions()) {
       this.items = this.getSelectOptions()
     }
   }
