@@ -32,9 +32,18 @@ export default class FormFieldSelect extends Mixins(FormFieldMixin) {
   // created() nicht erneut. Ändert sich dabei das angebundene Feld (name) oder
   // dessen optionRequestParams, müssen die Options neu geladen werden – sonst
   // zeigt das Select die Optionen des vorherigen Felds.
+  //
+  // Vergleich per Wert (nicht per Referenz): Ein als Inline-Objekt übergebenes
+  // optionRequestParams (:optionRequestParams="{ key: value }") erzeugt bei
+  // jedem Re-Render eine neue Referenz, obwohl sich der Inhalt nicht ändert.
+  // Würde der Watch darauf neu laden, entstünde eine Endlosschleife
+  // (reloadOptions → optionsLoaded → State-Änderung → Re-Render → neue Referenz).
   @Watch('name')
   @Watch('optionRequestParams')
-  onFieldChanged () {
+  onFieldChanged (newValue, oldValue) {
+    if (JSON.stringify(newValue) === JSON.stringify(oldValue)) {
+      return
+    }
     this.reloadOptions()
   }
 
